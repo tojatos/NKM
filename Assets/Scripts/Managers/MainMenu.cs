@@ -7,7 +7,7 @@ namespace Managers
 	{
 		public void PlayButtonClick()
 		{
-			SceneManager.LoadScene("Pre Game Options");
+			SceneManager.LoadScene("Game Type Select");
 		}
 		public void OptionsButtonClick()
 		{
