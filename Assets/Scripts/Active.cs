@@ -16,7 +16,7 @@ public class Active
 	#endregion
 
 	public UIManager UIManager;
-	
+
 	public Turn Turn { get; }
 	public Phase Phase { get; }
 	public AirSelection AirSelection { get; }
@@ -134,10 +134,12 @@ public class Active
 		{
 			throw new Exception("Cell range cannot be null!");
 		}
+
 		if (cellRange.Count == 0 && !addToRange)
 		{
 			return false;
 		}
+
 		if (HexCells!=null&&addToRange)
 		{
 			HexCells.AddRange(cellRange);

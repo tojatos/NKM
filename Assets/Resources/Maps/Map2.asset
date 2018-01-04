@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f7a1d20e054f7343bedfd27db4e7658, type: 3}
+  m_Name: Map2
+  m_EditorClassIdentifier: 
+  Name: Map2
+  Map: {fileID: 2800000, guid: 28bc19f135a4e8649b41bcbd5a790636, type: 3}
+  MaxCharacters: 6
+  SpawnPoints: 0200000003000000
+  ColorMappings:
+  - Color: {r: 1, g: 1, b: 1, a: 1}
+    HexTileType: 0
+  - Color: {r: 0, g: 0, b: 0, a: 1}
+    HexTileType: 1
+  - Color: {r: 1, g: 0.047058824, b: 0, a: 1}
+    HexTileType: 2
+  - Color: {r: 0.16470589, g: 0, b: 1, a: 1}
+    HexTileType: 3
