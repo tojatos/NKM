@@ -30,6 +30,7 @@ namespace Managers
 			ReloadCppDropdown(_mapSelectDropdown.value);
 			_cppDropdown.value = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer", 1) - 1;
 		}
+
 		public void PlayButtonClick()
 		{
 			//_numberOfPlayers = PlayerCountDropdown.value;
@@ -37,11 +38,11 @@ namespace Managers
 			PlayerPrefs.SetInt("SelectedMap", _mapSelectDropdown.value);
 			PlayerPrefs.SetInt("NumberOfPlayers", _playerCountDropdown.value + 1);
 			PlayerPrefs.SetInt("NumberOfCharactersPerPlayer", _cppDropdown.value + 1);
-			SceneManager.LoadScene("Game");
+			SceneManager.LoadScene(Scenes.SinglePlayerGame);
 		}
-		public void BackToMenuButtonClick()
+		public void BackButtonClick()
 		{
-			SceneManager.LoadScene("Main Menu");
+			SceneManager.LoadScene(Scenes.GameTypeSelect);
 		}
 
 		private void ReloadPlayerCountDropdown(int value)

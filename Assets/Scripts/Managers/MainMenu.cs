@@ -7,12 +7,10 @@ namespace Managers
 	{
 		public void PlayButtonClick()
 		{
-			SceneManager.LoadScene("Game Type Select");
+			SceneManager.LoadScene(Scenes.GameTypeSelect);
 		}
 		public void OptionsButtonClick()
 		{
-			//Music.Stop();
-			//Music.PlayDelayed(4f);
 		}
 		public void ExitButtonClick()
 		{

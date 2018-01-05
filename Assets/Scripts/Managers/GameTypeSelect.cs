@@ -7,14 +7,15 @@ namespace Managers
 	{
 		public void SinglePlayerButtonClick()
 		{
-			SceneManager.LoadScene("Pre Game Options");
+			SceneManager.LoadScene(Scenes.PreGameOptions);
 		}
 		public void MultiPlayerButtonClick()
 		{
+			//SceneManager.LoadScene(Scenes.MultiPlayerGame); TODO
 		}
 		public void BackButtonClick()
 		{
-			SceneManager.LoadScene("Main Menu");
+			SceneManager.LoadScene(Scenes.MainMenu);
 		}
 	}
 }
