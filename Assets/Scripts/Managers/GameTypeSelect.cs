@@ -5,17 +5,8 @@ namespace Managers
 {
 	public class GameTypeSelect : SingletonMonoBehaviour<MainMenu>
 	{
-		public void SinglePlayerButtonClick()
-		{
-			SceneManager.LoadScene(Scenes.PreGameOptions);
-		}
-		public void MultiPlayerButtonClick()
-		{
-			//SceneManager.LoadScene(Scenes.MultiPlayerGame); TODO
-		}
-		public void BackButtonClick()
-		{
-			SceneManager.LoadScene(Scenes.MainMenu);
-		}
+		public void SinglePlayerButtonClick() => SceneManager.LoadScene(Scenes.PreGameOptions);
+		public void MultiPlayerButtonClick() => SceneManager.LoadScene(Scenes.MultiPlayerSetup);
+		public void BackButtonClick() => SceneManager.LoadScene(Scenes.MainMenu);
 	}
 }

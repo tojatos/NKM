@@ -5,16 +5,8 @@ namespace Managers
 {
 	public class MainMenu : SingletonMonoBehaviour<MainMenu>
 	{
-		public void PlayButtonClick()
-		{
-			SceneManager.LoadScene(Scenes.GameTypeSelect);
-		}
-		public void OptionsButtonClick()
-		{
-		}
-		public void ExitButtonClick()
-		{
-			Application.Quit();
-		}
+		public void PlayButtonClick() => SceneManager.LoadScene(Scenes.GameTypeSelect);
+		public void OptionsButtonClick(){}//TODO: create options
+		public void ExitButtonClick() => Application.Quit();
 	}
 }
