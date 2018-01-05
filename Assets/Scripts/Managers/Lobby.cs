@@ -8,19 +8,13 @@ using UnityEngine.UI;
 
 namespace Managers
 {
-	public class MultiplayerSetup : SingletonMonoBehaviour<MultiplayerSetup>
-	{
-		[SerializeField]
-		private InputField _ipAddress;
-		public void HostGameButtonClick() => SceneManager.LoadScene(Scenes.GameHostOptions);
-		public void JoinGameButtonClick()
-		{
-			if (_ipAddress.text == "") _ipAddress.text = "127.0.0.1";
-			Connect(_ipAddress.text);
-		}
-		public void BackButtonClick() => SceneManager.LoadScene(Scenes.GameTypeSelect);
-		#region MoveThisLater
+	//TODO: Create a lobby
 
+	public class Lobby : SingletonMonoBehaviour<Lobby>
+	{
+		public void BackButtonClick() => SceneManager.LoadScene(Scenes.GameHostOptions);
+		#region MoveThisLater
+		[SerializeField] private Text serverStatusText;
 		private const int MAX_CONNECTION = 100;
 
 		private int port = 5701;
@@ -31,17 +25,10 @@ namespace Managers
 		private int reliableChannel;
 		private int unreliableChannel;
 
-		private int ourClientId;
-		private int connectionID;
-		private float connectionTime;
-
-		private bool isConnected = false;
 		private bool isStarted = false;
 		private byte error;
 
-		private string playerName;
-
-		private void Connect(string ipAddress)
+		private void Start()
 		{
 			NetworkTransport.Init();
 			ConnectionConfig cc = new ConnectionConfig();
@@ -51,16 +38,15 @@ namespace Managers
 
 			HostTopology topo = new HostTopology(cc, MAX_CONNECTION);
 
-			hostId = NetworkTransport.AddHost(topo, 0);
+			hostId = NetworkTransport.AddHost(topo, port, null);
+			//webHostId = NetworkTransport.AddWebsocketHost(topo, port, null);
 
-			connectionID = NetworkTransport.Connect(hostId, ipAddress, port, 0, out error);
-
-			connectionTime = Time.time;
-			isConnected = true;
+			isStarted = true;
+			serverStatusText.text = $"Server status:\nListening at port {port}";
 		}
-		private void Update()
+		void Update()
 		{
-			if (!isConnected) return;
+			if (!isStarted) return;
 			int recHostId;
 			int connectionId;
 			int channelId;
@@ -71,12 +57,21 @@ namespace Managers
 			NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
 			switch (recData)
 			{
+				case NetworkEventType.Nothing:
+					//Debug.Log("Nothing at all");
+					break;
+				case NetworkEventType.ConnectEvent:
+					Debug.Log("Player " + connectionId + " has connected");
+					break;
 				case NetworkEventType.DataEvent:
 					string msg = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
-					Debug.Log("Receiving: " + msg);
+					Debug.Log("Player " + connectionId + " has sent: " + msg);
+					break;
+				case NetworkEventType.DisconnectEvent:
+					Debug.Log("Player " + connectionId + " has disconnected");
 					break;
 			}
 		}
-		#endregion
+#endregion
 	}
 }
