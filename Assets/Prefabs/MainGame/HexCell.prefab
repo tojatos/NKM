@@ -51,8 +51,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db481fce1da84d94d9b5b6c4db2795e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameManager: {fileID: 0}
-  Coordinates:
-    _x: 0
-    _z: 0
   Color: {r: 0, g: 0, b: 0, a: 0}

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Managers
 {
-	public class PreGameOptions : SingletonMonoBehaviour<PreGameOptions>
+	public class PreGameOptions : MonoBehaviour
 	{
 		private Dropdown _playerCountDropdown;
 		private Dropdown _mapSelectDropdown;

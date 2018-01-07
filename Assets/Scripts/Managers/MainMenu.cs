@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace Managers
 {
-	public class MainMenu : SingletonMonoBehaviour<MainMenu>
+	public class MainMenu : MonoBehaviour
 	{
 		public void PlayButtonClick() => SceneManager.LoadScene(Scenes.GameTypeSelect);
 		public void OptionsButtonClick(){}//TODO: create options

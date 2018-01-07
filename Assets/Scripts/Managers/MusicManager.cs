@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Managers
 {
-	public class MusicManager : SingletonMonoBehaviour<MusicManager>
+	public class MusicManager : MonoBehaviour
 	{
 		public AudioSource Music;
 		private GameObject MuteButton;

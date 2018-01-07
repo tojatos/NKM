@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace Managers
 {
-	public class GameTypeSelect : SingletonMonoBehaviour<MainMenu>
+	public class GameTypeSelect : MonoBehaviour
 	{
 		public void SinglePlayerButtonClick() => SceneManager.LoadScene(Scenes.PreGameOptions);
 		public void MultiPlayerButtonClick() => SceneManager.LoadScene(Scenes.MultiPlayerSetup);

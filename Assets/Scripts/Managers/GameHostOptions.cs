@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Multiplayer.Network;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Managers
 {
-	public class GameHostOptions : SingletonMonoBehaviour<GameHostOptions>
+	public class GameHostOptions : MonoBehaviour
 	{
+		[SerializeField] private GameObject _serverPrefab;
+		[SerializeField] private GameObject _clientPrefab;
+
 		private Dropdown _playerCountDropdown;
 		private Dropdown _mapSelectDropdown;
 		private Dropdown _cppDropdown;
@@ -36,7 +40,10 @@ namespace Managers
 			PlayerPrefs.SetInt("SelectedMap", _mapSelectDropdown.value);
 			PlayerPrefs.SetInt("NumberOfPlayers", _playerCountDropdown.value + 1);
 			PlayerPrefs.SetInt("NumberOfCharactersPerPlayer", _cppDropdown.value + 1);
-			SceneManager.LoadScene(Scenes.Lobby);
+			Instantiate(_serverPrefab);
+			//var client = Instantiate(_clientPrefab).GetComponent<Client>();
+			//client.Connect("127.0.0.1");
+			SceneManager.LoadScene(Scenes.ServerView);
 		}
 		public void BackButtonClick() => SceneManager.LoadScene(Scenes.MultiPlayerSetup);
 

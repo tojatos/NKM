@@ -539,6 +539,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ipAddress: {fileID: 545453897}
+  _clientPrefab: {fileID: 1728086265880318, guid: 1d398edf389f1ae458008e8d2ccfd0d8,
+    type: 2}
 --- !u!1 &545453895
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,8 +1416,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2101312304}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 236.5, y: 236, z: 0}
-  m_LocalScale: {x: 0.295625, y: 0.295625, z: 0.295625}
+  m_LocalPosition: {x: 800, y: 450, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 545453896}
   - {fileID: 659648121}
