@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using Multiplayer.Network;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Managers
 {
-	public class Lobby : MonoBehaviour
+	public class ServerView : MonoBehaviour
 	{
 		[SerializeField] private GameObject PlayerList;
 		[SerializeField] private GameObject LobbyPlayerPrefab;
@@ -15,13 +14,15 @@ namespace Managers
 		[SerializeField] private Text SelectedMap;
 		[SerializeField] private Text PlayersPerCharacter;
 
-		private Client ActiveClient;
-		void Awake() => ActiveClient = FindObjectOfType<Client>();
-		void OnApplicationQuit() => ActiveClient.Disconnect();
-		public void BackButtonClick()
+		public Button StartGameButton;
+		public bool CanStart { get; set; }
+
+		private Server ActiveServer;
+		void Awake() => ActiveServer = FindObjectOfType<Server>();
+
+		public void StartGame()
 		{
-			ActiveClient.Disconnect();
-			SceneManager.LoadScene(Scenes.MultiPlayerSetup);
+
 		}
 
 		public void UpdatePlayers(List<string> names)
@@ -43,5 +44,11 @@ namespace Managers
 			SelectedMap.text = Stuff.Maps[int.Parse(selectedMap)].Name;
 			PlayersPerCharacter.text = playersPerCharacter;
 		}
+
+		private void Update()
+		{
+			StartGameButton.ToggleIf(!CanStart);
+		}
+
 	}
 }

@@ -68,12 +68,7 @@ namespace UIManagers
 		public void UpdateActivePhaseText() => ActivePhaseText.GetComponent<Text>().text = Active.Phase.Number.ToString();
 
 		//TODO: Generic methods?
-		private static void Toggle(Selectable targetButton) => targetButton.interactable = !targetButton.interactable;
-		private static void Toggle(GameObject targetGameObject) => targetGameObject.SetActive(!targetGameObject.activeSelf);
-		private static void Show(GameObject targetGameObject) => targetGameObject.SetActive(true);
-		public static void Show(List<GameObject> targetGameObjects) => targetGameObjects.ForEach(Show);
-		private static void Hide(GameObject targetGameObject) => targetGameObject.SetActive(false);
-		public static void Hide(List<GameObject> targetGameObjects) => targetGameObjects.ForEach(Hide);
+		
 
 		[UsedImplicitly]
 		public void OpenUseCharacterSelect()
@@ -94,10 +89,14 @@ namespace UIManagers
 			}
 			}
 			UpdateButtons();
-			ToggleIf(!Tooltip.Instance.IsActive, Tooltip.Instance.gameObject);
-			ToggleIf(Active.CharacterOnMap==null, CharacterStats.Instance.gameObject);
-			ToggleIf(Active.Instance.CharacterOnMap == null, CharacterFace.Instance.gameObject);
-			ToggleIf(!(Active.CharacterOnMap != null && Active.Turn.CharacterThatTookActionInTurn==null && Active.CharacterOnMap.Owner == Active.Player &&Active.CharacterOnMap.TookActionInPhaseBefore == false), TakeActionWithCharacterButton);
+			Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
+			//ToggleIf(!Tooltip.Instance.IsActive, Tooltip.Instance.gameObject);
+			//ToggleIf(Active.CharacterOnMap==null, CharacterStats.Instance.gameObject);
+			CharacterStats.Instance.gameObject.ToggleIf(Active.CharacterOnMap == null);
+			//ToggleIf(Active.Instance.CharacterOnMap == null, CharacterFace.Instance.gameObject);
+			CharacterFace.Instance.gameObject.ToggleIf(Active.Instance.CharacterOnMap == null);
+			//ToggleIf(!(Active.CharacterOnMap != null && Active.Turn.CharacterThatTookActionInTurn==null && Active.CharacterOnMap.Owner == Active.Player &&Active.CharacterOnMap.TookActionInPhaseBefore == false), TakeActionWithCharacterButton);
+			TakeActionWithCharacterButton.ToggleIf(!(Active.CharacterOnMap != null && Active.Turn.CharacterThatTookActionInTurn == null && Active.CharacterOnMap.Owner == Active.Player && Active.CharacterOnMap.TookActionInPhaseBefore == false));
 			if (Input.GetMouseButtonDown(1)|| Input.GetKeyDown(KeyCode.Escape))
 			{
 				if (CharacterInfo.Instance.gameObject.activeSelf)
@@ -111,13 +110,14 @@ namespace UIManagers
 		{
 			if (Active.Phase.Number == 0)
 			{
-				ToggleIf(true, EndTurnButton.GetComponent<Button>());
+				//ToggleIf(true, EndTurnButton.GetComponent<Button>());
+				EndTurnButton.GetComponent<Button>().ToggleIf(true);
 			}
 			else
 			{
-				ToggleIf(Active.Turn.CharacterThatTookActionInTurn == null && Active.Player.Characters.Any(c => c.CanTakeAction && c.IsOnMap), EndTurnButton.GetComponent<Button>());
+				//ToggleIf(Active.Turn.CharacterThatTookActionInTurn == null && Active.Player.Characters.Any(c => c.CanTakeAction && c.IsOnMap), EndTurnButton.GetComponent<Button>());
+				EndTurnButton.GetComponent<Button>().ToggleIf(Active.Turn.CharacterThatTookActionInTurn == null && Active.Player.Characters.Any(c => c.CanTakeAction && c.IsOnMap));
 			}
-			
 			if (Active.IsActiveUse)
 			{
 				Active.Buttons = CancelButtons;
@@ -128,35 +128,14 @@ namespace UIManagers
 			else
 			{
 				Active.Buttons = UseButtons;
-				ToggleIf(Active.Player.Characters.All(c => c.IsOnMap || !c.IsAlive) || Active.Turn.WasCharacterPlaced || Active.Player.GetSpawnPoints().All(sp=>sp.CharacterOnCell!=null), PlaceCharacterButton.GetComponent<Button>());
+				//ToggleIf(Active.Player.Characters.All(c => c.IsOnMap || !c.IsAlive) || Active.Turn.WasCharacterPlaced || Active.Player.GetSpawnPoints().All(sp=>sp.CharacterOnCell!=null), PlaceCharacterButton.GetComponent<Button>());
+				PlaceCharacterButton.GetComponent<Button>().ToggleIf(Active.Player.Characters.All(c => c.IsOnMap || !c.IsAlive) || Active.Turn.WasCharacterPlaced || Active.Player.GetSpawnPoints().All(sp => sp.CharacterOnCell != null));
 				//ToggleIf(!Active.Player.Items.Any(), UseItemButton.GetComponent<Button>());
 				//ToggleIf(!Active.Player.Potions.Any(), UsePotionButton.GetComponent<Button>());
 			}
-		
 		}
 
-		/// <summary>
-		/// Disables button if condition is true,
-		/// enables button if condition is false.
-		/// </summary>
-		private static void ToggleIf(bool condition, Button buttonToToggle)
-		{
-			if (condition && buttonToToggle.interactable || !condition && !buttonToToggle.interactable)
-			{
-				Toggle(buttonToToggle);
-			}
-		}
-		/// <summary>
-		/// Disables object if condition is true,
-		/// enables object if condition is false.
-		/// </summary>
-		private static void ToggleIf(bool condition, GameObject objectToToggle)
-		{
-			if (condition && objectToToggle.activeSelf || !condition && !objectToToggle.activeSelf)
-			{
-				Toggle(objectToToggle);
-			}
-		}
+
 
 		private IEnumerator SelectAndInitializeThings()
 		{

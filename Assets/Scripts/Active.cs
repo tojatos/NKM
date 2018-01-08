@@ -66,10 +66,12 @@ public class Active
 		{
 			if (_ui != null)
 			{
-				UIManager.Hide(_ui);
+				//UIManager.Hide(_ui);
+				_ui.Hide();
 			}
 			_ui = value ?? UIManager.GameUI;
-			UIManager.Show(_ui);
+			//UIManager.Show(_ui);
+			_ui.Show();
 		}
 	}
 	/// <summary>
@@ -82,10 +84,12 @@ public class Active
 			HelpHexCells = null;
 			if (_buttons != null)
 			{
-				UIManager.Hide(_buttons);
+				//UIManager.Hide(_buttons);
+				_buttons.Hide();
 			}
 			_buttons = value;
-			UIManager.Show(_buttons);
+			//UIManager.Show(_buttons);
+			_buttons.Show();
 		}
 	}
 

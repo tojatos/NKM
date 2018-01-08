@@ -50,6 +50,11 @@ namespace Multiplayer.Network
 			isSetUp = true;
 			Debug.Log("Client started!");
 		}
+		public void Disconnect()
+		{
+			NetworkTransport.Disconnect(hostId, connectionID, out error);
+			Destroy(this);
+		}
 		private void Update()
 		{
 			if (!isSetUp) return;
@@ -64,14 +69,14 @@ namespace Multiplayer.Network
 			switch (recData)
 			{
 				case NetworkEventType.ConnectEvent:
-					Debug.Log("We connected!");
+					Debug.Log("| Client connected.");
 					isConnected = true;
 					Send("CONNECTED", reliableChannel, connectionId);
 					SceneManager.LoadScene(Scenes.Lobby);
 					break;
 				case NetworkEventType.DataEvent:
 					string msg = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
-					Debug.Log("Receiving: " + msg);
+					Debug.Log("| Client receiving: " + msg);
 					ReceiveMessage(connectionId, msg);
 					break;
 			}
@@ -92,6 +97,9 @@ namespace Multiplayer.Network
 						List<string> names = contents.ToList();
 						UpdatePlayers(names);
 						break;
+					case "GAMEOPTIONS":
+						UpdateGameOptions(contents.ToList());
+						break;
 					default:
 						Debug.Log($"Undefined message: {m}");
 						break;
@@ -99,6 +107,14 @@ namespace Multiplayer.Network
 			});
 		}
 
+		private void UpdateGameOptions(List<string> options)
+		{
+			if (SceneManager.GetActiveScene().name == Scenes.Lobby)
+			{
+				Lobby l = FindObjectOfType<Lobby>();
+				l.UpdateGameOptions(options);
+			}
+		}
 		private void UpdatePlayers(List<string> names)
 		{
 			if (SceneManager.GetActiveScene().name == Scenes.Lobby)
@@ -114,9 +130,11 @@ namespace Multiplayer.Network
 		}
 		private void Send(string message, int channelId, int cnnId)
 		{
-			Debug.Log("Client sending: " + message);
+			Debug.Log("| Client sending: " + message);
 			byte[] msg = Encoding.Unicode.GetBytes(message);
 			NetworkTransport.Send(hostId, cnnId, channelId, msg, msg.Length, out error);
 		}
+
+
 	}
 }

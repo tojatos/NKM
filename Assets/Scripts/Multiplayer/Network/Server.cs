@@ -10,7 +10,8 @@ namespace Multiplayer.Network
 {
 	public class Server : MonoBehaviour
 	{
-		void Awake() => DontDestroyOnLoad(this);
+
+
 		#region NetworkingVariables
 		private const int MAX_CONNECTION = 100;
 
@@ -27,15 +28,30 @@ namespace Multiplayer.Network
 #endregion
 
 		private List<Player> Players = new List<Player>();
+		private ServerView ServerView;
+
 		private int _selectedMap;
-		private int _maxPlayers; 
+		private int _numberOfPlayers; 
 		private int _playersPerCharacter;
 
+		void Awake()
+		{
+			DontDestroyOnLoad(this);
+			SceneManager.sceneLoaded += (Scene, mode) =>
+			{
+				if (SceneManager.GetActiveScene().name == Scenes.ServerView)
+				{
+					ServerView = FindObjectOfType<ServerView>();
+					var gameOptions = new List<int> { _numberOfPlayers, _selectedMap, _playersPerCharacter };
+					ServerView.UpdateGameOptions(gameOptions.ConvertAll(x => x.ToString()));
+				}
+			};
+		}
 		private void Start()
 		{
 			StartServer();
 
-			_maxPlayers = PlayerPrefs.GetInt("NumberOfPlayers");
+			_numberOfPlayers = PlayerPrefs.GetInt("NumberOfPlayers");
 			_selectedMap = PlayerPrefs.GetInt("SelectedMap");
 			_playersPerCharacter = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer");
 		}
@@ -87,6 +103,10 @@ namespace Multiplayer.Network
 		{
 			Players.RemoveAll(p => p.ConnectionID == connectionId);
 			UpdatePlayers();
+			if (Players.Count < _numberOfPlayers)
+			{
+				ServerView.CanStart = false;
+			}
 		}
 
 		private void ReceiveMessage(int connectionId, string msg)
@@ -121,7 +141,7 @@ namespace Multiplayer.Network
 		}
 		private void TryJoiningLobby(Player player)
 		{
-			if(Players.Count <= _maxPlayers)
+			if(Players.Count <= _numberOfPlayers)
 			{
 				JoinLobby(player);
 			}
@@ -136,11 +156,15 @@ namespace Multiplayer.Network
 		{
 			SendGameOptions(player.ConnectionID);
 			UpdatePlayers();
+			if (Players.Count == _numberOfPlayers)
+			{
+				ServerView.CanStart = true;
+			}
 		}
-
 		private void SendGameOptions(int playerConnectionId)
 		{
-			//TODO
+			var msg = ComposeMessage("GAMEOPTIONS", _numberOfPlayers, _selectedMap, _playersPerCharacter);
+			Send(msg, reliableChannel, playerConnectionId);
 		}
 
 		private void UpdatePlayers()
@@ -149,6 +173,8 @@ namespace Multiplayer.Network
 			Players.ForEach(p => msg += $"{p.Name}%");
 			msg = msg.TrimEnd('%');
 			SendToAllPlayers(msg, reliableChannel);
+
+			ServerView.UpdatePlayers(Players.Select(p=>p.Name).ToList());
 		}
 
 		private void AskForName(int connID)
@@ -170,6 +196,12 @@ namespace Multiplayer.Network
 		{
 			var connIds = Players.Select(p => p.ConnectionID).ToList();
 			Send(message, channelId, connIds);
+		}
+		private string ComposeMessage(string header, params object[] contents)
+		{
+			string msg = header;
+			contents.ToList().ForEach(c => msg += $"%{c}");
+			return msg;
 		}
 	}
 }
