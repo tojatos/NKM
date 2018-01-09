@@ -24,6 +24,7 @@ namespace Managers
 			SceneManager.LoadScene(Scenes.MultiPlayerSetup);
 		}
 
+
 		public void UpdatePlayers(List<string> names)
 		{
 			PlayerList.transform.Clear();

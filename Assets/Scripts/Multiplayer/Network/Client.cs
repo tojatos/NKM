@@ -52,6 +52,7 @@ namespace Multiplayer.Network
 		}
 		public void Disconnect()
 		{
+			Debug.Log("You are disconnected from a server.");
 			NetworkTransport.Disconnect(hostId, connectionID, out error);
 			Destroy(this);
 		}
@@ -99,6 +100,10 @@ namespace Multiplayer.Network
 						break;
 					case "GAMEOPTIONS":
 						UpdateGameOptions(contents.ToList());
+						break;
+					case "DISCONNECT":
+						Disconnect();
+						SceneManager.LoadScene(Scenes.MultiPlayerSetup);
 						break;
 					default:
 						Debug.Log($"Undefined message: {m}");

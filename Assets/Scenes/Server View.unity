@@ -952,7 +952,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerList: {fileID: 631063256}
-  LobbyPlayerPrefab: {fileID: 1572785777702460, guid: 6270a099e68698945b22b9fec3ba14e3,
+  ServerViewPlayerPrefab: {fileID: 1941513725158446, guid: ab54d9ab91e2dd540940393f955eb688,
     type: 2}
   NumberOfPlayers: {fileID: 1912576800}
   SelectedMap: {fileID: 1398920140}

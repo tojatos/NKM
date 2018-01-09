@@ -109,6 +109,11 @@ namespace Multiplayer.Network
 			}
 		}
 
+		public void SendDisconnnectMessage(int connId)
+		{
+			Send("DISCONNECT", reliableChannel, connId);
+		}
+
 		private void ReceiveMessage(int connectionId, string msg)
 		{
 			List<string> messages = msg.Split('|').ToList();
@@ -174,7 +179,7 @@ namespace Multiplayer.Network
 			msg = msg.TrimEnd('%');
 			SendToAllPlayers(msg, reliableChannel);
 
-			ServerView.UpdatePlayers(Players.Select(p=>p.Name).ToList());
+			ServerView.UpdatePlayers(Players);
 		}
 
 		private void AskForName(int connID)

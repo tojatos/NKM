@@ -8,7 +8,7 @@ namespace Managers
 	public class ServerView : MonoBehaviour
 	{
 		[SerializeField] private GameObject PlayerList;
-		[SerializeField] private GameObject LobbyPlayerPrefab;
+		[SerializeField] private GameObject ServerViewPlayerPrefab;
 
 		[SerializeField] private Text NumberOfPlayers;
 		[SerializeField] private Text SelectedMap;
@@ -25,13 +25,14 @@ namespace Managers
 
 		}
 
-		public void UpdatePlayers(List<string> names)
+		public void UpdatePlayers(List<Multiplayer.Network.Player> players)
 		{
 			PlayerList.transform.Clear();
-			names.ForEach(n =>
+			players.ForEach(player =>
 			{
-				var lPlayer = Instantiate(LobbyPlayerPrefab, PlayerList.transform);
-				lPlayer.GetComponentInChildren<Text>().text = n;
+				var sPlayer = Instantiate(ServerViewPlayerPrefab, PlayerList.transform);
+				sPlayer.GetComponentInChildren<Text>().text = player.Name;
+				sPlayer.transform.Find("Disconnect Button").GetComponent<Button>().onClick.AddListener(() => ActiveServer.SendDisconnnectMessage(player.ConnectionID));
 			});
 		}
 
