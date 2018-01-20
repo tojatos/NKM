@@ -51,6 +51,7 @@ namespace Managers
 			{
 				_playerCountDropdown.options.Add(new Dropdown.OptionData(i.ToString()));
 			}
+
 			_playerCountDropdown.value = 0;
 			_playerCountDropdown.RefreshShownValue();
 		}
@@ -62,6 +63,7 @@ namespace Managers
 			{
 				_cppDropdown.options.Add(new Dropdown.OptionData(i.ToString()));
 			}
+
 			_cppDropdown.value = 0;
 			_cppDropdown.RefreshShownValue();
 		}

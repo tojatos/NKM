@@ -28,8 +28,9 @@ namespace MyGameObjects.Effects
 			if (_passiveAbility == null)
 				return "Nic nie robi - najwidoczniej pasywka twojej postaci nie może zostać zbuffowana :)";
 			if (_passiveAbility.GetType() == typeof(TheFistHero)) return "Podwaja efekt zdolności biernej.";
+
 			return "Błąd w pliku PassiveBuff.cs";
 		}
-		
+
 	}
 }

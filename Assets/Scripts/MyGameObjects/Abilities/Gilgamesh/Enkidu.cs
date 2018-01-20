@@ -37,7 +37,7 @@ namespace MyGameObjects.Abilities.Gilgamesh
 			return string.Format(
 @"{0} wypuszcza niebiańskie łańcuchy, unieruchamiając przeciwnika na {1} fazy
 i podwajając bonusy zdolności biernej na ten okres.
-Zasięg: {2}	Czas odnowienia: {3}", 
+Zasięg: {2}	Czas odnowienia: {3}",
 				ParentCharacter.Name, StunDuration, AbilityRange, Cooldown);
 		}
 		protected override void Use()
@@ -46,6 +46,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
+
 			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
 			OnFailedUseFinish();
 		}

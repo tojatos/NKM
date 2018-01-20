@@ -26,6 +26,7 @@ public class Active
 	public MyGameObject MyGameObject { get; set; }
 	public Character CharacterOnMap { get; set; }
 	public List<HexCell> HexCells { get; set; }
+	//TODO: refactor this
 	public List<HexCell> HelpHexCells
 	{
 		private get { return _helpHexCells; }
@@ -64,11 +65,8 @@ public class Active
 		get { return _ui; }
 		set
 		{
-			if (_ui != null)
-			{
-				//UIManager.Hide(_ui);
-				_ui.Hide();
-			}
+			//UIManager.Hide(_ui);
+			_ui?.Hide();
 			_ui = value ?? UIManager.GameUI;
 			//UIManager.Show(_ui);
 			_ui.Show();
@@ -159,6 +157,7 @@ public class Active
 	{
 		var isPrepared = Prepare(Action.UseAbility, cellRange, addToRange);
 		if (!isPrepared) return false;
+
 		Ability = abilityToPrepare;
 		if (toggleToRed)
 		{
@@ -186,6 +185,7 @@ public class Active
 	public void MakeAction(HexCell cell)
 	{
 		if (!HexCells.Contains(cell)) return;
+
 		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 		switch (Action)
 		{
@@ -213,6 +213,7 @@ public class Active
 					{
 						if (character.Abilities.Count(a => a.OverridesMove) > 1)
 							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać akcję ruchu!");
+
 						character.Abilities.Single(a => a.OverridesMove).Move(cell);
 					}
 					else
@@ -220,6 +221,7 @@ public class Active
 						character.BasicMove(cell);
 					}
 				}
+
 				HexCells = null;//TODO is this really needed?
 				Action = Action.None;
 				character.Select();

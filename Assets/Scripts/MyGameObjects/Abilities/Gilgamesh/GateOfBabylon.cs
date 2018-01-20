@@ -24,7 +24,7 @@ zadając {2} obrażeń magicznych lub fizycznych, zależnie od odporności przec
 Jeżeli wróg ma więcej obrony fizycznej od magicznej, umiejętność zada obrażenia magiczne,
 a w przeciwnym razie - fizyczne.
 Zasięg: {3}	Czas odnowienia: {4}
-",				
+",
 			ParentCharacter.Name, AbilityRadius, AbilityDamage, AbilityRange, Cooldown);
 		}
 		public override List<HexCell> GetRangeCells()
@@ -42,6 +42,7 @@ Zasięg: {3}	Czas odnowienia: {4}
 			characters.ForEach(targetCharacter =>
 			{
 				if (targetCharacter.Owner == Active.Player) return;
+
 				ParentCharacter.Attack(targetCharacter, targetCharacter.MagicalDefense.Value <= targetCharacter.PhysicalDefense.Value ? AttackType.Magical : AttackType.Physical, AbilityDamage);
 			});
 			OnUseFinish();

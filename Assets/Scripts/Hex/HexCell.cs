@@ -67,6 +67,7 @@ namespace Hex
 		{
 			var neighborsList = new List<HexCell>();
 			if (depth == 0) return neighborsList;
+
 			foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
 			{
 				neighborsList.AddRange(GetNeighborsByDirection(depth, direction, stopAtWalls, stopAtEnemyCharacters, straightLine));
@@ -85,8 +86,10 @@ namespace Hex
 			if (neighbor == null || stopAtWalls && neighbor.Type == HexTileType.Wall || stopAtEnemyCharacters &&
 			    neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != Active.Player) return neighborsList;
 			if (neighborsList.Any(listsNeighbor => listsNeighbor == neighbor)) return neighborsList;
+
 			neighborsList.Add(neighbor);
 			if (depth <= 1) return neighborsList;
+
 			switch (direction)
 			{
 				case HexDirection.Ne:
@@ -140,6 +143,7 @@ namespace Hex
 				default:
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
 			}
+
 			return neighborsList;
 
 		}
@@ -149,6 +153,7 @@ namespace Hex
 			{
 				throw new Exception("cells are equal");
 			}
+
 			if (Coordinates.X == targetCell.Coordinates.X)
 			{
 				return Coordinates.Y < targetCell.Coordinates.Y ? HexDirection.Sw : HexDirection.Ne;
@@ -161,12 +166,14 @@ namespace Hex
 			{
 				return Coordinates.X < targetCell.Coordinates.X ? HexDirection.E : HexDirection.W;
 			}
+
 			throw new Exception("direction not found");
 		}
 		public HexCell GetCell(HexDirection direction, int value)
 		{
 			if (value <= 0)
 				throw new ArgumentOutOfRangeException(nameof(value), value, null);
+
 			HexCell cellToReturn;
 			switch (direction)
 			{
@@ -191,6 +198,7 @@ namespace Hex
 				default:
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
 			}
+
 			return cellToReturn;
 
 		}

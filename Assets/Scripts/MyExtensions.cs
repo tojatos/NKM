@@ -49,7 +49,7 @@ public static class MyExtensions
 		var trigger = gameObject.GetComponent<EventTrigger>() ?? gameObject.AddComponent<EventTrigger>();
 		//if (trigger == null) trigger =  gameObject.AddComponent<EventTrigger>();
 		var entry = new EventTrigger.Entry {eventID = eventTriggerType};
-		entry.callback.AddListener((eventData) => { Tooltip.Instance.Set(tooltipText); });
+		entry.callback.AddListener((eventData) => Tooltip.Instance.Set(tooltipText));
 		trigger.triggers.Add(entry);
 	}
 	/// <summary>
@@ -63,7 +63,7 @@ public static class MyExtensions
 	{
 		var trigger = gameObject.GetComponent<EventTrigger>() ?? gameObject.AddComponent<EventTrigger>();
 		var entry = new EventTrigger.Entry {eventID = eventTriggerType};
-		entry.callback.AddListener((eventData) => { Tooltip.Instance.Remove(); });
+		entry.callback.AddListener((eventData) => Tooltip.Instance.Remove());
 		trigger.triggers.Add(entry);
 	}
 	/// <summary>
@@ -116,6 +116,7 @@ public static class MyExtensions
 			default:
 				throw new ArgumentOutOfRangeException(nameof(type), type, null);
 		}
+
 		return stat;
 	}
 

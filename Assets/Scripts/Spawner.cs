@@ -28,6 +28,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		foreach (var highlightColorMapping in HighlightColorMappings)
 		{
 			if (highlightColorMapping.HiglightColor != highlightColor) continue;
+
 			var highlightObject = Instantiate(highlightColorMapping.HiglightPrefab, parentCell.transform);
 			highlightObject.transform.localPosition = new Vector3(0, 11, 0);
 			parentCell.Highlight = highlightObject;
@@ -38,6 +39,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		foreach (var highlightColorMapping in HighlightColorMappings)
 		{
 			if (highlightColorMapping.HiglightColor != highlightColor) continue;
+
 			var highlightObject = Instantiate(highlightColorMapping.HiglightPrefab, parentCell.transform);
 			highlightObject.transform.localPosition = new Vector3(0, 12, 0);
 			parentCell.HelpHighlight = highlightObject;
@@ -51,6 +53,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		{
 			throw new ArgumentNullException();
 		}
+
 		var createdMyGameObject = Activator.CreateInstance(type) as MyGameObject;
 		return createdMyGameObject;
 	}

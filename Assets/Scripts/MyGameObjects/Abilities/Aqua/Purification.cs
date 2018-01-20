@@ -38,6 +38,7 @@ Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 			cellRange.RemoveNonFriends();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
+
 			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
 			OnFailedUseFinish();
 		}

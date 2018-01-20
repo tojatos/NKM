@@ -45,6 +45,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
+
 			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
 			OnFailedUseFinish();
 		}
@@ -65,6 +66,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 			foreach (var c in shockwaveCells)
 			{
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
+
 				ParentCharacter.Attack(c.CharacterOnCell, AttackType.Physical, AbilityDamage);
 				break;
 			}

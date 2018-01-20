@@ -27,6 +27,7 @@ public class Tooltip : SingletonMonoBehaviour<Tooltip>
 	private void LateUpdate()
 	{
 		if (!IsActive) return;
+
 		var rectt = gameObject.GetComponent<RectTransform>().rect;
 		gameObject.transform.position = Input.mousePosition + new Vector3(0, rectt.height/2+5, 0);
 		if (Input.anyKey) IsActive = false;

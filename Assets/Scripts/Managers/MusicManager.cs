@@ -31,6 +31,7 @@ namespace Managers
 		{
 			MuteButton = GameObject.Find("Mute Button");
 			if (MuteButton == null) return;
+
 			MuteButton.GetComponent<Image>().sprite = _isMuted ? Stuff.Sprites.Icons.Find(i => i.name == "mute") : Stuff.Sprites.Icons.Find(i => i.name == "unmute");
 			MuteButton.GetComponent<Button>().onClick.AddListener(ToggleMute);
 		}

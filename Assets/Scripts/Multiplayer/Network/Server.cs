@@ -10,8 +10,6 @@ namespace Multiplayer.Network
 {
 	public class Server : MonoBehaviour
 	{
-
-
 		#region NetworkingVariables
 		private const int MAX_CONNECTION = 100;
 
@@ -27,11 +25,12 @@ namespace Multiplayer.Network
 		private byte error;
 #endregion
 
-		private List<Player> Players = new List<Player>();
+		public List<Player> Players = new List<Player>();
 		private ServerView ServerView;
+		private GameServerSide Game;
 
 		private int _selectedMap;
-		private int _numberOfPlayers; 
+		private int _numberOfPlayers;
 		private int _playersPerCharacter;
 
 		void Awake()
@@ -73,6 +72,7 @@ namespace Multiplayer.Network
 		private void Update()
 		{
 			if (!isStarted) return;
+
 			int recHostId;
 			int connectionId;
 			int channelId;
@@ -207,6 +207,19 @@ namespace Multiplayer.Network
 			string msg = header;
 			contents.ToList().ForEach(c => msg += $"%{c}");
 			return msg;
+		}
+
+		public void TryStartingGame()
+		{
+			if (_numberOfPlayers != Players.Count) return;
+
+			StartGame();
+		}
+
+		private void StartGame()
+		{
+			Game = Instantiate(new GameObject().AddComponent<GameServerSide>()).GetComponent<GameServerSide>();
+			SendToAllPlayers("GAMESTART", reliableChannel);
 		}
 	}
 }

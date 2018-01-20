@@ -41,6 +41,7 @@ namespace Hex
 			{
 				return;
 			}
+
 			Vector3 position;
 			// ReSharper disable once PossibleLossOfFraction
 			position.x = (x + z * 0.5f - z / 2) * (HexMetrics.InnerRadius * 2f);
@@ -81,7 +82,7 @@ namespace Hex
 				}
 
 			}
-			
+
 			foreach (var colorMapping in HexMap.ColorMappings)
 			{
 				if (colorMapping.Color.Equals(pixelColor))
@@ -107,6 +108,7 @@ namespace Hex
 					return;
 				}
 			}
+
 			Debug.LogError(cell.Coordinates + " nie ma zmapowanego typu!" + '\n' + "Red: " + ((Math.Abs(pixelColor.r - HexMap.ColorMappings[3].Color.r) < 0.001f) ? "Match" : "Nay") + " Green: " + ((Math.Abs(pixelColor.g - HexMap.ColorMappings[3].Color.g) < 0.001f) ? "Match" : "Nay") + " Blue: " + ((Math.Abs(pixelColor.b - HexMap.ColorMappings[3].Color.b) < 0.001f) ? "Match" : "Nay"));
 
 		}
@@ -115,6 +117,7 @@ namespace Hex
 		{
 			foreach (var hexCell in Cells)
 			{
+				//TODO: Check that somewhere else (change responsibility?)
 				if (hexCell.Highlight != null)
 				{
 					hexCell.ToggleHighlight();

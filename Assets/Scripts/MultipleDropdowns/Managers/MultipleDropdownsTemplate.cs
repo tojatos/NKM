@@ -41,6 +41,7 @@ namespace MultipleDropdowns.Managers
 			{
 				throw new Exception(Title + " jest już otwarty!");
 			}
+
 			Active.UI = new List<GameObject> { MultipleDropdownObject };
 			Fill();
 			FinishButton.GetComponentInChildren<Text>().text = FinishButtonText;
@@ -51,10 +52,8 @@ namespace MultipleDropdowns.Managers
 		{
 			var stringsToFill = GetStringsToFill();
 			var i = 0;
-			foreach (var dropdownGroup in DropdownGroups)
+			foreach (var dropdown in DropdownGroups.Select(dropdownGroup => dropdownGroup.GetComponentInChildren<Dropdown>()))
 			{
-
-				var dropdown = dropdownGroup.GetComponentInChildren<Dropdown>();
 				dropdown.ClearOptions();
 				dropdown.AddOptions(stringsToFill);
 				dropdown.value = i;

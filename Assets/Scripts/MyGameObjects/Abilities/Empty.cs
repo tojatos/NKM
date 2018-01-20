@@ -30,6 +30,6 @@ namespace MyGameObjects.Abilities
 
 		//	OnUseFinish();
 		//}
-		
+
 	}
 }

@@ -51,6 +51,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 				{
 					throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
 				}
+
 				cellRange.ForEach(c =>
 				{
 					var direction = ParentCharacter.ParentCell.GetDirection(c);
@@ -59,6 +60,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 					{
 						throw new Exception("Nie ma gdzie się ruszyć!");
 					}
+
 					moveCell.ToggleHighlight(HiglightColor.WhiteOrange);
 				});
 				cellRange.ForEach(c => c.ToggleHighlight(HiglightColor.Red));

@@ -17,7 +17,7 @@ namespace UIManagers
 
 		public GameObject HexMapUI;
 		public GameObject MainGameUI;
-		
+
 		public GameObject PlaceCharacterButton;
 		public GameObject UseItemButton;
 		public GameObject UsePotionButton;
@@ -56,7 +56,7 @@ namespace UIManagers
 				UseItemButton,
 				UsePotionButton
 			};
-			
+
 			CancelButtons = new List<GameObject>
 			{
 				CancelButton
@@ -68,7 +68,7 @@ namespace UIManagers
 		public void UpdateActivePhaseText() => ActivePhaseText.GetComponent<Text>().text = Active.Phase.Number.ToString();
 
 		//TODO: Generic methods?
-		
+
 
 		[UsedImplicitly]
 		public void OpenUseCharacterSelect()

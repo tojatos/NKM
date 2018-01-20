@@ -59,6 +59,7 @@ namespace Multiplayer.Network
 		private void Update()
 		{
 			if (!isSetUp) return;
+
 			int recHostId;
 			int connectionId;
 			int channelId;
@@ -85,31 +86,36 @@ namespace Multiplayer.Network
 		private void ReceiveMessage(int connectionId, string msg)
 		{
 			List<string> messages = msg.Split('|').ToList();
-			messages.ForEach(m =>
+			messages.ForEach(m => ExecuteMessage(connectionId, msg));
+		}
+
+		private void ExecuteMessage(int connectionId, string msg)
+		{
+			Queue<string> contents = new Queue<string>(msg.Split('%'));
+			string header = contents.Dequeue();
+			switch (header)
 			{
-				Queue<string> contents = new Queue<string>(m.Split('%'));
-				string header = contents.Dequeue();
-				switch (header)
-				{
-					case "NAMEASK":
-						SendName(connectionId);
-						break;
-					case "PLAYERLIST":
-						List<string> names = contents.ToList();
-						UpdatePlayers(names);
-						break;
-					case "GAMEOPTIONS":
-						UpdateGameOptions(contents.ToList());
-						break;
-					case "DISCONNECT":
-						Disconnect();
-						SceneManager.LoadScene(Scenes.MultiPlayerSetup);
-						break;
-					default:
-						Debug.Log($"Undefined message: {m}");
-						break;
-				}
-			});
+				case "NAMEASK":
+					SendName(connectionId);
+					break;
+				case "PLAYERLIST":
+					List<string> names = contents.ToList();
+					UpdatePlayers(names);
+					break;
+				case "GAMEOPTIONS":
+					UpdateGameOptions(contents.ToList());
+					break;
+				case "GAMESTART":
+					SceneManager.LoadScene(Scenes.MultiPlayerGame);
+					break;
+				case "DISCONNECT":
+					Disconnect();
+					SceneManager.LoadScene(Scenes.MultiPlayerSetup);
+					break;
+				default:
+					Debug.Log($"Undefined message: {msg}");
+					break;
+			}
 		}
 
 		private void UpdateGameOptions(List<string> options)

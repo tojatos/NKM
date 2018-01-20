@@ -52,6 +52,7 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 	private IEnumerator SetScrollbarToDown()
 	{
 		yield return null; // Waiting just one frame is probably good enough, yield return null does that
+
 		Scrollbar.value = 0;
 	}
 	private void FinishLogging()
@@ -74,6 +75,7 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 	IEnumerator MoveTextEnd_NextFrame()
 	{
 		yield return 0; // Skip the first frame in which this is called.
+
 		InputField.MoveTextEnd(false); // Do this during the next frame.
 	}
 

@@ -43,6 +43,7 @@ Zasięg: {4}	Czas odnowienia: {5}",
 			characters.ForEach(targetCharacter =>
 			{
 				if (targetCharacter.Owner == Active.Player) return;
+
 				var dmg = AbilityCurrentHealthPercentDamage / 100 * targetCharacter.HealthPoints.Value;
 				ParentCharacter.Attack(targetCharacter, AttackType.Physical, (int)dmg);
 				targetCharacter.Effects.Add(new StatModifier(2, -(targetCharacter.Speed.Value / 2), targetCharacter, StatType.Speed, Name));

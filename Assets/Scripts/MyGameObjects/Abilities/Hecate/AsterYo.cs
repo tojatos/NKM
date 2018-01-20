@@ -41,6 +41,7 @@ Zasięg: {3}	Czas odnowienia: {4}",
 			{
 				var passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();
 				if (passiveAbility == null) throw new Exception("Pasywna umiejętność nie znaleziona!");
+
 				characters = characters.Where(c => c.Owner != ParentCharacter.Owner).ToList();
 				Animations.Instance.AsterYo(ParentCharacter.CharacterObject.transform, characters.Select(c => c.CharacterObject.transform).ToList());
 				characters.ForEach(targetCharacter =>

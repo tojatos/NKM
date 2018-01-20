@@ -35,6 +35,7 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 	private void Update()
 	{
 		if (Active.UI != UIManager.Instance.GameUI) return;
+
 		if (Input.touchCount == 2)
 		{
 			MultiTouch();

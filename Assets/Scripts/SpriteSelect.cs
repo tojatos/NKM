@@ -30,7 +30,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 		_objectsToFill = new List<MyGameObject>(objectsToFill);
 		_objectsToFill.ForEach(SpawnSpriteObject);
 		FinishSelectingButton.onClick.RemoveAllListeners();
-		FinishSelectingButton.onClick.AddListener(delegate { finishSelectingButtonClick(); });
+		FinishSelectingButton.onClick.AddListener(() => finishSelectingButtonClick());
 
 		Title.text = title;
 		FinishSelectingButton.GetComponentInChildren<Text>().text = finishButtonText;
@@ -44,6 +44,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 	{
 		var charactersPerPlayer = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer", HexMapDrawer.Instance.HexMap.MaxCharacters);
 		if (SelectedObjects.Count != charactersPerPlayer) return;
+
 		var classNames = SelectedObjects.GetClassNames();
 		Active.Player.Characters.AddRange(Spawner.Create("Characters", classNames).Cast<Character>());
 		Active.Player.HasSelectedCharacters = true;
@@ -52,6 +53,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 	public void FinishUseCharacter()
 	{
 		if (SelectedObjects.Count != 1) return;
+
 		HexMapDrawer.RemoveAllHighlights();
 		Active.Player.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList().ForEach(c => c.ToggleHighlight(HiglightColor.Red));
 		Active.MyGameObject = Active.Player.Characters.Single(c => c.Name == SelectedObjects[0].Name);
@@ -70,7 +72,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 		button.image.sprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(c => c.name == o.Name);
 	}
 	/// <summary>
-	/// Adds object to selected list if is not on it already, 
+	/// Adds object to selected list if is not on it already,
 	/// otherwise removes it from that list.
 	/// </summary>
 	/// <param name="o">Object to toggle</param>
@@ -82,6 +84,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 			SelectedObjects.Remove(o);
 			return false;
 		}
+
 		SelectedObjects.Add(o);
 		return true;
 	}

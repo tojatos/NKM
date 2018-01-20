@@ -35,6 +35,7 @@ zyskuje ona {1} ataku i {2} szybkości.",
 			get
 			{
 				if (_isEnabled) return true;
+
 				_isEnabled = (float)ParentCharacter.HealthPoints.Value / ParentCharacter.HealthPoints.BaseValue < (float)HpPercent / 100;
 				return _isEnabled;
 			}
@@ -42,6 +43,7 @@ zyskuje ona {1} ataku i {2} szybkości.",
 		private void TryToActivateDemonicForm()
 		{
 			if (!IsEnabled) return;
+
 			Character.Deselect();
 			if (ParentCharacter.Name != "Demonic Rem") ParentCharacter.Name = "Demonic Rem";
 			if (ParentCharacter.Effects.All(e => e.Name != "Demonic Form Speed Boost"))

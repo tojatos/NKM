@@ -53,6 +53,7 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 			cellRange.RemoveAll(c => c.CharacterOnCell != null);
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
+
 			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
 			OnFailedUseFinish();
 		}
@@ -65,6 +66,7 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
+
 			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
 			OnUseFinish();
 		}

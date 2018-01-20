@@ -45,7 +45,7 @@ Czas odnowienia: {3}",
 			var cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange);
 			Active.MakeAction(cellRange);
-			
+
 		}
 		public override void Use(List<Character> characters)
 		{

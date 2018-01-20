@@ -35,6 +35,7 @@ namespace MyGameObjects.Abilities.Sinon
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+
 			return cellRange;
 		}
 	}

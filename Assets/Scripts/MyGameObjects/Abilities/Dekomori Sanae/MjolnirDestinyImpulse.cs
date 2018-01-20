@@ -43,6 +43,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 			characters.ForEach(targetCharacter =>
 			{
 				if (targetCharacter.Owner == Active.Player) return;
+
 				ParentCharacter.Attack(targetCharacter, AttackType.Physical, AbilityDamage);
 				WasUsedOnceThisTurn = true;
 				if (!targetCharacter.IsAlive)

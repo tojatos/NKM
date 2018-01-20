@@ -80,7 +80,7 @@ namespace MyGameObjects.MyGameObject_templates
 			CharacterObject.transform.parent = targetCell.transform;
 			//Deselect();
 			CharacterObject.GetComponent<Animation>().Play("Fade Out Character");
-			//yield return new WaitForSeconds(0.2f); TODO 
+			//yield return new WaitForSeconds(0.2f); TODO
 			CharacterObject.transform.localPosition = new Vector3(0, 10, 0);
 			CharacterObject.GetComponent<Animation>().Play("Fade In Character");
 			//yield return new WaitForSeconds(0.2f); TODO
@@ -99,6 +99,7 @@ namespace MyGameObjects.MyGameObject_templates
 					{
 						if (Abilities.Count(a => a.OverridesFriendAttack) > 1)
 							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
+
 						Abilities.Single(a => a.OverridesFriendAttack).AttackFriend(attackedCharacter);
 					}
 				}
@@ -108,6 +109,7 @@ namespace MyGameObjects.MyGameObject_templates
 					{
 						if (Abilities.Count(a => a.OverridesEnemyAttack) > 1)
 							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
+
 						Abilities.Single(a => a.OverridesEnemyAttack).AttackEnemy(attackedCharacter);
 					}
 					else
@@ -116,6 +118,7 @@ namespace MyGameObjects.MyGameObject_templates
 					}
 				}
 			}
+
 			HasUsedBasicAttackInPhaseBefore = true;
 			//HasUsedNormalAbilityInPhaseBefore = true;
 		}
@@ -135,6 +138,7 @@ namespace MyGameObjects.MyGameObject_templates
 				default:
 					throw new ArgumentOutOfRangeException(nameof(attackType), attackType, null);
 			}
+
 			var damage = atkPoints;
 			DamageModifier(attackedCharacter, ref damage);
 			damage -= defense;
@@ -160,11 +164,13 @@ namespace MyGameObjects.MyGameObject_templates
 			{
 				a.BeforeParentDamage(ref damage); //TODO event?
 			}
+
 			HealthPoints.Value -= damage;
 		}
 		public void RemoveIfDead()
 		{
 			if (IsAlive) return;
+
 			MessageLogger.Log(string.Format("{0} umiera!", FormattedFirstName));
 			RemoveFromMap();
 			DeathTimer = 0;
@@ -212,12 +218,14 @@ namespace MyGameObjects.MyGameObject_templates
 				MessageLogger.DebugLog("Nie jesteś właścicielem! Wara!");
 				return;
 			}
+
 			bool isPreparationSuccessful;
 			if (!CanTakeAction || !CanUseBasicMove && !CanUseBasicAttack)
 			{
 				MessageLogger.DebugLog("Ta postać nie może się ruszać ani atakować!");
 				return;
 			}
+
 			if (!CanUseBasicMove && CanUseBasicAttack)
 			{
 				isPreparationSuccessful = Active.Prepare(Action.AttackAndMove, GetPrepareBasicAttackCells());
@@ -236,6 +244,7 @@ namespace MyGameObjects.MyGameObject_templates
 			{
 				return;
 			}
+
 			Active.HexCells.ForEach(c=>c.ToggleHighlight(HiglightColor.Red));
 		}
 		private List<HexCell> GetPrepareMoveCells()
@@ -245,6 +254,7 @@ namespace MyGameObjects.MyGameObject_templates
 				MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający ruch!");
 				return Enumerable.Empty<HexCell>().ToList();
 			}
+
 			return GetMoveCells();
 		}
 		private List<HexCell> GetPrepareBasicAttackCells()
@@ -254,6 +264,7 @@ namespace MyGameObjects.MyGameObject_templates
 				MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający atak!");
 				return Enumerable.Empty<HexCell>().ToList();
 			}
+
 			var cellRange = GetBasicAttackCells();
 			if (CanAttackAllies)
 			{
@@ -271,8 +282,10 @@ namespace MyGameObjects.MyGameObject_templates
 			{
 				if (Abilities.Count(a => a.OverridesGetBasicAttackCells) > 1)
 					throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać komórki podstawowego ataku!");
+
 				return Abilities.Single(a => a.OverridesGetBasicAttackCells).GetBasicAttackCells();
 			}
+
 			List<HexCell> cellRange;
 			switch (Type)
 			{
@@ -285,6 +298,7 @@ namespace MyGameObjects.MyGameObject_templates
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+
 			return cellRange;
 		}
 		public List<HexCell> GetMoveCells()
@@ -293,8 +307,10 @@ namespace MyGameObjects.MyGameObject_templates
 			{
 				if (Abilities.Count(a => a.OverridesGetMoveCells) > 1)
 					throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać komórki ruchu!");
+
 				return Abilities.Single(a => a.OverridesGetMoveCells).GetMoveCells();
 			}
+
 			var cellRange = ParentCell.GetNeighbors(Speed.Value, true, true);
 			cellRange.RemoveAll(cell => cell.CharacterOnCell != null); //we don't want to allow stepping into our characters!
 			return cellRange;
@@ -350,6 +366,7 @@ namespace MyGameObjects.MyGameObject_templates
 			characterButtons.AddRange(new List<GameObject>(CharacterEffects.Instance.Buttons));
 			Active.Buttons = characterButtons;
 			if (Active.Player != Owner) return;
+
 			PrepareAttackAndMove();
 		}
 		public static void Deselect()
@@ -370,6 +387,7 @@ namespace MyGameObjects.MyGameObject_templates
 					Abilities.Add(new Empty(type));
 				}
 			}
+
 			Abilities.ForEach(a => a.ParentCharacter = this);
 			Abilities.ForEach(a => a.Awake());
 		}

@@ -16,16 +16,17 @@ public class Animations : SingletonMonoBehaviour<Animations>
 		var direction = (targetTransform.position - parentTransform.position);
 		var normalizedDirection = direction.normalized;
 		fork.transform.rotation = Quaternion.LookRotation(normalizedDirection);
-		
+
 		fork.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f); //resize the fork
 
 		PositionParticle(fork);
-		
+
 		if (direction.magnitude < 45) fork.transform.position -= normalizedDirection * 29; // throw the fork from behind if target is too close
 		var targetPosition = GetYPositioned(targetTransform.position) - normalizedDirection * 29; //subtraction to make the fork hit target by tip, not by middle
 
 		StartCoroutine(MoveToPosition(fork.transform, targetPosition, animationDuration-0.1f));
 		yield return new WaitForSeconds(animationDuration);
+
 		Destroy(fork);
 	}
 
@@ -36,9 +37,10 @@ public class Animations : SingletonMonoBehaviour<Animations>
 	private IEnumerator ItadakiNoKuraEnumerator(Transform parentTransform, Transform targetTransform)
 	{
 		if(IsAsterPlaying) yield return new WaitUntil(()=>!IsAsterPlaying);
+
 		var particleStartSize = 20f;
 		var animationDuration = 3.5f;
-		
+
 		var particle = Instantiate(Stuff.Particles.Single(o => o.name == "Itadaki No Kura"), targetTransform);
 
 		var pos = particle.transform.localPosition;
@@ -49,6 +51,7 @@ public class Animations : SingletonMonoBehaviour<Animations>
 		main.startSize = new ParticleSystem.MinMaxCurve(particleStartSize);
 		StartCoroutine(MoveToPosition(particle.transform, parentTransform.position, animationDuration-1f));
 		yield return new WaitForSeconds(animationDuration);
+
 		Destroy(particle);
 	}
 	public void ItadakiNoKura(Transform parentTransform, Transform targetTransform)
@@ -60,7 +63,7 @@ public class Animations : SingletonMonoBehaviour<Animations>
 	{
 		IsAsterPlaying = true;
 		const float particleSecondSize = 10f;
-		
+
 		var particlesWithTargets = new Dictionary<GameObject, Transform>();
 		foreach (var t in targetTransforms)
 		{
@@ -69,7 +72,9 @@ public class Animations : SingletonMonoBehaviour<Animations>
 			particlesWithTargets.Add(particle, t);
 			PositionParticle(particle);
 		}
+
 		yield return new WaitForSeconds(2f);
+
 		foreach (var pair in particlesWithTargets)
 		{
 			var particle = pair.Key;
@@ -79,6 +84,7 @@ public class Animations : SingletonMonoBehaviour<Animations>
 			main.startSize = new ParticleSystem.MinMaxCurve(particleSecondSize);
 			StartCoroutine(MoveToPosition(particle.transform, t.position, 0.1f));
 		}
+
 		yield return new WaitForSeconds(1.5f);
 
 		particlesWithTargets.ToList().ForEach(pair => Destroy(pair.Key));
@@ -91,7 +97,7 @@ public class Animations : SingletonMonoBehaviour<Animations>
 	private IEnumerator SonzaiNoChikaraEnumerator(List<Transform> targetTransforms)
 	{
 		const float animationTime = 4f;
-		
+
 		var particles = new List<GameObject>();
 		foreach (var t in targetTransforms)
 		{
@@ -105,7 +111,9 @@ public class Animations : SingletonMonoBehaviour<Animations>
 			var shape = ps.shape;
 			StartCoroutine(DecreaseRadiusToZero(shape, animationTime));
 		}
+
 		yield return new WaitForSeconds(animationTime);
+
 		particles.ForEach(Destroy);
 		particles.Clear();
 		foreach (var t in targetTransforms)
@@ -114,7 +122,9 @@ public class Animations : SingletonMonoBehaviour<Animations>
 			particles.Add(particle);
 			PositionParticle(particle);
 		}
+
 		yield return new WaitForSeconds(0.2f);
+
 		particles.ForEach(Destroy);
 	}
 	//public void SonzaiNoChikara(List<Transform> targetTransforms)

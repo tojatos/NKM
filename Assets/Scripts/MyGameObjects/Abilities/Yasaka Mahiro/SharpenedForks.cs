@@ -47,6 +47,7 @@ Zasięg: {3}	Czas odnowienia: {4}",
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
+
 			if (NumberOfUses != 0)
 			{
 				OnUseFinish();
@@ -71,6 +72,7 @@ Zasięg: {3}	Czas odnowienia: {4}",
 				Use();
 				return;
 			}
+
 			OnUseFinish();
 		}
 		public override void OnUseFinish()

@@ -47,6 +47,7 @@ Czas odnowiania: {3}",
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
+
 			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
 			OnFailedUseFinish();
 		}

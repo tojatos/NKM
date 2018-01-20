@@ -11,6 +11,7 @@ namespace Editor
 		private void OnPreprocessTexture()
 		{
 			if (!assetPath.Contains("Sprites")) return;
+
 			var importer = assetImporter as TextureImporter;
 			ImportSprite(importer);
 		}

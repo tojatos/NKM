@@ -63,6 +63,7 @@ Pozostałe ataki do zablokowania: {AttacksToBlock}";
 		public override bool BeforeParentBasicAttacked(Character attackingCharacter)
 		{
 			if (!IsEnabled) return true;
+
 			MessageLogger.Log(string.Format("{0} blokuje atak {1}!", ParentCharacter.FormattedFirstName, attackingCharacter.FormattedFirstName));
 			AttacksToBlock--;
 			CurrentBonusAttack += AbilityBonusAttackGain;
@@ -74,6 +75,7 @@ Pozostałe ataki do zablokowania: {AttacksToBlock}";
 		{
 			base.OnPhaseFinish();
 			if (!IsEnabled) return;
+
 			PhasesRemain--;
 			if (PhasesRemain == 0) Disable();
 		}

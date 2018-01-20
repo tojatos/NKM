@@ -22,7 +22,7 @@ namespace Managers
 
 		public void StartGame()
 		{
-
+			ActiveServer.TryStartingGame();
 		}
 
 		public void UpdatePlayers(List<Multiplayer.Network.Player> players)

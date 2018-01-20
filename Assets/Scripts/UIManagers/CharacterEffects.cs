@@ -17,6 +17,7 @@ namespace UIManagers
 		public void UpdateButtons()
 		{
 			if (Active.Instance.CharacterOnMap == null) return;
+
 			var character = Active.Instance.CharacterOnMap;
 			RemoveButtons();
 			character.Effects.ForEach(effect => CreateEffectButton(character, effect));

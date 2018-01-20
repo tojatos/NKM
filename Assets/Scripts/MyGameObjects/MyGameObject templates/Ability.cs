@@ -19,7 +19,7 @@ namespace MyGameObjects.MyGameObject_templates
 			get { return _currentCooldown; }
 			protected set
 			{
-				_currentCooldown = value; 
+				_currentCooldown = value;
 				CharacterAbilities.Instance.UpdateButtonData();
 			}
 		}
@@ -33,6 +33,7 @@ namespace MyGameObjects.MyGameObject_templates
 				{
 					return false;
 				}
+
 				try
 				{
 					CheckIfCanBePrepared();
@@ -90,6 +91,7 @@ namespace MyGameObjects.MyGameObject_templates
 				MessageLogger.DebugLog("\t" + e.Message);
 				return;
 			}
+
 			HexMapDrawer.RemoveAllHighlights();
 			Use();
 		}
@@ -132,6 +134,7 @@ namespace MyGameObjects.MyGameObject_templates
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+
 			Active.Clean();
 		}
 		protected void OnFailedUseFinish()

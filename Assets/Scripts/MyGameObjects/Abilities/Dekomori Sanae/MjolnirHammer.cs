@@ -50,6 +50,7 @@ ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
+
 			if (WasUsedOnceThisTurn)
 			{
 				OnUseFinish();
@@ -75,6 +76,7 @@ ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
 				Use();
 				return;
 			}
+
 			OnUseFinish();
 		}
 		public override void OnUseFinish()

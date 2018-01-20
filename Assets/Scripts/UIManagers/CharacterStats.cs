@@ -28,22 +28,22 @@ namespace UIManagers
 		{
 			var trigger = RangeObject.GetComponent<EventTrigger>() ?? RangeObject.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-			entry.callback.AddListener((eventData) => { Active.Instance.HelpHexCells = Active.Instance.CharacterOnMap.GetBasicAttackCells(); });
+			entry.callback.AddListener((eventData) => Active.Instance.HelpHexCells = Active.Instance.CharacterOnMap.GetBasicAttackCells());
 			trigger.triggers.Add(entry);
 
 			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
-			entry2.callback.AddListener((eventData) => { Active.Instance.HelpHexCells = null; });
+			entry2.callback.AddListener((eventData) => Active.Instance.HelpHexCells = null);
 			trigger.triggers.Add(entry2);
 		}
 		private void SetMoveHelpTriggers()
 		{
 			var trigger = SpeedObject.GetComponent<EventTrigger>() ?? SpeedObject.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-			entry.callback.AddListener((eventData) => { Active.Instance.HelpHexCells = Active.Instance.CharacterOnMap.GetMoveCells(); });
+			entry.callback.AddListener((eventData) => Active.Instance.HelpHexCells = Active.Instance.CharacterOnMap.GetMoveCells());
 			trigger.triggers.Add(entry);
 
 			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
-			entry2.callback.AddListener((eventData) => { Active.Instance.HelpHexCells = null; });
+			entry2.callback.AddListener((eventData) => Active.Instance.HelpHexCells = null);
 			trigger.triggers.Add(entry2);
 		}
 		private void EmptyTextes()

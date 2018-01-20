@@ -43,7 +43,7 @@ namespace Managers
 		{
 			UIManager.UpdateActivePhaseText();
 			//Game loop
-			while (true) 
+			while (true)
 			{
 				foreach (var player in Players)
 				{
@@ -55,6 +55,7 @@ namespace Managers
 				{
 					continue;
 				}
+
 				if(Players.All(p => p.Characters.Where(c=>c.IsOnMap).All(c => !c.CanTakeAction)))
 				{
 					Active.Phase.Finish();
@@ -78,6 +79,7 @@ namespace Managers
 				if (Input.GetMouseButtonDown(0))
 				{
 					if (Active.IsPointerOverUIObject()) return; //Do not touch cells if mouse is over UI
+
 					var cellPointed = CellPointed();
 					if (cellPointed != null)
 					{
@@ -91,6 +93,7 @@ namespace Managers
 						}
 					}
 				}
+
 				if (Input.GetMouseButtonDown(1)|| Input.GetKeyDown(KeyCode.Escape))
 				{
 					Active.Cancel();
@@ -102,6 +105,7 @@ namespace Managers
 			var inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if (!Physics.Raycast(inputRay, out hit)) return null;
+
 			var position = hit.point;
 			return GetCellByPosition(ref position);
 		}
@@ -112,7 +116,7 @@ namespace Managers
 			{
 				UseMyGameObject(touchedCell);
 			}
-			else if (Active.HexCells!=null&&Active.HexCells.Contains(touchedCell))
+			else if (Active.HexCells?.Contains(touchedCell) == true)
 			{
 				Active.MakeAction(touchedCell);
 			}
@@ -158,6 +162,7 @@ namespace Managers
 				{
 					throw new Exception("W tej turze już była wystawiona postać!");
 				}
+
 				var activeCharacter = Active.MyGameObject as Character;
 				try
 				{
@@ -168,6 +173,7 @@ namespace Managers
 					MessageLogger.Instance.DebugLog(e.Message);
 					throw;
 				}
+
 				Active.Turn.WasCharacterPlaced = true;
 				if (Active.Phase.Number == 0)
 				{
@@ -180,7 +186,7 @@ namespace Managers
 					HexMapDrawer.RemoveAllHighlights();
 					activeCharacter?.Select();
 				}
-			
+
 			}
 			//else if (myGameObjectType == typeof(Item))
 			//{
@@ -213,6 +219,6 @@ namespace Managers
 
 			Spawner.SpawnCharacterObject(cell, characterToSpawn);
 		}
-		
+
 	}
 }

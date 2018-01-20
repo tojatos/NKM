@@ -21,6 +21,7 @@ namespace UIManagers
 		public void UpdateButtons()
 		{
 			if (Active.Instance.CharacterOnMap == null) return;
+
 			var character = Active.Instance.CharacterOnMap;
 			RemoveButtons();
 
@@ -45,10 +46,10 @@ namespace UIManagers
 		{
 			var trigger = button.GetComponent<EventTrigger>() ?? button.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-			entry.callback.AddListener(eventData => { Active.Instance.HelpHexCells = ability.GetRangeCells(); });
+			entry.callback.AddListener(eventData => Active.Instance.HelpHexCells = ability.GetRangeCells());
 			trigger.triggers.Add(entry);
 			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
-			entry2.callback.AddListener(eventData => { Active.Instance.HelpHexCells = null; });
+			entry2.callback.AddListener(eventData => Active.Instance.HelpHexCells = null);
 			trigger.triggers.Add(entry2);
 		}
 		private void SetButtonSprite(GameObject button, Ability ability)
@@ -67,12 +68,13 @@ namespace UIManagers
 			SetButtonSprite(button, ability);
 			button.GetComponent<Button>().onClick.AddListener(ability.TryPrepare); //try to prepare an ability on click
 			SetRangeHelpTriggers(button, ability);
-			
+
 			Buttons.Add(button);
 		}
 		public void UpdateButtonData()
 		{
 			if(Active.Instance.CharacterOnMap==null) return;
+
 			var character = Active.Instance.CharacterOnMap;
 			Buttons.ForEach(button =>
 			{
@@ -86,6 +88,7 @@ namespace UIManagers
 		private void CreateEnableSpriteIfEnableable(GameObject button, Ability ability)
 		{
 			if (!(ability is EnableableAbility)) return;
+
 			var enableableAbility = (EnableableAbility) ability;
 			var enableGameObject = new GameObject();
 			enableGameObject.transform.parent = button.transform;

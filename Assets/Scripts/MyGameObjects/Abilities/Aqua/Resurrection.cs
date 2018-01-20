@@ -43,6 +43,7 @@ Czas odnowienia: {Cooldown}";
 				{
 					var selectedObj = SpriteSelect.Instance.SelectedObjects;
 					if (selectedObj.Count != 1) return;
+
 					Use((Character)selectedObj[0]);
 					Active.UI = null;
 				}, "Postać do ożywienia", "Zakończ wybieranie postaci");

@@ -12,7 +12,7 @@ namespace MyGameObjects.Effects
 		}
 		public override string GetDescription()
 		{
-			return "Ta postać nie może atakować.\n" + 
+			return "Ta postać nie może atakować.\n" +
 						 "Czas do zakończenia efektu: " + CurrentCooldown;
 		}
 	}
