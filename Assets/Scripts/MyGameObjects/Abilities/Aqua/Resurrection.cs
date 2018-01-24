@@ -13,7 +13,7 @@ namespace MyGameObjects.Abilities.Aqua
 		private Character _characterToResurrect;
 		public override List<HexCell> GetRangeCells()
 		{
-			return Active.Player.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList();
+			return Active.GamePlayer.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList();
 		}
 
 		public Resurrection()
@@ -39,7 +39,7 @@ Czas odnowienia: {Cooldown}";
 		protected override void Use()
 		{
 			Active.Ability = this;
-			SpriteSelect.Instance.Open(Active.Player.Characters.Where(c => !c.IsAlive && c.DeathTimer <= 1),
+			SpriteSelect.Instance.Open(Active.GamePlayer.Characters.Where(c => !c.IsAlive && c.DeathTimer <= 1),
 				() =>
 				{
 					var selectedObj = SpriteSelect.Instance.SelectedObjects;

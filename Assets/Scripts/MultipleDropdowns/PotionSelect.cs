@@ -37,8 +37,8 @@
 //			var selectedNames = GetData();
 //			Validator.ValidateInitializationSelect(selectedNames);
 //			var classNames = AllMyGameObjects.Instance.Potions.Where(c => selectedNames.Contains(c.Name)).ToList().GetClassNames();
-//			Active.Player.Potions.AddRange(Spawner.Create("Potions", classNames).Cast<Potion>());
-//			Active.Player.HasSelectedPotions = true;
+//			Active.GamePlayer.Potions.AddRange(Spawner.Create("Potions", classNames).Cast<Potion>());
+//			Active.GamePlayer.HasSelectedPotions = true;
 //		}
 //	}
 //}

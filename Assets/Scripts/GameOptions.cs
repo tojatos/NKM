@@ -5,7 +5,7 @@ using UIManagers;
 public class GameOptions
 {
 	public GameType GameType { get; set; }
-	public List<Player> Players { get; set; }
+	public List<GamePlayer> Players { get; set; }
 	public HexMap Map { get; set; }
 	public UIManager UIManager { get; set; }
 }

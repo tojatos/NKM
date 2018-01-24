@@ -21,7 +21,7 @@ namespace Hex
 		private Game Game;
 		void Start()
 		{
-			Game = LocalGameStarter.Instance.Game;
+			Game = GameStarter.Instance.Game;
 			Active = Game.Active;
 		}
 
@@ -68,7 +68,7 @@ namespace Hex
 
 		private void Awake()
 		{
-			//LocalGameStarter = GameObject.Find("LocalGameStarter").GetComponent<LocalGameStarter>();
+			//GameStarter = GameObject.Find("GameStarter").GetComponent<GameStarter>();
 			Spawner = Spawner.Instance;
 		}
 		public List<HexCell> GetNeighbors(int depth, bool stopAtWalls = false, bool stopAtEnemyCharacters = false, bool straightLine = false)
@@ -92,7 +92,7 @@ namespace Hex
 			var neighborsList = new List<HexCell>();
 			var neighbor = GetNeighbor(direction);
 			if (neighbor == null || stopAtWalls && neighbor.Type == HexTileType.Wall || stopAtEnemyCharacters &&
-			    neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != Active.Player) return neighborsList;
+			    neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != Active.GamePlayer) return neighborsList;
 			if (neighborsList.Any(listsNeighbor => listsNeighbor == neighbor)) return neighborsList;
 
 			neighborsList.Add(neighbor);

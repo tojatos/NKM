@@ -19,7 +19,7 @@ namespace UIManagers
 		public List<GameObject> Buttons { get; private set; }
 		public void Init()
 		{
-			Game = LocalGameStarter.Instance.Game;
+			Game = GameStarter.Instance.Game;
 			Buttons = new List<GameObject>();
 		}
 		public void UpdateButtons()

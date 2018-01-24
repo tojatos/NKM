@@ -42,7 +42,7 @@ Zasięg: {4}	Czas odnowienia: {5}",
 		{
 			characters.ForEach(targetCharacter =>
 			{
-				if (targetCharacter.Owner == Active.Player) return;
+				if (targetCharacter.Owner == Active.GamePlayer) return;
 
 				var dmg = AbilityCurrentHealthPercentDamage / 100 * targetCharacter.HealthPoints.Value;
 				ParentCharacter.Attack(targetCharacter, AttackType.Physical, (int)dmg);

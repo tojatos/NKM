@@ -18,7 +18,7 @@
 
 //		protected override List<string> GetStringsToFill()
 //		{
-//			return Active.Player.Items.Select(c => c.Name).ToList();
+//			return Active.GamePlayer.Items.Select(c => c.Name).ToList();
 //		}
 
 //		protected sealed override void CreateDropdowns()
@@ -34,7 +34,7 @@
 //		protected override void FinishSelecting()
 //		{
 //			var selectedNames = GetData();
-//			Active.MyGameObject = Active.Player.Items.Single(c => c.Name == selectedNames[0]);
+//			Active.MyGameObject = Active.GamePlayer.Items.Single(c => c.Name == selectedNames[0]);
 //			UIManager.VisibleUI = null;
 //		}
 //	}

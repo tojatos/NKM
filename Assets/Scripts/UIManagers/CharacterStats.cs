@@ -23,7 +23,7 @@ namespace UIManagers
 
 		private void Awake()
 		{
-			Game = LocalGameStarter.Instance.Game;
+			Game = GameStarter.Instance.Game;
 
 			EmptyTextes();
 			SetAttackHelpTriggers();

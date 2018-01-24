@@ -56,7 +56,7 @@ namespace MyGameObjects.MyGameObject_templates
 		/// </summary>
 		protected virtual void CheckIfCanBePrepared()
 		{
-			if (ParentCharacter.Owner != Active.Player)
+			if (ParentCharacter.Owner != Active.GamePlayer)
 			{
 				throw new Exception("Nie możesz używać umiejętności innej postaci!");
 			}

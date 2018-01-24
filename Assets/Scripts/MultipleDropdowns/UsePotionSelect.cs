@@ -18,7 +18,7 @@
 
 //		protected override List<string> GetStringsToFill()
 //		{
-//			return Active.Player.Potions.Select(c => c.Name).ToList();
+//			return Active.GamePlayer.Potions.Select(c => c.Name).ToList();
 //		}
 
 //		protected sealed override void CreateDropdowns()
@@ -34,7 +34,7 @@
 //		protected override void FinishSelecting()
 //		{
 //			var selectedNames = GetData();
-//			Active.MyGameObject = Active.Player.Potions.Single(c => c.Name == selectedNames[0]);
+//			Active.MyGameObject = Active.GamePlayer.Potions.Single(c => c.Name == selectedNames[0]);
 //			UIManager.VisibleUI = null;
 //		}
 //	}

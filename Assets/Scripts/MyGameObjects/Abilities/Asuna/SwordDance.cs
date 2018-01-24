@@ -64,7 +64,7 @@ Pozostałe ataki do zablokowania: {AttacksToBlock}";
 		{
 			if (!IsEnabled) return true;
 
-			MessageLogger.Log(string.Format("{0} blokuje atak {1}!", ParentCharacter.FormattedFirstName, attackingCharacter.FormattedFirstName));
+			MessageLogger.Log(string.Format("{0} blokuje atak {1}!", ParentCharacter.FormattedFirstName(), attackingCharacter.FormattedFirstName()));
 			AttacksToBlock--;
 			CurrentBonusAttack += AbilityBonusAttackGain;
 			if(AttacksToBlock == 0) Disable();

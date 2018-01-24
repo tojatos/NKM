@@ -18,7 +18,7 @@
 //
 //		protected override List<string> GetStringsToFill()
 //		{
-//			return Active.Player.Characters.Where(c=>!c.IsAlive&&c.DeathTimer<=1).Select(c => c.Name).ToList();
+//			return Active.GamePlayer.Characters.Where(c=>!c.IsAlive&&c.DeathTimer<=1).Select(c => c.Name).ToList();
 //		}
 //
 //		protected sealed override void CreateDropdowns()
@@ -34,7 +34,7 @@
 //		protected override void FinishSelecting()
 //		{
 //			var selectedNames = GetData();
-//			Active.Ability.Use(Active.Player.Characters.Single(c => c.Name == selectedNames[0]));
+//			Active.Ability.Use(Active.GamePlayer.Characters.Single(c => c.Name == selectedNames[0]));
 //			UIManager.VisibleUI = null;
 //		}
 //	}

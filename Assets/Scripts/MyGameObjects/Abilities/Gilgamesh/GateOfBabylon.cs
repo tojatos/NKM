@@ -41,7 +41,7 @@ Zasięg: {3}	Czas odnowienia: {4}
 		{
 			characters.ForEach(targetCharacter =>
 			{
-				if (targetCharacter.Owner == Active.Player) return;
+				if (targetCharacter.Owner == Active.GamePlayer) return;
 
 				ParentCharacter.Attack(targetCharacter, targetCharacter.MagicalDefense.Value <= targetCharacter.PhysicalDefense.Value ? AttackType.Magical : AttackType.Physical, AbilityDamage);
 			});

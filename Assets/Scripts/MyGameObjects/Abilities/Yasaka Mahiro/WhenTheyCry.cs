@@ -27,7 +27,7 @@ namespace MyGameObjects.Abilities.Yasaka_Mahiro
 
 		public override void OnDamage(Character targetCharacter, int damageDealt)
 		{
-			if(targetCharacter.Owner!=Active.Player&&!DamagedCharacters.Contains(targetCharacter)) DamagedCharacters.Add(targetCharacter);
+			if(targetCharacter.Owner!=Active.GamePlayer&&!DamagedCharacters.Contains(targetCharacter)) DamagedCharacters.Add(targetCharacter);
 		}
 	}
 }

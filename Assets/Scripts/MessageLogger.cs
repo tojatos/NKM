@@ -17,7 +17,7 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 
 	void Awake()
 	{
-		Game = LocalGameStarter.Instance.Game;
+		Game = GameStarter.Instance.Game;
 	}
 	public void Log(string text, bool endline = true)
 	{
@@ -139,7 +139,7 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 			}
 			else
 			{
-				Log("<b><</b>" + Game.Active.Player.Name + "<b>></b>: " + text);
+				Log("<b><</b>" + Game.Active.GamePlayer.Name + "<b>></b>: " + text);
 			}
 			InputField.text = "";
 			InputField.ActivateInputField();

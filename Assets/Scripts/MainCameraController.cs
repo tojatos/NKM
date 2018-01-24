@@ -21,7 +21,7 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 
 	public void Init()
 	{
-		Game = LocalGameStarter.Instance.Game;
+		Game = GameStarter.Instance.Game;
 		_cam = GetComponent<Camera>();
 		var mapWidth = HexMapDrawer.Instance.Width;
 		var mapHeight = HexMapDrawer.Instance.Height;

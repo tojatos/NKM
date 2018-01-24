@@ -25,7 +25,7 @@ namespace MyGameObjects.Abilities.Roronoa_Zoro
 				var r = UnityEngine.Random.Range(0, Active.HexCells.Count);
 				var randomCell = Active.HexCells[r];
 				ParentCharacter.BasicMove(randomCell);
-				MessageLogger.Log(string.Format("{0}: Cholera, znowu się zgubili?", ParentCharacter.FormattedFirstName));
+				MessageLogger.Log(string.Format("{0}: Cholera, znowu się zgubili?", ParentCharacter.FormattedFirstName()));
 			}
 		}
 	}

@@ -30,7 +30,6 @@ namespace MyGameObjects.MyGameObject_templates
 
 		public int DeathTimer { get; private set; }
 
-		public string FormattedFirstName => string.Format("<color={0}><</color><b>{1}</b><color={0}>></color>", ((Color32)Owner.GetColor()).ToHex(), Name.Split(' ').Last());
 
 		private bool CanAttackAllies
 		{
@@ -144,7 +143,7 @@ namespace MyGameObjects.MyGameObject_templates
 			damage -= defense;
 			damage = damage < 0 ? 0 : damage;
 			TrueDamageModifier(attackedCharacter, ref damage);
-			MessageLogger.Log(string.Format("{0} atakuje {1}", FormattedFirstName, attackedCharacter.FormattedFirstName), false);
+			MessageLogger.Log(string.Format("{0} atakuje {1}", this.FormattedFirstName(), attackedCharacter.FormattedFirstName()), false);
 			if (damage > 0)
 			{
 				attackedCharacter.Damage(ref damage);
@@ -171,7 +170,7 @@ namespace MyGameObjects.MyGameObject_templates
 		{
 			if (IsAlive) return;
 
-			MessageLogger.Log(string.Format("{0} umiera!", FormattedFirstName));
+			MessageLogger.Log(string.Format("{0} umiera!", this.FormattedFirstName()));
 			RemoveFromMap();
 			DeathTimer = 0;
 			if (Active.CharacterOnMap == this) Deselect();
@@ -213,7 +212,7 @@ namespace MyGameObjects.MyGameObject_templates
 		private void PrepareAttackAndMove()
 		{
 			Game.HexMapDrawer.RemoveAllHighlights();
-			if (Active.Player != Owner)
+			if (Active.GamePlayer != Owner)
 			{
 				MessageLogger.DebugLog("Nie jesteś właścicielem! Wara!");
 				return;
@@ -322,8 +321,8 @@ namespace MyGameObjects.MyGameObject_templates
 			var hpAfterHeal = targetCharacter.HealthPoints.Value;
 			var diff = hpAfterHeal - hpBeforeHeal;
 			MessageLogger.Log(targetCharacter != this
-				? $"{FormattedFirstName} ulecza {targetCharacter.FormattedFirstName} o <color=blue><b>{diff}</b></color> punktów życia!"
-				: $"{FormattedFirstName} ulecza się o <color=blue><b>{diff}</b></color> punktów życia!");
+				? $"{this.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{diff}</b></color> punktów życia!"
+				: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{diff}</b></color> punktów życia!");
 		}
 		public void OnPhaseFinish()
 		{
@@ -365,7 +364,7 @@ namespace MyGameObjects.MyGameObject_templates
 			var characterButtons = new List<GameObject>(CharacterAbilities.Instance.Buttons);
 			characterButtons.AddRange(new List<GameObject>(CharacterEffects.Instance.Buttons));
 			Active.Buttons = characterButtons;
-			if (Active.Player != Owner) return;
+			if (Active.GamePlayer != Owner) return;
 
 			PrepareAttackAndMove();
 		}

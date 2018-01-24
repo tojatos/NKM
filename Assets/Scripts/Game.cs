@@ -12,7 +12,7 @@ public class Game
 {
 	private GameOptions _options;
 
-	public List<Player> Players;
+	public List<GamePlayer> Players;
 	public Active Active;
 	public UIManager UIManager;
 	public Spawner Spawner;
@@ -28,7 +28,7 @@ public class Game
 	{
 		_options = gameOptions;
 	
-		Players = new List<Player>(gameOptions.Players);
+		Players = new List<GamePlayer>(gameOptions.Players);
 		UIManager = _options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
 		Spawner = Spawner.Instance;
@@ -40,13 +40,13 @@ public class Game
 	public void StartGame()
 	{
 		HexMapDrawer.CreateMap(_options.Map);
-		UIManager.InitializeStartGameScene();
+		UIManager.Init();
 		UIManager.VisibleUI = UIManager.GameUI;
 		Active.Buttons = UIManager.UseButtons;
 		MainCameraController.Instance.Init();
 
 		CharacterAbilities.Instance.Init();
-		Players.ForEach(p=>p.Init(this));
+//		Players.ForEach(p=>p.Init(this));
 		UIManager.UpdateActivePhaseText();
 		TakeTurns();
 	}
@@ -149,13 +149,13 @@ public class Game
 		//else if (myGameObjectType == typeof(Item))
 		//{
 		//	if (cell.CharacterOnCell == null) return;
-		//	if (cell.CharacterOnCell.Owner != Active.Player)
+		//	if (cell.CharacterOnCell.Owner != Active.GamePlayer)
 		//	{
 		//		throw new Exception("Nie możesz użyć przedmiotu na nie swojej postaci!");
 		//	}
 		//	var activeItem = Active.MyGameObject as Item;
 		//	cell.CharacterOnCell.ActiveItem = activeItem;
-		//	Active.Player.Items.Remove(activeItem);
+		//	Active.GamePlayer.Items.Remove(activeItem);
 		//	Active.MyGameObject = null;
 		//}
 		//else if (myGameObjectType == typeof(Potion))

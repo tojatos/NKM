@@ -35,7 +35,7 @@ public class Active
 	public Turn Turn { get; }
 	public Phase Phase { get; }
 	public AirSelection AirSelection { get; }
-	public Player Player { get; set; }
+	public GamePlayer GamePlayer { get; set; }
 	public Action Action { private get; set; }
 	public Ability Ability { get; set; }
 	public MyGameObject MyGameObject { get; set; }
@@ -67,7 +67,7 @@ public class Active
 
 	//public bool IsActivePlayerCharacterSelected
 	//{
-	//	get { return CharacterOnMap != null && CharacterOnMap.Owner == Player; }
+	//	get { return CharacterOnMap != null && CharacterOnMap.Owner == GamePlayer; }
 	//}
 	public bool IsActiveUse => !(Ability == null && (Action == Action.None || Action == Action.AttackAndMove) && MyGameObject == null);
 

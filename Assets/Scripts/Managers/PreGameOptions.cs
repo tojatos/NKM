@@ -20,9 +20,9 @@ namespace Managers
 			_mapSelectDropdown.options = Stuff.Maps.Select(map => new Dropdown.OptionData(map.Name)).ToList();
 			_mapSelectDropdown.onValueChanged.AddListener(ReloadPlayerCountDropdown);
 			_mapSelectDropdown.onValueChanged.AddListener(ReloadCppDropdown);
-			//TODO: Check if map exists, same with player number
+			//TODO: Check if map exists, same with gamePlayer number
 
-			_mapSelectDropdown.value = PlayerPrefs.GetInt("SelectedMap", 0);
+			_mapSelectDropdown.value = PlayerPrefs.GetInt("SelectedMapIndex", 0);
 
 			ReloadPlayerCountDropdown(_mapSelectDropdown.value);
 			_playerCountDropdown.value = PlayerPrefs.GetInt("NumberOfPlayers", 2) - 1;
@@ -33,10 +33,11 @@ namespace Managers
 
 		public void PlayButtonClick()
 		{
-			PlayerPrefs.SetInt("SelectedMap", _mapSelectDropdown.value);
+			PlayerPrefs.SetInt("SelectedMapIndex", _mapSelectDropdown.value);
 			PlayerPrefs.SetInt("NumberOfPlayers", _playerCountDropdown.value + 1);
 			PlayerPrefs.SetInt("NumberOfCharactersPerPlayer", _cppDropdown.value + 1);
-			SceneManager.LoadScene(Scenes.SinglePlayerGame);
+			PlayerPrefs.SetInt("GameType", (int)GameType.Local);
+			SceneManager.LoadScene(Scenes.MainGame);
 		}
 		public void BackButtonClick()
 		{

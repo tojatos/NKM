@@ -30,19 +30,19 @@ public class Turn
 			Game.HexMapDrawer.RemoveAllHighlights();
 		};
 	}
-	public void Start(Player player)
+	public void Start(GamePlayer gamePlayer)
 	{
-		Game.Active.Player = player;
+		Game.Active.GamePlayer = gamePlayer;
 		Game.Active.Turn.IsDone = false;
 		Game.Active.Reset();
 		UIManager.Instance.UpdateActivePlayerUI();
 		if (Game.Active.Phase.Number == 0)
 		{
-//			if (Game.Active.Player.HasSelectedCharacters == false)
+//			if (Game.Active.GamePlayer.HasSelectedCharacters == false)
 //			{
 //				UIManager.Instance.StartSelectAndInitializeThings();
 //			}
-		 if (Game.Active.Player.Characters.Any(c => !c.IsOnMap))
+		 if (Game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap))
 			{
 				UIManager.Instance.ForcePlacingChampions = true;
 			}

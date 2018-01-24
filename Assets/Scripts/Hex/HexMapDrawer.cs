@@ -12,7 +12,7 @@ namespace Hex
 
 		void Awake()
 		{
-			Game = LocalGameStarter.Instance.Game;
+			Game = GameStarter.Instance.Game;
 		}
 		public HexMap HexMap { get; private set; }
 		public HexCell CellPrefab;

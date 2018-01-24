@@ -3,8 +3,7 @@
 /// </summary>
 public static class Scenes
 {
-	public static string SinglePlayerGame => "Singleplayer Game";
-	public static string MultiPlayerGame => "Multiplayer Game";
+	public static string MainGame => "Main Game";
 	public static string MultiPlayerSetup => "Multiplayer Setup";
 	public static string GameTypeSelect => "Game Type Select";
 	public static string GameHostOptions => "Game Host Options";

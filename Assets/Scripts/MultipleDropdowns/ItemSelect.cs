@@ -37,8 +37,8 @@
 //			var selectedNames = GetData();
 //			Validator.ValidateInitializationSelect(selectedNames);
 //			var classNames = AllMyGameObjects.Instance.Items.Where(c => selectedNames.Contains(c.Name)).ToList().GetClassNames();
-//			Active.Player.Items.AddRange(Spawner.Create("Items", classNames).Cast<Item>());
-//			Active.Player.HasSelectedItems = true;
+//			Active.GamePlayer.Items.AddRange(Spawner.Create("Items", classNames).Cast<Item>());
+//			Active.GamePlayer.HasSelectedItems = true;
 //		}
 //	}
 //}

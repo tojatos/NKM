@@ -23,7 +23,7 @@
 //
 //		protected MultipleDropdownsTemplate(GameObject multipleDropdownObject)
 //		{
-//			Active = LocalGameStarter.Instance.Game.Active;
+//			Active = GameStarter.Instance.Game.Active;
 //
 //			MultipleDropdownObject = multipleDropdownObject;
 //			GetMonoBehaviourInfo();

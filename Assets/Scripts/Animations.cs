@@ -7,7 +7,7 @@ using UnityEngine;
 public class Animations : SingletonMonoBehaviour<Animations>
 {
 	private Game Game;
-	void Start() => Game = LocalGameStarter.Instance.Game;
+	void Start() => Game = GameStarter.Instance.Game;
 	private bool IsAsterPlaying;
 	public IEnumerator SharpenedForkEnumerator(Transform parentTransform, Transform targetTransform)
 	{

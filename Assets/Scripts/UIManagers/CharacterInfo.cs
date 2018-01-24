@@ -24,7 +24,7 @@ namespace UIManagers
 
 		void Awake()
 		{
-			Game = LocalGameStarter.Instance.Game;
+			Game = GameStarter.Instance.Game;
 		}
 		[UsedImplicitly]
 		public void Open()

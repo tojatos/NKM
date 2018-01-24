@@ -13,7 +13,7 @@ namespace UIManagers
 
 		private void Awake()
 		{
-			Game = LocalGameStarter.Instance.Game;
+			Game = GameStarter.Instance.Game;
 			Image = GetComponent<Image>();
 		}
 

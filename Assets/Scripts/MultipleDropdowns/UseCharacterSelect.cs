@@ -19,7 +19,7 @@
 //
 //		protected override List<string> GetStringsToFill()
 //		{
-//			return Active.Player.Characters.Where(c => !c.IsOnMap && c.IsAlive).Select(c => c.Name).ToList();
+//			return Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive).Select(c => c.Name).ToList();
 //		}
 //
 //		protected sealed override void CreateDropdowns()
@@ -36,8 +36,8 @@
 //		{
 //			var selectedNames = GetData();
 //			Game.HexMapDrawer.RemoveAllHighlights();
-//			Active.Player.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList().ForEach(c=>c.ToggleHighlight(HiglightColor.Red));
-//			Active.MyGameObject = Active.Player.Characters.Single(c => c.Name == selectedNames[0]);
+//			Active.GamePlayer.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList().ForEach(c=>c.ToggleHighlight(HiglightColor.Red));
+//			Active.MyGameObject = Active.GamePlayer.Characters.Single(c => c.Name == selectedNames[0]);
 //			UIManager.VisibleUI = null;
 //		}
 //	}

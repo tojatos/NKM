@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -12,6 +15,7 @@ namespace Multiplayer.Network
 	{
 		#region NetworkingVariables
 		private const int MAX_CONNECTION = 100;
+		private const int BUFFER_SIZE = 65535;
 
 		private int port = 5701;
 
@@ -20,18 +24,21 @@ namespace Multiplayer.Network
 
 		private int reliableChannel;
 		private int unreliableChannel;
+		private int reliableFragmentedChannel;
+
 
 		private bool isStarted = false;
 		private byte error;
 #endregion
 
 		public List<Player> Players = new List<Player>();
+		public Dictionary<Player, GamePlayer> GamePlayers = new Dictionary<Player, GamePlayer>();
 		private ServerView ServerView;
-		private GameServerSide Game;
+//		private GameServerSide Game;
 
-		private int _selectedMap;
-		private int _numberOfPlayers;
-		private int _playersPerCharacter;
+		public int SelectedMapIndex { get; private set; }
+		public int NumberOfPlayers { get; private set; }
+		public int PlayersPerCharacter { get; private set; }
 
 		void Awake()
 		{
@@ -41,7 +48,7 @@ namespace Multiplayer.Network
 				if (SceneManager.GetActiveScene().name == Scenes.ServerView)
 				{
 					ServerView = FindObjectOfType<ServerView>();
-					var gameOptions = new List<int> { _numberOfPlayers, _selectedMap, _playersPerCharacter };
+					var gameOptions = new List<int> { NumberOfPlayers, SelectedMapIndex, PlayersPerCharacter };
 					ServerView.UpdateGameOptions(gameOptions.ConvertAll(x => x.ToString()));
 				}
 			};
@@ -50,9 +57,9 @@ namespace Multiplayer.Network
 		{
 			StartServer();
 
-			_numberOfPlayers = PlayerPrefs.GetInt("NumberOfPlayers");
-			_selectedMap = PlayerPrefs.GetInt("SelectedMap");
-			_playersPerCharacter = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer");
+			NumberOfPlayers = PlayerPrefs.GetInt("NumberOfPlayers");
+			SelectedMapIndex = PlayerPrefs.GetInt("SelectedMapIndex");
+			PlayersPerCharacter = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer");
 		}
 
 		private void StartServer()
@@ -62,6 +69,8 @@ namespace Multiplayer.Network
 
 			reliableChannel = cc.AddChannel(QosType.Reliable);
 			unreliableChannel = cc.AddChannel(QosType.Unreliable);
+			reliableFragmentedChannel = cc.AddChannel(QosType.ReliableFragmented);
+
 
 			HostTopology topo = new HostTopology(cc, MAX_CONNECTION);
 
@@ -76,8 +85,8 @@ namespace Multiplayer.Network
 			int recHostId;
 			int connectionId;
 			int channelId;
-			byte[] recBuffer = new byte[1024];
-			int bufferSize = 1024;
+			byte[] recBuffer = new byte[65535];
+			int bufferSize = BUFFER_SIZE;
 			int dataSize;
 			byte error;
 			NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer,
@@ -85,16 +94,21 @@ namespace Multiplayer.Network
 			switch (recData)
 			{
 				case NetworkEventType.ConnectEvent:
-					Debug.Log("Player " + connectionId + " has connected");
+					Debug.Log("GamePlayer " + connectionId + " has connected");
 					break;
 				case NetworkEventType.DataEvent:
+					if(error!=0)
+					{
+						Debug.LogError((NetworkError)error);
+						return;
+					}
 					string msg = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
 					ReceiveMessage(connectionId, msg);
-					//Debug.Log("Player " + connectionId + " has sent: " + msg);
+					//Debug.Log("GamePlayer " + connectionId + " has sent: " + msg);
 					break;
 				case NetworkEventType.DisconnectEvent:
 					OnDisconnect(connectionId);
-					Debug.Log("Player " + connectionId + " has disconnected");
+					Debug.Log("GamePlayer " + connectionId + " has disconnected");
 					break;
 			}
 		}
@@ -103,7 +117,7 @@ namespace Multiplayer.Network
 		{
 			Players.RemoveAll(p => p.ConnectionID == connectionId);
 			UpdatePlayers();
-			if (Players.Count < _numberOfPlayers)
+			if (Players.Count < NumberOfPlayers)
 			{
 				ServerView.CanStart = false;
 			}
@@ -117,12 +131,23 @@ namespace Multiplayer.Network
 		private void ReceiveMessage(int connectionId, string msg)
 		{
 			List<string> messages = msg.Split('|').ToList();
-			messages.ForEach(m =>
+			foreach (var m in messages)
 			{
 				List<string> contents = m.Split('%').ToList();
 				string header = contents[0];
+				Debug.Log($"| Server receiving: {header}");
 				switch (header)
 				{
+					case "GET_GAMEPLAYERS":
+						SendGamePlayers(connectionId);
+						break;
+					case "GAMEPLAYER":
+						GamePlayer gamePlayer = JsonConvert.DeserializeObject<GamePlayer>(contents[1], new JsonSerializerSettings
+						{
+							TypeNameHandling = TypeNameHandling.Auto,
+						});
+						ReceivePlayer(Players.Single(p => p.ConnectionID == connectionId), gamePlayer);
+						break;
 					case "CONNECTED":
 						AskForName(connectionId);
 						break;
@@ -135,7 +160,21 @@ namespace Multiplayer.Network
 						Debug.Log($"Undefined message: {m}");
 						break;
 				}
+			}
+		}
+
+		private async void SendGamePlayers(int connectionId)
+		{
+			Func<bool> areAllGamePlayersReceived = () => Players.Count == GamePlayers.Count;
+			await areAllGamePlayersReceived.WaitToBeTrue();
+
+			string players = JsonConvert.SerializeObject(GamePlayers.Values.ToList(), new JsonSerializerSettings
+			{
+				TypeNameHandling = TypeNameHandling.Auto,
+				PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+				Formatting = Formatting.Indented
 			});
+			Send(ComposeMessage("GAMEPLAYERS", players), reliableFragmentedChannel, connectionId);
 		}
 
 		private Player CreatePlayer(int connId, string name)
@@ -146,7 +185,7 @@ namespace Multiplayer.Network
 		}
 		private void TryJoiningLobby(Player player)
 		{
-			if(Players.Count <= _numberOfPlayers)
+			if(Players.Count <= NumberOfPlayers)
 			{
 				JoinLobby(player);
 			}
@@ -161,14 +200,14 @@ namespace Multiplayer.Network
 		{
 			SendGameOptions(player.ConnectionID);
 			UpdatePlayers();
-			if (Players.Count == _numberOfPlayers)
+			if (Players.Count == NumberOfPlayers)
 			{
 				ServerView.CanStart = true;
 			}
 		}
 		private void SendGameOptions(int playerConnectionId)
 		{
-			var msg = ComposeMessage("GAMEOPTIONS", _numberOfPlayers, _selectedMap, _playersPerCharacter);
+			var msg = ComposeMessage("GAMEOPTIONS", NumberOfPlayers, SelectedMapIndex, PlayersPerCharacter);
 			Send(msg, reliableChannel, playerConnectionId);
 		}
 
@@ -211,15 +250,30 @@ namespace Multiplayer.Network
 
 		public void TryStartingGame()
 		{
-			if (_numberOfPlayers != Players.Count) return;
+			if (NumberOfPlayers != Players.Count) return;
 
 			StartGame();
 		}
 
 		private void StartGame()
 		{
-			Game = Instantiate(new GameObject().AddComponent<GameServerSide>()).GetComponent<GameServerSide>();
+			PlayerPrefs.SetInt("GameType", (int)GameType.MultiplayerServer);
+			SceneManager.LoadScene(Scenes.MainGame);
 			SendToAllPlayers("GAMESTART", reliableChannel);
+		}
+
+		public async Task<List<GamePlayer>> GetGamePlayersFromClients()
+		{
+			SendToAllPlayers("GET_GAME_PLAYER", reliableChannel);
+			Func<bool> areAllGamePlayersReceived = () => GamePlayers.Count == Players.Count;
+			await areAllGamePlayersReceived.WaitToBeTrue();
+			return GamePlayers.Values.ToList();
+
+		}
+
+		private void ReceivePlayer(Player player, GamePlayer gamePlayer)
+		{
+			GamePlayers.Add(player, gamePlayer);
 		}
 	}
 }
