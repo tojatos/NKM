@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 
@@ -16,6 +17,14 @@ namespace Hex
 		public GameObject HelpHighlight { get; set; }
 		public HexTileType Type { get; set; }
 		public Color Color;
+
+		private Game Game;
+		void Start()
+		{
+			Game = LocalGameStarter.Instance.Game;
+			Active = Game.Active;
+		}
+
 
 		private readonly HexCell[] _neighbors = new HexCell[6];
 
@@ -59,8 +68,7 @@ namespace Hex
 
 		private void Awake()
 		{
-			//GameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-			Active = Active.Instance;
+			//LocalGameStarter = GameObject.Find("LocalGameStarter").GetComponent<LocalGameStarter>();
 			Spawner = Spawner.Instance;
 		}
 		public List<HexCell> GetNeighbors(int depth, bool stopAtWalls = false, bool stopAtEnemyCharacters = false, bool straightLine = false)
@@ -178,22 +186,22 @@ namespace Hex
 			switch (direction)
 			{
 				case HexDirection.Ne:
-					cellToReturn = HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y - value);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y - value);
 					break;
 				case HexDirection.E:
-					cellToReturn = HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + value && c.Coordinates.Y == Coordinates.Y - value);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + value && c.Coordinates.Y == Coordinates.Y - value);
 					break;
 				case HexDirection.Se:
-					cellToReturn = HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + value && c.Coordinates.Y == Coordinates.Y);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + value && c.Coordinates.Y == Coordinates.Y);
 					break;
 				case HexDirection.Sw:
-					cellToReturn = HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y + value);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y + value);
 					break;
 				case HexDirection.W:
-					cellToReturn = HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - value && c.Coordinates.Y == Coordinates.Y + value);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - value && c.Coordinates.Y == Coordinates.Y + value);
 					break;
 				case HexDirection.Nw:
-					cellToReturn = HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - value && c.Coordinates.Y == Coordinates.Y);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - value && c.Coordinates.Y == Coordinates.Y);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);

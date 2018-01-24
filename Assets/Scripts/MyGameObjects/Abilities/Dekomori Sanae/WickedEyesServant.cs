@@ -25,7 +25,7 @@ Zabicie wroga dodaje dodatkowy punkt obrażeń nieuchronnych tej umiejętności 
 		{
 			get
 			{
-				return GameManager.Players.Any(p => p.Characters.Any(c => c.IsOnMap && (c.AttackPoints.Value > ParentCharacter.AttackPoints.Value || c.Name == "Takanashi Rikka")));
+				return Game.Players.Any(p => p.Characters.Any(c => c.IsOnMap && (c.AttackPoints.Value > ParentCharacter.AttackPoints.Value || c.Name == "Takanashi Rikka")));
 			}
 		}
 		public override void TrueDamageModifier(Character targetCharacter, ref int damage)

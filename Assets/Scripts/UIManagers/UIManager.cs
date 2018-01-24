@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hex;
 using JetBrains.Annotations;
+using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,8 @@ namespace UIManagers
 {
 	public class UIManager : SingletonMonoBehaviour<UIManager>
 	{
-		private Active Active;
+		private Game Game;
+
 		private SpriteSelect SpriteSelect;
 		private HexMapDrawer HexMapDrawer;
 
@@ -36,15 +38,28 @@ namespace UIManagers
 
 		public bool ForcePlacingChampions { private get; set; }
 
-		private void Awake() => InitializeStartGameScene();
-
-		private void InitializeStartGameScene()
+		//private void Awake() => InitializeStartGameScene();
+		private List<GameObject> _ui;
+		/// <summary>
+		/// On set: Hide previous UI and show new. If set to null show GameUI.
+		/// </summary>
+		public List<GameObject> VisibleUI
 		{
+			get { return _ui; }
+			set
+			{
+				_ui?.Hide();
+				_ui = value ?? GameUI;
+				_ui.Show();
+			}
+		}
+		public void InitializeStartGameScene()
+		{
+			Game = LocalGameStarter.Instance.Game;
 			HexMapDrawer = HexMapDrawer.Instance;
-			Active = Active.Instance;
 			SpriteSelect = SpriteSelect.Instance;
 
-			Active.UIManager = this;
+			Game.Active.UIManager = this;
 			GameUI = new List<GameObject>
 			{
 				MainGameUI,
@@ -62,10 +77,10 @@ namespace UIManagers
 				CancelButton
 			};
 			//UseResurrectionSelect = new UseResurrectionSelect(Instantiate(MultipleDropdownsPrefab, gameObject.transform));
-			Active.Buttons = UseButtons;
+			Game.Active.Buttons = UseButtons;
 		}
-		public void UpdateActivePlayerUI() => ActivePlayerText.GetComponent<Text>().text = Active.Player.Name;
-		public void UpdateActivePhaseText() => ActivePhaseText.GetComponent<Text>().text = Active.Phase.Number.ToString();
+		public void UpdateActivePlayerUI() => ActivePlayerText.GetComponent<Text>().text = Game.Active.Player.Name;
+		public void UpdateActivePhaseText() => ActivePhaseText.GetComponent<Text>().text = Game.Active.Phase.Number.ToString();
 
 		//TODO: Generic methods?
 
@@ -73,106 +88,111 @@ namespace UIManagers
 		[UsedImplicitly]
 		public void OpenUseCharacterSelect()
 		{
-			var characters = new List<MyGameObject>(Active.Player.Characters.Where(c => !c.IsOnMap && c.IsAlive));
-			SpriteSelect.Open(characters, SpriteSelect.FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
+			var characters = new List<MyGameObject>(Game.Active.Player.Characters.Where(c => !c.IsOnMap && c.IsAlive));
+			SpriteSelect.Open(characters, FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
 		}
+		private void FinishUseCharacter()
+		{
+			if (SpriteSelect.SelectedObjects.Count != 1) return;
 
+			Game.HexMapDrawer.RemoveAllHighlights();
+			Game.Active.Player.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList().ForEach(c => c.ToggleHighlight(HiglightColor.Red));
+			Game.Active.MyGameObject = Game.Active.Player.Characters.Single(c => c.Name == SpriteSelect.SelectedObjects[0].Name);
+			SpriteSelect.Close();
+		}
 
 		private void Update()
 		{
-			if (Active.Phase.Number == 0)
+			if (Game==null) return;
+			if (Game.Active.Phase.Number == 0)
 			{
-				if (ForcePlacingChampions && !SpriteSelect.gameObject.activeSelf && Active.MyGameObject == null && Active.Player.HasFinishedSelecting)
+				if (ForcePlacingChampions && !SpriteSelect.IsOpened && Game.Active.MyGameObject == null && Game.Active.Player.HasFinishedSelecting)
 				{
-					var characters = new List<MyGameObject>(Active.Player.Characters.Where(c => !c.IsOnMap && c.IsAlive));
-					SpriteSelect.Open(characters, SpriteSelect.FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
+					var characters = new List<MyGameObject>(Game.Active.Player.Characters.Where(c => !c.IsOnMap && c.IsAlive));
+					SpriteSelect.Open(characters, FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
 			}
 			}
 			UpdateButtons();
 			Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
-			//ToggleIf(!Tooltip.Instance.IsActive, Tooltip.Instance.gameObject);
-			//ToggleIf(Active.CharacterOnMap==null, CharacterStats.Instance.gameObject);
-			CharacterStats.Instance.gameObject.ToggleIf(Active.CharacterOnMap == null);
-			//ToggleIf(Active.Instance.CharacterOnMap == null, CharacterFace.Instance.gameObject);
-			CharacterFace.Instance.gameObject.ToggleIf(Active.Instance.CharacterOnMap == null);
-			//ToggleIf(!(Active.CharacterOnMap != null && Active.Turn.CharacterThatTookActionInTurn==null && Active.CharacterOnMap.Owner == Active.Player &&Active.CharacterOnMap.TookActionInPhaseBefore == false), TakeActionWithCharacterButton);
-			TakeActionWithCharacterButton.ToggleIf(!(Active.CharacterOnMap != null && Active.Turn.CharacterThatTookActionInTurn == null && Active.CharacterOnMap.Owner == Active.Player && Active.CharacterOnMap.TookActionInPhaseBefore == false));
+			CharacterStats.Instance.gameObject.ToggleIf(Game.Active.CharacterOnMap == null);
+			CharacterFace.Instance.gameObject.ToggleIf(Game.Active.CharacterOnMap == null);
+			TakeActionWithCharacterButton.ToggleIf(!(Game.Active.CharacterOnMap != null && Game.Active.Turn.CharacterThatTookActionInTurn == null && Game.Active.CharacterOnMap.Owner == Game.Active.Player && Game.Active.CharacterOnMap.TookActionInPhaseBefore == false));
 			if (Input.GetMouseButtonDown(1)|| Input.GetKeyDown(KeyCode.Escape))
 			{
 				if (CharacterInfo.Instance.gameObject.activeSelf)
 				{
-					Active.UI = GameUI;
+					Game.UIManager.VisibleUI = GameUI;
 				}
 			}
 		}
-
 		private void UpdateButtons()
 		{
-			if (Active.Phase.Number == 0)
+			if (Game.Active.Phase.Number == 0)
 			{
-				//ToggleIf(true, EndTurnButton.GetComponent<Button>());
 				EndTurnButton.GetComponent<Button>().ToggleIf(true);
 			}
 			else
 			{
-				//ToggleIf(Active.Turn.CharacterThatTookActionInTurn == null && Active.Player.Characters.Any(c => c.CanTakeAction && c.IsOnMap), EndTurnButton.GetComponent<Button>());
-				EndTurnButton.GetComponent<Button>().ToggleIf(Active.Turn.CharacterThatTookActionInTurn == null && Active.Player.Characters.Any(c => c.CanTakeAction && c.IsOnMap));
+				EndTurnButton.GetComponent<Button>().ToggleIf(Game.Active.Turn.CharacterThatTookActionInTurn == null && Game.Active.Player.Characters.Any(c => c.CanTakeAction && c.IsOnMap));
 			}
-			if (Active.IsActiveUse)
+			if (Game.Active.IsActiveUse)
 			{
-				Active.Buttons = CancelButtons;
+				Game.Active.Buttons = CancelButtons;
 			}
-			else if (Active.CharacterOnMap != null)
+			else if (Game.Active.CharacterOnMap != null)
 			{
 			}
 			else
 			{
-				Active.Buttons = UseButtons;
-				//ToggleIf(Active.Player.Characters.All(c => c.IsOnMap || !c.IsAlive) || Active.Turn.WasCharacterPlaced || Active.Player.GetSpawnPoints().All(sp=>sp.CharacterOnCell!=null), PlaceCharacterButton.GetComponent<Button>());
-				PlaceCharacterButton.GetComponent<Button>().ToggleIf(Active.Player.Characters.All(c => c.IsOnMap || !c.IsAlive) || Active.Turn.WasCharacterPlaced || Active.Player.GetSpawnPoints().All(sp => sp.CharacterOnCell != null));
-				//ToggleIf(!Active.Player.Items.Any(), UseItemButton.GetComponent<Button>());
-				//ToggleIf(!Active.Player.Potions.Any(), UsePotionButton.GetComponent<Button>());
+				Game.Active.Buttons = UseButtons;
+				PlaceCharacterButton.GetComponent<Button>().ToggleIf(Game.Active.Player.Characters.All(c => c.IsOnMap || !c.IsAlive) || Game.Active.Turn.WasCharacterPlaced || Game.Active.Player.GetSpawnPoints().All(sp => sp.CharacterOnCell != null));
 			}
 		}
-
-
-
-		private IEnumerator SelectAndInitializeThings()
+//		private IEnumerator SelectAndInitializeThings()
+//		{
+//			var allCharacters = new List<MyGameObject>(AllMyGameObjects.Instance.Characters);
+//			SpriteSelect.Instance.Open(allCharacters, FinishSelectingCharacters, "Wybór postaci", "Zakończ wybieranie postaci");
+//			yield return new WaitUntil(() => Game.Active.Player.HasSelectedCharacters);
+//			//ItemSelect.Open();TODO
+//			//yield return new WaitUntil(() => Game.Active.Player.HasSelectedItems);
+//			//PotionSelect.Open();TODO
+//			//yield return new WaitUntil(() => Game.Active.Player.HasSelectedPotions);
+//			Game.UIManager.VisibleUI = GameUI;
+//			HexMapDrawer.TriangulateCells(); //clicking on map does not work without triangulating here for some reason
+//			Game.Active.Turn.Finish();
+//		}
+		private void FinishSelectingCharacters()
 		{
-			var allCharacters = new List<MyGameObject>(AllMyGameObjects.Instance.Characters);
-			SpriteSelect.Instance.Open(allCharacters, SpriteSelect.Instance.FinishSelectingCharacters, "Wybór postaci", "Zakończ wybieranie postaci");
-			yield return new WaitUntil(() => Active.Player.HasSelectedCharacters);
-			//ItemSelect.Open();TODO
-			//yield return new WaitUntil(() => Active.Player.HasSelectedItems);
-			//PotionSelect.Open();TODO
-			//yield return new WaitUntil(() => Active.Player.HasSelectedPotions);
-			Active.UI = GameUI;
-			HexMapDrawer.TriangulateCells(); //clicking on map does not work without triangulating here for some reason
-			Active.Turn.Finish();
-		}
+			var charactersPerPlayer = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer", HexMapDrawer.Instance.HexMap.MaxCharacters);
+			if (SpriteSelect.Instance.SelectedObjects.Count != charactersPerPlayer) return;
 
+			var classNames = SpriteSelect.Instance.SelectedObjects.GetClassNames();
+			Game.Active.Player.Characters.AddRange(Spawner.Create("Characters", classNames).Cast<Character>());
+			Game.Active.Player.HasSelectedCharacters = true;
+			SpriteSelect.Close();
+		}
 		//needed to call a corountine outside of a monobehaviour class
-		public void StartSelectAndInitializeThings()
-		{
-			StartCoroutine(SelectAndInitializeThings());
-		}
+//		public void StartSelectAndInitializeThings()
+//		{
+//			StartCoroutine(SelectAndInitializeThings());
+//		}
 
 		[UsedImplicitly]
 		public void EndTurnButtonClick()
 		{
-			Active.Turn.Finish();
+			Game.Active.Turn.Finish();
 		}
 		[UsedImplicitly]
 		public void CancelButtonClick()
 		{
-			Active.Cancel();
+			Game.Active.Cancel();
 		}
 		[UsedImplicitly]
 		public void TakeActionWithCharacter()
 		{
-			//Active.Turn.CharacterThatTookActionInTurn = Active.CharacterOnMap;
-			Active.CharacterOnMap.InvokeJustBeforeFirstAction();
-			Active.Turn.Finish();
+			//Game.Active.Turn.CharacterThatTookActionInTurn = Game.Active.CharacterOnMap;
+			Game.Active.CharacterOnMap.InvokeJustBeforeFirstAction();
+			Game.Active.Turn.Finish();
 		}
 	}
 }

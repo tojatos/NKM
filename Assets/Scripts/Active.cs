@@ -9,12 +9,27 @@ using UnityEngine.EventSystems;
 
 public class Active
 {
-	#region Singleton
-	private static Active _instance;
-	public static Active Instance => _instance ?? (_instance = new Active());
+	//#region Singleton
+	//private static Active _instance;
+	//public static Active Instance => _instance ?? (_instance = new Active());
 
-	#endregion
-
+	//#endregion
+	private Game Game;
+	public Active(Game game)
+	{
+		Game = game;
+		Phase = new Phase(game);
+		Turn = new Turn(game);
+		AirSelection = new AirSelection(game);
+		IsDebug = false;
+	}
+//	private Active()
+//	{
+//		Phase = new Phase();
+//		Turn = new Turn { Active = this };
+//		AirSelection = new AirSelection { Active = this };
+//		IsDebug = false;
+//	}
 	public UIManager UIManager;
 
 	public Turn Turn { get; }
@@ -35,7 +50,7 @@ public class Active
 			_helpHexCells = value;
 			if (value == null)
 			{
-				HexMapDrawer.RemoveAllHelpHighlights();
+				Game.HexMapDrawer.RemoveAllHelpHighlights();
 			}
 			else
 			{
@@ -45,7 +60,6 @@ public class Active
 	}
 
 	private List<HexCell> _helpHexCells;
-	private List<GameObject> _ui;
 	private List<GameObject> _buttons;
 
 
@@ -57,21 +71,7 @@ public class Active
 	//}
 	public bool IsActiveUse => !(Ability == null && (Action == Action.None || Action == Action.AttackAndMove) && MyGameObject == null);
 
-	/// <summary>
-	/// On set: Hide previous UI and show new. If set to null show GameUI.
-	/// </summary>
-	public List<GameObject> UI
-	{
-		get { return _ui; }
-		set
-		{
-			//UIManager.Hide(_ui);
-			_ui?.Hide();
-			_ui = value ?? UIManager.GameUI;
-			//UIManager.Show(_ui);
-			_ui.Show();
-		}
-	}
+	
 	/// <summary>
 	/// On set: Hide previous Buttons and show new.
 	/// </summary>
@@ -93,20 +93,14 @@ public class Active
 
 
 
-	private Active()
-	{
-		Phase = new Phase();
-		Turn = new Turn {Active = this};
-		AirSelection = new AirSelection {Active = this};
-		IsDebug = false;
-	}
+
 
 	public void Reset()
 	{
 		Ability?.OnUseFinish();
 		if (IsActiveUse || Turn.IsDone)
 		{
-			Character.Deselect();
+			CharacterOnMap?.Deselect();
 		}
 		Ability = null;
 		HexCells = null;
@@ -122,12 +116,12 @@ public class Active
 		}
 		else if(MyGameObject != null)
 		{
-			HexMapDrawer.RemoveAllHighlights();
+			Game.HexMapDrawer.RemoveAllHighlights();
 			MyGameObject = null;
 		}
-		else if (CharacterOnMap != null)
+		else
 		{
-			Character.Deselect();
+			CharacterOnMap?.Deselect();
 		}
 	}
 	public bool Prepare(Action actionToPrepare, List<HexCell> cellRange, bool addToRange = false)
@@ -161,7 +155,7 @@ public class Active
 		Ability = abilityToPrepare;
 		if (toggleToRed)
 		{
-			HexMapDrawer.RemoveAllHighlights();
+			Game.HexMapDrawer.RemoveAllHighlights();
 			HexCells.ForEach(c => c.ToggleHighlight(HiglightColor.Red));
 		}
 		return true;
@@ -179,7 +173,7 @@ public class Active
 		Ability = null;
 		Action = Action.None;
 		HexCells = null;
-		HexMapDrawer.RemoveAllHighlights();
+		Game.HexMapDrawer.RemoveAllHighlights();
 		CharacterOnMap?.Select();
 	}
 	public void MakeAction(HexCell cell)

@@ -1,5 +1,6 @@
 ﻿using System;
 using Hex;
+using Managers;
 using UIManagers;
 using UnityEngine;
 
@@ -11,30 +12,30 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 	public float PositionChange = 15f;
 
 	private Camera _cam;
-	private Active Active;
+	private Game Game;
 	private Vector3 _mainPosition;
 
 	private Vector3 Origin;
 	private Vector3 Diference;
 	private bool Drag;
 
-	public void Start()
+	public void Init()
 	{
-		Active = Active.Instance;
+		Game = LocalGameStarter.Instance.Game;
 		_cam = GetComponent<Camera>();
 		var mapWidth = HexMapDrawer.Instance.Width;
 		var mapHeight = HexMapDrawer.Instance.Height;
-		var startingPosition = new Vector3(15* mapWidth, 300, 7* mapHeight);
+		var startingPosition = new Vector3(15 * mapWidth, 300, 7 * mapHeight);
 		_cam.transform.position = startingPosition;
-		var startingZoom = Math.Max(mapWidth, mapHeight)*10;
+		var startingZoom = Math.Max(mapWidth, mapHeight) * 10;
 		_cam.orthographicSize = startingZoom;
 		MaxZoom = startingZoom;
 		_mainPosition = startingPosition;
 	}
-
 	private void Update()
 	{
-		if (Active.UI != UIManager.Instance.GameUI) return;
+		if(Game==null) return;
+		if (Game.UIManager.VisibleUI != UIManager.Instance.GameUI) return;
 
 		if (Input.touchCount == 2)
 		{
@@ -52,7 +53,7 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 			ZoomOrthoCamera(false);
 		}
 		//Drag camera
-		if (Input.GetMouseButton(0) && Math.Abs(_cam.orthographicSize - MaxZoom) > 0.01 && !Active.IsPointerOverUIObject()) //drag only over a game
+		if (Input.GetMouseButton(0) && Math.Abs(_cam.orthographicSize - MaxZoom) > 0.01 && !Game.Active.IsPointerOverUIObject()) //drag only over a Game
 		{
 			Diference = (_cam.ScreenToWorldPoint(Input.mousePosition)) - _cam.transform.position;
 			if (Drag == false)

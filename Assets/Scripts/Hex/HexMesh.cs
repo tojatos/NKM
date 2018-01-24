@@ -14,7 +14,7 @@ namespace Hex
 		List<int> _triangles;
 		List<Color> _colors;
 
-		void Awake()
+		public void Init()
 		{
 			GetComponent<MeshFilter>().mesh = _hexMesh = new Mesh();
 			_meshCollider = gameObject.AddComponent<MeshCollider>();

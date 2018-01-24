@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,17 +13,20 @@ namespace UIManagers
 	/// </summary>
 	public class CharacterAbilities : SingletonMonoBehaviour<CharacterAbilities>
 	{
+		private Game Game;
+
 		public GameObject AbilityButtonPrefab;
 		public List<GameObject> Buttons { get; private set; }
-		private void Awake()
+		public void Init()
 		{
+			Game = LocalGameStarter.Instance.Game;
 			Buttons = new List<GameObject>();
 		}
 		public void UpdateButtons()
 		{
-			if (Active.Instance.CharacterOnMap == null) return;
+			if (Game.Active.CharacterOnMap == null) return;
 
-			var character = Active.Instance.CharacterOnMap;
+			var character = Game.Active.CharacterOnMap;
 			RemoveButtons();
 
 			//Create an ability button for each character ability
@@ -46,10 +50,10 @@ namespace UIManagers
 		{
 			var trigger = button.GetComponent<EventTrigger>() ?? button.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-			entry.callback.AddListener(eventData => Active.Instance.HelpHexCells = ability.GetRangeCells());
+			entry.callback.AddListener(eventData => Game.Active.HelpHexCells = ability.GetRangeCells());
 			trigger.triggers.Add(entry);
 			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
-			entry2.callback.AddListener(eventData => Active.Instance.HelpHexCells = null);
+			entry2.callback.AddListener(eventData => Game.Active.HelpHexCells = null);
 			trigger.triggers.Add(entry2);
 		}
 		private void SetButtonSprite(GameObject button, Ability ability)
@@ -73,9 +77,9 @@ namespace UIManagers
 		}
 		public void UpdateButtonData()
 		{
-			if(Active.Instance.CharacterOnMap==null) return;
+			if(Game==null||Game.Active.CharacterOnMap==null) return;
 
-			var character = Active.Instance.CharacterOnMap;
+			var character = Game.Active.CharacterOnMap;
 			Buttons.ForEach(button =>
 			{
 				var ability = character.Abilities[int.Parse(button.name)];
@@ -92,7 +96,7 @@ namespace UIManagers
 			var enableableAbility = (EnableableAbility) ability;
 			var enableGameObject = new GameObject();
 			enableGameObject.transform.parent = button.transform;
-			enableGameObject.AddComponent<Image>().sprite = Stuff.Sprites.Icons.Find(s => s.name == (enableableAbility.IsEnabled ? "Ability Active" : "Ability Inactive"));
+			enableGameObject.AddComponent<Image>().sprite = Stuff.Sprites.Icons.Find(s => s.name == (enableableAbility.IsEnabled ? "Ability Game.Active" : "Ability Inactive"));
 
 			var rect = enableGameObject.GetComponent<RectTransform>();
 			rect.anchorMin = new Vector2(1, 1);

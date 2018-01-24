@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 
@@ -6,19 +7,21 @@ namespace UIManagers
 {
 	public class CharacterEffects : SingletonMonoBehaviour<CharacterEffects>
 	{
+		private Game Game;
 		public GameObject EffectButtonPrefab;
 		public List<GameObject> Buttons { get; private set; }
 
 		private void Awake()
 		{
+			Game = LocalGameStarter.Instance.Game;
 			Buttons = new List<GameObject>();
 		}
 
 		public void UpdateButtons()
 		{
-			if (Active.Instance.CharacterOnMap == null) return;
+			if (Game.Active.CharacterOnMap == null) return;
 
-			var character = Active.Instance.CharacterOnMap;
+			var character = Game.Active.CharacterOnMap;
 			RemoveButtons();
 			character.Effects.ForEach(effect => CreateEffectButton(character, effect));
 		}

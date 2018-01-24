@@ -5,14 +5,15 @@ using UIManagers;
 
 public class Turn
 {
-	public Active Active;
+	private Game Game;
 	public bool IsDone { get; private set; }
 	//private int Number;
 	public bool WasCharacterPlaced { get; set; }
 	public Character CharacterThatTookActionInTurn { get; set; }
 
-	public Turn()
+	public Turn(Game game)
 	{
+		Game = game;
 		IsDone = false;
 		WasCharacterPlaced = false;
 		CharacterThatTookActionInTurn = null;
@@ -25,23 +26,23 @@ public class Turn
 			IsDone = true;
 			WasCharacterPlaced = false;
 			CharacterThatTookActionInTurn = null;
-			Active.Reset();
-			HexMapDrawer.RemoveAllHighlights();
+			Game.Active.Reset();
+			Game.HexMapDrawer.RemoveAllHighlights();
 		};
 	}
 	public void Start(Player player)
 	{
-		Active.Player = player;
-		Active.Turn.IsDone = false;
-		Active.Reset();
+		Game.Active.Player = player;
+		Game.Active.Turn.IsDone = false;
+		Game.Active.Reset();
 		UIManager.Instance.UpdateActivePlayerUI();
-		if (Active.Phase.Number == 0)
+		if (Game.Active.Phase.Number == 0)
 		{
-			if (Active.Player.HasSelectedCharacters == false)
-			{
-				UIManager.Instance.StartSelectAndInitializeThings();
-			}
-			else if (Active.Player.Characters.Any(c => !c.IsOnMap))
+//			if (Game.Active.Player.HasSelectedCharacters == false)
+//			{
+//				UIManager.Instance.StartSelectAndInitializeThings();
+//			}
+		 if (Game.Active.Player.Characters.Any(c => !c.IsOnMap))
 			{
 				UIManager.Instance.ForcePlacingChampions = true;
 			}
@@ -65,7 +66,7 @@ public class Turn
 	//	//Number++;
 	//	WasCharacterPlaced = false;
 	//	CharacterThatTookActionInTurn = null;
-	//	Active.Reset();
+	//	Game.Active.Reset();
 	//	HexMapDrawer.RemoveAllHighlights();
 	//}
 }

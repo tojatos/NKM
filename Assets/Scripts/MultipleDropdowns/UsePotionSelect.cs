@@ -35,7 +35,7 @@
 //		{
 //			var selectedNames = GetData();
 //			Active.MyGameObject = Active.Player.Potions.Single(c => c.Name == selectedNames[0]);
-//			Active.UI = null;
+//			UIManager.VisibleUI = null;
 //		}
 //	}
 //}

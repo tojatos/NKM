@@ -4,6 +4,7 @@ using System.Linq;
 using Hex;
 using Managers;
 using MyGameObjects.MyGameObject_templates;
+using UIManagers;
 
 namespace MyGameObjects.Abilities.Aqua
 {
@@ -45,7 +46,7 @@ Czas odnowienia: {Cooldown}";
 					if (selectedObj.Count != 1) return;
 
 					Use((Character)selectedObj[0]);
-					Active.UI = null;
+					SpriteSelect.Instance.Close();
 				}, "Postać do ożywienia", "Zakończ wybieranie postaci");
 		}
 		public override void Use(Character character)
@@ -57,7 +58,7 @@ Czas odnowienia: {Cooldown}";
 		{
 			try
 			{
-				GameManager.Instance.TrySpawning(cell, _characterToResurrect);
+				Spawner.Instance.TrySpawning(cell, _characterToResurrect);
 				_characterToResurrect.HealthPoints.Value = _characterToResurrect.HealthPoints.BaseValue / 2;
 
 				OnUseFinish();

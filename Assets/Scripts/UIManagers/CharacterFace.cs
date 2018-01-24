@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,17 +9,19 @@ namespace UIManagers
 	public class CharacterFace : SingletonMonoBehaviour<CharacterFace>
 	{
 		private Image Image;
+		private Game Game;
 
 		private void Awake()
 		{
+			Game = LocalGameStarter.Instance.Game;
 			Image = GetComponent<Image>();
 		}
 
 		private void Update() //TODO: Remove Update
 		{
-			if (Active.Instance.CharacterOnMap != null)
+			if (Game.Active.CharacterOnMap != null)
 			{
-				UpdateFace(Active.Instance.CharacterOnMap);
+				UpdateFace(Game.Active.CharacterOnMap);
 			}
 		}
 

@@ -92,7 +92,7 @@ namespace MyGameObjects.MyGameObject_templates
 				return;
 			}
 
-			HexMapDrawer.RemoveAllHighlights();
+			Game.HexMapDrawer.RemoveAllHighlights();
 			Use();
 		}
 		protected virtual void Use()

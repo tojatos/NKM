@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,8 @@ namespace UIManagers
 {
 	public class CharacterInfo : SingletonMonoBehaviour<CharacterInfo>
 	{
-		private readonly Active Active;
+		private Game Game;
+		private Active Active;
 		public Text HealthPoints;
 		public Text AttackPoints;
 		public Text Range;
@@ -20,14 +22,14 @@ namespace UIManagers
 		public Text Quote;
 		public Text Author;
 
-		private CharacterInfo()
+		void Awake()
 		{
-			Active = Active.Instance;
+			Game = LocalGameStarter.Instance.Game;
 		}
 		[UsedImplicitly]
 		public void Open()
 		{
-			Active.UI = new List<GameObject> { gameObject };
+			Game.UIManager.VisibleUI = new List<GameObject> { gameObject };
 			UpdateInfo(AllMyGameObjects.Instance.Characters.Single(c => c.Name == Active.CharacterOnMap.Name));
 		}
 

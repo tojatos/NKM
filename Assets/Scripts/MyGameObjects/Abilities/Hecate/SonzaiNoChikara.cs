@@ -19,7 +19,7 @@ namespace MyGameObjects.Abilities.Hecate
 
 		public override List<HexCell> GetRangeCells()
 		{
-			return HexMapDrawer.Cells;
+			return Game.HexMapDrawer.Cells;
 		}
 
 		public override string GetDescription()
@@ -43,7 +43,7 @@ Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdziela
 				var passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();
 				if (passiveAbility == null) throw new Exception("Pasywna umiejętność nie znaleziona!");
 
-				var enemyCharactersOnMap = GameManager.Players.Where(p => p != Active.Player).SelectMany(p => p.Characters).Where(c => c.IsOnMap).ToList();
+				var enemyCharactersOnMap = Game.Players.Where(p => p != Active.Player).SelectMany(p => p.Characters).Where(c => c.IsOnMap).ToList();
 				var damage = passiveAbility.CollectedEnergy / enemyCharactersOnMap.Count;
 				//Animations.Instance.SonzaiNoChikara(enemyCharactersOnMap.Select(c=>c.CharacterObject.transform).ToList());
 				enemyCharactersOnMap.ForEach(c => ParentCharacter.Attack(c, AttackType.Magical, damage));

@@ -1,4 +1,5 @@
-﻿using MyGameObjects.MyGameObject_templates;
+﻿using Managers;
+using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,6 +8,9 @@ namespace UIManagers
 {
 	public class CharacterStats : SingletonMonoBehaviour<CharacterStats>
 	{
+		private Game Game;
+
+
 		//public Text CharacterName;
 		public Text HealthPoints;
 		public Text AttackPoints;
@@ -19,6 +23,8 @@ namespace UIManagers
 
 		private void Awake()
 		{
+			Game = LocalGameStarter.Instance.Game;
+
 			EmptyTextes();
 			SetAttackHelpTriggers();
 			SetMoveHelpTriggers();
@@ -28,22 +34,22 @@ namespace UIManagers
 		{
 			var trigger = RangeObject.GetComponent<EventTrigger>() ?? RangeObject.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-			entry.callback.AddListener((eventData) => Active.Instance.HelpHexCells = Active.Instance.CharacterOnMap.GetBasicAttackCells());
+			entry.callback.AddListener((eventData) => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetBasicAttackCells());
 			trigger.triggers.Add(entry);
 
 			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
-			entry2.callback.AddListener((eventData) => Active.Instance.HelpHexCells = null);
+			entry2.callback.AddListener((eventData) => Game.Active.HelpHexCells = null);
 			trigger.triggers.Add(entry2);
 		}
 		private void SetMoveHelpTriggers()
 		{
 			var trigger = SpeedObject.GetComponent<EventTrigger>() ?? SpeedObject.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-			entry.callback.AddListener((eventData) => Active.Instance.HelpHexCells = Active.Instance.CharacterOnMap.GetMoveCells());
+			entry.callback.AddListener((eventData) => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetMoveCells());
 			trigger.triggers.Add(entry);
 
 			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
-			entry2.callback.AddListener((eventData) => Active.Instance.HelpHexCells = null);
+			entry2.callback.AddListener((eventData) => Game.Active.HelpHexCells = null);
 			trigger.triggers.Add(entry2);
 		}
 		private void EmptyTextes()

@@ -44,7 +44,7 @@ zyskuje ona {1} ataku i {2} szybkości.",
 		{
 			if (!IsEnabled) return;
 
-			Character.Deselect();
+			Active.CharacterOnMap.Deselect();
 			if (ParentCharacter.Name != "Demonic Rem") ParentCharacter.Name = "Demonic Rem";
 			if (ParentCharacter.Effects.All(e => e.Name != "Demonic Form Speed Boost"))
 			{

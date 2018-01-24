@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Hex;
+using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,6 +12,9 @@ using Object = UnityEngine.Object;
 
 public static class MyExtensions
 {
+	private static Active Active = LocalGameStarter.Instance.Game.Active;
+	
+
 	public static IEnumerable<string> GetClassNames<T>(this List<T> list)
 	{
 		var classNames = new List<string>();
@@ -25,14 +30,14 @@ public static class MyExtensions
 	/// </summary>
 	public static void RemoveNonEnemies(this List<HexCell> cellRange)
 	{
-		cellRange.RemoveAll(cell => cell.CharacterOnCell == null || cell.CharacterOnCell.Owner == Active.Instance.Player);
+		cellRange.RemoveAll(cell => cell.CharacterOnCell == null || cell.CharacterOnCell.Owner == Active.Player);
 	}
 	/// <summary>
 	/// Leaves only cells with friendly characters
 	/// </summary>
 	public static void RemoveNonFriends(this List<HexCell> cellRange)
 	{
-		cellRange.RemoveAll(cell => cell.CharacterOnCell == null || cell.CharacterOnCell.Owner != Active.Instance.Player);
+		cellRange.RemoveAll(cell => cell.CharacterOnCell == null || cell.CharacterOnCell.Owner != Active.Player);
 	}
 	/// <summary>
 	/// Leaves only cells with characters
@@ -149,4 +154,12 @@ public static class MyExtensions
 			objectToToggle.Toggle();
 		}
 	}
+	public static async Task WaitToBeTrue(this Func<bool> predicate)
+	{
+		while (!predicate.Invoke())
+		{
+			await Task.Delay(1);
+		}
+	}
+
 }

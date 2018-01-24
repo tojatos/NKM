@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Animations : SingletonMonoBehaviour<Animations>
 {
+	private Game Game;
+	void Start() => Game = LocalGameStarter.Instance.Game;
 	private bool IsAsterPlaying;
 	public IEnumerator SharpenedForkEnumerator(Transform parentTransform, Transform targetTransform)
 	{
@@ -168,19 +170,19 @@ public class Animations : SingletonMonoBehaviour<Animations>
 	{
 		if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
-			AsterYo(Active.Instance.CharacterOnMap.CharacterObject.transform, GameManager.Players.SelectMany(p => p.Characters.Select(c => c.CharacterObject.transform)).ToList());
+			AsterYo(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters.Select(c => c.CharacterObject.transform)).ToList());
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha2))
 		{
-			ItadakiNoKura(Active.Instance.CharacterOnMap.CharacterObject.transform, GameManager.Players.SelectMany(p => p.Characters).Where(c => c.Owner != Active.Instance.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First());
+			ItadakiNoKura(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters).Where(c => c.Owner != Game.Active.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First());
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha4))
 		{
-			StartCoroutine(SharpenedForkEnumerator(Active.Instance.CharacterOnMap.CharacterObject.transform, GameManager.Players.SelectMany(p => p.Characters).Where(c => c.Owner != Active.Instance.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First()));
+			StartCoroutine(SharpenedForkEnumerator(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters).Where(c => c.Owner != Game.Active.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First()));
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha3))
 		{
-			StartCoroutine(SonzaiNoChikaraEnumerator(GameManager.Players.SelectMany(p => p.Characters.Select(c => c.CharacterObject.transform)).ToList()));
+			StartCoroutine(SonzaiNoChikaraEnumerator(Game.Players.SelectMany(p => p.Characters.Select(c => c.CharacterObject.transform)).ToList()));
 		}
 	}
 }

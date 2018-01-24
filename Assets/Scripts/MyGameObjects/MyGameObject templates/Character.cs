@@ -212,7 +212,7 @@ namespace MyGameObjects.MyGameObject_templates
 		}
 		private void PrepareAttackAndMove()
 		{
-			HexMapDrawer.RemoveAllHighlights();
+			Game.HexMapDrawer.RemoveAllHighlights();
 			if (Active.Player != Owner)
 			{
 				MessageLogger.DebugLog("Nie jesteś właścicielem! Wara!");
@@ -369,13 +369,13 @@ namespace MyGameObjects.MyGameObject_templates
 
 			PrepareAttackAndMove();
 		}
-		public static void Deselect()
+		public void Deselect()
 		{
 			CharacterStats.Instance.UpdateCharacterStats(null);
-			Active.Instance.CharacterOnMap = null;
-			Active.Instance.Action = Action.None;
-			Active.Instance.HexCells = null;
-			HexMapDrawer.RemoveAllHighlights();
+			Active.CharacterOnMap = null;
+			Active.Action = Action.None;
+			Active.HexCells = null;
+			Game.HexMapDrawer.RemoveAllHighlights();
 		}
 		protected void InitiateAbilities(List<Ability> abilities)
 		{

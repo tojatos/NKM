@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using Managers;
 using UIManagers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,12 +12,12 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 	public Text LogText;
 	public Scrollbar Scrollbar;
 	public InputField InputField;
-	private Active Active;
+	private Game Game;
 	private int _linesCount = 4;
 
 	void Awake()
 	{
-		Active = Active.Instance;
+		Game = LocalGameStarter.Instance.Game;
 	}
 	public void Log(string text, bool endline = true)
 	{
@@ -27,7 +28,7 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 
 	public void DebugLog(string text, bool endline = true)
 	{
-		if (Active.IsDebug)
+		if (Game.Active.IsDebug)
 		{
 			LogText.text += "<b><color=red>" + text + "</color></b>";
 			LogText.text += endline ? "\n" : "";
@@ -91,29 +92,29 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 				if (text.StartsWith("set "))
 				{
 					text = text.Substring(4);
-					if (Active.CharacterOnMap != null)
+					if (Game.Active.CharacterOnMap != null)
 					{
 						if (text.StartsWith("hp "))
 						{
 							var value = text.Substring(3);
-							Active.CharacterOnMap.HealthPoints.Value = Int32.Parse(value);
-							Active.CharacterOnMap.RemoveIfDead();
+							Game.Active.CharacterOnMap.HealthPoints.Value = Int32.Parse(value);
+							Game.Active.CharacterOnMap.RemoveIfDead();
 						}
 						else if(text.StartsWith("atk "))
 						{
 							var value = text.Substring(4);
-							Active.CharacterOnMap.AttackPoints.Value = Int32.Parse(value);
+							Game.Active.CharacterOnMap.AttackPoints.Value = Int32.Parse(value);
 						}
 						else if (text.StartsWith("phase "))
 						{
 							var value = text.Substring(6);
-							Active.Phase.Number = Int32.Parse(value);
+							Game.Active.Phase.Number = Int32.Parse(value);
 						}
 						else
 						{
 							DebugLog("<i>Nie ma takiej komendy jak </i>" + text + "<i>.</i>");
 						}
-						CharacterStats.Instance.UpdateCharacterStats(Active.CharacterOnMap);
+						CharacterStats.Instance.UpdateCharacterStats(Game.Active.CharacterOnMap);
 					}
 					else
 					{
@@ -124,12 +125,12 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 				else if (text.StartsWith("debug "))
 				{
 					var value = bool.Parse(text.Substring(6));
-					Active.IsDebug = value;
+					Game.Active.IsDebug = value;
 
 				}
 				else if (text.StartsWith("cancel"))
 				{
-					Active.Cancel();
+					Game.Active.Cancel();
 				}
 				else
 				{
@@ -138,7 +139,7 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 			}
 			else
 			{
-				Log("<b><</b>" + Active.Player.Name + "<b>></b>: " + text);
+				Log("<b><</b>" + Game.Active.Player.Name + "<b>></b>: " + text);
 			}
 			InputField.text = "";
 			InputField.ActivateInputField();

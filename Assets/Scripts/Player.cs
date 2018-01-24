@@ -2,34 +2,37 @@
 using System.Collections.Generic;
 using MyGameObjects.MyGameObject_templates;
 using Hex;
-using Managers;
 using UnityEngine;
 
 public class Player
 {
+	private Game Game;
+
 	public string Name { get; set; }
 	public bool HasSelectedCharacters { get; set; }
-	public List<Character> Characters { get; }
+	public List<Character> Characters { get;} = new List<Character>();
 	//public List<Character> StartingCharacters { get; private set; }
 	public bool HasFinishedSelecting => HasSelectedCharacters;
 
-	public Player()
+	public int GetIndex() => Game.Players.FindIndex(p=>p==this); //TODO move to players or make generic
+
+
+	public void Init(Game game)
 	{
-		HasSelectedCharacters = false;
-		Characters = new List<Character>();
+		Game = game;
 	}
 
 	private HexTileType GetSpawnPointType()
 	{
-		return HexMapDrawer.Instance.HexMap.SpawnPoints[GameManager.GetIndex(this)];
+		return Game.HexMapDrawer.HexMap.SpawnPoints[GetIndex()];
 	}
 	public IEnumerable<HexCell> GetSpawnPoints()
 	{
-		return HexMapDrawer.Cells.FindAll(c => c.Type == GetSpawnPointType());
+		return Game.HexMapDrawer.Cells.FindAll(c => c.Type == GetSpawnPointType());
 	}
 	public Color GetColor()
 	{
-		switch (GameManager.GetIndex(this))
+		switch (GetIndex())
 		{
 			case 0:
 				return Color.red;

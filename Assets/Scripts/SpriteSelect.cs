@@ -1,36 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Hex;
+using Managers;
 using MyGameObjects.MyGameObject_templates;
+using UIManagers;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 {
-	private Active Active;
-	private List<MyGameObject> _objectsToFill;
-	public List<MyGameObject> SelectedObjects { get; private set; }
+	private List<MyGameObject> _objectsToFill = new List<MyGameObject>();
+	public List<MyGameObject> SelectedObjects { get; } = new List<MyGameObject>();
 	public Button FinishSelectingButton;
 	public Text Title;
-
-	private void Awake()
-	{
-		Active = Active.Instance;
-		_objectsToFill = new List<MyGameObject>();
-		SelectedObjects = new List<MyGameObject>();
-	}
 	public GameObject SpriteObjectPrefab;
-	public delegate void FinishSelectingButtonClick();
 
-	public void Open(IEnumerable<MyGameObject> objectsToFill, FinishSelectingButtonClick finishSelectingButtonClick, string title, string finishButtonText)
+	public bool IsOpened => gameObject.transform.parent.gameObject.activeSelf;
+
+	public void Open(IEnumerable<MyGameObject> objectsToFill, System.Action finishSelectingButtonClick, string title, string finishButtonText)
 	{
-		Active.Instance.UI = new List<GameObject> { gameObject };
+		gameObject.transform.parent.gameObject.Show();
 		SelectedObjects.Clear();
 		gameObject.transform.Find("Sprites").transform.Clear(); //Careful! Removes probably on the next frame
 		_objectsToFill = new List<MyGameObject>(objectsToFill);
 		_objectsToFill.ForEach(SpawnSpriteObject);
 		FinishSelectingButton.onClick.RemoveAllListeners();
-		FinishSelectingButton.onClick.AddListener(() => finishSelectingButtonClick());
+		FinishSelectingButton.onClick.AddListener(()=>finishSelectingButtonClick());
 
 		Title.text = title;
 		FinishSelectingButton.GetComponentInChildren<Text>().text = finishButtonText;
@@ -38,26 +34,6 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 		//select item if is the only one
 		var spritesTransform = gameObject.transform.Find("Sprites").transform;
 		if (_objectsToFill.Count == 1) spritesTransform.GetComponentsInChildren<Button>()[spritesTransform.childCount-1].onClick.Invoke(); //get last button, because the others are not removed yet for some reason
-	}
-
-	public void FinishSelectingCharacters()
-	{
-		var charactersPerPlayer = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer", HexMapDrawer.Instance.HexMap.MaxCharacters);
-		if (SelectedObjects.Count != charactersPerPlayer) return;
-
-		var classNames = SelectedObjects.GetClassNames();
-		Active.Player.Characters.AddRange(Spawner.Create("Characters", classNames).Cast<Character>());
-		Active.Player.HasSelectedCharacters = true;
-	}
-
-	public void FinishUseCharacter()
-	{
-		if (SelectedObjects.Count != 1) return;
-
-		HexMapDrawer.RemoveAllHighlights();
-		Active.Player.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList().ForEach(c => c.ToggleHighlight(HiglightColor.Red));
-		Active.MyGameObject = Active.Player.Characters.Single(c => c.Name == SelectedObjects[0].Name);
-		Active.UI = null;
 	}
 	private void SpawnSpriteObject(MyGameObject o)
 	{
@@ -89,4 +65,5 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 		return true;
 	}
 
+	public void Close() => gameObject.transform.parent.gameObject.Hide();
 }
