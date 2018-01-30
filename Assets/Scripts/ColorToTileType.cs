@@ -1,8 +1,8 @@
-﻿using Hex;
+﻿using System;
+using Hex;
 using JetBrains.Annotations;
 using UnityEngine;
-
-[System.Serializable]
+[Serializable]
 public class ColorToTileType
 {
 	[UsedImplicitly] public Color Color;

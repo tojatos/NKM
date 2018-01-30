@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Helpers;
 using Hex;
 using Multiplayer.Network;
 using MyGameObjects.MyGameObject_templates;
@@ -77,7 +78,7 @@ namespace Managers
 				case GameType.Local:
 					return await GetLocalPlayers();
 				case GameType.MultiplayerServer:
-					return await ActiveServer.GetGamePlayersFromClients();
+					return await ActiveServer.GetCharactersFromClients();
 				case GameType.MultiplayerClient:
 					return await ActiveClient.GetPlayersFromServer();
 				default:
@@ -144,7 +145,7 @@ namespace Managers
 
 		public async Task<GamePlayer> GetGamePlayer()
 		{
-			var p = new GamePlayer {Name = ActiveClient.playerName };
+			var p = new GamePlayer {Name = ActiveClient.PlayerName };
 			await GetCharacters(p);
 			return p;
 		}

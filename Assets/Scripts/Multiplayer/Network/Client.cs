@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers;
 using Managers;
-using Newtonsoft.Json;
+using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 namespace Multiplayer.Network
 {
-	public class Client : MonoBehaviour
+	public class Client : Networking
 	{
 		void Awake()
 		{
@@ -24,29 +25,9 @@ namespace Multiplayer.Network
 				}
 			};
 		}
-
-		#region NetworkingVariables
-		private const int MAX_CONNECTION = 100;
-		private const int BUFFER_SIZE = 65535;
-
-		private int port = 5701;
-
-		private int hostId;
-		private int webHostId;
-
-		private int reliableChannel;
-		private int unreliableChannel;
-		private int reliableFragmentedChannel;
-
-		private int ourClientId;
-		private int connectionID;
-		private float connectionTime;
-
-		private bool isSetUp = false;
-		private bool isConnected = false;
-		private byte error;
-		#endregion
-		public string playerName = "testname"; //TODO
+		private bool _isSetUp;
+		private bool _isConnected;
+		public string PlayerName = "testname"; //TODO
 		private GamePlayer GamePlayer;
 		private Game Game;
 
@@ -66,7 +47,7 @@ namespace Multiplayer.Network
 			connectionID = NetworkTransport.Connect(hostId, ipAddress, port, 0, out error);
 
 			connectionTime = Time.time;
-			isSetUp = true;
+			_isSetUp = true;
 			Debug.Log("Client started!");
 		}
 		public void Disconnect()
@@ -77,7 +58,7 @@ namespace Multiplayer.Network
 		}
 		private void Update()
 		{
-			if (!isSetUp) return;
+			if (!_isSetUp) return;
 
 			int recHostId;
 			int connectionId;
@@ -91,7 +72,7 @@ namespace Multiplayer.Network
 			{
 				case NetworkEventType.ConnectEvent:
 					Debug.Log("| Client connected.");
-					isConnected = true;
+					_isConnected = true;
 					Send("CONNECTED", reliableChannel, connectionId);
 					SceneManager.LoadScene(Scenes.Lobby);
 					break;
@@ -114,13 +95,13 @@ namespace Multiplayer.Network
 			switch (header)
 			{
 				case "GAMEPLAYERS":
-					SetGamePlayers(contents.Dequeue());
+					SetGamePlayers(contents.ToList());
 					break;
 				case "NAMEASK":
 					SendName(connectionId);
 					break;
-				case "GET_GAME_PLAYER":
-					SendGamePlayer();
+				case "GET_CHARACTERS":
+					SendSelectedCharacters();
 					break;
 				case "PLAYERLIST":
 					List<string> names = contents.ToList();
@@ -143,26 +124,27 @@ namespace Multiplayer.Network
 			}
 		}
 
-		private void SetGamePlayers(string gamePlayersJson)
+		private void SetGamePlayers(List<string> gamePlayersData)
 		{
-			GamePlayers = JsonConvert.DeserializeObject<List<GamePlayer>>(gamePlayersJson, new JsonSerializerSettings
+			GamePlayers = new List<GamePlayer>();
+			gamePlayersData.ForEach(data =>
 			{
-				TypeNameHandling = TypeNameHandling.Auto,
-				PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-				Formatting = Formatting.Indented
+				Queue<string> classNames = new Queue<string>(data.Split('*'));
+				string gamePlayerName = classNames.Dequeue();
+				var gamePlayer = new GamePlayer { Name = gamePlayerName };
+
+				//TODO: DRY
+				var characters = Spawner.Create("Characters", classNames).Cast<Character>().ToList();
+				gamePlayer.Characters.AddRange(characters);
+				GamePlayers.Add(gamePlayer);
 			});
 		}
 
-		private async void SendGamePlayer()
+		private async void SendSelectedCharacters()
 		{
 			if (GamePlayer == null) GamePlayer = await GameStarter.Instance.GetGamePlayer();
-			var serializedPlayer = JsonConvert.SerializeObject(GamePlayer, new JsonSerializerSettings
-			{
-				TypeNameHandling = TypeNameHandling.Auto,
-				PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-				Formatting = Formatting.Indented
-			});
-			Send(ComposeMessage("GAMEPLAYER", serializedPlayer), reliableFragmentedChannel);
+			List<string> characterClasses = GamePlayer.Characters.GetClassNames().ToList();
+			Send(ComposeMessage("CHARACTERS", characterClasses.ToArray()), reliableChannel);
 		}
 
 		public int SelectedMapIndex { get; private set; }
@@ -188,7 +170,7 @@ namespace Multiplayer.Network
 				l.UpdatePlayers(names);
 			}
 		}
-		private string ComposeMessage(string header, params object[] contents)
+		private string ComposeMessage(string header, params string[] contents)
 		{
 			string msg = header;
 			contents.ToList().ForEach(c => msg += $"%{c}");
@@ -197,7 +179,7 @@ namespace Multiplayer.Network
 
 		private void SendName(int connectionId)
 		{
-			Send($"NAMEIS%{playerName}", reliableChannel, connectionId);
+			Send($"NAMEIS%{PlayerName}", reliableChannel, connectionId);
 		}
 		private void Send(string message, int channelId, int cnnId)
 		{

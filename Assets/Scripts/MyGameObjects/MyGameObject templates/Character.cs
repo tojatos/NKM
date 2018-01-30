@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Helpers;
 using Hex;
 using MyGameObjects.Abilities;
 using MyGameObjects.Effects;
@@ -31,13 +32,7 @@ namespace MyGameObjects.MyGameObject_templates
 		public int DeathTimer { get; private set; }
 
 
-		private bool CanAttackAllies
-		{
-			get
-			{
-				return Abilities.Any(a => a.OverridesFriendAttack);
-			}
-		}
+		private bool CanAttackAllies => Abilities.Any(a => a.OverridesFriendAttack);
 		public List<Ability> Abilities{ get; private set; }
 		public List<Effect> Effects { get; }
 		public string Description { get; protected set; }
@@ -46,7 +41,7 @@ namespace MyGameObjects.MyGameObject_templates
 		public FightType Type;
 		public GameObject CharacterObject { get; set; }
 		public HexCell ParentCell { get; set; }
-		public Item ActiveItem { get; set; }
+//		public Item ActiveItem { get; set; }
 		public bool IsOnMap { get; set; }
 
 		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }

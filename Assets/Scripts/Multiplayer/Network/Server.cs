@@ -3,32 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers;
 using Managers;
-using Newtonsoft.Json;
+using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 namespace Multiplayer.Network
 {
-	public class Server : MonoBehaviour
+	public class Server : Networking
 	{
 		#region NetworkingVariables
-		private const int MAX_CONNECTION = 100;
-		private const int BUFFER_SIZE = 65535;
-
-		private int port = 5701;
-
-		private int hostId;
-		private int webHostId;
-
-		private int reliableChannel;
-		private int unreliableChannel;
-		private int reliableFragmentedChannel;
-
-
-		private bool isStarted = false;
-		private byte error;
+//		private const int MAX_CONNECTION = 100;
+//		private const int BUFFER_SIZE = 65535;
+//
+//		private int port = 5701;
+//
+//		private int hostId;
+//		private int webHostId;
+//		
+//		private int reliableChannel;
+//		private int unreliableChannel;
+//		private int reliableFragmentedChannel;
+//
+//
+//		private bool isStarted = false;
+//		private byte error;
 #endregion
 
 		public List<Player> Players = new List<Player>();
@@ -62,6 +63,7 @@ namespace Multiplayer.Network
 			PlayersPerCharacter = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer");
 		}
 
+		private bool _isStarted;
 		private void StartServer()
 		{
 			NetworkTransport.Init();
@@ -75,12 +77,12 @@ namespace Multiplayer.Network
 			HostTopology topo = new HostTopology(cc, MAX_CONNECTION);
 
 			hostId = NetworkTransport.AddHost(topo, port, null);
-			isStarted = true;
+			_isStarted = true;
 			Debug.Log("Server started!");
 		}
 		private void Update()
 		{
-			if (!isStarted) return;
+			if (!_isStarted) return;
 
 			int recHostId;
 			int connectionId;
@@ -133,26 +135,26 @@ namespace Multiplayer.Network
 			List<string> messages = msg.Split('|').ToList();
 			foreach (var m in messages)
 			{
-				List<string> contents = m.Split('%').ToList();
-				string header = contents[0];
+				Queue<string> contents = new Queue<string>(msg.Split('%'));
+				string header = contents.Dequeue();
 				Debug.Log($"| Server receiving: {header}");
 				switch (header)
 				{
 					case "GET_GAMEPLAYERS":
 						SendGamePlayers(connectionId);
 						break;
-					case "GAMEPLAYER":
-						GamePlayer gamePlayer = JsonConvert.DeserializeObject<GamePlayer>(contents[1], new JsonSerializerSettings
-						{
-							TypeNameHandling = TypeNameHandling.Auto,
-						});
-						ReceivePlayer(Players.Single(p => p.ConnectionID == connectionId), gamePlayer);
+					case "CHARACTERS":
+//						GamePlayer gamePlayer = JsonConvert.DeserializeObject<GamePlayer>(contents[1], new JsonSerializerSettings
+//						{
+//							TypeNameHandling = TypeNameHandling.Auto,
+//						});
+						ReceiveCharacters(Players.Single(p => p.ConnectionID == connectionId), contents.ToList());
 						break;
 					case "CONNECTED":
 						AskForName(connectionId);
 						break;
 					case "NAMEIS":
-						var name = contents[1];
+						var name = contents.Dequeue();
 						var player = CreatePlayer(connectionId, name);
 						TryJoiningLobby(player);
 						break;
@@ -168,13 +170,9 @@ namespace Multiplayer.Network
 			Func<bool> areAllGamePlayersReceived = () => Players.Count == GamePlayers.Count;
 			await areAllGamePlayersReceived.WaitToBeTrue();
 
-			string players = JsonConvert.SerializeObject(GamePlayers.Values.ToList(), new JsonSerializerSettings
-			{
-				TypeNameHandling = TypeNameHandling.Auto,
-				PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-				Formatting = Formatting.Indented
-			});
-			Send(ComposeMessage("GAMEPLAYERS", players), reliableFragmentedChannel, connectionId);
+			List<string> playersWithNameAndCharacters = new List<string>();
+			GamePlayers.Values.ToList().ForEach(g=> playersWithNameAndCharacters.Add(ComposeMessage('*', g.Name, g.Characters.GetClassNames().ToArray())));
+			Send(ComposeMessage("GAMEPLAYERS", playersWithNameAndCharacters.ToArray()), reliableChannel, connectionId);
 		}
 
 		private Player CreatePlayer(int connId, string name)
@@ -207,7 +205,7 @@ namespace Multiplayer.Network
 		}
 		private void SendGameOptions(int playerConnectionId)
 		{
-			var msg = ComposeMessage("GAMEOPTIONS", NumberOfPlayers, SelectedMapIndex, PlayersPerCharacter);
+			var msg = ComposeMessage("GAMEOPTIONS", NumberOfPlayers.ToString(), SelectedMapIndex.ToString(), PlayersPerCharacter.ToString());
 			Send(msg, reliableChannel, playerConnectionId);
 		}
 
@@ -241,13 +239,16 @@ namespace Multiplayer.Network
 			var connIds = Players.Select(p => p.ConnectionID).ToList();
 			Send(message, channelId, connIds);
 		}
-		private string ComposeMessage(string header, params object[] contents)
+		private string ComposeMessage(char delimiter, string header, params string[] contents)
 		{
 			string msg = header;
-			contents.ToList().ForEach(c => msg += $"%{c}");
+			contents.ToList().ForEach(c => msg += $"{delimiter}{c}");
 			return msg;
 		}
-
+		private string ComposeMessage(string header, params string[] contents)
+		{
+			return ComposeMessage('%', header, contents);
+		}
 		public void TryStartingGame()
 		{
 			if (NumberOfPlayers != Players.Count) return;
@@ -262,17 +263,22 @@ namespace Multiplayer.Network
 			SendToAllPlayers("GAMESTART", reliableChannel);
 		}
 
-		public async Task<List<GamePlayer>> GetGamePlayersFromClients()
+		public async Task<List<GamePlayer>> GetCharactersFromClients()
 		{
-			SendToAllPlayers("GET_GAME_PLAYER", reliableChannel);
+			SendToAllPlayers("GET_CHARACTERS", reliableChannel);
 			Func<bool> areAllGamePlayersReceived = () => GamePlayers.Count == Players.Count;
 			await areAllGamePlayersReceived.WaitToBeTrue();
 			return GamePlayers.Values.ToList();
 
 		}
 
-		private void ReceivePlayer(Player player, GamePlayer gamePlayer)
+		private void ReceiveCharacters(Player player, List<string> classNames)
 		{
+			var gamePlayer = new GamePlayer() {Name = player.Name}; //TODO: move that somewhere else
+
+			//TODO: DRY
+			var characters = Spawner.Create("Characters", classNames).Cast<Character>().ToList();
+			gamePlayer.Characters.AddRange(characters);
 			GamePlayers.Add(player, gamePlayer);
 		}
 	}

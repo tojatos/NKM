@@ -2,7 +2,6 @@
 
 namespace Hex
 {
-	[System.Serializable]
 	public struct HexCoordinates
 	{
 		[SerializeField]

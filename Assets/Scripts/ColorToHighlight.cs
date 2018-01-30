@@ -1,6 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using UnityEngine;
-[System.Serializable]
+[Serializable]
 public class ColorToHighlight
 {
 	[UsedImplicitly] public HiglightColor HiglightColor;
