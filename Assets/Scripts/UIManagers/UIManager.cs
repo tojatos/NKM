@@ -151,34 +151,6 @@ namespace UIManagers
 				PlaceCharacterButton.GetComponent<Button>().ToggleIf(Game.Active.GamePlayer.Characters.All(c => c.IsOnMap || !c.IsAlive) || Game.Active.Turn.WasCharacterPlaced || Game.Active.GamePlayer.GetSpawnPoints().All(sp => sp.CharacterOnCell != null));
 			}
 		}
-//		private IEnumerator SelectAndInitializeThings()
-//		{
-//			var allCharacters = new List<MyGameObject>(AllMyGameObjects.Instance.Characters);
-//			SpriteSelect.Instance.Open(allCharacters, FinishSelectingCharacters, "Wybór postaci", "Zakończ wybieranie postaci");
-//			yield return new WaitUntil(() => Game.Active.GamePlayer.HasSelectedCharacters);
-//			//ItemSelect.Open();TODO
-//			//yield return new WaitUntil(() => Game.Active.GamePlayer.HasSelectedItems);
-//			//PotionSelect.Open();TODO
-//			//yield return new WaitUntil(() => Game.Active.GamePlayer.HasSelectedPotions);
-//			Game.UIManager.VisibleUI = GameUI;
-//			HexMapDrawer.TriangulateCells(); //clicking on map does not work without triangulating here for some reason
-//			Game.Active.Turn.Finish();
-//		}
-		private void FinishSelectingCharacters()
-		{
-			var charactersPerPlayer = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer", HexMapDrawer.Instance.HexMap.MaxCharacters);
-			if (SpriteSelect.Instance.SelectedObjects.Count != charactersPerPlayer) return;
-
-			var classNames = SpriteSelect.Instance.SelectedObjects.GetClassNames();
-			Game.Active.GamePlayer.Characters.AddRange(Spawner.Create("Characters", classNames).Cast<Character>());
-			Game.Active.GamePlayer.HasSelectedCharacters = true;
-			SpriteSelect.Close();
-		}
-		//needed to call a corountine outside of a monobehaviour class
-//		public void StartSelectAndInitializeThings()
-//		{
-//			StartCoroutine(SelectAndInitializeThings());
-//		}
 
 		[UsedImplicitly]
 		public void EndTurnButtonClick()

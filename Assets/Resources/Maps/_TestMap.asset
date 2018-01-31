@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f7a1d20e054f7343bedfd27db4e7658, type: 3}
-  m_Name: TestMap
+  m_Name: _TestMap
   m_EditorClassIdentifier: 
   Name: Testowa mapa
   Map: {fileID: 2800000, guid: 19a9d77341f61ec4bb2e23e4fafff675, type: 3}

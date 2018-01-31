@@ -38,10 +38,6 @@ public class Turn
 		UIManager.Instance.UpdateActivePlayerUI();
 		if (Game.Active.Phase.Number == 0)
 		{
-//			if (Game.Active.GamePlayer.HasSelectedCharacters == false)
-//			{
-//				UIManager.Instance.StartSelectAndInitializeThings();
-//			}
 		 if (Game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap))
 			{
 				UIManager.Instance.ForcePlacingChampions = true;

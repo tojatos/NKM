@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Helpers;
 using Hex;
 using MyGameObjects.MyGameObject_templates;
@@ -67,10 +65,10 @@ public class Game
 //					}
 			}
 			//Skip finishing phase, if not every character is placed in the first phase
-//			if (Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap)))
-//			{
-//				continue;
-//			}
+			if (Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap)))
+			{
+				continue;
+			}
 
 			if (Players.All(p => p.Characters.Where(c => c.IsOnMap).All(c => !c.CanTakeAction)))
 			{

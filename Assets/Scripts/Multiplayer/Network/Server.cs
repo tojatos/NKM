@@ -276,9 +276,8 @@ namespace Multiplayer.Network
 		{
 			var gamePlayer = new GamePlayer() {Name = player.Name}; //TODO: move that somewhere else
 
-			//TODO: DRY
-			var characters = Spawner.Create("Characters", classNames).Cast<Character>().ToList();
-			gamePlayer.Characters.AddRange(characters);
+			gamePlayer.AddCharacters(classNames);
+
 			GamePlayers.Add(player, gamePlayer);
 		}
 	}

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Helpers;
 using Hex;
 using Multiplayer.Network;
+using MyGameObjects.Characters;
 using MyGameObjects.MyGameObject_templates;
 using Newtonsoft.Json;
 using UIManagers;
@@ -14,16 +15,86 @@ namespace Managers
 {
 	public class GameStarter : SingletonMonoBehaviour<GameStarter>
 	{
+		public bool IsTesting = false;
 		public Game Game = new Game();
 		private GameType GameType;
-
 		private Server ActiveServer;
 		private Client ActiveClient;
 
 		private async void Awake()
 		{
-			GameType = (GameType)PlayerPrefs.GetInt("GameType", (int)GameType.Local);
+			await PrepareAndStartGame();
+		}
 
+		private async Task PrepareAndStartGame()
+		{
+			GameOptions gameOptions;
+			if (!IsTesting)
+			{
+				SetGameType();
+				AssignClientOrServerIfNeeded();
+				gameOptions = await GetGameOptions();
+			}
+			else
+			{
+				gameOptions = new GameOptions
+				{
+					GameType = GameType.Local,
+					Map = Stuff.Maps[0],
+					Players = new List<GamePlayer>
+					{
+						new GamePlayer
+						{
+							Name = "Ryszard",
+							Characters = new List<Character>
+							{
+								new Sinon(),
+								new Hecate()
+							}
+						},
+						new GamePlayer
+						{
+							Name = "Maciej",
+							Characters = new List<Character>
+							{
+								new Aqua(),
+								new DekomoriSanae()
+							}
+						}
+					},
+					UIManager = UIManager.Instance
+				};
+				gameOptions.Players.ForEach(p =>
+				{
+					p.Characters.ForEach(c => c.Owner = p);
+					p.HasSelectedCharacters = true;
+				});
+			}
+
+			Game.Init(gameOptions);
+			Game.StartGame();
+			if (IsTesting)
+			{
+				Game.Players.ForEach(p=>p.Characters.ForEach(c =>
+				{
+					var spawnPoint = p.GetSpawnPoints().First(cell => cell.CharacterOnCell == null);
+					Spawner.Instance.TrySpawning(spawnPoint, c);
+				}));
+				Game.Active.Phase.Finish();
+			}
+
+		}
+
+		private async Task<GameOptions> GetGameOptions() => new GameOptions
+		{
+			GameType = GameType.Local,
+			Map = GetMap(),
+			Players = await GetPlayers(),
+			UIManager = UIManager.Instance
+		};
+
+		private void AssignClientOrServerIfNeeded()
+		{
 			switch (GameType)
 			{
 				case GameType.Local:
@@ -41,18 +112,11 @@ namespace Managers
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+		}
 
-			Task<List<GamePlayer>> players = GetPlayers();
-
-			GameOptions gameOptions = new GameOptions
-			{
-				GameType = GameType.Local,
-				Map = GetMap(),
-				Players = await players,
-				UIManager = UIManager.Instance
-			};
-			Game.Init(gameOptions);
-			Game.StartGame();
+		private void SetGameType()
+		{
+			GameType = (GameType)PlayerPrefs.GetInt("GameType", (int)GameType.Local);
 		}
 
 		private HexMap GetMap()
@@ -115,9 +179,7 @@ namespace Managers
 			if (SpriteSelect.Instance.SelectedObjects.Count != charactersPerPlayer) return;
 
 			var classNames = SpriteSelect.Instance.SelectedObjects.GetClassNames();
-			var characters = Spawner.Create("Characters", classNames).Cast<Character>().ToList();
-			characters.ForEach(c => c.Owner = p);
-			p.Characters.AddRange(characters);
+			p.AddCharacters(classNames);
 			p.HasSelectedCharacters = true;
 			SpriteSelect.Instance.Close();
 		}
@@ -149,5 +211,6 @@ namespace Managers
 			await GetCharacters(p);
 			return p;
 		}
+		
 	}
 }

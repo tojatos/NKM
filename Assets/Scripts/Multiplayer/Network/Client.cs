@@ -133,9 +133,7 @@ namespace Multiplayer.Network
 				string gamePlayerName = classNames.Dequeue();
 				var gamePlayer = new GamePlayer { Name = gamePlayerName };
 
-				//TODO: DRY
-				var characters = Spawner.Create("Characters", classNames).Cast<Character>().ToList();
-				gamePlayer.Characters.AddRange(characters);
+				gamePlayer.AddCharacters(classNames);
 				GamePlayers.Add(gamePlayer);
 			});
 		}

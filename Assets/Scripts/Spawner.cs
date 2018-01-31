@@ -22,7 +22,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		var characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterToSpawn.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
 		var characterObject = Instantiate(CharacterPrefab, parentCell.transform);
 		characterObject.transform.Find("Character Sprite").GetComponent<SpriteRenderer>().sprite = characterSprite;
-		characterObject.transform.Find("Border").GetComponent<SpriteRenderer>().color = Game.Active.GamePlayer.GetColor();
+		characterObject.transform.Find("Border").GetComponent<SpriteRenderer>().color = characterToSpawn.Owner.GetColor();
 		characterObject.transform.localPosition = new Vector3(0, 10, 0);
 		parentCell.CharacterOnCell = characterToSpawn;
 		characterToSpawn.ParentCell = parentCell;
@@ -70,7 +70,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	}
 	public void TrySpawning(HexCell cell, Character characterToSpawn)
 	{
-		var playerSpawnpointType = HexMapDrawer.Instance.HexMap.SpawnPoints[Game.Active.GamePlayer.GetIndex()];
+		var playerSpawnpointType = HexMapDrawer.Instance.HexMap.SpawnPoints[characterToSpawn.Owner.GetIndex()];
 		if (cell.Type != playerSpawnpointType)
 		{
 			throw new Exception("To nie twój spawn!");
