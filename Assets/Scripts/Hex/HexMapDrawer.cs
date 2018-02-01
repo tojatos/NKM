@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Managers;
-using UIManagers;
 using UnityEngine;
 
 namespace Hex
@@ -35,6 +34,7 @@ namespace Hex
 					CreateCell(x, z, i++);
 				}
 			}
+
 			TriangulateCells();
 		}
 		public void TriangulateCells()
@@ -141,7 +141,7 @@ namespace Hex
 		{
 			position = transform.InverseTransformPoint(position);
 			var coordinates = HexCoordinates.FromPosition(position);
-			var index = coordinates.X + coordinates.Z * HexMapDrawer.Instance.Width + coordinates.Z / 2;
+			var index = coordinates.X + coordinates.Z * Instance.Width + coordinates.Z / 2;
 			var touchedCell = Game.HexMapDrawer.Cells[index];
 			return touchedCell;
 		}
@@ -189,7 +189,7 @@ namespace Hex
 			if (!Physics.Raycast(inputRay, out hit)) return null;
 
 			var position = hit.point;
-			return HexMapDrawer.Instance.GetCellByPosition(ref position);
+			return Instance.GetCellByPosition(ref position);
 		}
 	}
 }

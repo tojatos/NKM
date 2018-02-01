@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Helpers;
 using Hex;
+using Multiplayer.Network;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
 using UnityEngine;
@@ -16,6 +17,10 @@ public class Game
 	public UIManager UIManager;
 	public Spawner Spawner;
 	public HexMapDrawer HexMapDrawer;
+	public GameType Type { get; private set; }
+
+	public Client Client;
+	public Server Server;
 
 	public bool IsInitialized;
 	public Game()
@@ -26,13 +31,18 @@ public class Game
 	public void Init(GameOptions gameOptions)
 	{
 		_options = gameOptions;
-	
+
+		Type = _options.GameType;
 		Players = new List<GamePlayer>(gameOptions.Players);
 		UIManager = _options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
 		Spawner = Spawner.Instance;
 
-		Players.ForEach(p => Debug.Log(p.Characters.Count));
+		Client = _options.Client;
+		Server = _options.Server;
+
+//		Players.ForEach(p => Debug.Log(p.Characters.Count));
+		Debug.Log("Game started!");
 		IsInitialized = true;
 	}
 
@@ -59,10 +69,6 @@ public class Game
 				Active.Turn.Start(player);
 				Func<bool> isTurnDone = () => Active.Turn.IsDone;
 				await isTurnDone.WaitToBeTrue();
-//					while (!Active.Turn.IsDone)
-//					{
-//						await Task.Delay(1);
-//					}
 			}
 			//Skip finishing phase, if not every character is placed in the first phase
 			if (Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap)))
@@ -81,7 +87,18 @@ public class Game
 
 		if (Active.MyGameObject != null)
 		{
-			UseMyGameObject(touchedCell);
+			switch (Type)
+			{
+				case GameType.Local:
+				case GameType.MultiplayerServer:
+					UseMyGameObject(touchedCell);
+					break;
+				case GameType.MultiplayerClient:
+					Client.SendUseMyGameObjectMessage(touchedCell, Active.MyGameObject);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 		else if (Active.HexCells?.Contains(touchedCell) == true)
 		{
@@ -110,7 +127,7 @@ public class Game
 		}
 	}
 
-	private void UseMyGameObject(HexCell cell)
+	public void UseMyGameObject(HexCell cell)
 	{
 		var myGameObjectType = Active.MyGameObject.GetType().BaseType;
 		if (myGameObjectType == typeof(Character))
@@ -145,20 +162,19 @@ public class Game
 			}
 
 		}
-		//else if (myGameObjectType == typeof(Item))
-		//{
-		//	if (cell.CharacterOnCell == null) return;
-		//	if (cell.CharacterOnCell.Owner != Active.GamePlayer)
-		//	{
-		//		throw new Exception("Nie możesz użyć przedmiotu na nie swojej postaci!");
-		//	}
-		//	var activeItem = Active.MyGameObject as Item;
-		//	cell.CharacterOnCell.ActiveItem = activeItem;
-		//	Active.GamePlayer.Items.Remove(activeItem);
-		//	Active.MyGameObject = null;
-		//}
-		//else if (myGameObjectType == typeof(Potion))
-		//{
-		//}
+	}
+
+	public void PlaceAllCharactersOnSpawns()
+	{
+		Players.ForEach(p => p.Characters.ForEach(c => TrySpawning(p, c)));
+		if(Active.Phase.Number==0) Active.Phase.Finish();
+	}
+
+	private static void TrySpawning(GamePlayer p, Character c)
+	{
+		var spawnPoint = p.GetSpawnPoints().FirstOrDefault(cell => cell.CharacterOnCell == null);
+		if (spawnPoint == null) return;
+
+		Spawner.Instance.TrySpawning(spawnPoint, c);
 	}
 }

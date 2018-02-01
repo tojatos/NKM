@@ -11,7 +11,7 @@ namespace UIManagers
 	public class CharacterInfo : SingletonMonoBehaviour<CharacterInfo>
 	{
 		private Game Game;
-		private Active Active;
+//		private Active Active;
 		public Text HealthPoints;
 		public Text AttackPoints;
 		public Text Range;
@@ -30,7 +30,7 @@ namespace UIManagers
 		public void Open()
 		{
 			Game.UIManager.VisibleUI = new List<GameObject> { gameObject };
-			UpdateInfo(AllMyGameObjects.Instance.Characters.Single(c => c.Name == Active.CharacterOnMap.Name));
+			UpdateInfo(AllMyGameObjects.Instance.Characters.Single(c => c.Name == Game.Active.CharacterOnMap.Name));
 		}
 
 		private void UpdateInfo(Character character)

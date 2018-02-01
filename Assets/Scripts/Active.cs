@@ -72,7 +72,7 @@ public class Active
 	//}
 	public bool IsActiveUse => !(Ability == null && (Action == Action.None || Action == Action.AttackAndMove) && MyGameObject == null);
 
-	
+
 	/// <summary>
 	/// On set: Hide previous Buttons and show new.
 	/// </summary>

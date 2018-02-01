@@ -21,5 +21,7 @@ namespace Multiplayer.Network
 
 
 		protected byte error;
+
+//		protected readonly MessageComposer MessageComposer = new MessageComposer();
 	}
 }

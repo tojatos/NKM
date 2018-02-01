@@ -1,5 +1,4 @@
-﻿using Managers;
-using UIManagers;
+﻿using UIManagers;
 
 public class Phase
 {

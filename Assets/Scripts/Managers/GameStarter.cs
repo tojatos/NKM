@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Helpers;
 using Hex;
 using Multiplayer.Network;
 using MyGameObjects.Characters;
 using MyGameObjects.MyGameObject_templates;
-using Newtonsoft.Json;
 using UIManagers;
 using UnityEngine;
 
@@ -15,7 +13,7 @@ namespace Managers
 {
 	public class GameStarter : SingletonMonoBehaviour<GameStarter>
 	{
-		public bool IsTesting = false;
+		public bool IsTesting;
 		public Game Game = new Game();
 		private GameType GameType;
 		private Server ActiveServer;
@@ -37,11 +35,26 @@ namespace Managers
 			}
 			else
 			{
-				gameOptions = new GameOptions
-				{
-					GameType = GameType.Local,
-					Map = Stuff.Maps[0],
-					Players = new List<GamePlayer>
+				gameOptions = GetTestingGameOptions();
+			}
+
+			Game.Init(gameOptions);
+			Game.StartGame();
+			if (IsTesting)
+			{
+				Game.PlaceAllCharactersOnSpawns();
+
+			}
+
+		}
+
+		private static GameOptions GetTestingGameOptions()
+		{
+			GameOptions gameOptions = new GameOptions
+			{
+				GameType = GameType.Local,
+				Map = Stuff.Maps[0],
+				Players = new List<GamePlayer>
 					{
 						new GamePlayer
 						{
@@ -62,35 +75,25 @@ namespace Managers
 							}
 						}
 					},
-					UIManager = UIManager.Instance
-				};
-				gameOptions.Players.ForEach(p =>
-				{
-					p.Characters.ForEach(c => c.Owner = p);
-					p.HasSelectedCharacters = true;
-				});
-			}
-
-			Game.Init(gameOptions);
-			Game.StartGame();
-			if (IsTesting)
+				UIManager = UIManager.Instance
+			};
+			gameOptions.Players.ForEach(p =>
 			{
-				Game.Players.ForEach(p=>p.Characters.ForEach(c =>
-				{
-					var spawnPoint = p.GetSpawnPoints().First(cell => cell.CharacterOnCell == null);
-					Spawner.Instance.TrySpawning(spawnPoint, c);
-				}));
-				Game.Active.Phase.Finish();
-			}
-
+				p.Characters.ForEach(c => c.Owner = p);
+				p.HasSelectedCharacters = true;
+//				p.Characters.ForEach(c => Debug.Log(c.Guid));
+			});
+			return gameOptions;
 		}
 
 		private async Task<GameOptions> GetGameOptions() => new GameOptions
 		{
-			GameType = GameType.Local,
+			GameType = GameType,
 			Map = GetMap(),
 			Players = await GetPlayers(),
-			UIManager = UIManager.Instance
+			UIManager = UIManager.Instance,
+			Client = ActiveClient,
+			Server = ActiveServer
 		};
 
 		private void AssignClientOrServerIfNeeded()
@@ -116,7 +119,7 @@ namespace Managers
 
 		private void SetGameType()
 		{
-			GameType = (GameType)PlayerPrefs.GetInt("GameType", (int)GameType.Local);
+			GameType = SessionSettings.Instance.GameType;
 		}
 
 		private HexMap GetMap()
@@ -124,7 +127,7 @@ namespace Managers
 			switch (GameType)
 			{
 				case GameType.Local:
-					var mapIndex = PlayerPrefs.GetInt("SelectedMapIndex", 0);
+					var mapIndex = SessionSettings.Instance.SelectedMapIndex;
 					var map = Stuff.Maps[mapIndex];
 					return map;
 				case GameType.MultiplayerServer:
@@ -151,7 +154,7 @@ namespace Managers
 		}
 		private async Task<List<GamePlayer>> GetLocalPlayers()
 		{
-			var numberOfPlayers = PlayerPrefs.GetInt("NumberOfPlayers", 2);
+			var numberOfPlayers = SessionSettings.Instance.NumberOfPlayers;
 			var players = new List<GamePlayer>();
 			for (var i = 0; i < numberOfPlayers; i++)
 				players.Add(new GamePlayer { Name = $"GamePlayer{i + 1}" });
@@ -190,10 +193,10 @@ namespace Managers
 			switch (GameType)
 			{
 				case GameType.Local:
-					charactersPerPlayer = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer");
+					charactersPerPlayer = SessionSettings.Instance.NumberOfCharactersPerPlayer;
 					break;
 				case GameType.MultiplayerServer:
-					charactersPerPlayer = ActiveServer.PlayersPerCharacter;
+					charactersPerPlayer = ActiveServer.CharactersPerPlayer;
 					break;
 				case GameType.MultiplayerClient:
 					charactersPerPlayer = ActiveClient.PlayersPerCharacter;
@@ -211,6 +214,6 @@ namespace Managers
 			await GetCharacters(p);
 			return p;
 		}
-		
+
 	}
 }

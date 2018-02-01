@@ -9,7 +9,6 @@ namespace Managers
 	public class GameHostOptions : MonoBehaviour
 	{
 		[SerializeField] private GameObject _serverPrefab;
-		[SerializeField] private GameObject _clientPrefab;
 
 		private Dropdown _playerCountDropdown;
 		private Dropdown _mapSelectDropdown;
@@ -25,23 +24,21 @@ namespace Managers
 			_mapSelectDropdown.onValueChanged.AddListener(ReloadCppDropdown);
 			//TODO: Check if map exists, same with gamePlayer number
 
-			_mapSelectDropdown.value = PlayerPrefs.GetInt("SelectedMapIndex", 0);
+			_mapSelectDropdown.value = SessionSettings.Instance.SelectedMapIndex;
 
 			ReloadPlayerCountDropdown(_mapSelectDropdown.value);
-			_playerCountDropdown.value = PlayerPrefs.GetInt("NumberOfPlayers", 2) - 1;
+			_playerCountDropdown.value = SessionSettings.Instance.NumberOfPlayers - 1;
 
 			ReloadCppDropdown(_mapSelectDropdown.value);
-			_cppDropdown.value = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer", 1) - 1;
+			_cppDropdown.value = SessionSettings.Instance.NumberOfCharactersPerPlayer - 1;
 		}
 
 		public void CreateGameButtonClick()
 		{
-			PlayerPrefs.SetInt("SelectedMapIndex", _mapSelectDropdown.value);
-			PlayerPrefs.SetInt("NumberOfPlayers", _playerCountDropdown.value + 1);
-			PlayerPrefs.SetInt("NumberOfCharactersPerPlayer", _cppDropdown.value + 1);
+			SessionSettings.Instance.SelectedMapIndex = _mapSelectDropdown.value;
+			SessionSettings.Instance.NumberOfPlayers = _playerCountDropdown.value + 1;
+			SessionSettings.Instance.NumberOfCharactersPerPlayer = _cppDropdown.value + 1;
 			Instantiate(_serverPrefab);
-			//var client = Instantiate(_clientPrefab).GetComponent<Client>();
-			//client.Connect("127.0.0.1");
 			SceneManager.LoadScene(Scenes.ServerView);
 		}
 		public void BackButtonClick() => SceneManager.LoadScene(Scenes.MultiPlayerSetup);

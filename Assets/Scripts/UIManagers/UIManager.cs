@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Helpers;
 using Hex;
@@ -107,6 +106,7 @@ namespace UIManagers
 		private void Update()
 		{
 			if (Game==null) return;
+
 			if (Game.Active.Phase.Number == 0)
 			{
 				if (ForcePlacingChampions && !SpriteSelect.IsOpened && Game.Active.MyGameObject == null && Game.Active.GamePlayer.HasFinishedSelecting)

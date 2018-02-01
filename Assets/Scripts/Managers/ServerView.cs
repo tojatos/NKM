@@ -26,7 +26,7 @@ namespace Managers
 			ActiveServer.TryStartingGame();
 		}
 
-		public void UpdatePlayers(List<Multiplayer.Network.Player> players)
+		public void UpdatePlayers(List<Player> players)
 		{
 			PlayerList.transform.Clear();
 			players.ForEach(player =>

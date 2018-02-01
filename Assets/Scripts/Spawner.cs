@@ -55,10 +55,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	private static MyGameObject Create(string namespaceName, string className)
 	{
 		var type = Type.GetType("MyGameObjects." + namespaceName + "." + className);
-		if (type == null)
-		{
-			throw new ArgumentNullException();
-		}
+		if (type == null) 	throw new ArgumentNullException();
 
 		var createdMyGameObject = Activator.CreateInstance(type) as MyGameObject;
 		return createdMyGameObject;
@@ -81,5 +78,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		}
 
 		SpawnCharacterObject(cell, characterToSpawn);
+		if (Game.Type == GameType.MultiplayerServer) Game.Server.SendSpawnCharacterMessege(cell, characterToSpawn);
+
 	}
 }

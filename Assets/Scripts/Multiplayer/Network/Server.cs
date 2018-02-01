@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Helpers;
+using Hex;
 using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
@@ -35,11 +36,11 @@ namespace Multiplayer.Network
 		public List<Player> Players = new List<Player>();
 		public Dictionary<Player, GamePlayer> GamePlayers = new Dictionary<Player, GamePlayer>();
 		private ServerView ServerView;
-//		private GameServerSide Game;
+		private Game Game;
 
 		public int SelectedMapIndex { get; private set; }
 		public int NumberOfPlayers { get; private set; }
-		public int PlayersPerCharacter { get; private set; }
+		public int CharactersPerPlayer { get; private set; }
 
 		void Awake()
 		{
@@ -49,8 +50,12 @@ namespace Multiplayer.Network
 				if (SceneManager.GetActiveScene().name == Scenes.ServerView)
 				{
 					ServerView = FindObjectOfType<ServerView>();
-					var gameOptions = new List<int> { NumberOfPlayers, SelectedMapIndex, PlayersPerCharacter };
+					var gameOptions = new List<int> { NumberOfPlayers, SelectedMapIndex, CharactersPerPlayer };
 					ServerView.UpdateGameOptions(gameOptions.ConvertAll(x => x.ToString()));
+				}
+				else if (SceneManager.GetActiveScene().name == Scenes.MainGame)
+				{
+					Game = GameStarter.Instance.Game;
 				}
 			};
 		}
@@ -58,9 +63,9 @@ namespace Multiplayer.Network
 		{
 			StartServer();
 
-			NumberOfPlayers = PlayerPrefs.GetInt("NumberOfPlayers");
-			SelectedMapIndex = PlayerPrefs.GetInt("SelectedMapIndex");
-			PlayersPerCharacter = PlayerPrefs.GetInt("NumberOfCharactersPerPlayer");
+			NumberOfPlayers = SessionSettings.Instance.NumberOfPlayers;
+			SelectedMapIndex = SessionSettings.Instance.SelectedMapIndex;
+			CharactersPerPlayer = SessionSettings.Instance.NumberOfCharactersPerPlayer;
 		}
 
 		private bool _isStarted;
@@ -104,6 +109,7 @@ namespace Multiplayer.Network
 						Debug.LogError((NetworkError)error);
 						return;
 					}
+
 					string msg = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
 					ReceiveMessage(connectionId, msg);
 					//Debug.Log("GamePlayer " + connectionId + " has sent: " + msg);
@@ -143,6 +149,9 @@ namespace Multiplayer.Network
 					case "GET_GAMEPLAYERS":
 						SendGamePlayers(connectionId);
 						break;
+					case "USE_MYGAMEOBJECT":
+						TryUsingMyGameObject(connectionId, contents);
+						break;
 					case "CHARACTERS":
 //						GamePlayer gamePlayer = JsonConvert.DeserializeObject<GamePlayer>(contents[1], new JsonSerializerSettings
 //						{
@@ -165,14 +174,35 @@ namespace Multiplayer.Network
 			}
 		}
 
+		private void TryUsingMyGameObject(int connectionId, Queue<string> contents)
+		{
+			try
+			{
+				if (GamePlayers.First(g => g.Key.ConnectionID == connectionId).Value != Game.Active.GamePlayer) throw new Exception("Nie jesteś aktywnym graczem!");
+
+				string characterName = contents.Dequeue();
+				string cellCoordinates = contents.Dequeue();
+				Game.Active.MyGameObject = Game.Active.GamePlayer.Characters.First(c=>c.Name==characterName && !c.IsOnMap); //TODO: this needs to be changed, use guid maybe
+				Game.TouchCell(HexMapDrawer.Instance.Cells.First(c=>c.Coordinates.ToString()==cellCoordinates));
+			}
+			catch (Exception e)
+			{
+				SendWarning(e.Message, connectionId);
+				throw;
+			}
+
+		}
+
+		public void SendWarning(string msg, int connId) => Send(MessageComposer.Compose("WARNING", msg), reliableChannel, connId);
+
 		private async void SendGamePlayers(int connectionId)
 		{
 			Func<bool> areAllGamePlayersReceived = () => Players.Count == GamePlayers.Count;
 			await areAllGamePlayersReceived.WaitToBeTrue();
 
 			List<string> playersWithNameAndCharacters = new List<string>();
-			GamePlayers.Values.ToList().ForEach(g=> playersWithNameAndCharacters.Add(ComposeMessage('*', g.Name, g.Characters.GetClassNames().ToArray())));
-			Send(ComposeMessage("GAMEPLAYERS", playersWithNameAndCharacters.ToArray()), reliableChannel, connectionId);
+			GamePlayers.Values.ToList().ForEach(g=> playersWithNameAndCharacters.Add(MessageComposer.Compose('*', g.Name, g.Characters.GetClassNames().ToArray())));
+			Send(MessageComposer.Compose("GAMEPLAYERS", playersWithNameAndCharacters.ToArray()), reliableChannel, connectionId);
 		}
 
 		private Player CreatePlayer(int connId, string name)
@@ -205,7 +235,7 @@ namespace Multiplayer.Network
 		}
 		private void SendGameOptions(int playerConnectionId)
 		{
-			var msg = ComposeMessage("GAMEOPTIONS", NumberOfPlayers.ToString(), SelectedMapIndex.ToString(), PlayersPerCharacter.ToString());
+			var msg = MessageComposer.Compose("GAMEOPTIONS", NumberOfPlayers.ToString(), SelectedMapIndex.ToString(), CharactersPerPlayer.ToString());
 			Send(msg, reliableChannel, playerConnectionId);
 		}
 
@@ -239,16 +269,7 @@ namespace Multiplayer.Network
 			var connIds = Players.Select(p => p.ConnectionID).ToList();
 			Send(message, channelId, connIds);
 		}
-		private string ComposeMessage(char delimiter, string header, params string[] contents)
-		{
-			string msg = header;
-			contents.ToList().ForEach(c => msg += $"{delimiter}{c}");
-			return msg;
-		}
-		private string ComposeMessage(string header, params string[] contents)
-		{
-			return ComposeMessage('%', header, contents);
-		}
+
 		public void TryStartingGame()
 		{
 			if (NumberOfPlayers != Players.Count) return;
@@ -258,7 +279,7 @@ namespace Multiplayer.Network
 
 		private void StartGame()
 		{
-			PlayerPrefs.SetInt("GameType", (int)GameType.MultiplayerServer);
+			SessionSettings.Instance.GameType = GameType.MultiplayerServer;
 			SceneManager.LoadScene(Scenes.MainGame);
 			SendToAllPlayers("GAMESTART", reliableChannel);
 		}
@@ -279,6 +300,12 @@ namespace Multiplayer.Network
 			gamePlayer.AddCharacters(classNames);
 
 			GamePlayers.Add(player, gamePlayer);
+		}
+
+		public void SendSpawnCharacterMessege(HexCell cell, Character activeCharacter)
+		{
+			string msg = MessageComposer.Compose("SPAWN_CHARACTER", activeCharacter.Name, cell.Coordinates.ToString());
+			SendToAllPlayers(msg, reliableChannel);
 		}
 	}
 }

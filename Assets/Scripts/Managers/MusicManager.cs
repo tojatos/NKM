@@ -1,71 +1,61 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Managers
 {
-	public class MusicManager : MonoBehaviour
+	public class MusicManager : CreatableSingletonMonoBehaviour<MusicManager>
 	{
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+		static void DDOL() => DontDestroyOnLoad(Instance);
+
 		public AudioSource Music;
 		private GameObject MuteButton;
-		private bool _isMuted;
-		private UnityAction<Scene, LoadSceneMode> _sceneLoadDelegate;
+
 		private void Awake()
 		{
-			_sceneLoadDelegate = (scene, mode) => OnSceneLoaded();
-			if (FindObjectsOfType<MusicManager>().Length > 1) Destroy(this); //makes singleton work when changing scenes
-			_isMuted = PlayerPrefsX.GetBool("IsMuted", false);
+			Music = gameObject.AddComponent<AudioSource>();
+			Music.playOnAwake = false;
+			Music.clip = Resources.Load("Audio/tobias_weber_-_The_Last_One_At_The_Bar_(Instrumental)") as AudioClip;
+			SceneManager.sceneLoaded += (scene, mode) => OnSceneLoaded();
 		}
-		void OnEnable()
-		{
-			SceneManager.sceneLoaded += _sceneLoadDelegate;
-		}
-		void OnDisable()
-		{
-			SceneManager.sceneLoaded -= _sceneLoadDelegate;
-		}
-
 		private void OnSceneLoaded()
-		//private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 		{
 			MuteButton = GameObject.Find("Mute Button");
 			if (MuteButton == null) return;
 
-			MuteButton.GetComponent<Image>().sprite = _isMuted ? Stuff.Sprites.Icons.Find(i => i.name == "mute") : Stuff.Sprites.Icons.Find(i => i.name == "unmute");
+			MuteButton.GetComponent<Image>().sprite = SessionSettings.Instance.IsMuted ? Stuff.Sprites.Icons.Find(i => i.name == "mute") : Stuff.Sprites.Icons.Find(i => i.name == "unmute");
 			MuteButton.GetComponent<Button>().onClick.AddListener(ToggleMute);
 		}
 		private void Start()
 		{
-			if (!_isMuted)
+			if (!SessionSettings.Instance.IsMuted)
 			{
 				Music.Play();
 			}
 			else
 			{
-				MuteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.Find(i => i.name == "mute");
+				if(MuteButton!=null)
+					MuteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.Find(i => i.name == "mute");
 			}
-			DontDestroyOnLoad(this);
 		}
 
 		private void ToggleMute()
 		{
-			if (_isMuted)
+			if (SessionSettings.Instance.IsMuted)
 			{
-				MuteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.Find(i => i.name == "unmute");
+				MuteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "unmute");
 				Music.Play();
 			}
 			else
 			{
-				MuteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.Find(i => i.name == "mute");
+				MuteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "mute");
 				Music.Stop();
 			}
-			_isMuted = !_isMuted;
+			SessionSettings.Instance.IsMuted = !SessionSettings.Instance.IsMuted;
 		}
 
-		private void OnApplicationQuit()
-		{
-			PlayerPrefsX.SetBool("IsMuted", _isMuted);
-		}
 	}
 }

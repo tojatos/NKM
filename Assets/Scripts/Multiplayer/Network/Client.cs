@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Helpers;
+using Hex;
 using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
@@ -83,6 +84,13 @@ namespace Multiplayer.Network
 					break;
 			}
 		}
+
+		public void SendUseMyGameObjectMessage(HexCell touchedCell, MyGameObject myGameObject)
+		{
+			var msg = MessageComposer.Compose("USE_MYGAMEOBJECT", myGameObject.Name, touchedCell.Coordinates.ToString());
+			Send(msg, reliableChannel);
+		}
+
 		private void ReceiveMessage(int connectionId, string msg)
 		{
 			List<string> messages = msg.Split('|').ToList();
@@ -94,6 +102,16 @@ namespace Multiplayer.Network
 			string header = contents.Dequeue();
 			switch (header)
 			{
+				case "WARNING":
+					Debug.LogWarning(contents.Dequeue());
+					break;
+				case "SPAWN_CHARACTER":
+					string characterName = contents.Dequeue();
+					string cellCoordinates = contents.Dequeue();
+					//TODO: change that
+					Game.Active.MyGameObject = Game.Active.GamePlayer.Characters.First(c => c.Name == characterName);
+					Game.UseMyGameObject(HexMapDrawer.Instance.Cells.First(c => c.Coordinates.ToString() == cellCoordinates));
+					break;
 				case "GAMEPLAYERS":
 					SetGamePlayers(contents.ToList());
 					break;
@@ -111,7 +129,7 @@ namespace Multiplayer.Network
 					UpdateGameOptions(contents.ToList());
 					break;
 				case "GAMESTART":
-					PlayerPrefs.SetInt("GameType", (int)GameType.MultiplayerClient);
+					SessionSettings.Instance.GameType = GameType.MultiplayerClient;
 					SceneManager.LoadScene(Scenes.MainGame);
 					break;
 				case "DISCONNECT":
@@ -142,7 +160,7 @@ namespace Multiplayer.Network
 		{
 			if (GamePlayer == null) GamePlayer = await GameStarter.Instance.GetGamePlayer();
 			List<string> characterClasses = GamePlayer.Characters.GetClassNames().ToList();
-			Send(ComposeMessage("CHARACTERS", characterClasses.ToArray()), reliableChannel);
+			Send(MessageComposer.Compose("CHARACTERS", characterClasses.ToArray()), reliableChannel);
 		}
 
 		public int SelectedMapIndex { get; private set; }
@@ -168,12 +186,7 @@ namespace Multiplayer.Network
 				l.UpdatePlayers(names);
 			}
 		}
-		private string ComposeMessage(string header, params string[] contents)
-		{
-			string msg = header;
-			contents.ToList().ForEach(c => msg += $"%{c}");
-			return msg;
-		}
+
 
 		private void SendName(int connectionId)
 		{

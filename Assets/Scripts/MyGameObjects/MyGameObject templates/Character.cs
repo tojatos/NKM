@@ -31,7 +31,6 @@ namespace MyGameObjects.MyGameObject_templates
 
 		public int DeathTimer { get; private set; }
 
-
 		private bool CanAttackAllies => Abilities.Any(a => a.OverridesFriendAttack);
 		public List<Ability> Abilities{ get; private set; }
 		public List<Effect> Effects { get; }

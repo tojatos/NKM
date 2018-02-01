@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 224586700565620540}
   - component: {fileID: 222591261421380340}
   - component: {fileID: 114882118405759114}
-  - component: {fileID: 114141767795061190}
   m_Layer: 0
   m_Name: MultipleDropdowns
   m_TagString: Untagged
@@ -170,22 +169,6 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!114 &114141767795061190
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1130854372873628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc87236b57ac4e6bb6f7df7c5aee8ab2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DropdownGroupPrefab: {fileID: 1109395540761102, guid: e6076aed781d1884c89f31ea9bd43f66,
-    type: 2}
-  Dropdowns: {fileID: 1381744657993188}
-  FinishButton: {fileID: 114779856089075466}
-  TitleText: {fileID: 114287304777591714}
 --- !u!114 &114287304777591714
 MonoBehaviour:
   m_ObjectHideFlags: 1
