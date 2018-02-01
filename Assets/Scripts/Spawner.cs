@@ -52,7 +52,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		}
 	}
 
-	private static MyGameObject Create(string namespaceName, string className)
+	public static MyGameObject Create(string namespaceName, string className)
 	{
 		var type = Type.GetType("MyGameObjects." + namespaceName + "." + className);
 		if (type == null) 	throw new ArgumentNullException();

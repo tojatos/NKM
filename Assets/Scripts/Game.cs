@@ -4,6 +4,7 @@ using System.Linq;
 using Helpers;
 using Hex;
 using Multiplayer.Network;
+using MyGameObjects.Characters;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
 using UnityEngine;
@@ -118,6 +119,7 @@ public class Game
 			if (touchedCell.CharacterOnCell != null)
 			{
 				touchedCell.CharacterOnCell.Select();
+				Debug.Log(touchedCell.CharacterOnCell.Guid);
 			}
 			else
 			{

@@ -60,7 +60,7 @@ namespace UIManagers
 			HexMapDrawer = HexMapDrawer.Instance;
 			SpriteSelect = SpriteSelect.Instance;
 
-			Game.Active.UIManager = this;
+			//Game.Active.UIManager = this;
 			GameUI = new List<GameObject>
 			{
 				MainGameUI,

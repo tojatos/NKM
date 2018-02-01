@@ -103,5 +103,11 @@ namespace Helpers
 		public static IEnumerable<HexCell> GetSpawnPoints(this GamePlayer gamePlayer) => GameStarter.Instance.Game.HexMapDrawer.Cells.FindAll(c => c.Type == gamePlayer.GetSpawnPointType());
 		public static string FormattedFirstName(this Character character) => string.Format("<color={0}><</color><b>{1}</b><color={0}>></color>", ((Color32)character.Owner.GetColor()).ToHex(), character.Name.Split(' ').Last());
 
+		public static Dictionary<string, Guid> GetClassNamesWithGuid<T>(this List<T> gameObjects) where T : MyGameObject
+		{
+			Dictionary<string, Guid> classNamesWithGuid = new Dictionary<string, Guid>();
+			gameObjects.ForEach(g => classNamesWithGuid.Add(g.GetType().Name, g.Guid));
+			return classNamesWithGuid;
+		}
 	}
 }

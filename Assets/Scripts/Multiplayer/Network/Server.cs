@@ -153,11 +153,7 @@ namespace Multiplayer.Network
 						TryUsingMyGameObject(connectionId, contents);
 						break;
 					case "CHARACTERS":
-//						GamePlayer gamePlayer = JsonConvert.DeserializeObject<GamePlayer>(contents[1], new JsonSerializerSettings
-//						{
-//							TypeNameHandling = TypeNameHandling.Auto,
-//						});
-						ReceiveCharacters(Players.Single(p => p.ConnectionID == connectionId), contents.ToList());
+						ReceiveCharacters(Players.Single(p => p.ConnectionID == connectionId), contents);
 						break;
 					case "CONNECTED":
 						AskForName(connectionId);
@@ -201,7 +197,7 @@ namespace Multiplayer.Network
 			await areAllGamePlayersReceived.WaitToBeTrue();
 
 			List<string> playersWithNameAndCharacters = new List<string>();
-			GamePlayers.Values.ToList().ForEach(g=> playersWithNameAndCharacters.Add(MessageComposer.Compose('*', g.Name, g.Characters.GetClassNames().ToArray())));
+			GamePlayers.Values.ToList().ForEach(g=> playersWithNameAndCharacters.Add(MessageComposer.Compose('*', g.Name, g.Characters.GetClassNamesWithGuid().Select(c => c.Key + "&" + c.Value).ToArray())));
 			Send(MessageComposer.Compose("GAMEPLAYERS", playersWithNameAndCharacters.ToArray()), reliableChannel, connectionId);
 		}
 
@@ -293,11 +289,12 @@ namespace Multiplayer.Network
 
 		}
 
-		private void ReceiveCharacters(Player player, List<string> classNames)
+		private void ReceiveCharacters(Player player, Queue<string> queue)
 		{
-			var gamePlayer = new GamePlayer() {Name = player.Name}; //TODO: move that somewhere else
+			var gamePlayer = new GamePlayer {Name = player.Name}; //TODO: move that somewhere else
 
-			gamePlayer.AddCharacters(classNames);
+			Dictionary<string, Guid> classNamesWithGuids = queue.ToDictionary(x => x.Split('*')[0], x => new Guid(x.Split('*')[1]));
+			gamePlayer.AddCharacters(classNamesWithGuids);
 
 			GamePlayers.Add(player, gamePlayer);
 		}

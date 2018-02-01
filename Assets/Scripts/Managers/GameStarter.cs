@@ -19,10 +19,7 @@ namespace Managers
 		private Server ActiveServer;
 		private Client ActiveClient;
 
-		private async void Awake()
-		{
-			await PrepareAndStartGame();
-		}
+		private async void Awake() => await PrepareAndStartGame();
 
 		private async Task PrepareAndStartGame()
 		{

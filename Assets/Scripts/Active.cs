@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Helpers;
 using Hex;
+using Multiplayer.Network;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
 using UnityEngine;
@@ -31,7 +32,7 @@ public class Active
 //		AirSelection = new AirSelection { Active = this };
 //		IsDebug = false;
 //	}
-	public UIManager UIManager;
+//	public UIManager UIManager;
 
 	public Turn Turn { get; }
 	public Phase Phase { get; }
@@ -63,7 +64,7 @@ public class Active
 	private List<HexCell> _helpHexCells;
 	private List<GameObject> _buttons;
 
-
+//	public List<object> GetInfo => TODO
 	public bool IsDebug { get; set; }
 
 	//public bool IsActivePlayerCharacterSelected
@@ -91,10 +92,6 @@ public class Active
 			_buttons.Show();
 		}
 	}
-
-
-
-
 
 	public void Reset()
 	{
@@ -180,6 +177,11 @@ public class Active
 	public void MakeAction(HexCell cell)
 	{
 		if (!HexCells.Contains(cell)) return;
+
+		if (Game.Type == GameType.MultiplayerClient)
+		{
+//			Game.Client.SendMakeActionMessage(Action, Ability, CharacterOnMap, cell.Coordinates.ToString()); TODO
+		}
 
 		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 		switch (Action)

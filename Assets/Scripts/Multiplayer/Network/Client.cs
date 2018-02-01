@@ -147,11 +147,12 @@ namespace Multiplayer.Network
 			GamePlayers = new List<GamePlayer>();
 			gamePlayersData.ForEach(data =>
 			{
-				Queue<string> classNames = new Queue<string>(data.Split('*'));
-				string gamePlayerName = classNames.Dequeue();
+				Queue<string> queue = new Queue<string>(data.Split('*'));
+				string gamePlayerName = queue.Dequeue();
 				var gamePlayer = new GamePlayer { Name = gamePlayerName };
 
-				gamePlayer.AddCharacters(classNames);
+				var classNamesWithGuids = queue.ToDictionary(x => x.Split('&')[0], x => new Guid(x.Split('&')[1]));
+				gamePlayer.AddCharacters(classNamesWithGuids);
 				GamePlayers.Add(gamePlayer);
 			});
 		}
@@ -159,8 +160,8 @@ namespace Multiplayer.Network
 		private async void SendSelectedCharacters()
 		{
 			if (GamePlayer == null) GamePlayer = await GameStarter.Instance.GetGamePlayer();
-			List<string> characterClasses = GamePlayer.Characters.GetClassNames().ToList();
-			Send(MessageComposer.Compose("CHARACTERS", characterClasses.ToArray()), reliableChannel);
+			var characterClassesWithGuid = GamePlayer.Characters.GetClassNamesWithGuid();
+			Send(MessageComposer.Compose("CHARACTERS", characterClassesWithGuid.Select(c=>c.Key+"*"+c.Value).ToArray()), reliableChannel);
 		}
 
 		public int SelectedMapIndex { get; private set; }
