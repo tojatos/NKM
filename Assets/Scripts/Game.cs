@@ -155,8 +155,10 @@ public class Game
 
 	public void UseMyGameObject(HexCell cell)
 	{
-		var myGameObjectType = Active.MyGameObject.GetType().BaseType;
-		if (myGameObjectType == typeof(Character))
+//		var myGameObjectType = Active.MyGameObject.GetType().BaseType;
+//		Debug.Log(myGameObjectType);
+
+		if (Active.MyGameObject.GetType() == typeof(Character))
 		{
 			if (Active.Turn.WasCharacterPlaced)
 			{

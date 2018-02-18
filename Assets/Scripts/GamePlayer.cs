@@ -33,7 +33,8 @@ public class GamePlayer
 
 	public void AddCharacters(IEnumerable<string> classNames)
 	{
-		var characters = Spawner.Create("Characters", classNames).Cast<Character>().ToList();
+		var characters = new List<Character>();
+		classNames.ToList().ForEach(n => characters.Add(new Character(n)));
 		AddCharacters(characters);
 
 	}

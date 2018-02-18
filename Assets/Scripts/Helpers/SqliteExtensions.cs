@@ -36,7 +36,7 @@ namespace Helpers
 			conn.Close();
 			return rows;
 		}
-		public static List<SqliteRow> GetCharacterNames(this SQLiteConnection conn) => Select(conn, "SELECT Name FROM Character");
+		public static List<string> GetCharacterNames(this SQLiteConnection conn) => Select(conn, "SELECT Name FROM Character").SelectMany(row => row.Data.Values).ToList();
 		public static List<string> GetAbilityClassNames(this SQLiteConnection conn, string characterName) => Select(conn, $"SELECT Ability.ClassName AS AbilityName FROM Character INNER JOIN Character_Ability ON Character.ID = Character_Ability.CharacterID INNER JOIN Ability ON Ability.ID = Character_Ability.AbilityID WHERE Character.Name = '{characterName}';").SelectMany(row => row.Data.Values).ToList();
 		public static SqliteRow GetCharacterData(this SQLiteConnection conn, string characterName) => Select(conn, $"SELECT AttackPoints, HealthPoints, BasicAttackRange, Speed, PhysicalDefense, MagicalDefense, FightType, Description, Quote, Author.Name FROM Character INNER JOIN Author ON Character.AuthorID = Author.ID WHERE Character.Name = '{characterName}';")[0];
 	}

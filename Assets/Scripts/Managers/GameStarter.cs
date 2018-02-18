@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Helpers;
 using Hex;
@@ -178,8 +179,8 @@ namespace Managers
 
 			if (SpriteSelect.Instance.SelectedObjects.Count != charactersPerPlayer) return;
 
-			var classNames = SpriteSelect.Instance.SelectedObjects.GetClassNames();
-			p.AddCharacters(classNames);
+			var names = SpriteSelect.Instance.SelectedObjects.Select(o=>o.Name);
+			p.AddCharacters(names);
 			p.HasSelectedCharacters = true;
 			SpriteSelect.Instance.Close();
 		}

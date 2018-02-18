@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Helpers;
 using MyGameObjects.MyGameObject_templates;
 
 public class AllMyGameObjects
@@ -14,19 +15,22 @@ public class AllMyGameObjects
 
 	private AllMyGameObjects()
 	{
-		Characters = new List<Character>
-		{
-			new Character("Asuna"),
-			new Character("DekomoriSanae"),
-			new Character("Gilgamesh"),
-			new Character("RoronoaZoro"),
-			new Character("Aqua"),
-			new Character("HanekawaTsubasa"),
-			new Character("Hecate"),
-			new Character("YasakaMahiro"),
-			new Character("Rem"),
-			new Character("Sinon"),
-		};
+		Characters = new List<Character>();
+
+		var characterNames = GameData.Conn.GetCharacterNames();
+		characterNames.ForEach(n=>Characters.Add(new Character(n)));
+//		{
+//			new Character("Asuna"),
+//			new Character("Dekomori Sanae"),
+//			new Character("Gilgamesh"),
+//			new Character("Roronoa Zoro"),
+//			new Character("Aqua"),
+//			new Character("Hanekawa Tsubasa"),
+//			new Character("Hecate"),
+//			new Character("YasakaMahiro"),
+//			new Character("Rem"),
+//			new Character("Sinon"),
+//		};
 		//Items = new List<Item>
 		//{
 		//	new GlassEye(),

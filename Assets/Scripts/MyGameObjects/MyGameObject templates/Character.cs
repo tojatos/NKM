@@ -4,7 +4,6 @@ using System.Linq;
 using Helpers;
 using Hex;
 using MyGameObjects.Abilities;
-using MyGameObjects.Abilities.Aqua;
 using MyGameObjects.Effects;
 using UIManagers;
 using UnityEngine;
@@ -12,7 +11,6 @@ namespace MyGameObjects.MyGameObject_templates
 {
 	public class Character : MyGameObject
 	{
-		private readonly SqliteRow CharacterData;
 		public Character(string name)
 		{
 			IsOnMap = false;
@@ -24,26 +22,26 @@ namespace MyGameObjects.MyGameObject_templates
 			Effects = new List<Effect>();
 			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
 
-			CharacterData = GameData.Conn.GetCharacterData(name);
+			var characterData = GameData.Conn.GetCharacterData(name);
 
 			Name = name;
-			AttackPoints = new Stat(this, StatType.AttackPoints, int.Parse(CharacterData.GetValue("AttackPoints")));
-			HealthPoints = new Stat(this, StatType.HealthPoints, int.Parse(CharacterData.GetValue("HealthPoints")));
-			BasicAttackRange = new Stat(this, StatType.BasicAttackRange, int.Parse(CharacterData.GetValue("BasicAttackRange")));
-			Speed = new Stat(this, StatType.Speed, int.Parse(CharacterData.GetValue("Speed")));
-			PhysicalDefense = new Stat(this, StatType.PhysicalDefense, int.Parse(CharacterData.GetValue("PhysicalDefense")));
-			MagicalDefense = new Stat(this, StatType.MagicalDefense, int.Parse(CharacterData.GetValue("MagicalDefense")));
+			AttackPoints = new Stat(this, StatType.AttackPoints, int.Parse(characterData.GetValue("AttackPoints")));
+			HealthPoints = new Stat(this, StatType.HealthPoints, int.Parse(characterData.GetValue("HealthPoints")));
+			BasicAttackRange = new Stat(this, StatType.BasicAttackRange, int.Parse(characterData.GetValue("BasicAttackRange")));
+			Speed = new Stat(this, StatType.Speed, int.Parse(characterData.GetValue("Speed")));
+			PhysicalDefense = new Stat(this, StatType.PhysicalDefense, int.Parse(characterData.GetValue("PhysicalDefense")));
+			MagicalDefense = new Stat(this, StatType.MagicalDefense, int.Parse(characterData.GetValue("MagicalDefense")));
 
-			Type = CharacterData.GetValue("FightType").ToFightType();
+			Type = characterData.GetValue("FightType").ToFightType();
 
 			var abilityClassNames = GameData.Conn.GetAbilityClassNames(name);
 			var abilityNamespaceName = "Abilities." + name.Replace(' ', '_');
 			var abilities = Spawner.Create(abilityNamespaceName, abilityClassNames).ToList().ConvertAll(x=>x as Ability);
 			InitiateAbilities(abilities);
 
-			Description = CharacterData.GetValue("Description");
-			Quote = CharacterData.GetValue("Quote");
-			Author = CharacterData.GetValue("Author.Name");
+			Description = characterData.GetValue("Description");
+			Quote = characterData.GetValue("Quote");
+			Author = characterData.GetValue("Author.Name");
 		}
 		public readonly Stat HealthPoints;
 		public readonly Stat AttackPoints;
