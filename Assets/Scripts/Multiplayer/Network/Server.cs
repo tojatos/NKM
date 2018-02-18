@@ -149,9 +149,15 @@ namespace Multiplayer.Network
 					case "GET_GAMEPLAYERS":
 						SendGamePlayers(connectionId);
 						break;
-					case "USE_MYGAMEOBJECT":
-						TryUsingMyGameObject(connectionId, contents);
+					case "ACTIVE_VAR_SET":
+						TrySettingActiveValue(connectionId, contents);
 						break;
+					case "TOUCH_CELL":
+						TouchCell(connectionId, contents);
+						break;
+//					case "USE_MYGAMEOBJECT":
+//						TryUsingMyGameObject(connectionId, contents);
+//						break;
 					case "CHARACTERS":
 						ReceiveCharacters(Players.Single(p => p.ConnectionID == connectionId), contents);
 						break;
@@ -170,26 +176,67 @@ namespace Multiplayer.Network
 			}
 		}
 
-		private void TryUsingMyGameObject(int connectionId, Queue<string> contents)
+		private void TrySettingActiveValue(int connectionId, Queue<string> contents)
 		{
 			try
 			{
 				if (GamePlayers.First(g => g.Key.ConnectionID == connectionId).Value != Game.Active.GamePlayer) throw new Exception("Nie jesteś aktywnym graczem!");
 
-				string characterName = contents.Dequeue();
-				string cellCoordinates = contents.Dequeue();
-				Game.Active.MyGameObject = Game.Active.GamePlayer.Characters.First(c=>c.Name==characterName && !c.IsOnMap); //TODO: this needs to be changed, use guid maybe
-				Game.TouchCell(HexMapDrawer.Instance.Cells.First(c=>c.Coordinates.ToString()==cellCoordinates));
+				string propertyName = contents.Dequeue();
+				string serializedValue = contents.Dequeue();
+				switch (propertyName)
+				{
+					case "GamePlayer":
+						Game.Active.GamePlayer = Game.Players.Find(g => g.Name == serializedValue);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
 			}
 			catch (Exception e)
 			{
 				SendWarning(e.Message, connectionId);
 				throw;
 			}
-
 		}
 
-		public void SendWarning(string msg, int connId) => Send(MessageComposer.Compose("WARNING", msg), reliableChannel, connId);
+		private void TouchCell(int connectionId, Queue<string> contents)
+		{
+			HexCell touchedCell = HexMapDrawer.Instance.Cells.First(c => c.Coordinates.ToString() == contents.Dequeue());
+			try
+			{
+				if (GamePlayers.First(g => g.Key.ConnectionID == connectionId).Value != Game.Active.GamePlayer) throw new Exception("Nie jesteś aktywnym graczem!");
+
+				Game.TryTouchingCell(touchedCell);
+				SendToAllPlayers(MessageComposer.Compose("TOUCH_CELL", touchedCell.Coordinates.ToString()), reliableChannel);
+			}
+			catch (Exception e)
+			{
+				SendWarning(e.Message, connectionId);
+				throw;
+			}
+		}
+
+//		private void TryUsingMyGameObject(int connectionId, Queue<string> contents)
+//		{
+//			try
+//			{
+//				if (GamePlayers.First(g => g.Key.ConnectionID == connectionId).Value != Game.Active.GamePlayer) throw new Exception("Nie jesteś aktywnym graczem!");
+//
+//				string characterName = contents.Dequeue();
+//				string cellCoordinates = contents.Dequeue();
+//				Game.Active.MyGameObject = Game.Active.GamePlayer.Characters.First(c=>c.Name==characterName && !c.IsOnMap); //TODO: this needs to be changed, use guid maybe
+//				Game.TouchCell(HexMapDrawer.Instance.Cells.First(c=>c.Coordinates.ToString()==cellCoordinates));
+//			}
+//			catch (Exception e)
+//			{
+//				SendWarning(e.Message, connectionId);
+//				throw;
+//			}
+//
+//		}
+
+			public void SendWarning(string msg, int connId) => Send(MessageComposer.Compose("WARNING", msg), reliableChannel, connId);
 
 		private async void SendGamePlayers(int connectionId)
 		{

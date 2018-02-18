@@ -99,6 +99,18 @@ namespace Helpers
 					throw new ArgumentOutOfRangeException();
 			}
 		}
+		public static FightType ToFightType(this string typeName)
+		{
+			switch (typeName)
+			{
+				case "Ranged":
+					return FightType.Ranged;
+				case "Melee":
+					return FightType.Melee;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
 		private static HexTileType GetSpawnPointType(this GamePlayer gamePlayer) => GameStarter.Instance.Game.HexMapDrawer.HexMap.SpawnPoints[gamePlayer.GetIndex()];
 		public static IEnumerable<HexCell> GetSpawnPoints(this GamePlayer gamePlayer) => GameStarter.Instance.Game.HexMapDrawer.Cells.FindAll(c => c.Type == gamePlayer.GetSpawnPointType());
 		public static string FormattedFirstName(this Character character) => string.Format("<color={0}><</color><b>{1}</b><color={0}>></color>", ((Color32)character.Owner.GetColor()).ToHex(), character.Name.Split(' ').Last());

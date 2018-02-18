@@ -14,11 +14,11 @@ public class SessionSettings : CreatableSingletonMonoBehaviour<SessionSettings>
 		IsMuted = PlayerPrefsX.GetBool("IsMuted", false);
 	}
 
-	public int SelectedMapIndex { get; set; }
-	public int NumberOfPlayers { get; set; }
-	public int NumberOfCharactersPerPlayer { get; set; }
-	public GameType GameType { get; set; }
-	public bool IsMuted { get; set; }
+	public int SelectedMapIndex;
+	public int NumberOfPlayers;
+	public int NumberOfCharactersPerPlayer;
+	public GameType GameType;
+	public bool IsMuted;
 
 	void OnApplicationQuit()
 	{

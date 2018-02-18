@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Helpers;
 using Hex;
+using Managers;
 using Multiplayer.Network;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
@@ -37,7 +39,29 @@ public class Active
 	public Turn Turn { get; }
 	public Phase Phase { get; }
 	public AirSelection AirSelection { get; }
-	public GamePlayer GamePlayer { get; set; }
+
+//	private GamePlayer _gamePlayer;
+//	public GamePlayer GamePlayer
+//	{
+//		get
+//		{
+//			if (Game.Type == GameType.MultiplayerClient) return Game.Client.SendGetActiveMessage("GamePlayer");
+//
+//			return _gamePlayer;
+//		}
+//		set
+//		{
+//			if (Game.Type == GameType.MultiplayerClient) Game.Client.SendSetActiveMessage("GamePlayer", value.Name);
+//			else _gamePlayer = value;
+//		}
+//	}
+	private readonly Synchronizable<GamePlayer> _gamePlayer = new Synchronizable<GamePlayer>(ActivePropertyName.GamePlayer);
+	public GamePlayer GamePlayer
+	{
+		get { return _gamePlayer.Get(); }
+		set { _gamePlayer.Set(value); }
+	}
+
 	public Action Action { private get; set; }
 	public Ability Ability { get; set; }
 	public MyGameObject MyGameObject { get; set; }
@@ -64,7 +88,7 @@ public class Active
 	private List<HexCell> _helpHexCells;
 	private List<GameObject> _buttons;
 
-//	public List<object> GetInfo => TODO
+//	public List<string> GetInfo => new List<string>{ ((int)Action).ToString(), CharacterOnMap.Guid.ToString(), Ability.Name, MyGameObject.Guid.ToString(), string.Join("*",HexCells.Select(c=>c.Coordinates))};
 	public bool IsDebug { get; set; }
 
 	//public bool IsActivePlayerCharacterSelected
@@ -180,7 +204,9 @@ public class Active
 
 		if (Game.Type == GameType.MultiplayerClient)
 		{
-//			Game.Client.SendMakeActionMessage(Action, Ability, CharacterOnMap, cell.Coordinates.ToString()); TODO
+			//			Game.Client.SendMakeActionMessage(Action, Ability, CharacterOnMap, cell.Coordinates.ToString());
+						Game.Client.SendMakeActionMessage(cell);
+
 		}
 
 		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
@@ -254,4 +280,32 @@ public class Active
 		EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
 		return results.Count > 0;
 	}
+}
+
+public class Synchronizable<T>
+{
+//	private Game Game;
+	public Synchronizable(string name)
+	{
+		_name = name;
+	}
+	private string _name;
+	private T _value;
+
+	public T Get()
+	{
+		if (GameStarter.Instance.Game.Type == GameType.MultiplayerClient) return GameStarter.Instance.Game.Client.TryToGetActiveVariable<T>(_name).Result;
+
+		return _value;
+	}
+	public void Set(T value)
+	{
+		if (GameStarter.Instance.Game.Type == GameType.MultiplayerClient) GameStarter.Instance.Game.Client.TryToSetActiveVariable<T>(_name, value);
+		else _value = value;
+	}
+}
+
+public static class ActivePropertyName
+{
+	public static readonly string GamePlayer = "GamePlayer";
 }

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Helpers;
 using Hex;
 using Multiplayer.Network;
-using MyGameObjects.Characters;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
 using UnityEngine;
@@ -32,6 +31,7 @@ namespace Managers
 			}
 			else
 			{
+//				GameData.DbTest();
 				gameOptions = GetTestingGameOptions();
 			}
 
@@ -58,8 +58,8 @@ namespace Managers
 							Name = "Ryszard",
 							Characters = new List<Character>
 							{
-								new Sinon(),
-								new Hecate()
+								new Character("Sinon"),
+								new Character("Hecate")
 							}
 						},
 						new GamePlayer
@@ -67,8 +67,8 @@ namespace Managers
 							Name = "Maciej",
 							Characters = new List<Character>
 							{
-								new Aqua(),
-								new DekomoriSanae()
+								new Character("Aqua"),
+								new Character("Dekomori Sanae")
 							}
 						}
 					},

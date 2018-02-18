@@ -12,9 +12,9 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	public GameObject CharacterPrefab;
 	public ColorToHighlight[] HighlightColorMappings;
 	private Game Game;
-	private void Awake()
+	public void Init(Game game)
 	{
-		Game = GameStarter.Instance.Game;
+		Game = game;
 	}
 
 	public void SpawnCharacterObject(HexCell parentCell, Character characterToSpawn)

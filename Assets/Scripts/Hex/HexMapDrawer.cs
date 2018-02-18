@@ -172,7 +172,7 @@ namespace Hex
 					}
 					else
 					{
-						Game.TouchCell(cellPointed);
+						Game.TryTouchingCell(cellPointed);
 					}
 				}
 			}

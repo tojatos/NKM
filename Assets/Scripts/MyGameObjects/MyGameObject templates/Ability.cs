@@ -24,7 +24,7 @@ namespace MyGameObjects.MyGameObject_templates
 			}
 		}
 
-		public Character ParentCharacter { protected get; set; }
+		public Character ParentCharacter { get; set; }
 		public virtual bool CanUse
 		{
 			get
@@ -174,8 +174,8 @@ namespace MyGameObjects.MyGameObject_templates
 	}
 	public enum AbilityType
 	{
+		Passive,
 		Normal,
-		Ultimatum,
-		Passive
+		Ultimatum
 	}
 }

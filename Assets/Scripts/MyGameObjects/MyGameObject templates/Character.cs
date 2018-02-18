@@ -4,14 +4,16 @@ using System.Linq;
 using Helpers;
 using Hex;
 using MyGameObjects.Abilities;
+using MyGameObjects.Abilities.Aqua;
 using MyGameObjects.Effects;
 using UIManagers;
 using UnityEngine;
 namespace MyGameObjects.MyGameObject_templates
 {
-	public abstract class Character : MyGameObject
+	public class Character : MyGameObject
 	{
-		protected Character()
+		private readonly SqliteRow CharacterData;
+		public Character(string name)
 		{
 			IsOnMap = false;
 			TookActionInPhaseBefore = true;
@@ -21,13 +23,34 @@ namespace MyGameObjects.MyGameObject_templates
 			HasUsedUltimatumAbilityInPhaseBefore = false;
 			Effects = new List<Effect>();
 			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
+
+			CharacterData = GameData.Conn.GetCharacterData(name);
+
+			Name = name;
+			AttackPoints = new Stat(this, StatType.AttackPoints, int.Parse(CharacterData.GetValue("AttackPoints")));
+			HealthPoints = new Stat(this, StatType.HealthPoints, int.Parse(CharacterData.GetValue("HealthPoints")));
+			BasicAttackRange = new Stat(this, StatType.BasicAttackRange, int.Parse(CharacterData.GetValue("BasicAttackRange")));
+			Speed = new Stat(this, StatType.Speed, int.Parse(CharacterData.GetValue("Speed")));
+			PhysicalDefense = new Stat(this, StatType.PhysicalDefense, int.Parse(CharacterData.GetValue("PhysicalDefense")));
+			MagicalDefense = new Stat(this, StatType.MagicalDefense, int.Parse(CharacterData.GetValue("MagicalDefense")));
+
+			Type = CharacterData.GetValue("FightType").ToFightType();
+
+			var abilityClassNames = GameData.Conn.GetAbilityClassNames(name);
+			var abilityNamespaceName = "Abilities." + name.Replace(' ', '_');
+			var abilities = Spawner.Create(abilityNamespaceName, abilityClassNames).ToList().ConvertAll(x=>x as Ability);
+			InitiateAbilities(abilities);
+
+			Description = CharacterData.GetValue("Description");
+			Quote = CharacterData.GetValue("Quote");
+			Author = CharacterData.GetValue("Author.Name");
 		}
-		public Stat HealthPoints;
-		public Stat AttackPoints;
-		public Stat BasicAttackRange;
-		public Stat Speed;
-		public Stat PhysicalDefense;
-		public Stat MagicalDefense;
+		public readonly Stat HealthPoints;
+		public readonly Stat AttackPoints;
+		public readonly Stat BasicAttackRange;
+		public readonly Stat Speed;
+		public readonly Stat PhysicalDefense;
+		public readonly Stat MagicalDefense;
 
 		public int DeathTimer { get; private set; }
 
@@ -370,15 +393,17 @@ namespace MyGameObjects.MyGameObject_templates
 			Active.HexCells = null;
 			Game.HexMapDrawer.RemoveAllHighlights();
 		}
-		protected void InitiateAbilities(List<Ability> abilities)
+
+		private void InitiateAbilities(List<Ability> abilities)
 		{
-			Abilities = abilities ?? new List<Ability>();
+			Abilities = new List<Ability>();
 			foreach (AbilityType type in Enum.GetValues(typeof(AbilityType)))
 			{
-				if (Abilities.All(a => a.Type != type))
-				{
-					Abilities.Add(new Empty(type));
-				}
+				var abilitiesOfType = abilities.Count(a => a.Type == type);
+				if (abilitiesOfType==0) Abilities.Add(new Empty(type));
+				else if (abilitiesOfType==1) Abilities.Add(abilities.First(a=>a.Type == type));
+				else Abilities.AddRange(abilities.FindAll(a=>a.Type==type));
+//				Abilities.Add(abilities.All(a => a.Type != type) ? new Empty(type) : abilities.First(a => a.Type == type));
 			}
 
 			Abilities.ForEach(a => a.ParentCharacter = this);

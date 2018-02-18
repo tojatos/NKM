@@ -4,7 +4,6 @@ using System.Linq;
 using Helpers;
 using Hex;
 using Multiplayer.Network;
-using MyGameObjects.Characters;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
 using UnityEngine;
@@ -38,6 +37,7 @@ public class Game
 		UIManager = _options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
 		Spawner = Spawner.Instance;
+		Spawner.Init(this);
 
 		Client = _options.Client;
 		Server = _options.Server;
@@ -83,26 +83,50 @@ public class Game
 			}
 		}
 	}
+	public void TryTouchingCell(HexCell touchedCell)
+	{
+		if (Type == GameType.MultiplayerClient)
+		{
+			Client.SendTouchCellMessage(touchedCell);
+			return;
+		}
+
+		TouchCell(touchedCell);
+	}
+
 	public void TouchCell(HexCell touchedCell)
 	{
-
 		if (Active.MyGameObject != null)
 		{
-			switch (Type)
-			{
-				case GameType.Local:
-				case GameType.MultiplayerServer:
-					UseMyGameObject(touchedCell);
-					break;
-				case GameType.MultiplayerClient:
-					Client.SendUseMyGameObjectMessage(touchedCell, Active.MyGameObject);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+			//			switch (Type)
+			//			{
+			//				case GameType.Local:
+			//				case GameType.MultiplayerServer:
+			//					UseMyGameObject(touchedCell);
+			//					break;
+			//				case GameType.MultiplayerClient:
+			//					Client.SendUseMyGameObjectMessage(touchedCell, Active.MyGameObject);
+			//					break;
+			//				default:
+			//					throw new ArgumentOutOfRangeException();
+			//			}
+			UseMyGameObject(touchedCell);
+
 		}
 		else if (Active.HexCells?.Contains(touchedCell) == true)
 		{
+			//			switch (Type)
+			//			{
+			//				case GameType.Local:
+			//				case GameType.MultiplayerServer:
+			//					Active.MakeAction(touchedCell);
+			//					break;
+			//				case GameType.MultiplayerClient:
+			//					Client.SendMakeActionMessage(touchedCell);
+			//					break;
+			//				default:
+			//					throw new ArgumentOutOfRangeException();
+			//			}
 			Active.MakeAction(touchedCell);
 		}
 		else

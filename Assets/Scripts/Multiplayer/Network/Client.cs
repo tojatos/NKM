@@ -91,6 +91,7 @@ namespace Multiplayer.Network
 			Send(msg, reliableChannel);
 		}
 
+
 		private void ReceiveMessage(int connectionId, string msg)
 		{
 			List<string> messages = msg.Split('|').ToList();
@@ -102,6 +103,9 @@ namespace Multiplayer.Network
 			string header = contents.Dequeue();
 			switch (header)
 			{
+				case "TOUCH_CELL":
+					Game.TouchCell(HexMapDrawer.Instance.Cells.First(c=>c.Coordinates.ToString()==contents.Dequeue()));
+					break;
 				case "WARNING":
 					Debug.LogWarning(contents.Dequeue());
 					break;
@@ -120,6 +124,9 @@ namespace Multiplayer.Network
 					break;
 				case "GET_CHARACTERS":
 					SendSelectedCharacters();
+					break;
+				case "ACTIVE_VAR":
+					ReceiveActiveVar(contents);
 					break;
 				case "PLAYERLIST":
 					List<string> names = contents.ToList();
@@ -140,6 +147,12 @@ namespace Multiplayer.Network
 					Debug.Log($"Undefined message: {msg}");
 					break;
 			}
+		}
+
+		private void ReceiveActiveVar(Queue<string> contents)
+		{
+			awaitedPropertyName = contents.Dequeue();
+			awaitedVariable = contents.Dequeue();
 		}
 
 		private void SetGamePlayers(List<string> gamePlayersData)
@@ -211,6 +224,77 @@ namespace Multiplayer.Network
 			if(areGamePlayersDerived()==false) Send("GET_GAMEPLAYERS", reliableChannel);
 			await areGamePlayersDerived.WaitToBeTrue();
 			return GamePlayers;
+		}
+
+		public void SendMakeActionMessage(HexCell touchedCell)
+		{
+			List<string> contents = new List<string>();
+			contents.Add(touchedCell.Coordinates.ToString());
+//			contents.AddRange(Game.Active.GetInfo);
+			string msg = MessageComposer.Compose('%', "MAKE_ACTION", contents.ToArray());
+			Send(msg, reliableChannel);
+		}
+		public void SendTouchCellMessage(HexCell touchedCell)
+		{
+			string msg = MessageComposer.Compose("TOUCH_CELL", touchedCell.Coordinates.ToString());
+			Send(msg, reliableChannel);
+		}
+
+		public void TryToSetActiveVariable<T>(string propertyName, T value)
+		{
+			string serializedValue;
+
+			if (value != null)
+			{
+				switch (propertyName)
+				{
+					case "GamePlayer":
+						serializedValue = (value as GamePlayer).Name;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			else
+			{
+				serializedValue = null;
+			}
+			string msg = MessageComposer.Compose("ACTIVE_VAR_SET", propertyName, serializedValue);
+			Send(msg, reliableChannel);
+		}
+
+		private string awaitedPropertyName;
+		private string awaitedVariable;
+		public async Task<T> TryToGetActiveVariable<T>(string propertyName) 
+		{
+			try
+			{
+				string msg = MessageComposer.Compose("ACTIVE_VAR_GET", propertyName);
+				Send(msg, reliableChannel);
+				Func<bool> areAwaitedVariablesSet = () => awaitedPropertyName != null && awaitedVariable != null;
+				await areAwaitedVariablesSet.WaitToBeTrue();
+
+				T valueToReturn;
+				switch (awaitedPropertyName)
+				{
+					case "GamePlayer":
+						valueToReturn = (T) Convert.ChangeType(Game.Players.First(p => p.Name == awaitedVariable), typeof(T));
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+				return valueToReturn;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				throw;
+			}
+			finally
+			{
+				awaitedPropertyName = null;
+				awaitedVariable = null;
+			}
 		}
 	}
 }

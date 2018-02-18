@@ -23,7 +23,7 @@ public class GamePlayer
 			var className = classNameWithGuid.Key;
 			var Guid = classNameWithGuid.Value;
 
-			var character = Spawner.Create("Characters", className) as Character;
+			var character = Spawner.Create("Characters", className) as Character;//TODO new character system
 			character.Guid = Guid;
 			characters.Add(character);
 
