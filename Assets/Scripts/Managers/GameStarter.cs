@@ -23,27 +23,16 @@ namespace Managers
 
 		private async Task PrepareAndStartGame()
 		{
-			GameOptions gameOptions;
 			if (!IsTesting)
 			{
-				SetGameType();
+				SetGameTypeFromSessionSettings();
 				AssignClientOrServerIfNeeded();
-				gameOptions = await GetGameOptions();
 			}
-			else
-			{
-//				GameData.DbTest();
-				gameOptions = GetTestingGameOptions();
-			}
+			GameOptions gameOptions = await GetGameOptions();
 
 			Game.Init(gameOptions);
-			Game.StartGame();
-			if (IsTesting)
-			{
-				Game.PlaceAllCharactersOnSpawns();
-
-			}
-
+			bool isGameStarted = Game.StartGame();
+			if(!isGameStarted) throw new Exception("Game has not started!");
 		}
 
 		private static GameOptions GetTestingGameOptions()
@@ -79,20 +68,24 @@ namespace Managers
 			{
 				p.Characters.ForEach(c => c.Owner = p);
 				p.HasSelectedCharacters = true;
-//				p.Characters.ForEach(c => Debug.Log(c.Guid));
 			});
 			return gameOptions;
 		}
 
-		private async Task<GameOptions> GetGameOptions() => new GameOptions
+		private async Task<GameOptions> GetGameOptions()
 		{
-			GameType = GameType,
-			Map = GetMap(),
-			Players = await GetPlayers(),
-			UIManager = UIManager.Instance,
-			Client = ActiveClient,
-			Server = ActiveServer
-		};
+			if (IsTesting) return GetTestingGameOptions();
+
+			return new GameOptions
+			{
+				GameType = GameType,
+				Map = GetMap(),
+				Players = await GetPlayers(),
+				UIManager = UIManager.Instance,
+				Client = ActiveClient,
+				Server = ActiveServer
+			};
+		}
 
 		private void AssignClientOrServerIfNeeded()
 		{
@@ -115,7 +108,7 @@ namespace Managers
 			}
 		}
 
-		private void SetGameType()
+		private void SetGameTypeFromSessionSettings()
 		{
 			GameType = SessionSettings.Instance.GameType;
 		}
@@ -168,7 +161,7 @@ namespace Managers
 		private async Task GetCharacters(GamePlayer p)
 		{
 			Debug.Log(p.Name);
-			var allCharacters = new List<MyGameObject>(AllMyGameObjects.Instance.Characters);
+			var allCharacters = new List<MyGameObject>(AllMyGameObjects.Characters);
 			SpriteSelect.Instance.Open(allCharacters, () => FinishSelectingCharacters(p), $"Wybór postaci - {p.Name}", "Zakończ wybieranie postaci");
 			Func<bool> hasSelectedCharecters = () => p.HasSelectedCharacters;
 			await hasSelectedCharecters.WaitToBeTrue();

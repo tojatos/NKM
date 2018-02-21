@@ -30,7 +30,7 @@ namespace UIManagers
 		public void Open()
 		{
 			Game.UIManager.VisibleUI = new List<GameObject> { gameObject };
-			UpdateInfo(AllMyGameObjects.Instance.Characters.Single(c => c.Name == Game.Active.CharacterOnMap.Name));
+			UpdateInfo(AllMyGameObjects.Characters.Single(c => c.Name == Game.Active.CharacterOnMap.Name));
 		}
 
 		private void UpdateInfo(Character character)

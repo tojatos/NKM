@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.Linq;
-using UnityEngine;
 
 namespace Helpers
 {
 	public static class SqliteExtensions
 	{
-		public static List<SqliteRow> Select(this SQLiteConnection conn, string query)
+		public static List<SqliteRow> Select(this IDbConnection conn, string query)
 		{
 			var rows = new List<SqliteRow>();
 
 			conn.Open();
-			SQLiteCommand dbcmd = new SQLiteCommand(query, conn);
+			IDbCommand dbcmd = conn.CreateCommand();
+			dbcmd.CommandText = query;
 			var reader = dbcmd.ExecuteReader();
 			while (reader.Read())
 			{
@@ -22,7 +20,7 @@ namespace Helpers
 				var fieldCount = reader.FieldCount;
 				for (int i = 0; i < fieldCount; i++)
 				{
-					var columnName = reader.GetOriginalName(i);
+					var columnName = reader.GetName(i);
 					var value = reader.GetValue(i).ToString();
 					row.Add(columnName, value);
 				}
@@ -36,9 +34,9 @@ namespace Helpers
 			conn.Close();
 			return rows;
 		}
-		public static List<string> GetCharacterNames(this SQLiteConnection conn) => Select(conn, "SELECT Name FROM Character").SelectMany(row => row.Data.Values).ToList();
-		public static List<string> GetAbilityClassNames(this SQLiteConnection conn, string characterName) => Select(conn, $"SELECT Ability.ClassName AS AbilityName FROM Character INNER JOIN Character_Ability ON Character.ID = Character_Ability.CharacterID INNER JOIN Ability ON Ability.ID = Character_Ability.AbilityID WHERE Character.Name = '{characterName}';").SelectMany(row => row.Data.Values).ToList();
-		public static SqliteRow GetCharacterData(this SQLiteConnection conn, string characterName) => Select(conn, $"SELECT AttackPoints, HealthPoints, BasicAttackRange, Speed, PhysicalDefense, MagicalDefense, FightType, Description, Quote, Author.Name FROM Character INNER JOIN Author ON Character.AuthorID = Author.ID WHERE Character.Name = '{characterName}';")[0];
+		public static List<string> GetCharacterNames(this IDbConnection conn) => Select(conn, "SELECT Name FROM Character").SelectMany(row => row.Data.Values).ToList();
+		public static List<string> GetAbilityClassNames(this IDbConnection conn, string characterName) => Select(conn, $"SELECT Ability.ClassName AS AbilityName FROM Character INNER JOIN Character_Ability ON Character.ID = Character_Ability.CharacterID INNER JOIN Ability ON Ability.ID = Character_Ability.AbilityID WHERE Character.Name = '{characterName}';").SelectMany(row => row.Data.Values).ToList();
+		public static SqliteRow GetCharacterData(this IDbConnection conn, string characterName) => Select(conn, $"SELECT AttackPoints, HealthPoints, BasicAttackRange, Speed, PhysicalDefense, MagicalDefense, FightType, Description, Quote, Author.Name FROM Character INNER JOIN Author ON Character.AuthorID = Author.ID WHERE Character.Name = '{characterName}';")[0];
 	}
 
 	public class SqliteRow

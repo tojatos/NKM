@@ -106,14 +106,9 @@ public class Active
 		set
 		{
 			HelpHexCells = null;
-			if (_buttons != null)
-			{
-				//UIManager.Hide(_buttons);
-				_buttons.Hide();
-			}
+			_buttons?.Hide();
 			_buttons = value;
-			//UIManager.Show(_buttons);
-			_buttons.Show();
+			_buttons?.Show();
 		}
 	}
 
@@ -289,14 +284,12 @@ public class Synchronizable<T>
 	{
 		_name = name;
 	}
-	private string _name;
+	private readonly string _name;
 	private T _value;
 
 	public T Get()
 	{
-		if (GameStarter.Instance.Game.Type == GameType.MultiplayerClient) return GameStarter.Instance.Game.Client.TryToGetActiveVariable<T>(_name).Result;
-
-		return _value;
+		return GameStarter.Instance.Game.Type == GameType.MultiplayerClient ? GameStarter.Instance.Game.Client.TryToGetActiveVariable<T>(_name).Result : _value;
 	}
 	public void Set(T value)
 	{

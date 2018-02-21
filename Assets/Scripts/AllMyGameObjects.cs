@@ -2,18 +2,21 @@
 using Helpers;
 using MyGameObjects.MyGameObject_templates;
 
-public class AllMyGameObjects
+/// <summary>
+/// Class that contains 
+/// </summary>
+public static class AllMyGameObjects
 {
-	#region Singleton
-	private static AllMyGameObjects _instance;
-	public static AllMyGameObjects Instance => _instance ?? (_instance = new AllMyGameObjects());
-	#endregion
+//	#region Singleton
+//	private static AllMyGameObjects _instance;
+//	public static AllMyGameObjects Instance => _instance ?? (_instance = new AllMyGameObjects());
+//	#endregion
 
-	public readonly List<Character> Characters;// { get; private set; }
+	public static readonly List<Character> Characters;// { get; private set; }
 	//public readonly List<Item> Items;// { get; private set; }
 	//public readonly List<Potion> Potions;// { get; private set; }
 
-	private AllMyGameObjects()
+	static AllMyGameObjects()
 	{
 		Characters = new List<Character>();
 

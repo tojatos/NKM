@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Helpers;
 using Hex;
+using Managers;
 using Multiplayer.Network;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
@@ -47,42 +49,55 @@ public class Game
 		IsInitialized = true;
 	}
 
-	public void StartGame()
+	/// <summary>
+	/// Returns true if game is successfully started,
+	/// otherwise returns false.
+	/// </summary>
+	/// <returns></returns>
+	public bool StartGame()
 	{
+		if (!IsInitialized) return false;
+
 		HexMapDrawer.CreateMap(_options.Map);
 		UIManager.Init();
 		UIManager.VisibleUI = UIManager.GameUI;
 		Active.Buttons = UIManager.UseButtons;
 		MainCameraController.Instance.Init();
-
 		CharacterAbilities.Instance.Init();
-//		Players.ForEach(p=>p.Init(this));
 		UIManager.UpdateActivePhaseText();
+		if (GameStarter.Instance.IsTesting) PlaceAllCharactersOnSpawns();
 		TakeTurns();
+		return true;
 	}
 
+	/// <summary>
+	/// Infinite loop that manages Turns and Phases
+	/// </summary>
 	private async void TakeTurns()
 	{
 		while (true)
 		{
-			foreach (var player in Players)
-			{
-				Active.Turn.Start(player);
-				Func<bool> isTurnDone = () => Active.Turn.IsDone;
-				await isTurnDone.WaitToBeTrue();
-			}
-			//Skip finishing phase, if not every character is placed in the first phase
-			if (Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap)))
-			{
-				continue;
-			}
+			foreach (var player in Players) await TakeTurn(player);
 
-			if (Players.All(p => p.Characters.Where(c => c.IsOnMap).All(c => !c.CanTakeAction)))
-			{
-				Active.Phase.Finish();
-			}
+			if (!IsEveryCharacterPlacedInTheFirstPhase) continue;
+
+			if (NoCharacterOnMapCanTakeAction) Active.Phase.Finish();
 		}
 	}
+
+	private bool NoCharacterOnMapCanTakeAction => Players.All(p => p.Characters.Where(c => c.IsOnMap).All(c => !c.CanTakeAction));
+	private bool IsEveryCharacterPlacedInTheFirstPhase => !(Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap)));
+
+	/// <summary>
+	/// Start a turn and wait for player to end it
+	/// </summary>
+	private async Task TakeTurn(GamePlayer player)
+	{
+		Active.Turn.Start(player);
+		Func<bool> isTurnDone = () => Active.Turn.IsDone;
+		await isTurnDone.WaitToBeTrue();
+	}
+
 	public void TryTouchingCell(HexCell touchedCell)
 	{
 		if (Type == GameType.MultiplayerClient)
@@ -192,6 +207,13 @@ public class Game
 		}
 	}
 
+	/// <summary>
+	/// Try to place all characters from game on their spawns
+	/// 
+	/// Dependencies:
+	/// - Players.Characters
+	/// - Active.Phase
+	/// </summary>
 	public void PlaceAllCharactersOnSpawns()
 	{
 		Players.ForEach(p => p.Characters.ForEach(c => TrySpawning(p, c)));
