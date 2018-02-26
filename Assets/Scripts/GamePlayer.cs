@@ -15,16 +15,16 @@ public class GamePlayer
 		characters.ForEach(c=> c.Owner = this);
 		Characters.AddRange(characters);
 	}
-	public void AddCharacters(Dictionary<string, Guid> classNamesWithGuids)
+	public void AddCharacters(Dictionary<string, Guid> namesWithGuids)
 	{
 		List<Character> characters = new List<Character>();
-		foreach (var classNameWithGuid in classNamesWithGuids)
+		foreach (var nameWithGuid in namesWithGuids)
 		{
-			var className = classNameWithGuid.Key;
-			var Guid = classNameWithGuid.Value;
+			var name = nameWithGuid.Key;
+			var Guid = nameWithGuid.Value;
 
-			var character = Spawner.Create("Characters", className) as Character;//TODO new character system
-			character.Guid = Guid;
+			var character = new Character(name, Guid);//Spawner.Create("Characters", name) as Character;//TODO new character system
+//			character.Guid = Guid;
 			characters.Add(character);
 
 		}

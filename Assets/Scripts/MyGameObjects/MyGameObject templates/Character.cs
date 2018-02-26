@@ -11,6 +11,10 @@ namespace MyGameObjects.MyGameObject_templates
 {
 	public class Character : MyGameObject
 	{
+		public Character(string name, Guid guid) : this(name)
+		{
+			Guid = guid;
+		}
 		public Character(string name)
 		{
 			IsOnMap = false;
@@ -55,9 +59,9 @@ namespace MyGameObjects.MyGameObject_templates
 		private bool CanAttackAllies => Abilities.Any(a => a.OverridesFriendAttack);
 		public List<Ability> Abilities{ get; private set; }
 		public List<Effect> Effects { get; }
-		public string Description { get; protected set; }
-		public string Quote { get; protected set; }
-		public string Author { get; protected set; }
+		public string Description { get; }
+		public string Quote { get; }
+		public string Author { get; }
 		public FightType Type;
 		public GameObject CharacterObject { get; set; }
 		public HexCell ParentCell { get; set; }

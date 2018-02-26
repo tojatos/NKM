@@ -164,8 +164,8 @@ namespace Multiplayer.Network
 				string gamePlayerName = queue.Dequeue();
 				var gamePlayer = new GamePlayer { Name = gamePlayerName };
 
-				var classNamesWithGuids = queue.ToDictionary(x => x.Split('&')[0], x => new Guid(x.Split('&')[1]));
-				gamePlayer.AddCharacters(classNamesWithGuids);
+				var namesWithGuids = queue.ToDictionary(x => x.Split('&')[0], x => new Guid(x.Split('&')[1]));
+				gamePlayer.AddCharacters(namesWithGuids);
 				GamePlayers.Add(gamePlayer);
 			});
 		}
@@ -173,7 +173,7 @@ namespace Multiplayer.Network
 		private async void SendSelectedCharacters()
 		{
 			if (GamePlayer == null) GamePlayer = await GameStarter.Instance.GetGamePlayer();
-			var characterClassesWithGuid = GamePlayer.Characters.GetClassNamesWithGuid();
+			var characterClassesWithGuid = GamePlayer.Characters.GetNamesWithGuid();
 			Send(MessageComposer.Compose("CHARACTERS", characterClassesWithGuid.Select(c=>c.Key+"*"+c.Value).ToArray()), reliableChannel);
 		}
 
