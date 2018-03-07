@@ -1,1 +1,3 @@
-~/Unity-2017.3.0f1/Editor/Unity -batchmode -quit -nographics -projectPath $PWD -buildLinux64Player Builds/LinuxBuild/NKM
+"/usr/bin/unity-editor" -batchmode -quit -nographics -projectPath "$(pwd)" -buildLinux64Player Builds/LinuxBuild/NKM
+echo Build finished
+

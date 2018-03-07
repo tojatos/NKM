@@ -6,6 +6,8 @@ namespace Editor
 {
 	public class BuildManagament
 	{
+		[MenuItem("Developement/Builds/Build Linux player")]
+		static void BuildLinuxPlayer() => BuildPlayer(BuildTarget.StandaloneLinux64, BuildOptions.Development);
 		[MenuItem("Developement/Builds/Build Windows player")]
 		static void BuildWindowsPlayer() => BuildPlayer(BuildTarget.StandaloneWindows64, BuildOptions.Development);
 		[MenuItem("Developement/Builds/Build and run Windows player")]
