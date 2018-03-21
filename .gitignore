@@ -36,3 +36,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Jetbrains
+**/.idea/workspace.xml
+**/.idea/tasks.xml

@@ -149,10 +149,11 @@ namespace Multiplayer.Network
 			}
 		}
 
+
 		private void ReceiveActiveVar(Queue<string> contents)
 		{
 			awaitedPropertyName = contents.Dequeue();
-			awaitedVariable = contents.Dequeue();
+			awaitedSerializedVariable = contents.Dequeue();
 		}
 
 		private void SetGamePlayers(List<string> gamePlayersData)
@@ -240,45 +241,41 @@ namespace Multiplayer.Network
 			Send(msg, reliableChannel);
 		}
 
-		public void TryToSetActiveVariable<T>(string propertyName, T value)
+		/// <summary>
+		/// Used by Serializable.cs
+		/// </summary>
+		public void TryToSetActiveVariable(string propertyName, string serializedValue)
 		{
-			string serializedValue;
-
-			if (value != null)
-			{
-				switch (propertyName)
-				{
-					case "GamePlayer":
-						serializedValue = (value as GamePlayer).Name;
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-			else
-			{
-				serializedValue = null;
-			}
 			string msg = MessageComposer.Compose("ACTIVE_VAR_SET", propertyName, serializedValue);
 			Send(msg, reliableChannel);
 		}
+		
+		
 
 		private string awaitedPropertyName;
-		private string awaitedVariable;
+		private string awaitedSerializedVariable;
+		/// <summary>
+		/// Send a message to the server,
+		/// server should return property name and string to deserialize property,
+		/// or null and null if the property is unavaiable.
+		/// </summary>
+		/// <param name="propertyName">Name of property, that you want to get from the server</param>
+		/// <typeparam name="T">Type of property, that you want to get from the server</typeparam>
+		/// <returns>Deserialized property or null, if the property is unavaiable</returns>
 		public async Task<T> TryToGetActiveVariable<T>(string propertyName) 
 		{
 			try
 			{
 				string msg = MessageComposer.Compose("ACTIVE_VAR_GET", propertyName);
 				Send(msg, reliableChannel);
-				Func<bool> areAwaitedVariablesSet = () => awaitedPropertyName != null && awaitedVariable != null;
+				Func<bool> areAwaitedVariablesSet = () => awaitedPropertyName != null && awaitedSerializedVariable != null;
 				await areAwaitedVariablesSet.WaitToBeTrue();
 
 				T valueToReturn;
 				switch (awaitedPropertyName)
 				{
 					case "GamePlayer":
-						valueToReturn = (T) Convert.ChangeType(Game.Players.First(p => p.Name == awaitedVariable), typeof(T));
+						valueToReturn = (T) Convert.ChangeType(Game.Players.First(p => p.Name == awaitedSerializedVariable), typeof(T));
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -293,7 +290,7 @@ namespace Multiplayer.Network
 			finally
 			{
 				awaitedPropertyName = null;
-				awaitedVariable = null;
+				awaitedSerializedVariable = null;
 			}
 		}
 	}

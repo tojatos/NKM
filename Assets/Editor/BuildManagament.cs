@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEditor;
 
 namespace Editor
 {
+	[UsedImplicitly]
 	public class BuildManagament
 	{
 		[MenuItem("Developement/Builds/Build Linux player")]

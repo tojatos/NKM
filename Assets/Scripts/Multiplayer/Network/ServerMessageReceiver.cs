@@ -24,6 +24,7 @@ namespace Multiplayer.Network
 			Queue<string> contents = new Queue<string>(message.Split('%'));
 			string header = contents.Dequeue();
 			//			Debug.Log($"| Server received: {header}");
+			Debug.LogWarning("Received: " + message);
 			ReceiveMessage(connectionId, header, contents);
 		}
 
@@ -46,11 +47,15 @@ namespace Multiplayer.Network
 				case "CONNECTED":
 					Server.AskForName(connectionId);
 					break;
+				case "ACTIVE_VAR_GET":
+					Server.TryGettingSerializedActiveValue(connectionId, contents.Dequeue());
+					break;
 				case "NAMEIS":
 					CreatePlayerAndTryToJoinLobby(connectionId, contents);
 					break;
 				default:
 					Debug.Log($"Undefined message: {header}");
+					contents.ToList().ForEach(Debug.Log);
 					break;
 			}
 		}

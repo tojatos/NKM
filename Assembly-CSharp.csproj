@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Helpers\JsonExtensions.cs" />
     <Compile Include="Assets\Scripts\Helpers\MyGameObjectExtensions.cs" />
     <Compile Include="Assets\Scripts\Helpers\SqliteExtensions.cs" />
+    <Compile Include="Assets\Scripts\Helpers\SynchronizableExtensions.cs" />
     <Compile Include="Assets\Scripts\Helpers\TooltipExtentions.cs" />
     <Compile Include="Assets\Scripts\Helpers\UnityGameObjectExtentions.cs" />
     <Compile Include="Assets\Scripts\Hex\HexCell.cs" />

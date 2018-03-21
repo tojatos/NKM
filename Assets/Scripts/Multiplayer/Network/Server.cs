@@ -46,7 +46,7 @@ namespace Multiplayer.Network
 		void Awake()
 		{
 			DontDestroyOnLoad(this);
-			SceneManager.sceneLoaded += (Scene, mode) =>
+			SceneManager.sceneLoaded += (scene, mode) =>
 			{
 				if (SceneManager.GetActiveScene().name == Scenes.ServerView)
 				{
@@ -280,7 +280,22 @@ namespace Multiplayer.Network
 				throw;
 			}
 		}
+		public void TryGettingSerializedActiveValue(int connectionId, string propertyName)
+		{
+            string serializedValue;
+            switch (propertyName)
+            {
+                case "GamePlayer":
+                    serializedValue = Game.Active.GamePlayer.SynchronizableSerialize(ActivePropertyName.GamePlayer);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+			Send(MessageComposer.Compose("ACTIVE_VAR", propertyName, serializedValue), reliableChannel, connectionId);
 
+			
+			
+		}
 		public void TouchCell(int connectionId, Queue<string> contents)
 		{
 			HexCell touchedCell = HexMapDrawer.Instance.Cells.First(c => c.Coordinates.ToString() == contents.Dequeue());

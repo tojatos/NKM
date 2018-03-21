@@ -30,6 +30,7 @@
             <e p="JsonExtensions.cs" t="Include" />
             <e p="MyGameObjectExtensions.cs" t="Include" />
             <e p="SqliteExtensions.cs" t="Include" />
+            <e p="SynchronizableExtensions.cs" t="Include" />
             <e p="TooltipExtentions.cs" t="Include" />
             <e p="UnityGameObjectExtentions.cs" t="Include" />
           </e>
@@ -188,9 +189,7 @@
       </e>
       <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp" t="ExcludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-      </e>
+      <e p="Temp/bin" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>
