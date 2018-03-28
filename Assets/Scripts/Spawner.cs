@@ -79,7 +79,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		}
 
 		SpawnCharacterObject(cell, characterToSpawn);
-		if (Game.Type == GameType.MultiplayerServer) Game.Server.SendSpawnCharacterMessege(cell, characterToSpawn);
+//		if (Game.Type == GameType.MultiplayerServer) Game.Server.SendSpawnCharacterMessege(cell, characterToSpawn);
 
 	}
 }

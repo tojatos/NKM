@@ -19,7 +19,8 @@ public class Synchronizable<T>
 
 	public T Get()
 	{
-		return GameStarter.Instance.Game.Type == GameType.MultiplayerClient ? GameStarter.Instance.Game.Client.TryToGetActiveVariable<T>(_name).Result : _value;
+		return _value;
+//		return GameStarter.Instance.Game.Type == GameType.MultiplayerClient ? GameStarter.Instance.Game.Client.TryToGetActiveVariable<T>(_name).Result : _value;
 	}
 	public void Set(T value)
 	{
@@ -29,7 +30,9 @@ public class Synchronizable<T>
 			var serializedValue = value.SynchronizableSerialize(_name);
 			GameStarter.Instance.Game.Client.TryToSetActiveVariable(_name, serializedValue);
 		}
-		else _value = value;
+
+		_value = value;
+		//else _value = value;
 	}
 
 //	public string Serialize(T value)

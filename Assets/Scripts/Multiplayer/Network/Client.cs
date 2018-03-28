@@ -85,12 +85,11 @@ namespace Multiplayer.Network
 			}
 		}
 
-		public void SendUseMyGameObjectMessage(HexCell touchedCell, MyGameObject myGameObject)
-		{
-			var msg = MessageComposer.Compose("USE_MYGAMEOBJECT", myGameObject.Name, touchedCell.Coordinates.ToString());
-			Send(msg, reliableChannel);
-		}
-
+//		public void SendUseMyGameObjectMessage(HexCell touchedCell, MyGameObject myGameObject)
+//		{
+//			var msg = MessageComposer.Compose("USE_MYGAMEOBJECT", myGameObject.Name, touchedCell.Coordinates.ToString());
+//			Send(msg, reliableChannel);
+//		}
 
 		private void ReceiveMessage(int connectionId, string msg)
 		{
@@ -104,18 +103,19 @@ namespace Multiplayer.Network
 			switch (header)
 			{
 				case "TOUCH_CELL":
-					Game.TouchCell(HexMapDrawer.Instance.Cells.First(c=>c.Coordinates.ToString()==contents.Dequeue()));
+					string coordinates = contents.Dequeue();
+					Game.TouchCell(HexMapDrawer.Instance.Cells.First(c=>c.Coordinates.ToString()==coordinates));
 					break;
 				case "WARNING":
 					Debug.LogWarning(contents.Dequeue());
 					break;
-				case "SPAWN_CHARACTER":
-					string characterName = contents.Dequeue();
-					string cellCoordinates = contents.Dequeue();
-					//TODO: change that
-					Game.Active.MyGameObject = Game.Active.GamePlayer.Characters.First(c => c.Name == characterName);
-					Game.UseMyGameObject(HexMapDrawer.Instance.Cells.First(c => c.Coordinates.ToString() == cellCoordinates));
-					break;
+//				case "SPAWN_CHARACTER":
+//					string characterName = contents.Dequeue();
+//					string cellCoordinates = contents.Dequeue();
+//					//TODO: change that
+//					Game.Active.MyGameObject = Game.Active.GamePlayer.Characters.First(c => c.Name == characterName);
+//					Game.UseMyGameObject(HexMapDrawer.Instance.Cells.First(c => c.Coordinates.ToString() == cellCoordinates));
+//					break;
 				case "GAMEPLAYERS":
 					SetGamePlayers(contents.ToList());
 					break;
@@ -125,9 +125,9 @@ namespace Multiplayer.Network
 				case "GET_CHARACTERS":
 					SendSelectedCharacters();
 					break;
-				case "ACTIVE_VAR":
-					ReceiveActiveVar(contents);
-					break;
+//				case "ACTIVE_VAR":
+//					ReceiveActiveVar(contents);
+//					break;
 				case "PLAYERLIST":
 					List<string> names = contents.ToList();
 					UpdatePlayers(names);
@@ -147,13 +147,6 @@ namespace Multiplayer.Network
 					Debug.Log($"Undefined message: {msg}");
 					break;
 			}
-		}
-
-
-		private void ReceiveActiveVar(Queue<string> contents)
-		{
-			awaitedPropertyName = contents.Dequeue();
-			awaitedSerializedVariable = contents.Dequeue();
 		}
 
 		private void SetGamePlayers(List<string> gamePlayersData)
@@ -227,14 +220,14 @@ namespace Multiplayer.Network
 			return GamePlayers;
 		}
 
-		public void SendMakeActionMessage(HexCell touchedCell)
-		{
-			List<string> contents = new List<string>();
-			contents.Add(touchedCell.Coordinates.ToString());
-//			contents.AddRange(Game.Active.GetInfo);
-			string msg = MessageComposer.Compose('%', "MAKE_ACTION", contents.ToArray());
-			Send(msg, reliableChannel);
-		}
+//		public void SendMakeActionMessage(HexCell touchedCell)
+//		{
+//			List<string> contents = new List<string>();
+//			contents.Add(touchedCell.Coordinates.ToString());
+////			contents.AddRange(Game.Active.GetInfo);
+//			string msg = MessageComposer.Compose('%', "MAKE_ACTION", contents.ToArray());
+//			Send(msg, reliableChannel);
+//		}
 		public void SendTouchCellMessage(HexCell touchedCell)
 		{
 			string msg = MessageComposer.Compose("TOUCH_CELL", touchedCell.Coordinates.ToString());
@@ -251,47 +244,60 @@ namespace Multiplayer.Network
 		}
 		
 		
-
-		private string awaitedPropertyName;
-		private string awaitedSerializedVariable;
-		/// <summary>
-		/// Send a message to the server,
-		/// server should return property name and string to deserialize property,
-		/// or null and null if the property is unavaiable.
-		/// </summary>
-		/// <param name="propertyName">Name of property, that you want to get from the server</param>
-		/// <typeparam name="T">Type of property, that you want to get from the server</typeparam>
-		/// <returns>Deserialized property or null, if the property is unavaiable</returns>
-		public async Task<T> TryToGetActiveVariable<T>(string propertyName) 
-		{
-			try
-			{
-				string msg = MessageComposer.Compose("ACTIVE_VAR_GET", propertyName);
-				Send(msg, reliableChannel);
-				Func<bool> areAwaitedVariablesSet = () => awaitedPropertyName != null && awaitedSerializedVariable != null;
-				await areAwaitedVariablesSet.WaitToBeTrue();
-
-				T valueToReturn;
-				switch (awaitedPropertyName)
-				{
-					case "GamePlayer":
-						valueToReturn = (T) Convert.ChangeType(Game.Players.First(p => p.Name == awaitedSerializedVariable), typeof(T));
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-				return valueToReturn;
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e);
-				throw;
-			}
-			finally
-			{
-				awaitedPropertyName = null;
-				awaitedSerializedVariable = null;
-			}
-		}
+//		private void ReceiveActiveVar(Queue<string> contents)
+//		{
+//			awaitedPropertyName = contents.Dequeue();
+//			awaitedSerializedVariable = contents.Dequeue();
+//			Send("Yay!", reliableChannel);
+//
+//		}
+//
+//		private string awaitedPropertyName;
+//		private string awaitedSerializedVariable;
+//		/// <summary>
+//		/// Send a message to the server,
+//		/// server should return property name and string to deserialize property,
+//		/// or null and null if the property is unavaiable.
+//		/// </summary>
+//		/// <param name="propertyName">Name of property, that you want to get from the server</param>
+//		/// <typeparam name="T">Type of property, that you want to get from the server</typeparam>
+//		/// <returns>Deserialized property or null, if the property is unavaiable</returns>
+//		public async Task<T> TryToGetActiveVariable<T>(string propertyName)
+//		{
+//			try
+//			{
+//				string msg = MessageComposer.Compose("ACTIVE_VAR_GET", propertyName);
+//				Send(msg, reliableChannel);
+//				//Func<bool> areAwaitedVariablesSet = () => awaitedPropertyName != null && awaitedSerializedVariable != null;
+//				//await areAwaitedVariablesSet.WaitToBeTrue();
+//
+//				//Cannot await, or else app hangs :( TODO
+//				await Task.Delay(5000);
+//				
+//				Send("Awaited variables are set!", reliableChannel);
+//
+//				T valueToReturn;
+//				switch (awaitedPropertyName)
+//				{
+//					case "GamePlayer":
+//						valueToReturn = (T) Convert.ChangeType(Game.Players.First(p => p.Name == awaitedSerializedVariable), typeof(T));
+//						break;
+//					default:
+//						throw new ArgumentOutOfRangeException();
+//				}
+//				return valueToReturn;
+//			}
+//			catch (Exception e)
+//			{
+//				Console.WriteLine(e);
+//				throw;
+//			}
+//			finally
+//			{
+//				awaitedPropertyName = null;
+//				awaitedSerializedVariable = null;
+//
+//			}
+//		}
 	}
 }

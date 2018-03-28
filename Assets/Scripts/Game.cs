@@ -111,6 +111,7 @@ public class Game
 
 	public void TouchCell(HexCell touchedCell)
 	{
+		
 		if (Active.MyGameObject != null)
 		{
 			//			switch (Type)

@@ -41,15 +41,18 @@ namespace Multiplayer.Network
 				case "TOUCH_CELL":
 					Server.TouchCell(connectionId, contents);
 					break;
+//				case "MAKE_ACTION":
+//					Server.MakeAction(connectionId, contents);
+//					break;
 				case "CHARACTERS":
 					Server.ReceiveCharacters(Server.Players.Single(p => p.ConnectionID == connectionId), contents);
 					break;
 				case "CONNECTED":
 					Server.AskForName(connectionId);
 					break;
-				case "ACTIVE_VAR_GET":
-					Server.TryGettingSerializedActiveValue(connectionId, contents.Dequeue());
-					break;
+//				case "ACTIVE_VAR_GET":
+//					Server.TryGettingSerializedActiveValue(connectionId, contents.Dequeue());
+//					break;
 				case "NAMEIS":
 					CreatePlayerAndTryToJoinLobby(connectionId, contents);
 					break;

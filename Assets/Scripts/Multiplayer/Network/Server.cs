@@ -251,11 +251,11 @@ namespace Multiplayer.Network
 			GamePlayers.Add(player, gamePlayer);
 		}
 
-		public void SendSpawnCharacterMessege(HexCell cell, Character activeCharacter)
-		{
-			string msg = MessageComposer.Compose("SPAWN_CHARACTER", activeCharacter.Name, cell.Coordinates.ToString());
-			SendToAllPlayers(msg, reliableChannel);
-		}
+//		public void SendSpawnCharacterMessege(HexCell cell, Character activeCharacter)
+//		{
+//			string msg = MessageComposer.Compose("SPAWN_CHARACTER", activeCharacter.Name, cell.Coordinates.ToString());
+//			SendToAllPlayers(msg, reliableChannel);
+//		}
 
 		public void TrySettingActiveValue(int connectionId, Queue<string> contents)
 		{
@@ -265,13 +265,59 @@ namespace Multiplayer.Network
 
 				string propertyName = contents.Dequeue();
 				string serializedValue = contents.Dequeue();
+
+				if (serializedValue=="")
+				{
+					switch (propertyName)
+					{
+						case ActivePropertyName.GamePlayer:						
+							Game.Active.GamePlayer = null;
+							break;
+						case ActivePropertyName.Ability:
+							Game.Active.Ability = null;
+							break;
+						case ActivePropertyName.CharacterOnMap:
+							Game.Active.CharacterOnMap = null; 
+							break;
+						case ActivePropertyName.MyGameObject:
+							Game.Active.MyGameObject = null;
+							break;
+						case ActivePropertyName.Action:
+							Game.Active.Action = Action.None;
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+
+					return;
+				}
+//				switch (propertyName)
+//				{
+//					case "GamePlayer":
+//						break;
+//					default:
+//						throw new ArgumentOutOfRangeException();
+//				}
 				switch (propertyName)
 				{
-					case "GamePlayer":
+					case ActivePropertyName.GamePlayer:						
 						Game.Active.GamePlayer = Game.Players.Find(g => g.Name == serializedValue);
+						break;
+					case ActivePropertyName.Ability:
+						Game.Active.Ability = Game.Players.SelectMany(g => g.Characters).SelectMany(c => c.Abilities).First(a => a.Guid.ToString() == serializedValue);
+						break;
+					case ActivePropertyName.CharacterOnMap:
+						Game.Active.CharacterOnMap = Game.Players.SelectMany(g => g.Characters).First(c => c.Guid.ToString() == serializedValue); 
+						break;
+					case ActivePropertyName.MyGameObject:
+						Game.Active.MyGameObject = Game.Players.SelectMany(g => g.Characters).First(a => a.Guid.ToString() == serializedValue);//TODO find if a character is the only value set there
+						break;
+					case ActivePropertyName.Action:
+						Game.Active.Action = (Action) Enum.Parse(typeof(Action), serializedValue);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
+
 				}
 			}
 			catch (Exception e)
@@ -280,25 +326,38 @@ namespace Multiplayer.Network
 				throw;
 			}
 		}
-		public void TryGettingSerializedActiveValue(int connectionId, string propertyName)
-		{
-            string serializedValue;
-            switch (propertyName)
-            {
-                case "GamePlayer":
-                    serializedValue = Game.Active.GamePlayer.SynchronizableSerialize(ActivePropertyName.GamePlayer);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-			Send(MessageComposer.Compose("ACTIVE_VAR", propertyName, serializedValue), reliableChannel, connectionId);
-
-			
-			
-		}
+//		public void TryGettingSerializedActiveValue(int connectionId, string propertyName)
+//		{
+//            string serializedValue;
+//            switch (propertyName)
+//            {
+//                case "GamePlayer":
+//                    serializedValue = Game.Active.GamePlayer.SynchronizableSerialize(ActivePropertyName.GamePlayer);
+//                    break;
+//                default:
+//                    throw new ArgumentOutOfRangeException();
+//            }
+//			Send(MessageComposer.Compose("ACTIVE_VAR", propertyName, serializedValue), reliableChannel, connectionId);
+//
+//			
+//			
+//		}
+//		public static T SynchronizableDeserialize<T>(string value, string name)
+//		{
+//			T deserializedValue;
+//			if (value == null) deserializedValue = default(T);
+//			else
+//			{
+//				
+//			}
+//
+//			return deserializedValue;
+//		}
+		
 		public void TouchCell(int connectionId, Queue<string> contents)
 		{
-			HexCell touchedCell = HexMapDrawer.Instance.Cells.First(c => c.Coordinates.ToString() == contents.Dequeue());
+			string coordinates = contents.Dequeue();
+			HexCell touchedCell = HexMapDrawer.Instance.Cells.First(c => c.Coordinates.ToString() == coordinates);
 			try
 			{
 				if (GamePlayers.First(g => g.Key.ConnectionID == connectionId).Value != Game.Active.GamePlayer) throw new Exception("Nie jesteś aktywnym graczem!");
@@ -312,5 +371,22 @@ namespace Multiplayer.Network
 				throw;
 			}
 		}
+//		public void MakeAction(int connectionId, Queue<string> contents)
+//		{
+//			string coordinates = contents.Dequeue();
+//			HexCell touchedCell = HexMapDrawer.Instance.Cells.First(c => c.Coordinates.ToString() == coordinates);
+//			try
+//			{
+//				if (GamePlayers.First(g => g.Key.ConnectionID == connectionId).Value != Game.Active.GamePlayer) throw new Exception("Nie jesteś aktywnym graczem!");
+//
+//				Game.Active.MakeAction(touchedCell);
+//				SendToAllPlayers(MessageComposer.Compose("MAKE_ACTION", touchedCell.Coordinates.ToString()), reliableChannel);
+//			}
+//			catch (Exception e)
+//			{
+//				SendWarning(e.Message, connectionId);
+//				throw;
+//			}
+//		}
 	}
 }
