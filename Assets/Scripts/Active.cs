@@ -36,57 +36,12 @@ public class Active
 	public Phase Phase { get; }
 	public AirSelection AirSelection { get; }
 
-//	private GamePlayer _gamePlayer;
-//	public GamePlayer GamePlayer
-//	{
-//		get
-//		{
-//			if (Game.Type == GameType.MultiplayerClient) return Game.Client.SendGetActiveMessage("GamePlayer");
-//
-//			return _gamePlayer;
-//		}
-//		set
-//		{
-//			if (Game.Type == GameType.MultiplayerClient) Game.Client.SendSetActiveMessage("GamePlayer", value.Name);
-//			else _gamePlayer = value;
-//		}
-//	}
-	private readonly Synchronizable<GamePlayer> _gamePlayer = new Synchronizable<GamePlayer>(ActivePropertyName.GamePlayer);
-	private readonly Synchronizable<Action> _action = new Synchronizable<Action>(ActivePropertyName.Action);
-	private readonly Synchronizable<Ability> _ability = new Synchronizable<Ability>(ActivePropertyName.Ability);
-	private readonly Synchronizable<MyGameObject> _myGameObject = new Synchronizable<MyGameObject>(ActivePropertyName.MyGameObject);
-	private readonly Synchronizable<Character> _characterOnMap = new Synchronizable<Character>(ActivePropertyName.CharacterOnMap);
-	public GamePlayer GamePlayer
-	{
-		get { return _gamePlayer.Get(); }
-		set { _gamePlayer.Set(value); }
-	}
+	public  GamePlayer GamePlayer;
+	public  Action Action;
+	public  Ability Ability;
+	public  MyGameObject MyGameObject;
+	public  Character CharacterOnMap;
 
-//	public Action Action { private get; set; }
-//	public Ability Ability { get; set; }
-//	public MyGameObject MyGameObject { get; set; }
-//	public Character CharacterOnMap { get; set; }
-	
-	public Action Action {
-		private get { return _action.Get(); }
-		set { _action.Set(value); } 
-	}
-	public Ability Ability { 
-		get { return _ability.Get(); }
-		set { _ability.Set(value); } 
-	}
-
-	public MyGameObject MyGameObject
-	{
-		get { return _myGameObject.Get(); }
-		set { _myGameObject.Set(value); }
-	}
-
-	public Character CharacterOnMap
-	{
-		get { return _characterOnMap.Get(); }
-		set { _characterOnMap.Set(value); }
-	}
 	
 	public List<HexCell> HexCells { get; set; }
 	//TODO: refactor this

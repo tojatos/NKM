@@ -50,24 +50,11 @@
             <e p="GameHostOptions.cs" t="Include" />
             <e p="GameStarter.cs" t="Include" />
             <e p="GameTypeSelect.cs" t="Include" />
-            <e p="Lobby.cs" t="Include" />
             <e p="MainMenu.cs" t="Include" />
-            <e p="MultiplayerSetup.cs" t="Include" />
             <e p="MusicManager.cs" t="Include" />
             <e p="PreGameOptions.cs" t="Include" />
-            <e p="ServerView.cs" t="Include" />
           </e>
           <e p="MessageLogger.cs" t="Include" />
-          <e p="Multiplayer" t="Include">
-            <e p="Network" t="Include">
-              <e p="Client.cs" t="Include" />
-              <e p="MessageComposer.cs" t="Include" />
-              <e p="Networking.cs" t="Include" />
-              <e p="Player.cs" t="Include" />
-              <e p="Server.cs" t="Include" />
-              <e p="ServerMessageReceiver.cs" t="Include" />
-            </e>
-          </e>
           <e p="MyGameObjects" t="Include">
             <e p="Abilities" t="Include">
               <e p="Aqua" t="Include">
@@ -163,7 +150,6 @@
           <e p="SpriteSelect.cs" t="Include" />
           <e p="Stat.cs" t="Include" />
           <e p="Stuff.cs" t="Include" />
-          <e p="Synchronizable.cs" t="Include" />
           <e p="Tooltip.cs" t="Include" />
           <e p="Turn.cs" t="Include" />
           <e p="UIManagers" t="Include">

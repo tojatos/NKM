@@ -42,7 +42,7 @@ namespace Managers
 		}
 		public void BackButtonClick()
 		{
-			SceneManager.LoadScene(Scenes.GameTypeSelect);
+			SceneManager.LoadScene(Scenes.MainMenu);
 		}
 
 		private void ReloadPlayerCountDropdown(int value)

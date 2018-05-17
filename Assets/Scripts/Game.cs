@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Helpers;
 using Hex;
 using Managers;
-using Multiplayer.Network;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
 using UnityEngine;
@@ -19,10 +18,6 @@ public class Game
 	public UIManager UIManager;
 	public Spawner Spawner;
 	public HexMapDrawer HexMapDrawer;
-	public GameType Type { get; private set; }
-
-	public Client Client;
-	public Server Server;
 
 	public bool IsInitialized;
 	public Game()
@@ -34,15 +29,11 @@ public class Game
 	{
 		_options = gameOptions;
 
-		Type = _options.GameType;
 		Players = new List<GamePlayer>(gameOptions.Players);
 		UIManager = _options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
 		Spawner = Spawner.Instance;
 		Spawner.Init(this);
-
-		Client = _options.Client;
-		Server = _options.Server;
 
 //		Players.ForEach(p => Debug.Log(p.Characters.Count));
 		Debug.Log("Game started!");
@@ -100,12 +91,6 @@ public class Game
 
 	public void TryTouchingCell(HexCell touchedCell)
 	{
-		if (Type == GameType.MultiplayerClient)
-		{
-			Client.SendTouchCellMessage(touchedCell);
-			return;
-		}
-
 		TouchCell(touchedCell);
 	}
 
@@ -114,35 +99,11 @@ public class Game
 		
 		if (Active.MyGameObject != null)
 		{
-			//			switch (Type)
-			//			{
-			//				case GameType.Local:
-			//				case GameType.MultiplayerServer:
-			//					UseMyGameObject(touchedCell);
-			//					break;
-			//				case GameType.MultiplayerClient:
-			//					Client.SendUseMyGameObjectMessage(touchedCell, Active.MyGameObject);
-			//					break;
-			//				default:
-			//					throw new ArgumentOutOfRangeException();
-			//			}
 			UseMyGameObject(touchedCell);
 
 		}
 		else if (Active.HexCells?.Contains(touchedCell) == true)
 		{
-			//			switch (Type)
-			//			{
-			//				case GameType.Local:
-			//				case GameType.MultiplayerServer:
-			//					Active.MakeAction(touchedCell);
-			//					break;
-			//				case GameType.MultiplayerClient:
-			//					Client.SendMakeActionMessage(touchedCell);
-			//					break;
-			//				default:
-			//					throw new ArgumentOutOfRangeException();
-			//			}
 			Active.MakeAction(touchedCell);
 		}
 		else

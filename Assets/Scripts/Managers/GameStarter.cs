@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Helpers;
 using Hex;
-using Multiplayer.Network;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
 using UnityEngine;
@@ -15,19 +14,11 @@ namespace Managers
 	{
 		public bool IsTesting;
 		public Game Game = new Game();
-		private GameType GameType;
-		private Server ActiveServer;
-		private Client ActiveClient;
 
 		private async void Awake() => await PrepareAndStartGame();
 
 		private async Task PrepareAndStartGame()
 		{
-			if (!IsTesting)
-			{
-				SetGameTypeFromSessionSettings();
-				AssignClientOrServerIfNeeded();
-			}
 			GameOptions gameOptions = await GetGameOptions();
 
 			Game.Init(gameOptions);
@@ -39,7 +30,6 @@ namespace Managers
 		{
 			GameOptions gameOptions = new GameOptions
 			{
-				GameType = GameType.Local,
 				Map = Stuff.Maps[0],
 				Players = new List<GamePlayer>
 					{
@@ -78,70 +68,23 @@ namespace Managers
 
 			return new GameOptions
 			{
-				GameType = GameType,
 				Map = GetMap(),
 				Players = await GetPlayers(),
 				UIManager = UIManager.Instance,
-				Client = ActiveClient,
-				Server = ActiveServer
 			};
 		}
 
-		private void AssignClientOrServerIfNeeded()
-		{
-			switch (GameType)
-			{
-				case GameType.Local:
-					break;
-				case GameType.MultiplayerServer:
-					ActiveServer = FindObjectOfType<Server>();
-					if (ActiveServer == null) throw new Exception("Server not found");
 
-					break;
-				case GameType.MultiplayerClient:
-					ActiveClient = FindObjectOfType<Client>();
-					if (ActiveClient == null) throw new Exception("Client not found");
-
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
-		private void SetGameTypeFromSessionSettings()
-		{
-			GameType = SessionSettings.Instance.GameType;
-		}
 
 		private HexMap GetMap()
 		{
-			switch (GameType)
-			{
-				case GameType.Local:
 					var mapIndex = SessionSettings.Instance.SelectedMapIndex;
 					var map = Stuff.Maps[mapIndex];
 					return map;
-				case GameType.MultiplayerServer:
-					return Stuff.Maps[ActiveServer.SelectedMapIndex];
-				case GameType.MultiplayerClient:
-					return Stuff.Maps[ActiveClient.SelectedMapIndex];
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
 		}
 		private async Task<List<GamePlayer>> GetPlayers()
 		{
-			switch (GameType)
-			{
-				case GameType.Local:
 					return await GetLocalPlayers();
-				case GameType.MultiplayerServer:
-					return await ActiveServer.GetCharactersFromClients();
-				case GameType.MultiplayerClient:
-					return await ActiveClient.GetPlayersFromServer();
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
 		}
 		private async Task<List<GamePlayer>> GetLocalPlayers()
 		{
@@ -180,31 +123,10 @@ namespace Managers
 
 		private int GetCharactersPerPlayer()
 		{
-			int charactersPerPlayer;
-			switch (GameType)
-			{
-				case GameType.Local:
-					charactersPerPlayer = SessionSettings.Instance.NumberOfCharactersPerPlayer;
-					break;
-				case GameType.MultiplayerServer:
-					charactersPerPlayer = ActiveServer.CharactersPerPlayer;
-					break;
-				case GameType.MultiplayerClient:
-					charactersPerPlayer = ActiveClient.PlayersPerCharacter;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			return charactersPerPlayer;
+					return SessionSettings.Instance.NumberOfCharactersPerPlayer;
 		}
 
-		public async Task<GamePlayer> GetGamePlayer()
-		{
-			var p = new GamePlayer {Name = ActiveClient.PlayerName };
-			await GetCharacters(p);
-			return p;
-		}
+
 
 	}
 }
