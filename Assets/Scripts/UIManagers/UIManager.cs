@@ -15,7 +15,6 @@ namespace UIManagers
 		private Game Game;
 
 		private SpriteSelect SpriteSelect;
-		private HexMapDrawer HexMapDrawer;
 
 		public GameObject HexMapUI;
 		public GameObject MainGameUI;
@@ -57,7 +56,6 @@ namespace UIManagers
 		public void Init()
 		{
 			Game = GameStarter.Instance.Game;
-			HexMapDrawer = HexMapDrawer.Instance;
 			SpriteSelect = SpriteSelect.Instance;
 
 			//Game.Active.UIManager = this;

@@ -36,7 +36,7 @@ public class Game
 //		Spawner.Init(this);
 
 //		Players.ForEach(p => Debug.Log(p.Characters.Count));
-		Debug.Log("Game started!");
+//		Debug.Log("Game started!");
 		IsInitialized = true;
 	}
 
@@ -120,7 +120,7 @@ public class Game
 			if (touchedCell.CharacterOnCell != null)
 			{
 				touchedCell.CharacterOnCell.Select();
-				Debug.Log(touchedCell.CharacterOnCell.Guid);
+//				Debug.Log(touchedCell.CharacterOnCell.Guid);
 			}
 			else
 			{

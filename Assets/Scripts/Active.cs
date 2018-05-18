@@ -6,14 +6,10 @@ using Hex;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Object = UnityEngine.Object;
 
 public class Active
 {
-	//#region Singleton
-	//private static Active _instance;
-	//public static Active Instance => _instance ?? (_instance = new Active());
-
-	//#endregion
 	private Game Game;
 	public Active(Game game)
 	{
@@ -23,14 +19,6 @@ public class Active
 		AirSelection = new AirSelection(game);
 		IsDebug = false;
 	}
-//	private Active()
-//	{
-//		Phase = new Phase();
-//		Turn = new Turn { Active = this };
-//		AirSelection = new AirSelection { Active = this };
-//		IsDebug = false;
-//	}
-//	public UIManager UIManager;
 
 	public Turn Turn { get; }
 	public Phase Phase { get; }
@@ -41,6 +29,7 @@ public class Active
 	public  Ability Ability;
 	public  MyGameObject MyGameObject;
 	public  Character CharacterOnMap;
+	public List<HexCell> MoveCells = new List<HexCell>();
 
 	
 	public List<HexCell> HexCells { get; set; }
@@ -161,6 +150,37 @@ public class Active
 		AudioSource.PlayClipAtPoint(ac, Camera.main.transform.position, volume);
 	}
 
+	public void RemoveMoveCells()
+	{
+		if(MoveCells==null || MoveCells.Count==0) return;
+		
+		for (int i = MoveCells.Count - 1; i >= 0; i--)
+		{
+			//Remove the line
+			Object.Destroy(MoveCells[i].gameObject.GetComponent<LineRenderer>());
+			
+			MoveCells.RemoveAt(i);
+		}
+	}
+
+	public void AddMoveCell(HexCell cell)
+	{
+		if(MoveCells==null||MoveCells.Count<1) throw new Exception("Unable to add move cell!");
+		//Draw a line between two hexcell centres
+		
+		//Check for component in case of Zoro's Lack of Orientation
+		LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null ? cell.gameObject.GetComponent<LineRenderer>() : cell.gameObject.AddComponent<LineRenderer>();
+		lRend.SetPositions(new[]
+			{MoveCells.Last().transform.position + Vector3.up, cell.transform.position + Vector3.up});
+		lRend.material = new Material(Shader.Find("Standard"));
+		lRend.startColor = Color.black;
+		lRend.endColor = Color.black;
+		lRend.widthMultiplier = 2;
+		
+		Game.Active.MoveCells.Add(cell);
+		
+	}
+
 	public void Clean()
 	{
 		if(AirSelection.IsEnabled) AirSelection.Disable();
@@ -168,6 +188,10 @@ public class Active
 		Action = Action.None;
 		HexCells = null;
 		Game.HexMapDrawer.RemoveAllHighlights();
+	}
+	public void CleanAndTrySelecting()
+	{
+        Clean();	
 		CharacterOnMap?.Select();
 	}
 	public void MakeAction(HexCell cell)
@@ -209,11 +233,11 @@ public class Active
 						if (character.Abilities.Count(a => a.OverridesMove) > 1)
 							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać akcję ruchu!");
 
-						character.Abilities.Single(a => a.OverridesMove).Move(cell);
+						character.Abilities.Single(a => a.OverridesMove).Move(MoveCells);
 					}
 					else
 					{
-						character.BasicMove(cell);
+						character.BasicMove(MoveCells);
 					}
 				}
 
@@ -253,8 +277,6 @@ public class Active
 		return results.Count > 0;
 	}
 }
-
-
 
 public static class ActivePropertyName
 {

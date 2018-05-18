@@ -79,7 +79,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 			var direction = ParentCharacter.ParentCell.GetDirection(targetCharacter.ParentCell);
 			var moveCell = targetCharacter.ParentCell.GetCell(direction, 2);
 			ParentCharacter.Attack(targetCharacter, AttackType.Physical, ParentCharacter.AttackPoints.Value);
-			ParentCharacter.Move(moveCell);
+			ParentCharacter.MoveTo(moveCell);
 			Active.PlayAudio("giri");
 			OnUseFinish();
 		}

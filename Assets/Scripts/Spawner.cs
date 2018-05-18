@@ -20,6 +20,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	{
 		var characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterToSpawn.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
 		var characterObject = Instantiate(CharacterPrefab, parentCell.transform);
+		characterObject.name = characterToSpawn.Name;
 		characterObject.transform.Find("Character Sprite").GetComponent<SpriteRenderer>().sprite = characterSprite;
 		characterObject.transform.Find("Border").GetComponent<SpriteRenderer>().color = characterToSpawn.Owner.GetColor();
 		characterObject.transform.localPosition = new Vector3(0, 10, 0);

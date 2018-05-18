@@ -61,7 +61,7 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 
 		public override void Use(HexCell cell)
 		{
-			ParentCharacter.Move(cell);
+			ParentCharacter.MoveTo(cell);
 			HasDashed = true;
 			var cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, true, false, true);
 			cellRange.RemoveNonEnemies();

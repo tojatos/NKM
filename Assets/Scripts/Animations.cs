@@ -9,6 +9,7 @@ public class Animations : SingletonMonoBehaviour<Animations>
 	private Game Game;
 	private void Start() => Game = GameStarter.Instance.Game;
 	private bool _isAsterPlaying;
+	private bool _isMovePlaying;
 	public IEnumerator SharpenedForkEnumerator(Transform parentTransform, Transform targetTransform)
 	{
 		const float animationDuration = 0.5f;
@@ -58,6 +59,18 @@ public class Animations : SingletonMonoBehaviour<Animations>
 	{
 		StartCoroutine(ItadakiNoKuraEnumerator(parentTransform, targetTransform));
 	}
+
+	public void Move(Transform parentTransform, Vector3 target, float animationSpeed) => StartCoroutine(MoveEnumerator(parentTransform, target, animationSpeed));
+
+	private IEnumerator MoveEnumerator(Transform parentTransform, Vector3 target, float animationSpeed)
+	{
+		if (_isMovePlaying) yield return new WaitUntil(() => !_isMovePlaying);
+		_isMovePlaying = true;
+		StartCoroutine(MoveToPosition(parentTransform, target, animationSpeed));
+		yield return new WaitForSeconds(animationSpeed);
+		_isMovePlaying = false;
+	}
+
 
 	private IEnumerator AsterYoEnumerator(Transform parentTransform, List<Transform> targetTransforms)
 	{

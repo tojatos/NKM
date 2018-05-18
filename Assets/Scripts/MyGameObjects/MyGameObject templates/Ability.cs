@@ -135,11 +135,11 @@ namespace MyGameObjects.MyGameObject_templates
 					throw new ArgumentOutOfRangeException();
 			}
 
-			Active.Clean();
+			Active.CleanAndTrySelecting();
 		}
 		protected void OnFailedUseFinish()
 		{
-			Active.Clean();
+			Active.CleanAndTrySelecting();
 		}
 
 		public virtual void DamageModifier(Character targetCharacter, ref int damage){}
@@ -167,7 +167,7 @@ namespace MyGameObjects.MyGameObject_templates
 		{
 			throw new NotImplementedException();
 		}
-		public virtual void Move(HexCell cell)
+		public virtual void Move(List<HexCell> moveCells)
 		{
 			throw new NotImplementedException();
 		}

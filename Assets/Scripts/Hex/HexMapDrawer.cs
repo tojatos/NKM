@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Managers;
 using UnityEngine;
 
@@ -157,6 +158,37 @@ namespace Hex
 				if (cellPointed != null && Game.Active.HexCells.Contains(cellPointed))
 				{
 					Game.Active.AirSelection.HexCells = new List<HexCell> { cellPointed };
+				}
+			}
+
+			if (Game.Active.Action == Action.AttackAndMove)
+			{
+				var cellPointed = CellPointed();
+				if (cellPointed != null && (Game.Active.HexCells.Contains(cellPointed)||cellPointed==Game.Active.CharacterOnMap.ParentCell))
+				{
+					var lastMoveCell = Game.Active.MoveCells.LastOrDefault();
+					if(lastMoveCell==null) throw new Exception("Move cell is null!");
+					if (cellPointed != lastMoveCell)
+					{
+						if (Game.Active.MoveCells.Contains(cellPointed))
+						{
+							//remove all cells to pointed
+							for (int i = Game.Active.MoveCells.Count - 1; i >= 0; i--)
+							{
+								if (Game.Active.MoveCells[i] == cellPointed) break;
+
+								//Remove the line
+								Destroy(Game.Active.MoveCells[i].gameObject.GetComponent<LineRenderer>());
+
+								Game.Active.MoveCells.RemoveAt(i);
+							}
+						}
+						else if (Game.Active.CharacterOnMap.Speed.Value >= Game.Active.MoveCells.Count && lastMoveCell.GetNeighbors(1).Contains(cellPointed))
+						{
+							Game.Active.AddMoveCell(cellPointed);
+
+						}
+					}
 				}
 			}
 			if (Input.GetMouseButtonDown(0))

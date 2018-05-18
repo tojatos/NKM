@@ -7,6 +7,8 @@ using MyGameObjects.Abilities;
 using MyGameObjects.Effects;
 using UIManagers;
 using UnityEngine;
+using Object = UnityEngine.Object;
+
 namespace MyGameObjects.MyGameObject_templates
 {
 	public class Character : MyGameObject
@@ -96,28 +98,34 @@ namespace MyGameObjects.MyGameObject_templates
 
 		#endregion
 
-		public void BasicMove(HexCell targetCell)
-		{
-			HasUsedBasicMoveInPhaseBefore = true;
-			Move(targetCell);
-		}
-		public void Move(HexCell targetCell)
+
+		public void MoveTo(HexCell targetCell)
 		{
 			ParentCell.CharacterOnCell = null;
 			ParentCell = targetCell;
 			targetCell.CharacterOnCell = this;
 			CharacterObject.transform.parent = targetCell.transform;
-			//Deselect();
-			CharacterObject.GetComponent<Animation>().Play("Fade Out Character");
-			//yield return new WaitForSeconds(0.2f); TODO
-			CharacterObject.transform.localPosition = new Vector3(0, 10, 0);
-			CharacterObject.GetComponent<Animation>().Play("Fade In Character");
-			//yield return new WaitForSeconds(0.2f); TODO
-			//Active.HexCells = null;
-			//Active.Action = Action.None;
-			//Select();
+
+			Animations.Instance.Move(CharacterObject.transform,
+				CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f);
 
 		}
+		public void BasicMove(List<HexCell> cellPath)
+		{
+			HasUsedBasicMoveInPhaseBefore = true;
+			Move(cellPath);
+		}
+
+		private void Move(List<HexCell> cellPath)
+		{
+			cellPath.RemoveAt(0);//Remove parent cell
+			foreach (var nextCell in cellPath)
+			{
+				Object.Destroy(nextCell.gameObject.GetComponent<LineRenderer>());//Remove the line
+				MoveTo(nextCell);
+			}
+		}
+
 		public void BasicAttack(Character attackedCharacter)
 		{
 			if (attackedCharacter.Abilities.All(a => a.BeforeParentBasicAttacked(this)))
@@ -211,11 +219,8 @@ namespace MyGameObjects.MyGameObject_templates
 		private event VoidDelegate AfterBeingAttacked;
 		private event VoidDelegate OnEnemyKill;
 		private event OnDamageDelegate OnDamage;
-		public void InvokeJustBeforeFirstAction()
-		{
-		  	Debug.Log("JustBeforeFirstAction invoked");
-			JustBeforeFirstAction?.Invoke();
-		}
+		public void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
+
 		private void RemoveFromMap()
 		{
 			ParentCell.CharacterOnCell = null;
@@ -237,17 +242,10 @@ namespace MyGameObjects.MyGameObject_templates
 				ability.DamageModifier(targetCharacter, ref damage);
 			}
 		}
-//		private void OnEnemyKill()
-//		{
-//			Abilities.ForEach(a => a.OnEnemyKill());
-//		}
-//		private void OnDamage(Character targetCharacter, int damageDealt)
-//		{
-//			Abilities.ForEach(a => a.OnDamage(targetCharacter, damageDealt));
-//		}
 		private void PrepareAttackAndMove()
 		{
-			Game.HexMapDrawer.RemoveAllHighlights();
+//			Game.HexMapDrawer.RemoveAllHighlights();
+			Active.Clean();
 			if (Active.GamePlayer != Owner)
 			{
 				MessageLogger.DebugLog("Nie jesteś właścicielem! Wara!");
@@ -277,10 +275,14 @@ namespace MyGameObjects.MyGameObject_templates
 			}
 			if (!isPreparationSuccessful)
 			{
+				//there are no cells to move or attack
 				return;
 			}
 
-			Active.HexCells.ForEach(c=>c.ToggleHighlight(HiglightColor.Red));
+			Active.HexCells.ForEach(c=>c.ToggleHighlight(c.CharacterOnCell!=null ? HiglightColor.Red: HiglightColor.WhiteOrange));
+			Active.RemoveMoveCells();
+			Active.MoveCells.Add(ParentCell);
+			
 		}
 		private List<HexCell> GetPrepareMoveCells()
 		{
@@ -406,6 +408,7 @@ namespace MyGameObjects.MyGameObject_templates
 			Active.Action = Action.None;
 			Active.HexCells = null;
 			Game.HexMapDrawer.RemoveAllHighlights();
+			Active.RemoveMoveCells();
 		}
 
 		private void InitiateAbilities(List<Ability> abilities)
