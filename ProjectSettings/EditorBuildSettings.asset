@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Multiplayer Setup.unity
     guid: 3a40ba8f5698723488490cf06305ff32
   - enabled: 1
@@ -17,13 +17,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main Game.unity
     guid: 470084eb42eb962459c6f6c54e28f3bb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Game Type Select.unity
     guid: d1ccc4c52f978ba4d98cd2105da40e7e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lobby.unity
     guid: c366f2f0d4661ef43ad225a7e5521d23
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Game Host Options.unity
     guid: 9892991172a86e14b8963182008e8a02
   - enabled: 1

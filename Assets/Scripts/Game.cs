@@ -33,7 +33,7 @@ public class Game
 		UIManager = _options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
 		Spawner = Spawner.Instance;
-		Spawner.Init(this);
+//		Spawner.Init(this);
 
 //		Players.ForEach(p => Debug.Log(p.Characters.Count));
 		Debug.Log("Game started!");

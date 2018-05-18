@@ -10,11 +10,11 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 {
 	public GameObject CharacterPrefab;
 	public ColorToHighlight[] HighlightColorMappings;
-	private Game Game;
-	public void Init(Game game)
-	{
-		Game = game;
-	}
+//	private Game Game;
+//	public void Init(Game game)
+//	{
+//		Game = game;
+//	}
 
 	public void SpawnCharacterObject(HexCell parentCell, Character characterToSpawn)
 	{

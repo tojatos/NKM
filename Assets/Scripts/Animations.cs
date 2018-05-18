@@ -7,8 +7,8 @@ using UnityEngine;
 public class Animations : SingletonMonoBehaviour<Animations>
 {
 	private Game Game;
-	void Start() => Game = GameStarter.Instance.Game;
-	private bool IsAsterPlaying;
+	private void Start() => Game = GameStarter.Instance.Game;
+	private bool _isAsterPlaying;
 	public IEnumerator SharpenedForkEnumerator(Transform parentTransform, Transform targetTransform)
 	{
 		const float animationDuration = 0.5f;
@@ -38,16 +38,14 @@ public class Animations : SingletonMonoBehaviour<Animations>
 	}
 	private IEnumerator ItadakiNoKuraEnumerator(Transform parentTransform, Transform targetTransform)
 	{
-		if(IsAsterPlaying) yield return new WaitUntil(()=>!IsAsterPlaying);
+		if(_isAsterPlaying) yield return new WaitUntil(()=>!_isAsterPlaying);
 
-		var particleStartSize = 20f;
-		var animationDuration = 3.5f;
+		const float particleStartSize = 20f;
+		const float animationDuration = 3.5f;
 
-		var particle = Instantiate(Stuff.Particles.Single(o => o.name == "Itadaki No Kura"), targetTransform);
+		var particle = Instantiate(Stuff.Particles.Single(o => o.name == "Itadaki No Kura"), targetTransform.position, targetTransform.rotation);
 
-		var pos = particle.transform.localPosition;
-		pos.z = -20;
-		particle.transform.localPosition = pos;
+		particle.transform.localPosition += new Vector3(0,20,0);
 
 		var main = particle.GetComponent<ParticleSystem>().main;
 		main.startSize = new ParticleSystem.MinMaxCurve(particleStartSize);
@@ -63,7 +61,7 @@ public class Animations : SingletonMonoBehaviour<Animations>
 
 	private IEnumerator AsterYoEnumerator(Transform parentTransform, List<Transform> targetTransforms)
 	{
-		IsAsterPlaying = true;
+		_isAsterPlaying = true;
 		const float particleSecondSize = 10f;
 
 		var particlesWithTargets = new Dictionary<GameObject, Transform>();
@@ -90,7 +88,7 @@ public class Animations : SingletonMonoBehaviour<Animations>
 		yield return new WaitForSeconds(1.5f);
 
 		particlesWithTargets.ToList().ForEach(pair => Destroy(pair.Key));
-		IsAsterPlaying = false;
+		_isAsterPlaying = false;
 	}
 	public void AsterYo(Transform parentTransform, List<Transform> targetTransforms)
 	{
@@ -168,21 +166,23 @@ public class Animations : SingletonMonoBehaviour<Animations>
 	//}
 	private void Update()
 	{
+		if (!Input.GetKey(KeyCode.BackQuote)) return;
+		
 		if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
-			AsterYo(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters.Select(c => c.CharacterObject.transform)).ToList());
+			AsterYo(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters.Where(c => c.IsOnMap).Select(c => c.CharacterObject.transform)).ToList());
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha2))
 		{
-			ItadakiNoKura(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters).Where(c => c.Owner != Game.Active.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First());
+			ItadakiNoKura(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters).Where(c => c.IsOnMap).Where(c => c.Owner != Game.Active.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First());
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha4))
 		{
-			StartCoroutine(SharpenedForkEnumerator(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters).Where(c => c.Owner != Game.Active.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First()));
+			StartCoroutine(SharpenedForkEnumerator(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters).Where(c => c.IsOnMap).Where(c => c.Owner != Game.Active.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First()));
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha3))
 		{
-			StartCoroutine(SonzaiNoChikaraEnumerator(Game.Players.SelectMany(p => p.Characters.Select(c => c.CharacterObject.transform)).ToList()));
+			StartCoroutine(SonzaiNoChikaraEnumerator(Game.Players.SelectMany(p => p.Characters.Where(c => c.IsOnMap).Select(c => c.CharacterObject.transform)).ToList()));
 		}
 	}
 }

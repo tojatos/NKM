@@ -39,7 +39,9 @@ namespace Managers
 							Characters = new List<Character>
 							{
 								new Character("Sinon"),
-								new Character("Hecate")
+								new Character("Hecate"),
+//								new Character("Yasaka Mahiro"),
+								
 							}
 						},
 						new GamePlayer

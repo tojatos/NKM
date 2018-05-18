@@ -17,6 +17,7 @@ namespace MyGameObjects.MyGameObject_templates
 		}
 		public Character(string name)
 		{
+			//Define basic properties
 			IsOnMap = false;
 			TookActionInPhaseBefore = true;
 			HasUsedBasicAttackInPhaseBefore = false;
@@ -24,8 +25,14 @@ namespace MyGameObjects.MyGameObject_templates
 			HasUsedNormalAbilityInPhaseBefore = false;
 			HasUsedUltimatumAbilityInPhaseBefore = false;
 			Effects = new List<Effect>();
+			
+			//Add triggers to events
 			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
+			AfterBeingAttacked += RemoveIfDead;
+			OnEnemyKill += () => Abilities.ForEach(a => a.OnEnemyKill());
+			OnDamage += (targetCharacter, damageDealt) => Abilities.ForEach(a => a.OnDamage(targetCharacter, damageDealt));
 
+			//Define database properties
 			var characterData = GameData.Conn.GetCharacterData(name);
 
 			Name = name;
@@ -38,15 +45,19 @@ namespace MyGameObjects.MyGameObject_templates
 
 			Type = characterData.GetValue("FightType").ToFightType();
 
+			Description = characterData.GetValue("Description");
+			Quote = characterData.GetValue("Quote");
+			Author = characterData.GetValue("Author.Name");
+			
+			//Create and initiate abilites
 			var abilityClassNames = GameData.Conn.GetAbilityClassNames(name);
 			var abilityNamespaceName = "Abilities." + name.Replace(' ', '_');
 			var abilities = Spawner.Create(abilityNamespaceName, abilityClassNames).ToList().ConvertAll(x=>x as Ability);
 			InitiateAbilities(abilities);
 
-			Description = characterData.GetValue("Description");
-			Quote = characterData.GetValue("Quote");
-			Author = characterData.GetValue("Author.Name");
 		}
+
+		#region Properties
 		public readonly Stat HealthPoints;
 		public readonly Stat AttackPoints;
 		public readonly Stat BasicAttackRange;
@@ -83,10 +94,10 @@ namespace MyGameObjects.MyGameObject_templates
 
 		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive || Active.Turn.CharacterThatTookActionInTurn != null && Active.Turn.CharacterThatTookActionInTurn != this);
 
+		#endregion
 
 		public void BasicMove(HexCell targetCell)
 		{
-			//Active.Turn.CharacterThatTookActionInTurn = this;
 			HasUsedBasicMoveInPhaseBefore = true;
 			Move(targetCell);
 		}
@@ -174,7 +185,7 @@ namespace MyGameObjects.MyGameObject_templates
 				MessageLogger.Log(", ale nie zadaje żadnych obrażeń!");
 			}
 			attackedCharacter.AfterBeingAttacked();
-			OnDamage(attackedCharacter, damage);
+			OnDamage?.Invoke(attackedCharacter, damage);
 		}
 		private void Damage(ref int damage)
 		{
@@ -189,15 +200,21 @@ namespace MyGameObjects.MyGameObject_templates
 		{
 			if (IsAlive) return;
 
-			MessageLogger.Log(string.Format("{0} umiera!", this.FormattedFirstName()));
+			MessageLogger.Log($"{this.FormattedFirstName()} umiera!");
 			RemoveFromMap();
 			DeathTimer = 0;
 			if (Active.CharacterOnMap == this) Deselect();
 		}
-
-		private void AfterBeingAttacked()
+		public delegate void VoidDelegate();
+		public delegate void OnDamageDelegate(Character targetCharacter, int damageDealt);
+		public event VoidDelegate JustBeforeFirstAction;
+		private event VoidDelegate AfterBeingAttacked;
+		private event VoidDelegate OnEnemyKill;
+		private event OnDamageDelegate OnDamage;
+		public void InvokeJustBeforeFirstAction()
 		{
-			RemoveIfDead();
+		  	Debug.Log("JustBeforeFirstAction invoked");
+			JustBeforeFirstAction?.Invoke();
 		}
 		private void RemoveFromMap()
 		{
@@ -220,14 +237,14 @@ namespace MyGameObjects.MyGameObject_templates
 				ability.DamageModifier(targetCharacter, ref damage);
 			}
 		}
-		private void OnEnemyKill()
-		{
-			Abilities.ForEach(a => a.OnEnemyKill());
-		}
-		private void OnDamage(Character targetCharacter, int damageDealt)
-		{
-			Abilities.ForEach(a => a.OnDamage(targetCharacter, damageDealt));
-		}
+//		private void OnEnemyKill()
+//		{
+//			Abilities.ForEach(a => a.OnEnemyKill());
+//		}
+//		private void OnDamage(Character targetCharacter, int damageDealt)
+//		{
+//			Abilities.ForEach(a => a.OnDamage(targetCharacter, damageDealt));
+//		}
 		private void PrepareAttackAndMove()
 		{
 			Game.HexMapDrawer.RemoveAllHighlights();
@@ -368,12 +385,7 @@ namespace MyGameObjects.MyGameObject_templates
 				DeathTimer++;
 			}
 		}
-		public delegate void OnJustBeforeFirstAction();
-		public event OnJustBeforeFirstAction JustBeforeFirstAction;
-		public void InvokeJustBeforeFirstAction()
-		{
-			JustBeforeFirstAction?.Invoke();
-		}
+		
 		public void Select()
 		{
 			CharacterStats.Instance.UpdateCharacterStats(this);
