@@ -53,7 +53,7 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 			ZoomOrthoCamera(false);
 		}
 		//Drag camera
-		if (Input.GetMouseButton(0) && Math.Abs(_cam.orthographicSize - MaxZoom) > 0.01 && !Game.Active.IsPointerOverUIObject()) //drag only over a Game
+		if (Input.GetMouseButton(2) && Math.Abs(_cam.orthographicSize - MaxZoom) > 0.01 && !Game.Active.IsPointerOverUIObject()) //drag only over a Game
 		{
 			Diference = (_cam.ScreenToWorldPoint(Input.mousePosition)) - _cam.transform.position;
 			if (Drag == false)

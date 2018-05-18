@@ -39,20 +39,20 @@ namespace Managers
 							Characters = new List<Character>
 							{
 //								new Character("Sinon"),
-//								new Character("Hecate"),
+								new Character("Hecate"),
 								new Character("Roronoa Zoro"),
 								
 							}
 						},
-//						new GamePlayer
-//						{
-//							Name = "Maciej",
-//							Characters = new List<Character>
-//							{
-//								new Character("Aqua"),
-////								new Character("Dekomori Sanae")
-//							}
-//						}
+						new GamePlayer
+						{
+							Name = "Maciej",
+							Characters = new List<Character>
+							{
+								new Character("Aqua"),
+								new Character("Dekomori Sanae")
+							}
+						}
 					},
 				UIManager = UIManager.Instance
 			};

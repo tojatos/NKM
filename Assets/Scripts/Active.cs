@@ -197,14 +197,6 @@ public class Active
 	public void MakeAction(HexCell cell)
 	{
 		if (!HexCells.Contains(cell)) return;
-
-//		if (Game.Type == GameType.MultiplayerClient)
-//		{
-//			//			Game.Client.SendMakeActionMessage(Action, Ability, CharacterOnMap, cell.Coordinates.ToString());
-//						Game.Client.SendMakeActionMessage(cell);
-//
-//		}
-
 		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 		switch (Action)
 		{
@@ -228,16 +220,19 @@ public class Active
 				}
 				else
 				{
-					if (character.Abilities.Any(a => a.OverridesMove))
+					if (cell == MoveCells.LastOrDefault())
 					{
-						if (character.Abilities.Count(a => a.OverridesMove) > 1)
-							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać akcję ruchu!");
-
-						character.Abilities.Single(a => a.OverridesMove).Move(MoveCells);
-					}
-					else
-					{
-						character.BasicMove(MoveCells);
+                        if (character.Abilities.Any(a => a.OverridesMove))
+                                                                              {
+                                                                              if (character.Abilities.Count(a => a.OverridesMove) > 1)
+                                                                              throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać akcję ruchu!");
+                                                                              
+                                                                              character.Abilities.Single(a => a.OverridesMove).Move(MoveCells);
+                                                                              }
+                        else
+                        {
+                            character.BasicMove(MoveCells);
+                        }
 					}
 				}
 

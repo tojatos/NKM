@@ -97,7 +97,7 @@ namespace UIManagers
 			var enableableAbility = (EnableableAbility) ability;
 			var enableGameObject = new GameObject();
 			enableGameObject.transform.parent = button.transform;
-			enableGameObject.AddComponent<Image>().sprite = Stuff.Sprites.Icons.Find(s => s.name == (enableableAbility.IsEnabled ? "Ability Game.Active" : "Ability Inactive"));
+			enableGameObject.AddComponent<Image>().sprite = Stuff.Sprites.Icons.Find(s => s.name == (enableableAbility.IsEnabled ? "Ability Active" : "Ability Inactive"));
 
 			var rect = enableGameObject.GetComponent<RectTransform>();
 			rect.anchorMin = new Vector2(1, 1);
