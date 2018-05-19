@@ -133,6 +133,7 @@
     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Character.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Effect.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\EnableableAbility.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\HexCellEffect.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Item.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\MyGameObject.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Potion.cs" />

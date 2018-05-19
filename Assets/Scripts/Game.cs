@@ -96,6 +96,7 @@ public class Game
 
 	public void TouchCell(HexCell touchedCell)
 	{
+		Players.ForEach(p=>p.Characters.ForEach(c=>Debug.Log(c.ParentCell.Coordinates)));
 		
 		if (Active.MyGameObject != null)
 		{

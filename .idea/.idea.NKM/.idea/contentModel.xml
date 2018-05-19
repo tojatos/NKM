@@ -126,6 +126,7 @@
             <e p="Character.cs" t="Include" />
             <e p="Effect.cs" t="Include" />
             <e p="EnableableAbility.cs" t="Include" />
+            <e p="HexCellEffect.cs" t="Include" />
             <e p="Item.cs" t="Include" />
             <e p="MyGameObject.cs" t="Include" />
             <e p="Potion.cs" t="Include" />

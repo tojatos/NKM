@@ -183,7 +183,8 @@ namespace Hex
 								Game.Active.MoveCells.RemoveAt(i);
 							}
 						}
-						else if (Game.Active.CharacterOnMap.Speed.Value >= Game.Active.MoveCells.Count && lastMoveCell.GetNeighbors(1).Contains(cellPointed))
+						else if (Game.Active.CharacterOnMap.Speed.Value >= Game.Active.MoveCells.Count &&
+						         lastMoveCell.GetNeighbors(1).Contains(cellPointed) && cellPointed.CharacterOnCell == null)
 						{
 							Game.Active.AddMoveCell(cellPointed);
 

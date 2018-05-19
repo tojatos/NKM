@@ -17,6 +17,7 @@ namespace Hex
 		public GameObject HelpHighlight { get; set; }
 		public HexTileType Type { get; set; }
 		public Color Color;
+		public List<HexCellEffect> Effects = new List<HexCellEffect>();
 
 		private Game Game;
 		void Start()
