@@ -183,6 +183,7 @@ public class Active
 
 	public void Clean()
 	{
+		RemoveMoveCells();
 		if(AirSelection.IsEnabled) AirSelection.Disable();
 		Ability = null;
 		Action = Action.None;

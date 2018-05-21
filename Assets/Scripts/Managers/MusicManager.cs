@@ -17,7 +17,7 @@ namespace Managers
 		{
 			Music = gameObject.AddComponent<AudioSource>();
 			Music.playOnAwake = false;
-			Music.clip = Resources.Load("Audio/tobias_weber_-_The_Last_One_At_The_Bar_(Instrumental)") as AudioClip;
+//			Music.clip = Resources.Load("Audio/tobias_weber_-_The_Last_One_At_The_Bar_(Instrumental)") as AudioClip;
 			SceneManager.sceneLoaded += (scene, mode) => OnSceneLoaded();
 		}
 		private void OnSceneLoaded()
