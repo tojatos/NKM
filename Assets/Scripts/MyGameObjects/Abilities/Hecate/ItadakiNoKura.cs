@@ -42,7 +42,8 @@ ParentCharacter.Name, HealthPercent, CollectedEnergy
 			if (CollectedEnergyCharacters.Contains(targetCharacter)) return;
 			
 			CollectedEnergyCharacters.Add(targetCharacter);
-			Animations.Instance.ItadakiNoKura(ParentCharacter.CharacterObject.transform, targetCharacter.CharacterObject.transform);
+//			AnimationPlayer.Instance.ItadakiNoKura(ParentCharacter.CharacterObject.transform, targetCharacter.CharacterObject.transform);
+			AnimationPlayer.Add(new Animations.ItadakiNoKura(ParentCharacter.CharacterObject.transform, targetCharacter.CharacterObject.transform));
 		}
 	}
 }

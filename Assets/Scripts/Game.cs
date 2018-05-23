@@ -47,6 +47,7 @@ public class Game
 	/// <returns></returns>
 	public bool StartGame()
 	{
+
 		if (!IsInitialized) return false;
 
 		HexMapDrawer.CreateMap(_options.Map);

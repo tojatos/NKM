@@ -113,7 +113,7 @@ namespace Hex
 				}
 			}
 
-			Debug.LogError(cell.Coordinates + " nie ma zmapowanego typu!" + '\n' + "Red: " + ((Math.Abs(pixelColor.r - HexMap.ColorMappings[3].Color.r) < 0.001f) ? "Match" : "Nay") + " Green: " + ((Math.Abs(pixelColor.g - HexMap.ColorMappings[3].Color.g) < 0.001f) ? "Match" : "Nay") + " Blue: " + ((Math.Abs(pixelColor.b - HexMap.ColorMappings[3].Color.b) < 0.001f) ? "Match" : "Nay"));
+			Debug.LogError(cell.Coordinates + " nie ma zmapowanego typu!");// + '\n' + "Red: " + ((Math.Abs(pixelColor.r - HexMap.ColorMappings[3].Color.r) < 0.001f) ? "Match" : "Nay") + " Green: " + ((Math.Abs(pixelColor.g - HexMap.ColorMappings[3].Color.g) < 0.001f) ? "Match" : "Nay") + " Blue: " + ((Math.Abs(pixelColor.b - HexMap.ColorMappings[3].Color.b) < 0.001f) ? "Match" : "Nay"));
 
 		}
 

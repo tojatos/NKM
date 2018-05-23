@@ -10,10 +10,15 @@ namespace Editor
 	{
 		private void OnPreprocessTexture()
 		{
-			if (!assetPath.Contains("Sprites")) return;
-
 			var importer = assetImporter as TextureImporter;
+			if (assetPath.Contains("Sprites"))
+			{
 			ImportSprite(importer);
+			}
+			if (assetPath.Contains("Maps"))
+			{
+			ImportMap(importer);
+			}
 		}
 
 		private static void ImportSprite(TextureImporter importer)
@@ -24,6 +29,13 @@ namespace Editor
 			importer.wrapMode = TextureWrapMode.Clamp;
 			importer.mipmapEnabled = false;
 			importer.alphaIsTransparency = importer.DoesSourceTextureHaveAlpha();
+		}
+		
+		private static void ImportMap(TextureImporter importer)
+		{
+			importer.isReadable = true;
+			importer.filterMode = FilterMode.Point;
+			importer.spritePixelsPerUnit = 1;
 		}
 	}
 }

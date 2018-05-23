@@ -63,9 +63,9 @@ Zasięg: {3}	Czas odnowienia: {4}",
 		{
 			var dmg = AbilityDamage + AbilityMissingHealthPercentDamage / 100 *
 			          (targetCharacter.HealthPoints.BaseValue - targetCharacter.HealthPoints.Value);
-			Animations.Instance.StartCoroutine(
-				Animations.Instance.SharpenedForkEnumerator(ParentCharacter.CharacterObject.transform,
-					targetCharacter.CharacterObject.transform));
+//			AnimationPlayer.Instance.StartCoroutine(
+//				AnimationPlayer.Instance.SharpenedForkEnumerator(ParentCharacter.CharacterObject.transform,
+//					targetCharacter.CharacterObject.transform)); TODO: animation
 			ParentCharacter.Attack(targetCharacter, AttackType.Physical, (int)dmg);
 			NumberOfUses++;
 			if (NumberOfUses < 3)

@@ -56,7 +56,11 @@
     <Compile Include="Assets\Scripts\Active.cs" />
     <Compile Include="Assets\Scripts\AirSelection.cs" />
     <Compile Include="Assets\Scripts\AllMyGameObjects.cs" />
-    <Compile Include="Assets\Scripts\Animations.cs" />
+    <Compile Include="Assets\Scripts\AnimationPlayer.cs" />
+    <Compile Include="Assets\Scripts\Animations\AsterYo.cs" />
+    <Compile Include="Assets\Scripts\Animations\ItadakiNoKura.cs" />
+    <Compile Include="Assets\Scripts\Animations\MoveToPosition.cs" />
+    <Compile Include="Assets\Scripts\Animations\NkmAnimation.cs" />
     <Compile Include="Assets\Scripts\ColorToHighlight.cs" />
     <Compile Include="Assets\Scripts\ColorToTileType.cs" />
     <Compile Include="Assets\Scripts\CreatableSingletonMonoBehaviour.cs" />

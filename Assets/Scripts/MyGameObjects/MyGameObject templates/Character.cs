@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Animations;
 using Helpers;
 using Hex;
 using MyGameObjects.Abilities;
@@ -105,10 +106,11 @@ namespace MyGameObjects.MyGameObject_templates
 			ParentCell = targetCell;
 			targetCell.CharacterOnCell = this;
 			CharacterObject.transform.parent = targetCell.transform;
+			AnimationPlayer.Add(new MoveToPosition(CharacterObject.transform, CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f, false));
 
-			Animations.Instance.Move(CharacterObject.transform,
-				CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f);
 
+//			AnimationPlayer.Instance.Move(CharacterObject.transform,
+//				CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f);TODO:Animation
 		}
 		public void BasicMove(List<HexCell> cellPath)
 		{

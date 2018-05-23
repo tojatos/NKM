@@ -43,7 +43,8 @@ Zasięg: {3}	Czas odnowienia: {4}",
 				if (passiveAbility == null) throw new Exception("Pasywna umiejętność nie znaleziona!");
 
 				characters = characters.Where(c => c.Owner != ParentCharacter.Owner).ToList();
-				Animations.Instance.AsterYo(ParentCharacter.CharacterObject.transform, characters.Select(c => c.CharacterObject.transform).ToList());
+//				AnimationPlayer.Instance.AsterYo(ParentCharacter.CharacterObject.transform, characters.Select(c => c.CharacterObject.transform).ToList());
+				AnimationPlayer.Add(new Animations.AsterYo(ParentCharacter.CharacterObject.transform, characters.Select(c => c.CharacterObject.transform).ToList()));
 				characters.ForEach(targetCharacter =>
 				{
 					//if (targetCharacter.Owner == ParentCharacter.Owner) return;
