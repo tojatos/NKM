@@ -105,7 +105,7 @@ namespace MyGameObjects.MyGameObject_templates
 			ParentCell = targetCell;
 			targetCell.CharacterOnCell = this;
 			CharacterObject.transform.parent = targetCell.transform;
-			AnimationPlayer.Add(new MoveTo(CharacterObject.transform, CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 2.13f));
+			AnimationPlayer.Add(new MoveTo(CharacterObject.transform, CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f));
 		}
 		public void BasicMove(List<HexCell> cellPath)
 		{
