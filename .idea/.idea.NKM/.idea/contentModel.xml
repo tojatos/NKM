@@ -19,8 +19,16 @@
         <e p="Animations" t="Include">
           <e p="AsterYo.cs" t="Include" />
           <e p="ItadakiNoKura.cs" t="Include" />
-          <e p="MoveToPosition.cs" t="Include" />
+          <e p="MoveTo.cs" t="Include" />
           <e p="NkmAnimation.cs" t="Include" />
+          <e p="NkmAnimationPart.cs" t="Include" />
+          <e p="Parts" t="Include">
+            <e p="AsterYoFinish.cs" t="Include" />
+            <e p="AsterYoStart.cs" t="Include" />
+            <e p="ItadakiNoKuraFinish.cs" t="Include" />
+            <e p="ItadakiNoKuraStart.cs" t="Include" />
+            <e p="MoveToPosition.cs" t="Include" />
+          </e>
         </e>
         <e p="ColorToHighlight.cs" t="Include" />
         <e p="ColorToTileType.cs" t="Include" />

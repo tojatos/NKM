@@ -1,23 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Animations;
-using Managers;
-using NUnit.Framework;
-using UnityEngine;
 
 public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
 {
 	private static readonly Queue<NkmAnimation> AnimationsToPlay = new Queue<NkmAnimation>();
-	public static bool CanPlayNext = true;
-//	private bool _isAsterPlaying;
-//	private bool _isMovePlaying;
-
-	private void Play(NkmAnimation animationToPlay)
-	{
-		StartCoroutine(animationToPlay.Play());
-	}
-
+	private static bool _canPlayNext = true;
 	public static void Add(NkmAnimation animation)
 	{
 		AnimationsToPlay.Enqueue(animation);
@@ -49,76 +37,8 @@ public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
 //	{
 //		return new Vector3(position.x, position.y + y, position.z);
 //	}
-//	private IEnumerator ItadakiNoKuraEnumerator(Transform parentTransform, Transform targetTransform)
-//	{
-//		if(_isAsterPlaying) yield return new WaitUntil(()=>!_isAsterPlaying);
-//
-//		const float particleStartSize = 20f;
-//		const float animationDuration = 3.5f;
-//
-//		var particle = Instantiate(Stuff.Particles.Single(o => o.name == "Itadaki No Kura"), targetTransform.position, targetTransform.rotation);
-//
-//		particle.transform.localPosition += new Vector3(0,20,0);
-//
-//		var main = particle.GetComponent<ParticleSystem>().main;
-//		main.startSize = new ParticleSystem.MinMaxCurve(particleStartSize);
-//		StartCoroutine(MoveToPosition(particle.transform, parentTransform.position, animationDuration-1f));
-//		yield return new WaitForSeconds(animationDuration);
-//
-//		Destroy(particle);
-//	}
-//	public void ItadakiNoKura(Transform parentTransform, Transform targetTransform)
-//	{
-//		StartCoroutine(ItadakiNoKuraEnumerator(parentTransform, targetTransform));
-//	}
-
-//	public void Move(Transform parentTransform, Vector3 target, float animationSpeed) => StartCoroutine(MoveEnumerator(parentTransform, target, animationSpeed));
-//
-//	private IEnumerator MoveEnumerator(Transform parentTransform, Vector3 target, float animationSpeed)
-//	{
-//		if (_isMovePlaying) yield return new WaitUntil(() => !_isMovePlaying);
-//		_isMovePlaying = true;
-//		StartCoroutine(MoveToPosition(parentTransform, target, animationSpeed));
-//		yield return new WaitForSeconds(animationSpeed);
-//		_isMovePlaying = false;
-//	}
 
 
-//	private IEnumerator AsterYoEnumerator(Transform parentTransform, List<Transform> targetTransforms)
-//	{
-//		_isAsterPlaying = true;
-//		const float particleSecondSize = 10f;
-//
-//		var particlesWithTargets = new Dictionary<GameObject, Transform>();
-//		foreach (var t in targetTransforms)
-//		{
-//			var particle = Instantiate(Stuff.Particles.Single(o => o.name == "Aster Yo"), parentTransform);
-//
-//			particlesWithTargets.Add(particle, t);
-//			PositionParticle(particle);
-//		}
-//
-//		yield return new WaitForSeconds(2f);
-//
-//		foreach (var pair in particlesWithTargets)
-//		{
-//			var particle = pair.Key;
-//			var t = pair.Value;
-//
-//			var main = particle.GetComponent<ParticleSystem>().main;
-//			main.startSize = new ParticleSystem.MinMaxCurve(particleSecondSize);
-//			StartCoroutine(MoveToPosition(particle.transform, t.position, 0.1f));
-//		}
-//
-//		yield return new WaitForSeconds(1.5f);
-//
-//		particlesWithTargets.ToList().ForEach(pair => Destroy(pair.Key));
-//		_isAsterPlaying = false;
-//	}
-//	public void AsterYo(Transform parentTransform, List<Transform> targetTransforms)
-//	{
-//		StartCoroutine(AsterYoEnumerator(parentTransform, targetTransforms));
-//	}
 //	private IEnumerator SonzaiNoChikaraEnumerator(List<Transform> targetTransforms)
 //	{
 //		const float animationTime = 4f;
@@ -152,17 +72,6 @@ public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
 //
 //		particles.ForEach(Destroy);
 //	}
-	//public void SonzaiNoChikara(List<Transform> targetTransforms)
-	//{
-	//	StartCoroutine(SonzaiNoChikaraEnumerator(targetTransforms));
-	//	//StartCoroutine("SonzaiNoChikaraEnumerator", targetTransforms);
-	//}
-//	private static void PositionParticle(GameObject particle)
-//	{
-//		var pos = particle.transform.localPosition;
-//		pos.z = -20;
-//		particle.transform.localPosition = pos;
-//	}
 //	private static IEnumerator DecreaseRadiusToZero(ParticleSystem.ShapeModule shape, float time)
 //	{
 //		while (time > 0)
@@ -172,50 +81,21 @@ public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
 //			yield return new WaitForSeconds(0.2f);
 //		}
 //	}
-//	private static IEnumerator MoveToPosition(Transform trans, Vector3 endPos, float timeToMove)
-//	{
-//		var currentPos = trans.position;
-//		var t = 0f;
-//		while (t < 1)
-//		{
-//			t += Time.deltaTime / timeToMove;
-//			trans.position = Vector3.Lerp(currentPos, endPos, t);
-//			yield return null;
-//		}
-//	}
 
-	//public void Enqueue(IEnumerator routine)
-	//{
-	//	//StartCoroutine(animationName, args);
-	//	StartCoroutine()
-	//}
-	private void Update()
+	private async void Update()
 	{
-		if (AnimationsToPlay.Count <= 0 || !CanPlayNext) return;
-		
-		CanPlayNext = false;
+		if (AnimationsToPlay.Count <= 0 || !_canPlayNext) return;
+		await PlayNextAnimation();
+	}
+
+	/// <summary>
+	/// Dequeues and plays every animation part from the queue, consecutively.
+	/// </summary>
+	private static async Task PlayNextAnimation()
+	{
+		_canPlayNext = false;
 		var a = AnimationsToPlay.Dequeue();
-		Play(a);
-
-
-
-//		if (!Input.GetKey(KeyCode.BackQuote)) return;
-//		
-//		if (Input.GetKeyDown(KeyCode.Alpha1))
-//		{
-//			AsterYo(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters.Where(c => c.IsOnMap).Select(c => c.CharacterObject.transform)).ToList());
-//		}
-//		if (Input.GetKeyDown(KeyCode.Alpha2))
-//		{
-//			ItadakiNoKura(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters).Where(c => c.IsOnMap).Where(c => c.Owner != Game.Active.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First());
-//		}
-//		if (Input.GetKeyDown(KeyCode.Alpha4))
-//		{
-//			StartCoroutine(SharpenedForkEnumerator(Game.Active.CharacterOnMap.CharacterObject.transform, Game.Players.SelectMany(p => p.Characters).Where(c => c.IsOnMap).Where(c => c.Owner != Game.Active.CharacterOnMap.Owner).Select(c => c.CharacterObject.transform).First()));
-//		}
-//		if (Input.GetKeyDown(KeyCode.Alpha3))
-//		{
-//			StartCoroutine(SonzaiNoChikaraEnumerator(Game.Players.SelectMany(p => p.Characters.Where(c => c.IsOnMap).Select(c => c.CharacterObject.transform)).ToList()));
-//		}
+		await a.Play();
+		_canPlayNext = true;
 	}
 }

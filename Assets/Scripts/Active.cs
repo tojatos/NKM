@@ -17,7 +17,7 @@ public class Active
 		Phase = new Phase(game);
 		Turn = new Turn(game);
 		AirSelection = new AirSelection(game);
-		IsDebug = false;
+		IsDebug = true;
 	}
 
 	public Turn Turn { get; }

@@ -99,18 +99,13 @@ namespace MyGameObjects.MyGameObject_templates
 
 		#endregion
 
-
 		public void MoveTo(HexCell targetCell)
 		{
 			ParentCell.CharacterOnCell = null;
 			ParentCell = targetCell;
 			targetCell.CharacterOnCell = this;
 			CharacterObject.transform.parent = targetCell.transform;
-			AnimationPlayer.Add(new MoveToPosition(CharacterObject.transform, CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f, false));
-
-
-//			AnimationPlayer.Instance.Move(CharacterObject.transform,
-//				CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f);TODO:Animation
+			AnimationPlayer.Add(new MoveTo(CharacterObject.transform, CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 2.13f));
 		}
 		public void BasicMove(List<HexCell> cellPath)
 		{

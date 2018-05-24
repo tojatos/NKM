@@ -59,8 +59,14 @@
     <Compile Include="Assets\Scripts\AnimationPlayer.cs" />
     <Compile Include="Assets\Scripts\Animations\AsterYo.cs" />
     <Compile Include="Assets\Scripts\Animations\ItadakiNoKura.cs" />
-    <Compile Include="Assets\Scripts\Animations\MoveToPosition.cs" />
+    <Compile Include="Assets\Scripts\Animations\MoveTo.cs" />
     <Compile Include="Assets\Scripts\Animations\NkmAnimation.cs" />
+    <Compile Include="Assets\Scripts\Animations\NkmAnimationPart.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\AsterYoFinish.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\AsterYoStart.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraFinish.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraStart.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\MoveToPosition.cs" />
     <Compile Include="Assets\Scripts\ColorToHighlight.cs" />
     <Compile Include="Assets\Scripts\ColorToTileType.cs" />
     <Compile Include="Assets\Scripts\CreatableSingletonMonoBehaviour.cs" />

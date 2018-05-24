@@ -1,28 +1,35 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Helpers;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Animations
 {
+    /// <summary>
+    /// Create an animation from parts
+    ///
+    /// To create an animation, enqueue parts to AnimationParts queue.
+    /// </summary>
     public abstract class NkmAnimation  
     {
-        public abstract IEnumerator Play();
+        protected readonly Queue<NkmAnimationPart> AnimationParts = new Queue<NkmAnimationPart>();
+        
+        /// <summary>
+        /// Dequeues and plays every animation part from the queue, consecutively.
+        /// </summary>
+        public async Task Play()
+        {
+            while (AnimationParts.Count > 0)
+            {
+                NkmAnimationPart animationPart = AnimationParts.Dequeue();
+                AnimationPlayer.Instance.StartCoroutine(animationPart.Play());
+                Func<bool> isFinished = () => animationPart.IsFinished;
+                await isFinished.WaitToBeTrue();
+            }
+        }
 
-//        protected static IEnumerator MoveToPosition(Transform trans, Vector3 endPos, float timeToMove)
-//        {
-//            var currentPos = trans.position;
-//            var t = 0f;
-//            while (t < 1)
-//            {
-//                t += Time.deltaTime / timeToMove;
-//                trans.position = Vector3.Lerp(currentPos, endPos, t);
-//                yield return null;
-//            }
-//        }
-//        protected static void PositionParticle(GameObject particle)
-//	{
-//		var pos = particle.transform.localPosition;
-//		pos.z = -20;
-//		particle.transform.localPosition = pos;
-//	}
     }
 }
