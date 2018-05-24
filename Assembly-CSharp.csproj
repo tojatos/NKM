@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraFinish.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraStart.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\MoveToPosition.cs" />
+    <Compile Include="Assets\Scripts\Animations\TakeDamage.cs" />
     <Compile Include="Assets\Scripts\ColorToHighlight.cs" />
     <Compile Include="Assets\Scripts\ColorToTileType.cs" />
     <Compile Include="Assets\Scripts\CreatableSingletonMonoBehaviour.cs" />

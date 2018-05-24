@@ -34,6 +34,7 @@ namespace MyGameObjects.MyGameObject_templates
 			AfterBeingAttacked += RemoveIfDead;
 			OnEnemyKill += () => Abilities.ForEach(a => a.OnEnemyKill());
 			OnDamage += (targetCharacter, damageDealt) => Abilities.ForEach(a => a.OnDamage(targetCharacter, damageDealt));
+			OnDamage += (targetCharacter, damageDealt) => AnimationPlayer.Add(new TakeDamage(targetCharacter.CharacterObject.transform, damageDealt.ToString(), Color.red));
 
 			//Define database properties
 			var characterData = GameData.Conn.GetCharacterData(name);

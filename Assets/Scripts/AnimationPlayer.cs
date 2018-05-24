@@ -95,7 +95,8 @@ public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
 	{
 		_canPlayNext = false;
 		var a = AnimationsToPlay.Dequeue();
-		await a.Play();
+		if (a.AllowPlayingOtherAnimations) a.Play();
+		else await a.Play();
 		_canPlayNext = true;
 	}
 }

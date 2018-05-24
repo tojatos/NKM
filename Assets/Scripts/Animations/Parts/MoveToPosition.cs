@@ -10,7 +10,6 @@ namespace Animations.Parts
         
         private Vector3 _endPos;
         private readonly float _timeToMove;
-	    private readonly bool _allowPlayingOtherAnimations;
         
         public MoveToPosition(Transform trans, Vector3 endPos, float timeToMove)
         {

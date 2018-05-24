@@ -16,6 +16,7 @@ namespace Animations
     public abstract class NkmAnimation  
     {
         protected readonly Queue<NkmAnimationPart> AnimationParts = new Queue<NkmAnimationPart>();
+        public bool AllowPlayingOtherAnimations { get; protected set; }
         
         /// <summary>
         /// Dequeues and plays every animation part from the queue, consecutively.
