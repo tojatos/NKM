@@ -280,7 +280,7 @@ namespace MyGameObjects.MyGameObject_templates
 				return;
 			}
 
-			Active.HexCells.ForEach(c=>c.ToggleHighlight(c.CharacterOnCell!=null ? HiglightColor.Red: HiglightColor.WhiteOrange));
+			Active.HexCells.ForEach(c=>c.ToggleHighlight(c.CharacterOnCell!=null ? HiglightColor.Red: HiglightColor.GreenTransparent));
 			Active.RemoveMoveCells();
 			Active.MoveCells.Add(ParentCell);
 			

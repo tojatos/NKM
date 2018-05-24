@@ -7452,6 +7452,9 @@ MonoBehaviour:
   - HiglightColor: 2
     HiglightPrefab: {fileID: 1621994580443434, guid: ee7cbf6fa85dffe46b97763a5dd38223,
       type: 2}
+  - HiglightColor: 3
+    HiglightPrefab: {fileID: 1621994580443434, guid: fac747bf3b24446c699fc4e4b0a42db7,
+      type: 2}
 --- !u!1 &1807808037
 GameObject:
   m_ObjectHideFlags: 0

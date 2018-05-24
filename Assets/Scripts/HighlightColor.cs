@@ -2,5 +2,6 @@
 {
 	Black,
 	Red,
-	WhiteOrange
+	WhiteOrange,
+	GreenTransparent
 }
