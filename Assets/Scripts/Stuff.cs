@@ -14,6 +14,7 @@ public static class Stuff
 		Maps = new List<HexMap>(Resources.LoadAll<HexMap>("Maps"));
 		Particles = new List<GameObject>(Resources.LoadAll<GameObject>("Particles"));
 		Prefabs = new List<GameObject>(Resources.LoadAll<GameObject>("Blender"));
+		Prefabs.AddRange(Resources.LoadAll<GameObject>("Prefabs"));
 		Sprites = new AllSprites();
 	}
 }

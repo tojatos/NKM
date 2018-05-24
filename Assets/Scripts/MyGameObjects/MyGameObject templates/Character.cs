@@ -34,7 +34,9 @@ namespace MyGameObjects.MyGameObject_templates
 			AfterBeingAttacked += RemoveIfDead;
 			OnEnemyKill += () => Abilities.ForEach(a => a.OnEnemyKill());
 			OnDamage += (targetCharacter, damageDealt) => Abilities.ForEach(a => a.OnDamage(targetCharacter, damageDealt));
-			OnDamage += (targetCharacter, damageDealt) => AnimationPlayer.Add(new TakeDamage(targetCharacter.CharacterObject.transform, damageDealt.ToString(), Color.red));
+			OnDamage += (targetCharacter, damageDealt) => AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform, damageDealt.ToString(), Color.red));
+			OnDamage += (targetCharacter, damageDealt) => AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damageDealt.ToString(), Color.red));
+			OnHeal += (targetCharacter, valueHealed) => AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(), Color.blue));
 
 			//Define database properties
 			var characterData = GameData.Conn.GetCharacterData(name);
@@ -212,11 +214,12 @@ namespace MyGameObjects.MyGameObject_templates
 			if (Active.CharacterOnMap == this) Deselect();
 		}
 		public delegate void VoidDelegate();
-		public delegate void OnDamageDelegate(Character targetCharacter, int damageDealt);
+		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
 		public event VoidDelegate JustBeforeFirstAction;
 		private event VoidDelegate AfterBeingAttacked;
 		private event VoidDelegate OnEnemyKill;
-		private event OnDamageDelegate OnDamage;
+		private event CharacterIntDelegate OnDamage;
+		private event CharacterIntDelegate OnHeal;
 		public void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
 
 		private void RemoveFromMap()
@@ -359,6 +362,7 @@ namespace MyGameObjects.MyGameObject_templates
 			MessageLogger.Log(targetCharacter != this
 				? $"{this.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{diff}</b></color> punktów życia!"
 				: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{diff}</b></color> punktów życia!");
+			OnHeal?.Invoke(targetCharacter, diff);
 		}
 		public void OnPhaseFinish()
 		{

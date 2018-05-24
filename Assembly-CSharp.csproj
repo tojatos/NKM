@@ -64,10 +64,13 @@
     <Compile Include="Assets\Scripts\Animations\NkmAnimationPart.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\AsterYoFinish.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\AsterYoStart.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\FloatingInfoFinish.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\FloatingInfoStart.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraFinish.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraStart.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\MoveToPosition.cs" />
-    <Compile Include="Assets\Scripts\Animations\TakeDamage.cs" />
+    <Compile Include="Assets\Scripts\Animations\ShowInfo.cs" />
+    <Compile Include="Assets\Scripts\Animations\Tilt.cs" />
     <Compile Include="Assets\Scripts\ColorToHighlight.cs" />
     <Compile Include="Assets\Scripts\ColorToTileType.cs" />
     <Compile Include="Assets\Scripts\CreatableSingletonMonoBehaviour.cs" />
