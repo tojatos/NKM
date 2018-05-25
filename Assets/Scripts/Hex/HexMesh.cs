@@ -6,13 +6,12 @@ namespace Hex
 	[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 	public class HexMesh : MonoBehaviour
 	{
+		private Mesh _hexMesh;
+		private MeshCollider _meshCollider;
 
-		Mesh _hexMesh;
-		MeshCollider _meshCollider;
-
-		List<Vector3> _vertices;
-		List<int> _triangles;
-		List<Color> _colors;
+		private List<Vector3> _vertices;
+		private List<int> _triangles;
+		private List<Color> _colors;
 
 		public void Init()
 		{
@@ -42,9 +41,9 @@ namespace Hex
 			_meshCollider.sharedMesh = _hexMesh;
 		}
 
-		void Triangulate(HexCell cell)
+		private void Triangulate(HexCell cell)
 		{
-			var center = cell.transform.localPosition;
+			Vector3 center = cell.transform.localPosition;
 			for (var i = 0; i < 6; i++)
 			{
 				AddTriangle(
@@ -55,7 +54,8 @@ namespace Hex
 				AddTriangleColor(cell.Color);
 			}
 		}
-		void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
+
+		private void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
 		{
 			var vertexIndex = _vertices.Count;
 			_vertices.Add(v1);
@@ -66,7 +66,7 @@ namespace Hex
 			_triangles.Add(vertexIndex + 2);
 		}
 
-		void AddTriangleColor(Color color)
+		private void AddTriangleColor(Color color)
 		{
 			_colors.Add(color);
 			_colors.Add(color);

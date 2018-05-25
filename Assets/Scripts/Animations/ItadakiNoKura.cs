@@ -7,11 +7,11 @@ namespace Animations
     {
 	    public ItadakiNoKura(Transform parentTransform, Transform targetTransform)
 	    {
-		    ItadakiNoKuraStart s = new ItadakiNoKuraStart(parentTransform, targetTransform);
+		    var s = new ItadakiNoKuraStart(targetTransform);
 		    AnimationParts.Enqueue(s);
-		    GameObject particle = s._particle;
-		    MoveToPosition m = new MoveToPosition(particle.transform, parentTransform, 2.5f);
-		    m.IsFinished = true; //allow to play other animations
+		    GameObject particle = s.Particle;
+		    var m = new MoveToPosition(particle.transform, parentTransform, 2.5f) {IsFinished = true};
+		    //allow to play other animations
 		    AnimationParts.Enqueue(m);
 		    AnimationParts.Enqueue(new ItadakiNoKuraFinish(particle));
 		    

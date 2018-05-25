@@ -33,7 +33,7 @@ Zasięg: {3}	Czas odnowienia: {4}
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange, false, false);
 			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, AbilityRadius);
 		}

@@ -8,7 +8,7 @@ namespace MyGameObjects.Abilities.Dekomori_Sanae
 	{
 		private const int AbilityDamage = 25;
 		private const int AbilityRange = 6;
-		private bool WasUsedOnceThisTurn;
+		private bool _wasUsedOnceThisTurn;
 		public MjolnirDestinyImpulse()
 		{
 			Name = "Mjolnir Destiny Impulse";
@@ -32,7 +32,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.Add(ParentCharacter.ParentCell);
 			Active.Prepare(this, cellRange, false, false);
 			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, 1);
@@ -45,7 +45,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 				if (targetCharacter.Owner == Active.GamePlayer) return;
 
 				ParentCharacter.Attack(targetCharacter, AttackType.Physical, AbilityDamage);
-				WasUsedOnceThisTurn = true;
+				_wasUsedOnceThisTurn = true;
 				if (!targetCharacter.IsAlive)
 				{
 					killedSomething = true;
@@ -56,7 +56,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 		}
 		public override void Cancel()
 		{
-			if (WasUsedOnceThisTurn)
+			if (_wasUsedOnceThisTurn)
 			{
 				OnUseFinish();
 			}
@@ -68,7 +68,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 		public override void OnUseFinish()
 		{
 			base.OnUseFinish();
-			WasUsedOnceThisTurn = false;
+			_wasUsedOnceThisTurn = false;
 		}
 	}
 }

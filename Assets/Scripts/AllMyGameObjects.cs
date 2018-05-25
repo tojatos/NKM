@@ -2,52 +2,17 @@
 using Helpers;
 using MyGameObjects.MyGameObject_templates;
 
-/// <summary>
-/// Class that contains 
-/// </summary>
 public static class AllMyGameObjects
 {
-//	#region Singleton
-//	private static AllMyGameObjects _instance;
-//	public static AllMyGameObjects Instance => _instance ?? (_instance = new AllMyGameObjects());
-//	#endregion
 
-	public static readonly List<Character> Characters;// { get; private set; }
-	//public readonly List<Item> Items;// { get; private set; }
-	//public readonly List<Potion> Potions;// { get; private set; }
+
+	public static List<Character> Characters { get; }
 
 	static AllMyGameObjects()
 	{
 		Characters = new List<Character>();
 
-		var characterNames = GameData.Conn.GetCharacterNames();
+		List<string> characterNames = GameData.Conn.GetCharacterNames();
 		characterNames.ForEach(n=>Characters.Add(new Character(n)));
-//		{
-//			new Character("Asuna"),
-//			new Character("Dekomori Sanae"),
-//			new Character("Gilgamesh"),
-//			new Character("Roronoa Zoro"),
-//			new Character("Aqua"),
-//			new Character("Hanekawa Tsubasa"),
-//			new Character("Hecate"),
-//			new Character("YasakaMahiro"),
-//			new Character("Rem"),
-//			new Character("Sinon"),
-//		};
-		//Items = new List<Item>
-		//{
-		//	new GlassEye(),
-		//	new RikkiBand(),
-		//	new SachikoScissors(),
-		//	new Yoshinon(),
-		//	new YuzuruHeart()
-		//};
-		//Potions = new List<Potion>
-		//{
-		//	new FreezePotion(),
-		//	new HealthPotion(),
-		//	new InvisibilityPotion(),
-		//	new OraclePotion()
-		//};
 	}
 }

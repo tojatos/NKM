@@ -18,7 +18,6 @@
         <e p="AnimationPlayer.cs" t="Include" />
         <e p="Animations" t="Include">
           <e p="AsterYo.cs" t="Include" />
-          <e p="Heal.cs" t="Include" />
           <e p="ItadakiNoKura.cs" t="Include" />
           <e p="MoveTo.cs" t="Include" />
           <e p="NkmAnimation.cs" t="Include" />
@@ -34,7 +33,6 @@
           </e>
           <e p="ShowInfo.cs" t="Include" />
           <e p="Tilt.cs" t="Include" />
-          <e p="TiltAndShowInfo.cs" t="Include" />
         </e>
         <e p="ColorToHighlight.cs" t="Include" />
         <e p="ColorToTileType.cs" t="Include" />
@@ -45,10 +43,8 @@
         <e p="GamePlayer.cs" t="Include" />
         <e p="Helpers" t="Include">
           <e p="AsyncExtensions.cs" t="Include" />
-          <e p="JsonExtensions.cs" t="Include" />
           <e p="MyGameObjectExtensions.cs" t="Include" />
           <e p="SqliteExtensions.cs" t="Include" />
-          <e p="SynchronizableExtensions.cs" t="Include" />
           <e p="TooltipExtentions.cs" t="Include" />
           <e p="UnityGameObjectExtentions.cs" t="Include" />
         </e>
@@ -82,6 +78,11 @@
               <e p="Dash.cs" t="Include" />
               <e p="LambentLight.cs" t="Include" />
               <e p="SwordDance.cs" t="Include" />
+            </e>
+            <e p="Crona" t="Include">
+              <e p="BlackBlood.cs" t="Include" />
+              <e p="Infection.cs" t="Include" />
+              <e p="ScreechAlpha.cs" t="Include" />
             </e>
             <e p="Dekomori Sanae" t="Include">
               <e p="MjolnirDestinyImpulse.cs" t="Include" />
@@ -128,6 +129,7 @@
           </e>
           <e p="Effects" t="Include">
             <e p="BasicAttackInability.cs" t="Include" />
+            <e p="BlackBlood.cs" t="Include" />
             <e p="DamageOverTime.cs" t="Include" />
             <e p="HPDrain.cs" t="Include" />
             <e p="MovementDisability.cs" t="Include" />
@@ -177,7 +179,6 @@
           <e p="CharacterStats.cs" t="Include" />
           <e p="UIManager.cs" t="Include" />
         </e>
-        <e p="Validator.cs" t="Include" />
       </e>
       <e p="Assets/VertexColors.shader" t="Include" />
       <e p="Assets/packages" t="Include">

@@ -33,7 +33,7 @@ namespace UIManagers
 
 		private void SetAttackHelpTriggers()
 		{
-			var trigger = RangeObject.GetComponent<EventTrigger>() ?? RangeObject.AddComponent<EventTrigger>();
+			EventTrigger trigger = RangeObject.GetComponent<EventTrigger>() ?? RangeObject.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
 			entry.callback.AddListener((eventData) => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetBasicAttackCells());
 			trigger.triggers.Add(entry);
@@ -44,7 +44,7 @@ namespace UIManagers
 		}
 		private void SetMoveHelpTriggers()
 		{
-			var trigger = SpeedObject.GetComponent<EventTrigger>() ?? SpeedObject.AddComponent<EventTrigger>();
+			EventTrigger trigger = SpeedObject.GetComponent<EventTrigger>() ?? SpeedObject.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
 			entry.callback.AddListener((eventData) => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetMoveCells());
 			trigger.triggers.Add(entry);
@@ -82,7 +82,7 @@ namespace UIManagers
 
 		private string GetStatText(Character character, StatType type)
 		{
-			var stat = character.GetStat(type);
+			Stat stat = character.GetStat(type);
 			var bonus = stat.Value - stat.BaseValue;
 			var bonusText = bonus > 0
 				? "<color=green> + " + bonus + "</color>"

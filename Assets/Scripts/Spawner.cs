@@ -10,16 +10,11 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 {
 	public GameObject CharacterPrefab;
 	public ColorToHighlight[] HighlightColorMappings;
-//	private Game Game;
-//	public void Init(Game game)
-//	{
-//		Game = game;
-//	}
 
-	public void SpawnCharacterObject(HexCell parentCell, Character characterToSpawn)
+	private void SpawnCharacterObject(HexCell parentCell, Character characterToSpawn)
 	{
-		var characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterToSpawn.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
-		var characterObject = Instantiate(CharacterPrefab, parentCell.transform);
+		Sprite characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterToSpawn.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
+		GameObject characterObject = Instantiate(CharacterPrefab, parentCell.transform);
 		characterObject.name = characterToSpawn.Name;
 		characterObject.transform.Find("Character Sprite").GetComponent<SpriteRenderer>().sprite = characterSprite;
 		characterObject.transform.Find("Border").GetComponent<SpriteRenderer>().color = characterToSpawn.Owner.GetColor();
@@ -31,32 +26,31 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	}
 	public void SpawnHighlightCellObject(HexCell parentCell, HiglightColor highlightColor)
 	{
-		foreach (var highlightColorMapping in HighlightColorMappings)
+		foreach (ColorToHighlight highlightColorMapping in HighlightColorMappings)
 		{
 			if (highlightColorMapping.HiglightColor != highlightColor) continue;
 
-			var highlightObject = Instantiate(highlightColorMapping.HiglightPrefab, parentCell.transform);
+			GameObject highlightObject = Instantiate(highlightColorMapping.HiglightPrefab, parentCell.transform);
 			highlightObject.transform.localPosition = new Vector3(0, 11, 0);
 			parentCell.Highlight = highlightObject;
 		}
 	}
 	public void SpawnHelpHighlightCellObject(HexCell parentCell, HiglightColor highlightColor)
 	{
-		foreach (var highlightColorMapping in HighlightColorMappings)
+		foreach (ColorToHighlight highlightColorMapping in HighlightColorMappings)
 		{
 			if (highlightColorMapping.HiglightColor != highlightColor) continue;
 
-			var highlightObject = Instantiate(highlightColorMapping.HiglightPrefab, parentCell.transform);
+			GameObject highlightObject = Instantiate(highlightColorMapping.HiglightPrefab, parentCell.transform);
 			highlightObject.transform.localPosition = new Vector3(0, 12, 0);
 			parentCell.HelpHighlight = highlightObject;
 		}
 	}
 
-	public static MyGameObject Create(string namespaceName, string className)
+	private static MyGameObject Create(string namespaceName, string className)
 	{
 		var typeName = "MyGameObjects." + namespaceName + "." + className;
-//		Debug.Log(typeName);
-		var type = Type.GetType(typeName);
+		Type type = Type.GetType(typeName);
 		if (type == null) 	throw new ArgumentNullException();
 
 		var createdMyGameObject = Activator.CreateInstance(type) as MyGameObject;
@@ -69,7 +63,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	}
 	public void TrySpawning(HexCell cell, Character characterToSpawn)
 	{
-		var playerSpawnpointType = HexMapDrawer.Instance.HexMap.SpawnPoints[characterToSpawn.Owner.GetIndex()];
+		HexTileType playerSpawnpointType = HexMapDrawer.Instance.HexMap.SpawnPoints[characterToSpawn.Owner.GetIndex()];
 		if (cell.Type != playerSpawnpointType)
 		{
 			throw new Exception("To nie twój spawn!");
@@ -80,7 +74,5 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		}
 
 		SpawnCharacterObject(cell, characterToSpawn);
-//		if (Game.Type == GameType.MultiplayerServer) Game.Server.SendSpawnCharacterMessege(cell, characterToSpawn);
-
 	}
 }

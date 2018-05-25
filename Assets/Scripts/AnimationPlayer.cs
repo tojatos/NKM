@@ -94,8 +94,10 @@ public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
 	private static async Task PlayNextAnimation()
 	{
 		_canPlayNext = false;
-		var a = AnimationsToPlay.Dequeue();
+		NkmAnimation a = AnimationsToPlay.Dequeue();
+#pragma warning disable 4014
 		if (a.AllowPlayingOtherAnimations) a.Play();
+#pragma warning restore 4014
 		else await a.Play();
 		_canPlayNext = true;
 	}

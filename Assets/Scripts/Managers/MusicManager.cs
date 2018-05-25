@@ -8,10 +8,10 @@ namespace Managers
 	public class MusicManager : CreatableSingletonMonoBehaviour<MusicManager>
 	{
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-		static void DDOL() => DontDestroyOnLoad(Instance);
+		private static void DDOL() => DontDestroyOnLoad(Instance);
 
 		public AudioSource Music;
-		private GameObject MuteButton;
+		private GameObject _muteButton;
 
 		private void Awake()
 		{
@@ -22,11 +22,11 @@ namespace Managers
 		}
 		private void OnSceneLoaded()
 		{
-			MuteButton = GameObject.Find("Mute Button");
-			if (MuteButton == null) return;
+			_muteButton = GameObject.Find("Mute Button");
+			if (_muteButton == null) return;
 
-			MuteButton.GetComponent<Image>().sprite = SessionSettings.Instance.IsMuted ? Stuff.Sprites.Icons.Find(i => i.name == "mute") : Stuff.Sprites.Icons.Find(i => i.name == "unmute");
-			MuteButton.GetComponent<Button>().onClick.AddListener(ToggleMute);
+			_muteButton.GetComponent<Image>().sprite = SessionSettings.Instance.IsMuted ? Stuff.Sprites.Icons.Find(i => i.name == "mute") : Stuff.Sprites.Icons.Find(i => i.name == "unmute");
+			_muteButton.GetComponent<Button>().onClick.AddListener(ToggleMute);
 		}
 		private void Start()
 		{
@@ -36,8 +36,8 @@ namespace Managers
 			}
 			else
 			{
-				if(MuteButton!=null)
-					MuteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.Find(i => i.name == "mute");
+				if(_muteButton!=null)
+					_muteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.Find(i => i.name == "mute");
 			}
 		}
 
@@ -45,12 +45,12 @@ namespace Managers
 		{
 			if (SessionSettings.Instance.IsMuted)
 			{
-				MuteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "unmute");
+				_muteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "unmute");
 				Music.Play();
 			}
 			else
 			{
-				MuteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "mute");
+				_muteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "mute");
 				Music.Stop();
 			}
 			SessionSettings.Instance.IsMuted = !SessionSettings.Instance.IsMuted;

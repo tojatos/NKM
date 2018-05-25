@@ -25,7 +25,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			if (cellRange.Count == 0)
 			{
@@ -33,8 +33,8 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 			}
 			if(!cellRange.Any(c =>
 			{
-				var direction = ParentCharacter.ParentCell.GetDirection(c);
-				var moveCell = c.GetCell(direction, 2);
+				HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);
+				HexCell moveCell = c.GetCell(direction, 2);
 				return moveCell != null && moveCell.Type != HexTileType.Wall;
 			}))
 			{
@@ -43,7 +43,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(Action.UseAbility, cellRange);
 			try
@@ -55,8 +55,8 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 
 				cellRange.ForEach(c =>
 				{
-					var direction = ParentCharacter.ParentCell.GetDirection(c);
-					var moveCell = c.GetCell(direction, 2);
+					HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);
+					HexCell moveCell = c.GetCell(direction, 2);
 					if (moveCell == null || moveCell.Type == HexTileType.Wall)
 					{
 						throw new Exception("Nie ma gdzie się ruszyć!");
@@ -76,8 +76,8 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		}
 		public override void Use(Character targetCharacter)
 		{
-			var direction = ParentCharacter.ParentCell.GetDirection(targetCharacter.ParentCell);
-			var moveCell = targetCharacter.ParentCell.GetCell(direction, 2);
+			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCharacter.ParentCell);
+			HexCell moveCell = targetCharacter.ParentCell.GetCell(direction, 2);
 			ParentCharacter.Attack(targetCharacter, AttackType.Physical, ParentCharacter.AttackPoints.Value);
 			ParentCharacter.MoveTo(moveCell);
 			Active.PlayAudio("giri");

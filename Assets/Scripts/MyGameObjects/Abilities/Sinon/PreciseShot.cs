@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Helpers;
+using Hex;
 using MyGameObjects.MyGameObject_templates;
 
 namespace MyGameObjects.Abilities.Sinon
@@ -22,7 +24,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 			cellRange.RemoveNonEnemies();
 			if (cellRange.Count == 0)
 			{
@@ -31,7 +33,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		}
 		protected override void Use()
 		{
-			var cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;

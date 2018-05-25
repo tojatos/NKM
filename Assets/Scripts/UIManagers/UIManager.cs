@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Helpers;
-using Hex;
 using JetBrains.Annotations;
 using Managers;
 using MyGameObjects.MyGameObject_templates;
@@ -88,7 +87,7 @@ namespace UIManagers
 		[UsedImplicitly]
 		public void OpenUseCharacterSelect()
 		{
-			var characters = new List<MyGameObject>(Game.Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
+			List<MyGameObject> characters = new List<MyGameObject>(Game.Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
 			SpriteSelect.Open(characters, FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
 		}
 		private void FinishUseCharacter()
@@ -109,7 +108,7 @@ namespace UIManagers
 			{
 				if (ForcePlacingChampions && !SpriteSelect.IsOpened && Game.Active.MyGameObject == null && Game.Active.GamePlayer.HasFinishedSelecting)
 				{
-					var characters = new List<MyGameObject>(Game.Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
+					List<MyGameObject> characters = new List<MyGameObject>(Game.Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
 					SpriteSelect.Open(characters, FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
 			}
 			}

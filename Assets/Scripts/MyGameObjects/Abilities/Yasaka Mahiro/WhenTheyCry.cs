@@ -6,12 +6,12 @@ namespace MyGameObjects.Abilities.Yasaka_Mahiro
 	public class WhenTheyCry : Ability
 	{
 		private const int AdditionalDamagePercent = 25;
-		private readonly List<Character> DamagedCharacters;
+		private readonly List<Character> _damagedCharacters;
 		public WhenTheyCry()
 		{
 			Name = "When They Cry";
 			Type = AbilityType.Passive;
-			DamagedCharacters = new List<Character>();
+			_damagedCharacters = new List<Character>();
 		}
 		public override string GetDescription()
 		{
@@ -19,7 +19,7 @@ namespace MyGameObjects.Abilities.Yasaka_Mahiro
 		}
 		public override void DamageModifier(Character targetCharacter, ref int damage)
 		{
-			if (DamagedCharacters.Contains(targetCharacter))
+			if (_damagedCharacters.Contains(targetCharacter))
 			{
 				damage += damage * AdditionalDamagePercent / 100;
 			}
@@ -27,7 +27,7 @@ namespace MyGameObjects.Abilities.Yasaka_Mahiro
 
 		public override void OnDamage(Character targetCharacter, int damageDealt)
 		{
-			if(targetCharacter.Owner!=Active.GamePlayer&&!DamagedCharacters.Contains(targetCharacter)) DamagedCharacters.Add(targetCharacter);
+			if(targetCharacter.Owner!=Active.GamePlayer&&!_damagedCharacters.Contains(targetCharacter)) _damagedCharacters.Add(targetCharacter);
 		}
 	}
 }

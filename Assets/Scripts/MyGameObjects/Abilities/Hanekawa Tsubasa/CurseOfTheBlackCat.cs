@@ -35,7 +35,7 @@ Zasięg: {4} Czas odnowienia: {5}",
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			if (cellRange.Count == 0)
 			{
@@ -44,7 +44,7 @@ Zasięg: {4} Czas odnowienia: {5}",
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			Active.Prepare(this, cellRange);
 		}

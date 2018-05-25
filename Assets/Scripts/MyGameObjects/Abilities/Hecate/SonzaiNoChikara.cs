@@ -30,7 +30,7 @@ Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdziela
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange);
 			Active.MakeAction(cellRange);
 		}
@@ -39,10 +39,10 @@ Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdziela
 		{
 			try
 			{
-				var passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();
+				ItadakiNoKura passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();
 				if (passiveAbility == null) throw new Exception("Pasywna umiejętność nie znaleziona!");
 
-				var enemyCharactersOnMap = Game.Players.Where(p => p != Active.GamePlayer).SelectMany(p => p.Characters).Where(c => c.IsOnMap).ToList();
+				List<Character> enemyCharactersOnMap = Game.Players.Where(p => p != Active.GamePlayer).SelectMany(p => p.Characters).Where(c => c.IsOnMap).ToList();
 				var damage = passiveAbility.CollectedEnergy / enemyCharactersOnMap.Count;
 				//Animations.Instance.SonzaiNoChikara(enemyCharactersOnMap.Select(c=>c.CharacterObject.transform).ToList());
 				enemyCharactersOnMap.ForEach(c => ParentCharacter.Attack(c, AttackType.Magical, damage));

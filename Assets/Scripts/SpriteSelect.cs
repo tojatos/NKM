@@ -29,12 +29,12 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 		FinishSelectingButton.GetComponentInChildren<Text>().text = finishButtonText;
 
 		//select item if is the only one
-		var spritesTransform = gameObject.transform.Find("Sprites").transform;
+		Transform spritesTransform = gameObject.transform.Find("Sprites").transform;
 		if (_objectsToFill.Count == 1) spritesTransform.GetComponentsInChildren<Button>()[spritesTransform.childCount-1].onClick.Invoke(); //get last button, because the others are not removed yet for some reason
 	}
 	private void SpawnSpriteObject(MyGameObject o)
 	{
-		var spriteObject = Instantiate(SpriteObjectPrefab, gameObject.transform.Find("Sprites").transform);
+		GameObject spriteObject = Instantiate(SpriteObjectPrefab, gameObject.transform.Find("Sprites").transform);
 		var button = spriteObject.GetComponent<Button>();
 		button.onClick.AddListener(delegate
 		{

@@ -12,12 +12,11 @@ namespace MyGameObjects.MyGameObject_templates
 			if (Active.CharacterOnMap == ParentCharacter) CharacterEffects.Instance.UpdateButtons();
 			ParentCharacter.JustBeforeFirstAction += () =>{ if (CurrentCooldown > 0) CurrentCooldown--; };
 			Active.Turn.TurnFinished += () => {
-				if (CurrentCooldown == 0)
-				{
-					ParentCharacter.Effects.Remove(this);
-					OnRemove?.Invoke();
-					if (Active.CharacterOnMap == ParentCharacter) CharacterEffects.Instance.UpdateButtons();
-				} };
+				if (CurrentCooldown != 0) return;
+				ParentCharacter.Effects.Remove(this);
+				OnRemove?.Invoke();
+				if (Active.CharacterOnMap == ParentCharacter) CharacterEffects.Instance.UpdateButtons();
+			};
 
 		}
 		public delegate void OnRemoveHandler();

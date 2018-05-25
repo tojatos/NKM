@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Animations.Parts;
+﻿using Animations.Parts;
 using UnityEngine;
 
 namespace Animations

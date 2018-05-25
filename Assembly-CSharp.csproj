@@ -79,10 +79,8 @@
     <Compile Include="Assets\Scripts\GameOptions.cs" />
     <Compile Include="Assets\Scripts\GamePlayer.cs" />
     <Compile Include="Assets\Scripts\Helpers\AsyncExtensions.cs" />
-    <Compile Include="Assets\Scripts\Helpers\JsonExtensions.cs" />
     <Compile Include="Assets\Scripts\Helpers\MyGameObjectExtensions.cs" />
     <Compile Include="Assets\Scripts\Helpers\SqliteExtensions.cs" />
-    <Compile Include="Assets\Scripts\Helpers\SynchronizableExtensions.cs" />
     <Compile Include="Assets\Scripts\Helpers\TooltipExtentions.cs" />
     <Compile Include="Assets\Scripts\Helpers\UnityGameObjectExtentions.cs" />
     <Compile Include="Assets\Scripts\Hex\HexCell.cs" />
@@ -106,6 +104,9 @@
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\Dash.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\LambentLight.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\SwordDance.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\BlackBlood.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\Infection.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\ScreechAlpha.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Dekomori Sanae\MjolnirDestinyImpulse.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Dekomori Sanae\MjolnirHammer.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Dekomori Sanae\WickedEyesServant.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Yasaka Mahiro\TerrorOfTheUniverse.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Yasaka Mahiro\WhenTheyCry.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\BasicAttackInability.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\BlackBlood.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\DamageOverTime.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\HPDrain.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\MovementDisability.cs" />
@@ -172,7 +174,6 @@
     <Compile Include="Assets\Scripts\UIManagers\CharacterInfo.cs" />
     <Compile Include="Assets\Scripts\UIManagers\CharacterStats.cs" />
     <Compile Include="Assets\Scripts\UIManagers\UIManager.cs" />
-    <Compile Include="Assets\Scripts\Validator.cs" />
     <None Include="Assets\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.xml" />
     <None Include="Assets\VertexColors.shader" />
     <Reference Include="UnityEngine.UI">

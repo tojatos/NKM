@@ -14,7 +14,7 @@ namespace Helpers
 
 		public static IEnumerable<string> GetClassNames<T>(this List<T> list)
 		{
-			var classNames = new List<string>();
+			List<string> classNames = new List<string>();
 			list.ForEach(l => classNames.Add(l.GetType().Name));
 			return classNames;
 		}
@@ -29,7 +29,7 @@ namespace Helpers
 		/// <summary>
 		/// Leaves only cells with friendly characters
 		/// </summary>
-		public static void RemoveNonFriends(this List<HexCell> cellRange)
+		public static void RemoveNonFriends(this List<HexCell> cellRange) //TODO:  there should be a Player parameter, to define who is a friend
 		{
 			cellRange.RemoveAll(cell => cell.CharacterOnCell == null || cell.CharacterOnCell.Owner != GameStarter.Instance.Game.Active.GamePlayer);
 		}

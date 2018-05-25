@@ -14,9 +14,9 @@ public class Game
 	private GameOptions _options;
 
 	public List<GamePlayer> Players;
-	public Active Active;
+	public readonly Active Active;
 	public UIManager UIManager;
-	public Spawner Spawner;
+	private Spawner _spawner;
 	public HexMapDrawer HexMapDrawer;
 
 	public bool IsInitialized;
@@ -32,7 +32,7 @@ public class Game
 		Players = new List<GamePlayer>(gameOptions.Players);
 		UIManager = _options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
-		Spawner = Spawner.Instance;
+		_spawner = Spawner.Instance;
 //		Spawner.Init(this);
 
 //		Players.ForEach(p => Debug.Log(p.Characters.Count));
@@ -69,12 +69,13 @@ public class Game
 	{
 		while (true)
 		{
-			foreach (var player in Players) await TakeTurn(player);
+			foreach (GamePlayer player in Players) await TakeTurn(player);
 
 			if (!IsEveryCharacterPlacedInTheFirstPhase) continue;
 
 			if (NoCharacterOnMapCanTakeAction) Active.Phase.Finish();
 		}
+		// ReSharper disable once FunctionNeverReturns
 	}
 
 	private bool NoCharacterOnMapCanTakeAction => Players.All(p => p.Characters.Where(c => c.IsOnMap).All(c => !c.CanTakeAction));
@@ -90,15 +91,8 @@ public class Game
 		await isTurnDone.WaitToBeTrue();
 	}
 
-	public void TryTouchingCell(HexCell touchedCell)
-	{
-		TouchCell(touchedCell);
-	}
-
 	public void TouchCell(HexCell touchedCell)
 	{
-//		Players.ForEach(p=>p.Characters.ForEach(c=>Debug.Log(c.ParentCell.Coordinates)));
-		
 		if (Active.MyGameObject != null)
 		{
 			UseMyGameObject(touchedCell);
@@ -122,7 +116,6 @@ public class Game
 			if (touchedCell.CharacterOnCell != null)
 			{
 				touchedCell.CharacterOnCell.Select();
-//				Debug.Log(touchedCell.CharacterOnCell.Guid);
 			}
 			else
 			{
@@ -132,11 +125,8 @@ public class Game
 		}
 	}
 
-	public void UseMyGameObject(HexCell cell)
+	private void UseMyGameObject(HexCell cell)
 	{
-//		var myGameObjectType = Active.MyGameObject.GetType().BaseType;
-//		Debug.Log(myGameObjectType);
-
 		if (Active.MyGameObject.GetType() == typeof(Character))
 		{
 			if (Active.Turn.WasCharacterPlaced)
@@ -147,7 +137,7 @@ public class Game
 			var activeCharacter = Active.MyGameObject as Character;
 			try
 			{
-				Spawner.TrySpawning(cell, activeCharacter);
+				_spawner.TrySpawning(cell, activeCharacter);
 			}
 			catch (Exception e)
 			{
@@ -178,7 +168,7 @@ public class Game
 	/// - Players.Characters
 	/// - Active.Phase
 	/// </summary>
-	public void PlaceAllCharactersOnSpawns()
+	private void PlaceAllCharactersOnSpawns()
 	{
 		Players.ForEach(p => p.Characters.ForEach(c => TrySpawning(p, c)));
 		if(Active.Phase.Number==0) Active.Phase.Finish();
@@ -186,7 +176,7 @@ public class Game
 
 	private static void TrySpawning(GamePlayer p, Character c)
 	{
-		var spawnPoint = p.GetSpawnPoints().FirstOrDefault(cell => cell.CharacterOnCell == null);
+		HexCell spawnPoint = p.GetSpawnPoints().FirstOrDefault(cell => cell.CharacterOnCell == null);
 		if (spawnPoint == null) return;
 
 		Spawner.Instance.TrySpawning(spawnPoint, c);

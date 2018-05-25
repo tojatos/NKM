@@ -41,7 +41,7 @@ Czas odnowienia: {Cooldown}";
 			SpriteSelect.Instance.Open(Active.GamePlayer.Characters.Where(c => !c.IsAlive && c.DeathTimer <= 1),
 				() =>
 				{
-					var selectedObj = SpriteSelect.Instance.SelectedObjects;
+					List<MyGameObject> selectedObj = SpriteSelect.Instance.SelectedObjects;
 					if (selectedObj.Count != 1) return;
 
 					Use((Character)selectedObj[0]);

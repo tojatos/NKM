@@ -11,19 +11,19 @@ namespace MyGameObjects.Abilities.Yasaka_Mahiro
 		private const int AbilityDamage = 5;
 		private const float AbilityMissingHealthPercentDamage = 20;
 		private const int AbilityRange = 7;
-		private int NumberOfUses;
+		private int _numberOfUses;
 		public SharpenedForks()
 		{
 			Name = "Sharpened Forks";
 			Cooldown = 3;
 			CurrentCooldown = 0;
 			Type = AbilityType.Normal;
-			NumberOfUses = 0;
+			_numberOfUses = 0;
 		}
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			if (cellRange.Count == 0)
 			{
@@ -44,12 +44,12 @@ Zasięg: {3}	Czas odnowienia: {4}",
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
 
-			if (NumberOfUses != 0)
+			if (_numberOfUses != 0)
 			{
 				OnUseFinish();
 			}
@@ -67,8 +67,8 @@ Zasięg: {3}	Czas odnowienia: {4}",
 //				AnimationPlayer.Instance.SharpenedForkEnumerator(ParentCharacter.CharacterObject.transform,
 //					targetCharacter.CharacterObject.transform)); TODO: animation
 			ParentCharacter.Attack(targetCharacter, AttackType.Physical, (int)dmg);
-			NumberOfUses++;
-			if (NumberOfUses < 3)
+			_numberOfUses++;
+			if (_numberOfUses < 3)
 			{
 				Use();
 				return;
@@ -79,11 +79,11 @@ Zasięg: {3}	Czas odnowienia: {4}",
 		public override void OnUseFinish()
 		{
 			base.OnUseFinish();
-			NumberOfUses = 0;
+			_numberOfUses = 0;
 		}
 		public override void Cancel()
 		{
-			if (NumberOfUses == 0)
+			if (_numberOfUses == 0)
 				OnFailedUseFinish();
 			else
 				OnUseFinish();

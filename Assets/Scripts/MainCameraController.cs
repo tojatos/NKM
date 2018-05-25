@@ -15,9 +15,9 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 	private Game Game;
 	private Vector3 _mainPosition;
 
-	private Vector3 Origin;
-	private Vector3 Diference;
-	private bool Drag;
+	private Vector3 _origin;
+	private Vector3 _diference;
+	private bool _drag;
 
 	public void Init()
 	{
@@ -55,20 +55,20 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 		//Drag camera
 		if (Input.GetMouseButton(2) && Math.Abs(_cam.orthographicSize - MaxZoom) > 0.01 && !Game.Active.IsPointerOverUIObject()) //drag only over a Game
 		{
-			Diference = (_cam.ScreenToWorldPoint(Input.mousePosition)) - _cam.transform.position;
-			if (Drag == false)
+			_diference = (_cam.ScreenToWorldPoint(Input.mousePosition)) - _cam.transform.position;
+			if (_drag == false)
 			{
-				Drag = true;
-				Origin = _cam.ScreenToWorldPoint(Input.mousePosition);
+				_drag = true;
+				_origin = _cam.ScreenToWorldPoint(Input.mousePosition);
 			}
 		}
 		else
 		{
-			Drag = false;
+			_drag = false;
 		}
-		if (Drag)
+		if (_drag)
 		{
-			_cam.transform.position = (Origin - Diference);
+			_cam.transform.position = (_origin - _diference);
 		}
 	}
 
@@ -83,11 +83,11 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 		Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
 
 		// Find the magnitude of the vector (the distance) between the touches in each frame.
-		float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-		float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+		var prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+		var touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
 
 		// Find the difference in the distances between each frame.
-		float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+		var deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 		//MessageLogger.Instance.Log(deltaMagnitudeDiff.ToString());
 		if (deltaMagnitudeDiff < -20)
 		{
@@ -106,7 +106,7 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 	{
 		// Calculate how much we will have to move towards the zoomTowards position
 		//float multiplier = (1.0f / _cam.orthographicSize * PositionChange);
-		float multiplier = (PositionChange / _cam.orthographicSize);
+		var multiplier = (PositionChange / _cam.orthographicSize);
 		Vector3 amountToMove;
 		if (zoomFoward)
 		{

@@ -23,7 +23,7 @@ Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonFriends();
 			if (cellRange.Count == 0)
 			{
@@ -35,7 +35,7 @@ Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonFriends();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;

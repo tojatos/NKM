@@ -6,8 +6,8 @@ namespace Helpers
 {
 	public static class UnityGameObjectExtentions
 	{
-		public static void Toggle(this Selectable targetButton) => targetButton.interactable = !targetButton.interactable;
-		public static void Toggle(this GameObject targetGameObject) => targetGameObject.SetActive(!targetGameObject.activeSelf);
+		private static void Toggle(this Selectable targetButton) => targetButton.interactable = !targetButton.interactable;
+		private static void Toggle(this GameObject targetGameObject) => targetGameObject.SetActive(!targetGameObject.activeSelf);
 		public static void Show(this GameObject targetGameObject) => targetGameObject.SetActive(true);
 		public static void Show(this List<GameObject> targetGameObjects) => targetGameObjects.ForEach(Show);
 		public static void Hide(this GameObject targetGameObject) => targetGameObject.SetActive(false);

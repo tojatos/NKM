@@ -21,7 +21,7 @@ namespace MyGameObjects.Abilities.Rem
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			if (cellRange.Count == 0)
 			{
@@ -44,7 +44,7 @@ Czas odnowiania: {3}",
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;

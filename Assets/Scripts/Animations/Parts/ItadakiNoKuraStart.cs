@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Helpers;
 using UnityEngine;
@@ -9,24 +8,20 @@ namespace Animations.Parts
     public class ItadakiNoKuraStart : NkmAnimationPart
     {
         private const float ParticleStartSize = 20f;
-	    private readonly Transform _parentTransform;
-	    private readonly Transform _targetTransform;
-	    public readonly GameObject _particle;
+	    public readonly GameObject Particle;
 	    
-	    public ItadakiNoKuraStart(Transform parentTransform, Transform targetTransform)
+	    public ItadakiNoKuraStart(Transform targetTransform)
 	    {
-		    _parentTransform = parentTransform;
-		    _targetTransform = targetTransform;
-            _particle = Object.Instantiate(Stuff.Particles.Single(o => o.name == "Itadaki No Kura"), _targetTransform.position, _targetTransform.rotation);
-		    _particle.Hide();
+            Particle = Object.Instantiate(Stuff.Particles.Single(o => o.name == "Itadaki No Kura"), targetTransform.position, targetTransform.rotation);
+		    Particle.Hide();
 	    }
 	    
         public override IEnumerator Play()
         {
-            _particle.transform.localPosition += new Vector3(0,20,0);
-            var main = _particle.GetComponent<ParticleSystem>().main;
+            Particle.transform.localPosition += new Vector3(0,20,0);
+            ParticleSystem.MainModule main = Particle.GetComponent<ParticleSystem>().main;
             main.startSize = new ParticleSystem.MinMaxCurve(ParticleStartSize);
-	        _particle.Show();
+	        Particle.Show();
 	        
 	        IsFinished = true;
 	        yield break; 

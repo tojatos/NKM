@@ -33,7 +33,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			if (cellRange.Count == 0)
 			{
@@ -42,7 +42,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
@@ -53,7 +53,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 		public override void Use(Character targetCharacter)
 		{
 			Active.PlayAudio(Name);
-			var targetCell = targetCharacter.ParentCell;
+			HexCell targetCell = targetCharacter.ParentCell;
 			SendShockwave(targetCell);
 			SendShockwave(targetCell);
 			SendShockwave(targetCell);
@@ -62,9 +62,9 @@ Zasięg: {2}	Czas odnowienia: {3}",
 
 		private void SendShockwave(HexCell targetCell)
 		{
-			var direction = ParentCharacter.ParentCell.GetDirection(targetCell);
-			var shockwaveCells = ParentCharacter.ParentCell.GetLine(direction, AbilityRange).ToList();
-			foreach (var c in shockwaveCells)
+			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCell);
+			List<HexCell> shockwaveCells = ParentCharacter.ParentCell.GetLine(direction, AbilityRange).ToList();
+			foreach (HexCell c in shockwaveCells)
 			{
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
 

@@ -9,8 +9,8 @@ namespace Hex
 {
 	public class HexCell : MonoBehaviour
 	{
-		private Active Active;
-		private Spawner Spawner;
+		private Active _active;
+		private Spawner _spawner;
 		public HexCoordinates Coordinates;
 		public Character CharacterOnCell { get; set; }
 		public GameObject Highlight { get; set; }
@@ -20,10 +20,11 @@ namespace Hex
 		public List<HexCellEffect> Effects = new List<HexCellEffect>();
 
 		private Game Game;
-		void Start()
+
+		private void Start()
 		{
 			Game = GameStarter.Instance.Game;
-			Active = Game.Active;
+			_active = Game.Active;
 		}
 
 
@@ -46,7 +47,7 @@ namespace Hex
 		{
 			if (Highlight == null)
 			{
-				Spawner.SpawnHighlightCellObject(this, color);
+				_spawner.SpawnHighlightCellObject(this, color);
 			}
 			else
 			{
@@ -58,7 +59,7 @@ namespace Hex
 		{
 			if (HelpHighlight == null)
 			{
-				Spawner.SpawnHelpHighlightCellObject(this, color);
+				_spawner.SpawnHelpHighlightCellObject(this, color);
 			}
 			else
 			{
@@ -70,11 +71,11 @@ namespace Hex
 		private void Awake()
 		{
 			//GameStarter = GameObject.Find("GameStarter").GetComponent<GameStarter>();
-			Spawner = Spawner.Instance;
+			_spawner = Spawner.Instance;
 		}
 		public List<HexCell> GetNeighbors(int depth, bool stopAtWalls = false, bool stopAtEnemyCharacters = false, bool straightLine = false)
 		{
-			var neighborsList = new List<HexCell>();
+			List<HexCell> neighborsList = new List<HexCell>();
 			if (depth == 0) return neighborsList;
 
 			foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
@@ -90,10 +91,10 @@ namespace Hex
 
 		private IEnumerable<HexCell> GetNeighborsByDirection(int depth, HexDirection direction, bool stopAtWalls = false, bool stopAtEnemyCharacters = false, bool straightLine = false)
 		{
-			var neighborsList = new List<HexCell>();
-			var neighbor = GetNeighbor(direction);
+			List<HexCell> neighborsList = new List<HexCell>();
+			HexCell neighbor = GetNeighbor(direction);
 			if (neighbor == null || stopAtWalls && neighbor.Type == HexTileType.Wall || stopAtEnemyCharacters &&
-			    neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != Active.GamePlayer) return neighborsList;
+			    neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != _active.GamePlayer) return neighborsList;
 			if (neighborsList.Any(listsNeighbor => listsNeighbor == neighbor)) return neighborsList;
 
 			neighborsList.Add(neighbor);

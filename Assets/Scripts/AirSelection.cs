@@ -4,7 +4,7 @@ using Hex;
 
 public class AirSelection
 {
-	private Game Game;
+	private readonly Game _game;
 	public bool IsEnabled { get; private set; }
 	public enum SelectionShape
 	{
@@ -13,13 +13,13 @@ public class AirSelection
 	}
 	public AirSelection(Game game)
 	{
-		Game = game;
+		_game = game;
 		IsEnabled = false;
-		Shape = SelectionShape.None;
-		Size = 0;
+		_shape = SelectionShape.None;
+		_size = 0;
 	}
-	private SelectionShape Shape;
-	private int Size;
+	private SelectionShape _shape;
+	private int _size;
 	private List<HexCell> _hexCells;
 	public List<HexCell> HexCells
 	{
@@ -29,15 +29,15 @@ public class AirSelection
 			_hexCells = value;
 			if (_hexCells != null)
 			{
-				if (Shape == SelectionShape.Circle)
+				if (_shape == SelectionShape.Circle)
 				{
-					_hexCells.AddRange(value[0].GetNeighbors(Size));
+					_hexCells.AddRange(value[0].GetNeighbors(_size));
 				}
 			}
-			Game.HexMapDrawer.RemoveAllHighlights();
-			if (Game.Active.HexCells != null && _hexCells != null)
+			_game.HexMapDrawer.RemoveAllHighlights();
+			if (_game.Active.HexCells != null && _hexCells != null)
 			{
-				Game.Active.HexCells.ForEach(c =>
+				_game.Active.HexCells.ForEach(c =>
 				{
 					if (_hexCells.All(ac => ac != c))
 					{
@@ -51,15 +51,15 @@ public class AirSelection
 
 	public void Enable(SelectionShape shape, int size)
 	{
-		Game.Active.HexCells.ForEach(c => c.ToggleHighlight(HiglightColor.WhiteOrange));
+		_game.Active.HexCells.ForEach(c => c.ToggleHighlight(HiglightColor.WhiteOrange));
 		IsEnabled = true;
-		Shape = shape;
-		Size = size;
+		_shape = shape;
+		_size = size;
 	}
 	public void Disable()
 	{
 		IsEnabled = false;
-		Shape = SelectionShape.None;
+		_shape = SelectionShape.None;
 		HexCells = null;
 	}
 

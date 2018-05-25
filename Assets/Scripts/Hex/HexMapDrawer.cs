@@ -10,7 +10,7 @@ namespace Hex
 	{
 		private Game Game;
 
-		void Awake()
+		private void Awake()
 		{
 			Game = GameStarter.Instance.Game;
 		}
@@ -19,7 +19,7 @@ namespace Hex
 		public int Width { get; private set; }
 		public int Height { get; private set;}
 		public List<HexCell> Cells;
-		HexMesh _hexMesh;
+		private HexMesh _hexMesh;
 		public void CreateMap(HexMap hexMap)
 		{
 			HexMap = hexMap;
@@ -42,9 +42,10 @@ namespace Hex
 		{
 			_hexMesh.Triangulate(Cells);
 		}
-		void CreateCell(int x, int z, int i)
+
+		private void CreateCell(int x, int z, int i)
 		{
-			var pixelColor = HexMap.Map.GetPixel(x, z);
+			Color pixelColor = HexMap.Map.GetPixel(x, z);
 			if (Math.Abs(pixelColor.a) < 0.001) //transparent pixel
 			{
 				return;
@@ -56,7 +57,7 @@ namespace Hex
 			position.y = 0f;
 			position.z = z * (HexMetrics.OuterRadius * 1.5f);
 
-			var cell = Instantiate(CellPrefab);
+			HexCell cell = Instantiate(CellPrefab);
 			Cells.Add(cell);
 			cell.transform.SetParent(transform, false);
 			cell.transform.localPosition = position;
@@ -87,7 +88,7 @@ namespace Hex
 
 			}
 
-			foreach (var colorMapping in HexMap.ColorMappings)
+			foreach (ColorToTileType colorMapping in HexMap.ColorMappings)
 			{
 				if (colorMapping.Color.Equals(pixelColor))
 				{
@@ -119,7 +120,7 @@ namespace Hex
 
 		public void RemoveAllHighlights()
 		{
-			foreach (var hexCell in Cells)
+			foreach (HexCell hexCell in Cells)
 			{
 				//TODO: Check that somewhere else (change responsibility?)
 				if (hexCell.Highlight != null)
@@ -130,7 +131,7 @@ namespace Hex
 		}
 		public void RemoveAllHelpHighlights()
 		{
-			foreach (var hexCell in Cells)
+			foreach (HexCell hexCell in Cells)
 			{
 				if (hexCell.HelpHighlight != null)
 				{
@@ -141,9 +142,9 @@ namespace Hex
 		public HexCell GetCellByPosition(ref Vector3 position)
 		{
 			position = transform.InverseTransformPoint(position);
-			var coordinates = HexCoordinates.FromPosition(position);
+			HexCoordinates coordinates = HexCoordinates.FromPosition(position);
 			var index = coordinates.X + coordinates.Z * Instance.Width + coordinates.Z / 2;
-			var touchedCell = Game.HexMapDrawer.Cells[index];
+			HexCell touchedCell = Game.HexMapDrawer.Cells[index];
 			return touchedCell;
 		}
 
@@ -154,7 +155,7 @@ namespace Hex
 
 			if (Game.Active.AirSelection.IsEnabled)
 			{
-				var cellPointed = CellPointed();
+				HexCell cellPointed = CellPointed();
 				if (cellPointed != null && Game.Active.HexCells.Contains(cellPointed))
 				{
 					Game.Active.AirSelection.HexCells = new List<HexCell> { cellPointed };
@@ -163,17 +164,17 @@ namespace Hex
 
 			if (Game.Active.Action == Action.AttackAndMove)
 			{
-				var cellPointed = CellPointed();
+				HexCell cellPointed = CellPointed();
 				if (cellPointed != null && (Game.Active.HexCells.Contains(cellPointed)||cellPointed==Game.Active.CharacterOnMap.ParentCell))
 				{
-					var lastMoveCell = Game.Active.MoveCells.LastOrDefault();
+					HexCell lastMoveCell = Game.Active.MoveCells.LastOrDefault();
 					if(lastMoveCell==null) throw new Exception("Move cell is null!");
 					if (cellPointed != lastMoveCell)
 					{
 						if (Game.Active.MoveCells.Contains(cellPointed))
 						{
 							//remove all cells to pointed
-							for (int i = Game.Active.MoveCells.Count - 1; i >= 0; i--)
+							for (var i = Game.Active.MoveCells.Count - 1; i >= 0; i--)
 							{
 								if (Game.Active.MoveCells[i] == cellPointed) break;
 
@@ -196,7 +197,7 @@ namespace Hex
 			{
 				if (Game.Active.IsPointerOverUIObject()) return; //Do not touch cells if mouse is over UI
 
-				var cellPointed = CellPointed();
+				HexCell cellPointed = CellPointed();
 				if (cellPointed != null)
 				{
 					if (Game.Active.AirSelection.IsEnabled && Game.Active.HexCells.Contains(cellPointed))
@@ -205,7 +206,7 @@ namespace Hex
 					}
 					else
 					{
-						Game.TryTouchingCell(cellPointed);
+						Game.TouchCell(cellPointed);
 					}
 				}
 			}
@@ -217,11 +218,11 @@ namespace Hex
 		}
 		private HexCell CellPointed()
 		{
-			var inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+			Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if (!Physics.Raycast(inputRay, out hit)) return null;
 
-			var position = hit.point;
+			Vector3 position = hit.point;
 			return Instance.GetCellByPosition(ref position);
 		}
 	}

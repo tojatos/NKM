@@ -7,7 +7,7 @@ namespace Helpers
 	{
 		private static void AddSetTooltipEvent(this GameObject gameObject, EventTriggerType eventTriggerType, string tooltipText)
 		{
-			var trigger = gameObject.GetComponent<EventTrigger>() ?? gameObject.AddComponent<EventTrigger>();
+			EventTrigger trigger = gameObject.GetComponent<EventTrigger>() ?? gameObject.AddComponent<EventTrigger>();
 			//if (trigger == null) trigger =  gameObject.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = eventTriggerType};
 			entry.callback.AddListener((eventData) => Tooltip.Instance.Set(tooltipText));
@@ -24,7 +24,7 @@ namespace Helpers
 
 		private static void AddRemoveTooltipEvent(this GameObject gameObject, EventTriggerType eventTriggerType)
 		{
-			var trigger = gameObject.GetComponent<EventTrigger>() ?? gameObject.AddComponent<EventTrigger>();
+			EventTrigger trigger = gameObject.GetComponent<EventTrigger>() ?? gameObject.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = eventTriggerType};
 			entry.callback.AddListener((eventData) => Tooltip.Instance.Remove());
 			trigger.triggers.Add(entry);

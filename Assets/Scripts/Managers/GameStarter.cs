@@ -22,13 +22,13 @@ namespace Managers
 			GameOptions gameOptions = await GetGameOptions();
 
 			Game.Init(gameOptions);
-			bool isGameStarted = Game.StartGame();
+			var isGameStarted = Game.StartGame();
 			if(!isGameStarted) throw new Exception("Game has not started!");
 		}
 
 		private static GameOptions GetTestingGameOptions()
 		{
-			GameOptions gameOptions = new GameOptions
+			var gameOptions = new GameOptions
 			{
 				Map = Stuff.Maps[0],
 				Players = new List<GamePlayer>
@@ -41,6 +41,7 @@ namespace Managers
 //								new Character("Sinon"),
 								new Character("Hecate"),
 								new Character("Roronoa Zoro"),
+								new Character("Crona"),
 								
 							}
 						},
@@ -81,7 +82,7 @@ namespace Managers
 		private HexMap GetMap()
 		{
 					var mapIndex = SessionSettings.Instance.SelectedMapIndex;
-					var map = Stuff.Maps[mapIndex];
+					HexMap map = Stuff.Maps[mapIndex];
 					return map;
 		}
 		private async Task<List<GamePlayer>> GetPlayers()
@@ -91,11 +92,11 @@ namespace Managers
 		private async Task<List<GamePlayer>> GetLocalPlayers()
 		{
 			var numberOfPlayers = SessionSettings.Instance.NumberOfPlayers;
-			var players = new List<GamePlayer>();
+			List<GamePlayer> players = new List<GamePlayer>();
 			for (var i = 0; i < numberOfPlayers; i++)
 				players.Add(new GamePlayer { Name = $"GamePlayer{i + 1}" });
 
-			foreach (var p in players)
+			foreach (GamePlayer p in players)
 			{
 				await GetCharacters(p);
 			}
@@ -106,18 +107,18 @@ namespace Managers
 		private async Task GetCharacters(GamePlayer p)
 		{
 			Debug.Log(p.Name);
-			var allCharacters = new List<MyGameObject>(AllMyGameObjects.Characters);
+			List<MyGameObject> allCharacters = new List<MyGameObject>(AllMyGameObjects.Characters);
 			SpriteSelect.Instance.Open(allCharacters, () => FinishSelectingCharacters(p), $"Wybór postaci - {p.Name}", "Zakończ wybieranie postaci");
 			Func<bool> hasSelectedCharecters = () => p.HasSelectedCharacters;
 			await hasSelectedCharecters.WaitToBeTrue();
 		}
 		private void FinishSelectingCharacters(GamePlayer p)
 		{
-			int charactersPerPlayer = GetCharactersPerPlayer();
+			var charactersPerPlayer = GetCharactersPerPlayer();
 
 			if (SpriteSelect.Instance.SelectedObjects.Count != charactersPerPlayer) return;
 
-			var names = SpriteSelect.Instance.SelectedObjects.Select(o=>o.Name);
+			IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o=>o.Name);
 			p.AddCharacters(names);
 			p.HasSelectedCharacters = true;
 			SpriteSelect.Instance.Close();

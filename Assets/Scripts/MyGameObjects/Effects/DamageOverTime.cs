@@ -18,11 +18,5 @@ namespace MyGameObjects.Effects
 			return "Zadaje " + _damagePerTick + " obrażeń co fazę.\n" +
 						 "Czas do zakończenia efektu: " + CurrentCooldown;
 		}
-
-		//public override void OnPhaseFinish()
-		//{
-		//	base.OnPhaseFinish();
-		//	_characterThatAttacks.Attack(ParentCharacter, _attackType, _damagePerTick);
-		//}
 	}
 }

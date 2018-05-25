@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -31,15 +32,16 @@ namespace Managers
 				SessionSettings.Instance.NumberOfCharactersPerPlayer - 1;
 		}
 
+		[UsedImplicitly]
 		public void PlayButtonClick()
 		{
 			SessionSettings.Instance.SelectedMapIndex = _mapSelectDropdown.value;
 			SessionSettings.Instance.NumberOfPlayers = _playerCountDropdown.value + 1;
 			SessionSettings.Instance.NumberOfCharactersPerPlayer = _cppDropdown.value + 1;
-			SessionSettings.Instance.GameType = GameType.Local;
 
 			SceneManager.LoadScene(Scenes.MainGame);
 		}
+		[UsedImplicitly]
 		public void BackButtonClick()
 		{
 			SceneManager.LoadScene(Scenes.MainMenu);

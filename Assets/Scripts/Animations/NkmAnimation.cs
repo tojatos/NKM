@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Helpers;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Animations
 {

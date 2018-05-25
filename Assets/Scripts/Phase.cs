@@ -2,7 +2,7 @@
 
 public class Phase
 {
-	private Game Game;
+	private readonly Game Game;
 
 	public int Number { get; set; }
 

@@ -21,7 +21,7 @@ namespace Animations.Parts
 
         public override IEnumerator Play()
         {
-            TextMesh mesh = TextObject.GetComponent<TextMesh>();
+            var mesh = TextObject.GetComponent<TextMesh>();
             mesh.color = _textColor;
             mesh.text = _textToShow;
             TextObject.Show();

@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 
 public class Active
 {
-	private Game Game;
+	private readonly Game Game;
 	public Active(Game game)
 	{
 		Game = game;
@@ -154,7 +154,7 @@ public class Active
 	{
 		if(MoveCells==null || MoveCells.Count==0) return;
 		
-		for (int i = MoveCells.Count - 1; i >= 0; i--)
+		for (var i = MoveCells.Count - 1; i >= 0; i--)
 		{
 			//Remove the line
 			Object.Destroy(MoveCells[i].gameObject.GetComponent<LineRenderer>());
@@ -214,7 +214,7 @@ public class Active
 				}
 				break;
 			case Action.AttackAndMove:
-				var character = CharacterOnMap;
+				Character character = CharacterOnMap;
 				if (cell.CharacterOnCell != null)
 				{
 					character.BasicAttack(cell.CharacterOnCell);
@@ -253,7 +253,7 @@ public class Active
 			case Action.None:
 				throw new Exception("Żadna akcja nie jest aktywna!");
 			case Action.UseAbility:
-				var characters = cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
+				List<Character> characters = cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
 				Ability.Use(characters);
 				//Turn.CharacterThatTookActionInTurn = CharacterOnMap;
 				break;
@@ -268,7 +268,7 @@ public class Active
 	{
 		var eventDataCurrentPosition =
 			new PointerEventData(EventSystem.current) {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
-		var results = new List<RaycastResult>();
+		List<RaycastResult> results = new List<RaycastResult>();
 		EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
 		return results.Count > 0;
 	}

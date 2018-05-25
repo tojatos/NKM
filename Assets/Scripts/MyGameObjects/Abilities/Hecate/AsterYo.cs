@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Hex;
 using MyGameObjects.MyGameObject_templates;
-using UnityEngine;
 
 namespace MyGameObjects.Abilities.Hecate
 {
@@ -32,7 +31,7 @@ Zasięg: {3}	Czas odnowienia: {4}",
 
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange, false, false);
 			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, AbilityRadius);
 		}
@@ -40,7 +39,7 @@ Zasięg: {3}	Czas odnowienia: {4}",
 		{
 			try
 			{
-				var passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();
+				ItadakiNoKura passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();
 				if (passiveAbility == null) throw new Exception("Pasywna umiejętność nie znaleziona!");
 
 				characters = characters.Where(c => c.Owner != ParentCharacter.Owner).ToList();

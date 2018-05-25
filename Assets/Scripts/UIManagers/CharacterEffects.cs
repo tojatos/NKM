@@ -22,7 +22,7 @@ namespace UIManagers
 		{
 			if (Game.Active.CharacterOnMap == null) return;
 
-			var character = Game.Active.CharacterOnMap;
+			Character character = Game.Active.CharacterOnMap;
 			RemoveButtons();
 			character.Effects.ForEach(effect => CreateEffectButton(character, effect));
 		}
@@ -34,7 +34,7 @@ namespace UIManagers
 		}
 		private void CreateEffectButton(Character character, Effect effect)
 		{
-			var button = Instantiate(EffectButtonPrefab, transform);
+			GameObject button = Instantiate(EffectButtonPrefab, transform);
 
 			button.name = character.Effects.IndexOf(effect).ToString();
 

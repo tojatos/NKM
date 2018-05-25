@@ -37,20 +37,18 @@ namespace Hex
 			var iX = Mathf.RoundToInt(x);
 			var iY = Mathf.RoundToInt(y);
 			var iZ = Mathf.RoundToInt(-x - y);
-			if (iX + iY + iZ != 0)
-			{
-				var dX = Mathf.Abs(x - iX);
-				var dY = Mathf.Abs(y - iY);
-				var dZ = Mathf.Abs(-x - y - iZ);
+			if (iX + iY + iZ == 0) return new HexCoordinates(iX, iZ);
+			var dX = Mathf.Abs(x - iX);
+			var dY = Mathf.Abs(y - iY);
+			var dZ = Mathf.Abs(-x - y - iZ);
 
-				if (dX > dY && dX > dZ)
-				{
-					iX = -iY - iZ;
-				}
-				else if (dZ > dY)
-				{
-					iZ = -iX - iY;
-				}
+			if (dX > dY && dX > dZ)
+			{
+				iX = -iY - iZ;
+			}
+			else if (dZ > dY)
+			{
+				iZ = -iX - iY;
 			}
 			return new HexCoordinates(iX, iZ);
 		}
@@ -60,17 +58,6 @@ namespace Hex
 			return "(" +
 			       X + ", " + Y + ", " + Z + ")";
 		}
-		public int DistanceTo(HexCoordinates other)
-		{
-			return
-			((X < other.X ? other.X - X : X - other.X) +
-			 (Y < other.Y ? other.Y - Y : Y - other.Y) +
-			 (Z < other.Z ? other.Z - Z : Z - other.Z)) / 2;
-		}
-		//public string ToStringOnSeparateLines()
-		//{
-		//	return X + "\n" + Y + "\n" + Z;
-		//}
 
 	}
 }

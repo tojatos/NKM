@@ -15,7 +15,7 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 	private Game Game;
 	private int _linesCount = 4;
 
-	void Awake()
+	private void Awake()
 	{
 		Game = GameStarter.Instance.Game;
 	}
@@ -42,10 +42,10 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 	}
 	private void ResizeIfNotEnoughSpace()
 	{
-		int trueLinesCount = CountLines();
+		var trueLinesCount = CountLines();
 		if (trueLinesCount > 4 && _linesCount != trueLinesCount)
 		{
-			int diff = trueLinesCount - _linesCount;
+			var diff = trueLinesCount - _linesCount;
 			LogText.rectTransform.offsetMin = new Vector2(LogText.rectTransform.offsetMin.x, LogText.rectTransform.offsetMin.y + diff * -14);
 			_linesCount = trueLinesCount;
 		}
@@ -63,7 +63,7 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 		StartCoroutine(SetScrollbarToDown());
 	}
 
-	void Update()
+	private void Update()
 	{
 		if (!InputField.isFocused && Input.GetKeyDown(KeyCode.Slash))
 		{
@@ -73,7 +73,8 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 		}
 
 	}
-	IEnumerator MoveTextEnd_NextFrame()
+
+	private IEnumerator MoveTextEnd_NextFrame()
 	{
 		yield return 0; // Skip the first frame in which this is called.
 

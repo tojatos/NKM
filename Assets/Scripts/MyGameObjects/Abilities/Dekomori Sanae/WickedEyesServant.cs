@@ -5,12 +5,12 @@ namespace MyGameObjects.Abilities.Dekomori_Sanae
 {
 	public class WickedEyesServant : EnableableAbility
 	{
-		private int AdditionalDamage;
+		private int _additionalDamage;
 		public WickedEyesServant()
 		{
 			Name = "Wicked Eye's Servant";
 			Type = AbilityType.Passive;
-			AdditionalDamage = 3;
+			_additionalDamage = 3;
 		}
 		public override string GetDescription()
 		{
@@ -18,7 +18,7 @@ namespace MyGameObjects.Abilities.Dekomori_Sanae
 @"{0} zyskuje <color=blue>{1}</color> obrażeń nieuchronnych na każdym ataku i umiejętności,
 jeżeli na polu gry znajduje się chociaż jedna postać z atakiem większym od {0} lub Rikka Takanashi.
 Zabicie wroga dodaje dodatkowy punkt obrażeń nieuchronnych tej umiejętności na stałe."
-						 ,ParentCharacter.Name, AdditionalDamage);
+						 ,ParentCharacter.Name, _additionalDamage);
 		}
 		public override bool IsEnabled
 		{
@@ -29,11 +29,11 @@ Zabicie wroga dodaje dodatkowy punkt obrażeń nieuchronnych tej umiejętności 
 		}
 		public override void TrueDamageModifier(Character targetCharacter, ref int damage)
 		{
-			damage += IsEnabled ? AdditionalDamage : 0;
+			damage += IsEnabled ? _additionalDamage : 0;
 		}
 		public override void OnEnemyKill()
 		{
-			AdditionalDamage++;
+			_additionalDamage++;
 		}
 	}
 }

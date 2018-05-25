@@ -34,12 +34,12 @@ namespace MyGameObjects.MyGameObject_templates
 			AfterBeingAttacked += RemoveIfDead;
 			OnEnemyKill += () => Abilities.ForEach(a => a.OnEnemyKill());
 			OnDamage += (targetCharacter, damageDealt) => Abilities.ForEach(a => a.OnDamage(targetCharacter, damageDealt));
-			OnDamage += (targetCharacter, damageDealt) => AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform, damageDealt.ToString(), Color.red));
+			OnDamage += (targetCharacter, damageDealt) => AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
 			OnDamage += (targetCharacter, damageDealt) => AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damageDealt.ToString(), Color.red));
 			OnHeal += (targetCharacter, valueHealed) => AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(), Color.blue));
 
 			//Define database properties
-			var characterData = GameData.Conn.GetCharacterData(name);
+			SqliteRow characterData = GameData.Conn.GetCharacterData(name);
 
 			Name = name;
 			AttackPoints = new Stat(this, StatType.AttackPoints, int.Parse(characterData.GetValue("AttackPoints")));
@@ -56,9 +56,9 @@ namespace MyGameObjects.MyGameObject_templates
 			Author = characterData.GetValue("Author.Name");
 			
 			//Create and initiate abilites
-			var abilityClassNames = GameData.Conn.GetAbilityClassNames(name);
+			IEnumerable<string> abilityClassNames = GameData.Conn.GetAbilityClassNames(name);
 			var abilityNamespaceName = "Abilities." + name.Replace(' ', '_');
-			var abilities = Spawner.Create(abilityNamespaceName, abilityClassNames).ToList().ConvertAll(x=>x as Ability);
+			List<Ability> abilities = Spawner.Create(abilityNamespaceName, abilityClassNames).ToList().ConvertAll(x=>x as Ability);
 			InitiateAbilities(abilities);
 
 		}
@@ -79,7 +79,7 @@ namespace MyGameObjects.MyGameObject_templates
 		public string Description { get; }
 		public string Quote { get; }
 		public string Author { get; }
-		public FightType Type;
+		public readonly FightType Type;
 		public GameObject CharacterObject { get; set; }
 		public HexCell ParentCell { get; set; }
 //		public Item ActiveItem { get; set; }
@@ -116,10 +116,10 @@ namespace MyGameObjects.MyGameObject_templates
 			Move(cellPath);
 		}
 
-		private void Move(List<HexCell> cellPath)
+		private void Move(IList<HexCell> cellPath)
 		{
 			cellPath.RemoveAt(0);//Remove parent cell
-			foreach (var nextCell in cellPath)
+			foreach (HexCell nextCell in cellPath)
 			{
 				Object.Destroy(nextCell.gameObject.GetComponent<LineRenderer>());//Remove the line
 				MoveTo(nextCell);
@@ -181,12 +181,12 @@ namespace MyGameObjects.MyGameObject_templates
 			damage -= defense;
 			damage = damage < 0 ? 0 : damage;
 			TrueDamageModifier(attackedCharacter, ref damage);
-			MessageLogger.Log(string.Format("{0} atakuje {1}", this.FormattedFirstName(), attackedCharacter.FormattedFirstName()), false);
+			MessageLogger.Log($"{this.FormattedFirstName()} atakuje {attackedCharacter.FormattedFirstName()}", false);
 			if (damage > 0)
 			{
 				attackedCharacter.Damage(ref damage);
-				MessageLogger.Log(string.Format(" zadając <color=red><b>{0}</b></color> obrażeń!", damage));
-				if (!attackedCharacter.IsAlive) OnEnemyKill();
+				MessageLogger.Log($" zadając <color=red><b>{damage}</b></color> obrażeń!");
+				if (!attackedCharacter.IsAlive) OnEnemyKill?.Invoke();
 			}
 			else
 			{
@@ -197,11 +197,12 @@ namespace MyGameObjects.MyGameObject_templates
 		}
 		private void Damage(ref int damage)
 		{
-			foreach (var a in Abilities)
+			foreach (Ability a in Abilities)
 			{
 				a.BeforeParentDamage(ref damage); //TODO event?
 			}
 
+			BeforeParentDamage?.Invoke();
 			HealthPoints.Value -= damage;
 		}
 		public void RemoveIfDead()
@@ -216,10 +217,11 @@ namespace MyGameObjects.MyGameObject_templates
 		public delegate void VoidDelegate();
 		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
 		public event VoidDelegate JustBeforeFirstAction;
-		private event VoidDelegate AfterBeingAttacked;
-		private event VoidDelegate OnEnemyKill;
-		private event CharacterIntDelegate OnDamage;
-		private event CharacterIntDelegate OnHeal;
+		public event VoidDelegate AfterBeingAttacked;
+		public event VoidDelegate OnEnemyKill;
+		public event VoidDelegate BeforeParentDamage;
+		public event CharacterIntDelegate OnDamage;
+		public event CharacterIntDelegate OnHeal;
 		public void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
 
 		private void RemoveFromMap()
@@ -227,18 +229,18 @@ namespace MyGameObjects.MyGameObject_templates
 			ParentCell.CharacterOnCell = null;
 			ParentCell = null;
 			IsOnMap = false;
-			UnityEngine.Object.Destroy(CharacterObject);
+			Object.Destroy(CharacterObject);
 		}
 		private void DamageModifier(Character targetCharacter, ref int damage)
 		{
-			foreach (var ability in Abilities)
+			foreach (Ability ability in Abilities)
 			{
 				ability.DamageModifier(targetCharacter, ref damage);
 			}
 		}
 		private void TrueDamageModifier(Character targetCharacter, ref int damage)
 		{
-			foreach (var ability in Abilities)
+			foreach (Ability ability in Abilities)
 			{
 				ability.DamageModifier(targetCharacter, ref damage);
 			}
@@ -303,7 +305,7 @@ namespace MyGameObjects.MyGameObject_templates
 				return Enumerable.Empty<HexCell>().ToList();
 			}
 
-			var cellRange = GetBasicAttackCells();
+			List<HexCell> cellRange = GetBasicAttackCells();
 			if (CanAttackAllies)
 			{
 					cellRange.RemoveNonCharacters();
@@ -349,7 +351,7 @@ namespace MyGameObjects.MyGameObject_templates
 				return Abilities.Single(a => a.OverridesGetMoveCells).GetMoveCells();
 			}
 
-			var cellRange = ParentCell.GetNeighbors(Speed.Value, true, true);
+			List<HexCell> cellRange = ParentCell.GetNeighbors(Speed.Value, true, true);
 			cellRange.RemoveAll(cell => cell.CharacterOnCell != null); //we don't want to allow stepping into our characters!
 			return cellRange;
 		}
@@ -396,7 +398,7 @@ namespace MyGameObjects.MyGameObject_templates
 			Active.CharacterOnMap = this;
 			CharacterAbilities.Instance.UpdateButtons();
 			CharacterEffects.Instance.UpdateButtons();
-			var characterButtons = new List<GameObject>(CharacterAbilities.Instance.Buttons);
+			List<GameObject> characterButtons = new List<GameObject>(CharacterAbilities.Instance.Buttons);
 			characterButtons.AddRange(new List<GameObject>(CharacterEffects.Instance.Buttons));
 			Active.Buttons = characterButtons;
 			if (Active.GamePlayer != Owner) return;

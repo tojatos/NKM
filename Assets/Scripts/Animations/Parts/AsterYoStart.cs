@@ -17,9 +17,9 @@ namespace Animations.Parts
         {
             _parentTransform = parentTransform;
 //            _targetTransforms = targetTransforms;
-            foreach (var targetTransform in targetTransforms)
+            foreach (Transform targetTransform in targetTransforms)
             {
-                var particle = Object.Instantiate(Stuff.Particles.Single(o => o.name == "Aster Yo"), parentTransform.position, parentTransform.rotation);
+                GameObject particle = Object.Instantiate(Stuff.Particles.Single(o => o.name == "Aster Yo"), parentTransform.position, parentTransform.rotation);
                 ParticlesWithTargets.Add(particle, targetTransform);
                 particle.Hide();
             }
@@ -27,9 +27,9 @@ namespace Animations.Parts
 
         public override IEnumerator Play()
         {
-            foreach (var particleWithTarget in ParticlesWithTargets)
+            foreach (KeyValuePair<GameObject, Transform> particleWithTarget in ParticlesWithTargets)
             {
-                var particle = particleWithTarget.Key;
+                GameObject particle = particleWithTarget.Key;
                 particle.transform.position = _parentTransform.position;
                 particle.transform.localPosition += new Vector3(0, 20, 0);
                 particle.Show();
@@ -38,9 +38,9 @@ namespace Animations.Parts
 
             yield return new WaitForSeconds(2f);
 
-            foreach (var particleWithTarget in ParticlesWithTargets)
+            foreach (KeyValuePair<GameObject, Transform> particleWithTarget in ParticlesWithTargets)
             {
-                var main = particleWithTarget.Key.GetComponent<ParticleSystem>().main;
+                ParticleSystem.MainModule main = particleWithTarget.Key.GetComponent<ParticleSystem>().main;
                 main.startSize = new ParticleSystem.MinMaxCurve(ParticleSecondSize);
             }
 

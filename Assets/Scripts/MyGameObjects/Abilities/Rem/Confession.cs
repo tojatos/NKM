@@ -19,7 +19,7 @@ namespace MyGameObjects.Abilities.Rem
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonFriends();
 			cellRange.RemoveAll(c=>!c.CharacterOnCell.TookActionInPhaseBefore);
 			if (cellRange.Count == 0)
@@ -41,7 +41,7 @@ Zasięg: {1}	Czas odnowienia: {2}",
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonFriends();
 			cellRange.RemoveAll(c => !c.CharacterOnCell.TookActionInPhaseBefore);
 			Active.Prepare(this, cellRange);

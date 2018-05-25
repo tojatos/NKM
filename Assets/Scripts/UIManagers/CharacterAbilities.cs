@@ -27,7 +27,7 @@ namespace UIManagers
 		{
 			if (Game.Active.CharacterOnMap == null) return;
 
-			var character = Game.Active.CharacterOnMap;
+			Character character = Game.Active.CharacterOnMap;
 			RemoveButtons();
 
 			//Create an ability button for each character ability
@@ -49,7 +49,7 @@ namespace UIManagers
 		/// <param name="ability">Get range from this ability</param>
 		private void SetRangeHelpTriggers(GameObject button, Ability ability)
 		{
-			var trigger = button.GetComponent<EventTrigger>() ?? button.AddComponent<EventTrigger>();
+			EventTrigger trigger = button.GetComponent<EventTrigger>() ?? button.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
 			entry.callback.AddListener(eventData => Game.Active.HelpHexCells = ability.GetRangeCells());
 			trigger.triggers.Add(entry);
@@ -57,14 +57,14 @@ namespace UIManagers
 			entry2.callback.AddListener(eventData => Game.Active.HelpHexCells = null);
 			trigger.triggers.Add(entry2);
 		}
-		private void SetButtonSprite(GameObject button, Ability ability)
+		private static void SetButtonSprite(GameObject button, Ability ability)
 		{
-				var abilitySprite = Stuff.Sprites.Abilities.SingleOrDefault(s => s.name == ability.Name) ?? Stuff.Sprites.Abilities.Single(s => s.name == "Default Ability Sprite");
+				Sprite abilitySprite = Stuff.Sprites.Abilities.SingleOrDefault(s => s.name == ability.Name) ?? Stuff.Sprites.Abilities.Single(s => s.name == "Default Ability Sprite");
 				button.GetComponent<Image>().sprite = abilitySprite;
 		}
 		private void CreateAbilityButton(Character character, Ability ability)
 		{
-			var button = Instantiate(AbilityButtonPrefab, transform);
+			GameObject button = Instantiate(AbilityButtonPrefab, transform);
 			button.name = character.Abilities.IndexOf(ability).ToString(); //we do that to be able to UpdateButtonData
 
 			button.AddSetTooltipEvent("<b>" + ability.Name + "</b>\n" + ability.GetDescription());
@@ -80,17 +80,17 @@ namespace UIManagers
 		{
 			if(Game==null||Game.Active.CharacterOnMap==null) return;
 
-			var character = Game.Active.CharacterOnMap;
+			Character character = Game.Active.CharacterOnMap;
 			Buttons.ForEach(button =>
 			{
-				var ability = character.Abilities[int.Parse(button.name)];
+				Ability ability = character.Abilities[int.Parse(button.name)];
 				button.ChangeImageColor(!ability.CanUse ? Color.grey : Color.white);
 				button.GetComponentInChildren<Text>().text = ability.CurrentCooldown > 0 ? ability.CurrentCooldown.ToString() : "";
 
 				CreateEnableSpriteIfEnableable(button, ability);
 			});
 		}
-		private void CreateEnableSpriteIfEnableable(GameObject button, Ability ability)
+		private static void CreateEnableSpriteIfEnableable(GameObject button, Ability ability)
 		{
 			if (!(ability is EnableableAbility)) return;
 

@@ -2,9 +2,9 @@
 
 public class Stat
 {
-	private readonly StatType Type;// { get; set; }
-	private readonly Character ParentCharacter;// { get; private set; }
-	public readonly int BaseValue;// { get; private set; }
+	private readonly StatType _type;
+	private readonly Character _parentCharacter;
+	public readonly int BaseValue;
 
 	public delegate void OnStatChange();
 	public event OnStatChange StatChanged;
@@ -15,21 +15,21 @@ public class Stat
 		get
 		{
 			var modifier = 0;
-			ParentCharacter.Effects.ForEach(e => modifier += e.Modifier(Type));
+			_parentCharacter.Effects.ForEach(e => modifier += e.Modifier(_type));
 			return _value + modifier;
 		}
 		set
 		{
 			_value = value;
-			if (Type == StatType.HealthPoints && Value > BaseValue) Value = BaseValue;
+			if (_type == StatType.HealthPoints && Value > BaseValue) Value = BaseValue;
 			StatChanged?.Invoke();
 		}
 	}
 
 	public Stat(Character parentCharacter, StatType type, int baseValue)
 	{
-		ParentCharacter = parentCharacter;
-		Type = type;
+		_parentCharacter = parentCharacter;
+		_type = type;
 		BaseValue = baseValue;
 		Value = BaseValue;
 	}

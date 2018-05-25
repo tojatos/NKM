@@ -4,9 +4,8 @@ using UIManagers;
 
 public class Turn
 {
-	private Game Game;
+	private readonly Game Game;
 	public bool IsDone { get; private set; }
-	//private int Number;
 	public bool WasCharacterPlaced { get; set; }
 	public Character CharacterThatTookActionInTurn { get; set; }
 
@@ -35,12 +34,10 @@ public class Turn
 		Game.Active.Turn.IsDone = false;
 		Game.Active.Reset();
 		UIManager.Instance.UpdateActivePlayerUI();
-		if (Game.Active.Phase.Number == 0)
+		if (Game.Active.Phase.Number != 0) return;
+		if (Game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap))
 		{
-		 if (Game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap))
-			{
-				UIManager.Instance.ForcePlacingChampions = true;
-			}
+			UIManager.Instance.ForcePlacingChampions = true;
 		}
 	}
 
@@ -51,17 +48,4 @@ public class Turn
 	{
 		TurnFinished?.Invoke();
 	}
-	//public void TurnFinished()
-	//{
-	//	if (CharacterThatTookActionInTurn != null)
-	//	{
-	//		CharacterThatTookActionInTurn.TookActionInPhaseBefore = true;
-	//	}
-	//	IsDone = true;
-	//	//Number++;
-	//	WasCharacterPlaced = false;
-	//	CharacterThatTookActionInTurn = null;
-	//	Game.Active.Reset();
-	//	HexMapDrawer.RemoveAllHighlights();
-	//}
 }

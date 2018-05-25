@@ -22,7 +22,7 @@ namespace UIManagers
 		public Text Quote;
 		public Text Author;
 
-		void Awake()
+		private void Awake()
 		{
 			Game = GameStarter.Instance.Game;
 		}

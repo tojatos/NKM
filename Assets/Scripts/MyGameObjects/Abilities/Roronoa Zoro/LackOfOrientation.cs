@@ -25,9 +25,9 @@ namespace MyGameObjects.Abilities.Roronoa_Zoro
 			else
 			{
 				Active.RemoveMoveCells();
-				int movementPoints = ParentCharacter.Speed.Value;
+				var movementPoints = ParentCharacter.Speed.Value;
 				Active.MoveCells.Add(ParentCharacter.ParentCell);
-				var lastCell = ParentCharacter.ParentCell; 
+				HexCell lastCell = ParentCharacter.ParentCell; 
 				while (movementPoints-- != 0)
 				{
 					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(1, true, true);

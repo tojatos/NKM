@@ -13,7 +13,7 @@ namespace MyGameObjects.Abilities.Asuna
 		private const int AbilityCriticalHitRange = 2;
 		private const int AbilityCriticalHitModifier = 3;
 
-		private bool HasDashed;
+		private bool _hasDashed;
 
 		public Dash()
 		{
@@ -34,14 +34,14 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 
 		public override List<HexCell> GetRangeCells()
 		{
-			var cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange, true, true, true);
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange, true, true, true);
 			return cellRange;
 		}
 
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveAll(c => c.CharacterOnCell != null);
 			if (cellRange.Count == 0)
 			{
@@ -50,7 +50,7 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveAll(c => c.CharacterOnCell != null);
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
@@ -62,8 +62,8 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 		public override void Use(HexCell cell)
 		{
 			ParentCharacter.MoveTo(cell);
-			HasDashed = true;
-			var cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, true, false, true);
+			_hasDashed = true;
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, true, false, true);
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
@@ -83,12 +83,12 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 		public override void OnUseFinish()
 		{
 			base.OnUseFinish();
-			HasDashed = false;
+			_hasDashed = false;
 		}
 
 		public override void Cancel()
 		{
-			if(HasDashed) OnUseFinish();
+			if(_hasDashed) OnUseFinish();
 			else OnFailedUseFinish();
 		}
 	}

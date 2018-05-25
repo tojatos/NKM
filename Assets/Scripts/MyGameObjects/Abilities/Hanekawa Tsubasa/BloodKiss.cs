@@ -30,7 +30,7 @@ ParentCharacter.Name, DoTDamage, DoTTime, AbilityRange, Cooldown);
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			if (cellRange.Count == 0)
 			{
@@ -43,7 +43,7 @@ ParentCharacter.Name, DoTDamage, DoTTime, AbilityRange, Cooldown);
 		}
 		protected override void Use()
 		{
-			var cellRange = GetRangeCells();
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			Active.Prepare(this, cellRange);
 		}
