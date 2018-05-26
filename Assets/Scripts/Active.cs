@@ -7,7 +7,10 @@ using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
-
+/// <summary>
+/// Main utility class.
+/// Contains information about active game state.
+/// </summary>
 public class Active
 {
 	private readonly Game Game;

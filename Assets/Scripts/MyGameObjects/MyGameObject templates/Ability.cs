@@ -92,7 +92,8 @@ namespace MyGameObjects.MyGameObject_templates
 				return;
 			}
 
-			Game.HexMapDrawer.RemoveAllHighlights();
+//			Game.HexMapDrawer.RemoveAllHighlights();
+			Active.Clean();
 			Use();
 		}
 		protected virtual void Use()

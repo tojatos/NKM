@@ -248,7 +248,7 @@ namespace MyGameObjects.MyGameObject_templates
 		private void PrepareAttackAndMove()
 		{
 //			Game.HexMapDrawer.RemoveAllHighlights();
-			Active.Clean();
+//			Active.Clean();
 			if (Active.GamePlayer != Owner)
 			{
 				MessageLogger.DebugLog("Nie jesteś właścicielem! Wara!");
@@ -394,6 +394,7 @@ namespace MyGameObjects.MyGameObject_templates
 		
 		public void Select()
 		{
+			Active.Clean();
 			CharacterStats.Instance.UpdateCharacterStats(this);
 			Active.CharacterOnMap = this;
 			CharacterAbilities.Instance.UpdateButtons();
