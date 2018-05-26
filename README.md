@@ -6,4 +6,4 @@ Made with Unity
 
 ## How the game works
 
-You can read about it in the [Game Rules](https://github.com/tojatos/NKM/docs/GameRules.md) section.
+You can read about it in the [Game Rules](https://github.com/tojatos/NKM/blob/master/docs/GameRules.md) section.
