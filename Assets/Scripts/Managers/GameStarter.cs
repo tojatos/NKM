@@ -51,7 +51,8 @@ namespace Managers
 							Characters = new List<Character>
 							{
 								new Character("Aqua"),
-								new Character("Dekomori Sanae")
+//								new Character("Dekomori Sanae")
+								new Character("Gilgamesh")
 							}
 						}
 					},

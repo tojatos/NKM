@@ -14,10 +14,6 @@ namespace MyGameObjects.MyGameObject_templates
 {
 	public class Character : MyGameObject
 	{
-		public Character(string name, Guid guid) : this(name)
-		{
-			Guid = guid;
-		}
 		public Character(string name)
 		{
 			//Define basic properties
@@ -91,14 +87,18 @@ namespace MyGameObjects.MyGameObject_templates
 		public bool HasUsedUltimatumAbilityInPhaseBefore { private get; set; }
 
 		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
-		private bool CanUseBasicAttack => !HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
+		private bool CanUseBasicAttack => !HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect;
 		public bool CanUseNormalAbility => !HasUsedNormalAbilityInPhaseBefore && !HasUsedBasicAttackInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
 		public bool CanUseUltimatumAbility => !(HasUsedUltimatumAbilityInPhaseBefore || Active.Turn.CharacterThatTookActionInTurn == this);
 
 		public bool TookActionInPhaseBefore { get; set; }
 		public bool IsAlive => HealthPoints.Value > 0;
 
-		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive || Active.Turn.CharacterThatTookActionInTurn != null && Active.Turn.CharacterThatTookActionInTurn != this);
+		private bool IsStunned => Effects.Any(e => e.GetType() == typeof(Stun));
+		private bool CanMove => Effects.All(e => e.GetType() != typeof(MovementDisability));
+		private bool HasBasicAttackInabilityEffect => Effects.Any(e => e.GetType() == typeof(BasicAttackInability));
+		
+		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive || Active.Turn.CharacterThatTookActionInTurn != null && Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
 
 		#endregion
 
@@ -181,16 +181,15 @@ namespace MyGameObjects.MyGameObject_templates
 			damage -= defense;
 			damage = damage < 0 ? 0 : damage;
 			TrueDamageModifier(attackedCharacter, ref damage);
-			MessageLogger.Log($"{this.FormattedFirstName()} atakuje {attackedCharacter.FormattedFirstName()}", false);
 			if (damage > 0)
 			{
 				attackedCharacter.Damage(ref damage);
-				MessageLogger.Log($" zadając <color=red><b>{damage}</b></color> obrażeń!");
+                MessageLogger.Log($"{this.FormattedFirstName()} atakuje {attackedCharacter.FormattedFirstName()}, zadając <color=red><b>{damage}</b></color> obrażeń!");
 				if (!attackedCharacter.IsAlive) OnEnemyKill?.Invoke();
 			}
 			else
 			{
-				MessageLogger.Log(", ale nie zadaje żadnych obrażeń!");
+                MessageLogger.Log($"{this.FormattedFirstName()} atakuje {attackedCharacter.FormattedFirstName()}, ale nie zadaje żadnych obrażeń!");
 			}
 			attackedCharacter.AfterBeingAttacked();
 			OnDamage?.Invoke(attackedCharacter, damage);
@@ -289,21 +288,18 @@ namespace MyGameObjects.MyGameObject_templates
 		}
 		private List<HexCell> GetPrepareMoveCells()
 		{
-			if (Effects.Any(e => e.GetType() == typeof(MovementDisability)))
-			{
-				MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający ruch!");
-				return Enumerable.Empty<HexCell>().ToList();
-			}
+			if (CanMove) return GetMoveCells();
+			MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający ruch!");
+			return Enumerable.Empty<HexCell>().ToList();
 
-			return GetMoveCells();
 		}
 		private List<HexCell> GetPrepareBasicAttackCells()
 		{
-			if (Effects.Any(e => e.GetType() == typeof(BasicAttackInability)))
-			{
-				MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający atak!");
-				return Enumerable.Empty<HexCell>().ToList();
-			}
+//			if (Effects.Any(e => e.GetType() == typeof(BasicAttackInability)))
+//			{
+//				MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający atak!");
+//				return Enumerable.Empty<HexCell>().ToList();
+//			}
 
 			List<HexCell> cellRange = GetBasicAttackCells();
 			if (CanAttackAllies)

@@ -8,6 +8,7 @@ namespace MyGameObjects.Effects
     {
         private const int Damage = 10;
         private readonly Character _characterThatAttacks;
+        private bool _wasActivatedOnce = false;
 
         public BlackBlood(Character characterThatAttacks, Character effectTarget, int cooldown = -1) : base(cooldown,
             effectTarget, "Black Blood")
@@ -16,10 +17,13 @@ namespace MyGameObjects.Effects
             Type = effectTarget.Owner == characterThatAttacks.Owner ? EffectType.Positive : EffectType.Negative;
             ParentCharacter.BeforeParentDamage += () =>
             {
+                if(_wasActivatedOnce) return;//prevent infinite loop
+                _wasActivatedOnce = true; 
                 List<Character> enemiesInRange =
-                    ParentCharacter.ParentCell.GetNeighbors(1).Select(c => c.CharacterOnCell).Where(c => c != null).ToList();
-//                if(effectTarget.Owner != characterThatAttacks.Owner) enemiesInRange.Add(effectTarget); TODO: infinite loop
+                    ParentCharacter.ParentCell.GetNeighbors(1).Select(c => c.CharacterOnCell).Where(c => c != null && c.Owner != characterThatAttacks.Owner).ToList();
+                if(effectTarget.Owner != characterThatAttacks.Owner) enemiesInRange.Add(effectTarget);
                 enemiesInRange.ForEach(enemy => characterThatAttacks.Attack(enemy, AttackType.Magical, Damage));
+                _wasActivatedOnce = false;
             };
         }
 

@@ -1,4 +1,5 @@
-﻿using MyGameObjects.MyGameObject_templates;
+﻿using System;
+using MyGameObjects.MyGameObject_templates;
 
 namespace MyGameObjects.Effects
 {
@@ -18,7 +19,7 @@ namespace MyGameObjects.Effects
 			return string.Format(
 @"{0} {3} o {1}
 Czas do zakończenia efektu: {2}",
-				_value >= 0 ? "Zwiększa" : "Zmniejsza", _value, CurrentCooldown, _statType);
+				_value >= 0 ? "Zwiększa" : "Zmniejsza", Math.Abs(_value), CurrentCooldown, _statType);
 		}
 		public override int Modifier(StatType statType)
 		{

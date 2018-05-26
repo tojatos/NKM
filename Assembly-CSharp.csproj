@@ -140,6 +140,7 @@
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\MovementDisability.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\PassiveBuff.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\StatModifier.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\Stun.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Items\GlassEye.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Items\RikkiBand.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Items\SachikoScissors.cs" />

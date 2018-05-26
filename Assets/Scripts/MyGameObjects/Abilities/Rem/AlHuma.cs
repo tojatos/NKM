@@ -37,7 +37,7 @@ namespace MyGameObjects.Abilities.Rem
 		public override string GetDescription()
 		{
 			return string.Format(
-@"{0} zamraża jednego wroga w zasięgu {1} do końca tej fazy,
+@"{0} zamraża jednego wroga w zasięgu {1} na jedną turę,
 zadając {2} obrażeń magicznych.
 Czas odnowiania: {3}",
 				ParentCharacter.Name, AbilityRange, AbilityDamage, Cooldown);

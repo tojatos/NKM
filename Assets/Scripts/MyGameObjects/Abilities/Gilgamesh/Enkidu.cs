@@ -10,7 +10,7 @@ namespace MyGameObjects.Abilities.Gilgamesh
 	public class Enkidu : Ability
 	{
 		private const int AbilityRange = 8;
-		private const int StunDuration = 2;
+		private const int SnarDuration = 2;
 		public Enkidu()
 		{
 			Name = "Enkidu";
@@ -39,7 +39,7 @@ namespace MyGameObjects.Abilities.Gilgamesh
 @"{0} wypuszcza niebiańskie łańcuchy, unieruchamiając przeciwnika na {1} fazy
 i podwajając bonusy zdolności biernej na ten okres.
 Zasięg: {2}	Czas odnowienia: {3}",
-				ParentCharacter.Name, StunDuration, AbilityRange, Cooldown);
+				ParentCharacter.Name, SnarDuration, AbilityRange, Cooldown);
 		}
 		protected override void Use()
 		{
@@ -55,8 +55,8 @@ Zasięg: {2}	Czas odnowienia: {3}",
 		{
 			try
 			{
-				ParentCharacter.Effects.Add(new PassiveBuff(StunDuration, ParentCharacter, Name));
-				targetCharacter.Effects.Add(new MovementDisability(StunDuration, targetCharacter, Name));
+				ParentCharacter.Effects.Add(new PassiveBuff(SnarDuration, ParentCharacter, Name));
+				targetCharacter.Effects.Add(new MovementDisability(SnarDuration, targetCharacter, Name));
 				OnUseFinish();
 			}
 			catch (Exception e)

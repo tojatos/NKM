@@ -7,7 +7,6 @@ namespace MyGameObjects.Effects
 		public BasicAttackInability(int cooldown, Character parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
 		{
 			Name = name??"Basic Attack Inability";
-			//CurrentCooldown = cooldown;
 			Type = EffectType.Negative;
 		}
 		public override string GetDescription()
