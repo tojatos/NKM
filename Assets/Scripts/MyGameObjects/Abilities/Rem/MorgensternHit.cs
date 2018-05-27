@@ -48,8 +48,9 @@ Czas odnowienia: {3}",
 			Active.MakeAction(cellRange);
 
 		}
-		public override void Use(List<Character> characters)
+		public override void Use(List<HexCell> cells)
 		{
+			List<Character> characters = cells.GetCharacters();
 			characters.ForEach(c =>ParentCharacter.Attack(c, AttackType.Physical, AbilityDamage));
 			OnUseFinish();
 		}

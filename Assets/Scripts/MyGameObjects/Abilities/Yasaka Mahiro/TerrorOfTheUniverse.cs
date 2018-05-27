@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Helpers;
 using Hex;
 using MyGameObjects.Effects;
 using MyGameObjects.MyGameObject_templates;
@@ -38,8 +39,9 @@ Zasięg: {4}	Czas odnowienia: {5}",
 			Active.Prepare(this, cellRange, false, false);
 			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, AbilityRadius);
 		}
-		public override void Use(List<Character> characters)
+		public override void Use(List<HexCell> cells)
 		{
+			List<Character> characters = cells.GetCharacters();
 			characters.ForEach(targetCharacter =>
 			{
 				if (targetCharacter.Owner == Active.GamePlayer) return;

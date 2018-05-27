@@ -100,15 +100,19 @@ namespace MyGameObjects.MyGameObject_templates
 		{
 			throw new NotImplementedException();
 		}
-		public virtual void Use(List<Character> characters)
-		{
-			throw new NotImplementedException();
-		}
+//		public virtual void Use(List<Character> characters)
+//		{
+//			throw new NotImplementedException();
+//		}
 		public virtual void Use(Character character)
 		{
 			throw new NotImplementedException();
 		}
 		public virtual void Use(HexCell cell)
+		{
+			throw new NotImplementedException();
+		}
+		public virtual void Use(List<HexCell> cells)
 		{
 			throw new NotImplementedException();
 		}
@@ -147,8 +151,8 @@ namespace MyGameObjects.MyGameObject_templates
 		public virtual void TrueDamageModifier(Character targetCharacter, ref int damage){}
 		public virtual void Awake(){}
 		public virtual void OnEnemyKill(){}
-		public virtual void AttackFriend(Character attackedCharacter){}
-		public virtual void AttackEnemy(Character attackedCharacter){}
+		public virtual void AttackFriend(Character attackedCharacter, int damage){}
+		public virtual void AttackEnemy(Character attackedCharacter, int damage){}
 		public virtual void OnDamage(Character targetCharacter, int damageDealt){}
 		public virtual void BeforeParentDamage(ref int damage){}
 		/// <summary>
@@ -172,6 +176,7 @@ namespace MyGameObjects.MyGameObject_templates
 		{
 			throw new NotImplementedException();
 		}
+
 	}
 	public enum AbilityType
 	{

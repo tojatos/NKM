@@ -128,6 +128,8 @@ namespace MyGameObjects.MyGameObject_templates
 
 		public void BasicAttack(Character attackedCharacter)
 		{
+			int damage = AttackPoints.Value;
+			BeforeBasicAttack?.Invoke(attackedCharacter, ref damage);
 			if (attackedCharacter.Abilities.All(a => a.BeforeParentBasicAttacked(this)))
 			{
 				if (attackedCharacter.Owner == Owner)
@@ -137,7 +139,7 @@ namespace MyGameObjects.MyGameObject_templates
 						if (Abilities.Count(a => a.OverridesFriendAttack) > 1)
 							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
 
-						Abilities.Single(a => a.OverridesFriendAttack).AttackFriend(attackedCharacter);
+						Abilities.Single(a => a.OverridesFriendAttack).AttackFriend(attackedCharacter, damage);
 					}
 				}
 				else
@@ -147,11 +149,11 @@ namespace MyGameObjects.MyGameObject_templates
 						if (Abilities.Count(a => a.OverridesEnemyAttack) > 1)
 							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
 
-						Abilities.Single(a => a.OverridesEnemyAttack).AttackEnemy(attackedCharacter);
+						Abilities.Single(a => a.OverridesEnemyAttack).AttackEnemy(attackedCharacter, damage);
 					}
 					else
 					{
-						Attack(attackedCharacter, AttackType.Physical, AttackPoints.Value);
+						Attack(attackedCharacter, AttackType.Physical, damage);
 					}
 				}
 			}
@@ -203,6 +205,7 @@ namespace MyGameObjects.MyGameObject_templates
 
 			BeforeParentDamage?.Invoke();
 			HealthPoints.Value -= damage;
+			OnParentDamage?.Invoke(damage);
 		}
 		public void RemoveIfDead()
 		{
@@ -214,11 +217,15 @@ namespace MyGameObjects.MyGameObject_templates
 			if (Active.CharacterOnMap == this) Deselect();
 		}
 		public delegate void VoidDelegate();
+		public delegate void IntDelegate(int value);
 		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
+		public delegate void CharacterRefIntDelegate(Character targetCharacter, ref int value);
 		public event VoidDelegate JustBeforeFirstAction;
 		public event VoidDelegate AfterBeingAttacked;
 		public event VoidDelegate OnEnemyKill;
 		public event VoidDelegate BeforeParentDamage;
+		public event CharacterRefIntDelegate BeforeBasicAttack;
+		public event IntDelegate OnParentDamage;
 		public event CharacterIntDelegate OnDamage;
 		public event CharacterIntDelegate OnHeal;
 		public void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();

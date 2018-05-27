@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Helpers;
 using Hex;
 using MyGameObjects.MyGameObject_templates;
 
@@ -37,8 +38,9 @@ Zasięg: {2}	Czas odnowienia: {3}",
 			Active.Prepare(this, cellRange, false, false);
 			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, 1);
 		}
-		public override void Use(List<Character> characters)
+		public override void Use(List<HexCell> cells)
 		{
+			List<Character> characters = cells.GetCharacters();
 			var killedSomething = false;
 			characters.ForEach(targetCharacter =>
 			{

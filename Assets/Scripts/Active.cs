@@ -248,7 +248,7 @@ public class Active
 				throw new ArgumentOutOfRangeException();
 		}
 	}
-	public void MakeAction(IEnumerable<HexCell> cells)
+	public void MakeAction(List<HexCell> cells)
 	{
 		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 		switch (Action)
@@ -256,8 +256,9 @@ public class Active
 			case Action.None:
 				throw new Exception("Żadna akcja nie jest aktywna!");
 			case Action.UseAbility:
-				List<Character> characters = cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
-				Ability.Use(characters);
+				Ability.Use(cells);
+//				List<Character> characters = cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
+//				Ability.Use(characters);
 				//Turn.CharacterThatTookActionInTurn = CharacterOnMap;
 				break;
 			case Action.AttackAndMove:

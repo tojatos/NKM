@@ -30,11 +30,11 @@ ParentCharacter.Name, HealthPercent, CollectedEnergy
 );
 		}
 
-		public override void AttackEnemy(Character attackedCharacter)
+		public override void AttackEnemy(Character attackedCharacter, int damage)
 		{
 			//We have to collect energy before attacking to prevent missing reference exception if the enemy is killed (animation has to know the target hexcell)
 			TryCollectingEnergy(attackedCharacter);
-			ParentCharacter.Attack(attackedCharacter, AttackType.Physical, ParentCharacter.AttackPoints.Value);
+			ParentCharacter.Attack(attackedCharacter, AttackType.Physical, damage);
 		}
 
 		public void TryCollectingEnergy(Character targetCharacter)

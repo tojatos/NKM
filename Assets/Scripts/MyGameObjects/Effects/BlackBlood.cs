@@ -8,7 +8,7 @@ namespace MyGameObjects.Effects
     {
         private const int Damage = 10;
         private readonly Character _characterThatAttacks;
-        private bool _wasActivatedOnce = false;
+        private bool _wasActivatedOnce;
 
         public BlackBlood(Character characterThatAttacks, Character effectTarget, int cooldown = -1) : base(cooldown,
             effectTarget, "Black Blood")

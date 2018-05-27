@@ -120,6 +120,9 @@
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hecate\AsterYo.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hecate\ItadakiNoKura.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hecate\SonzaiNoChikara.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Itsuka Kotori\CamaelMegiddo.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Itsuka Kotori\Conflagration.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Itsuka Kotori\ElohimGibor.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\AlHuma.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\Confession.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\DemonicForm.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\PassiveBuff.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\StatModifier.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Effects\Stun.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\HexCellEffects\Conflagration.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Items\GlassEye.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Items\RikkiBand.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Items\SachikoScissors.cs" />

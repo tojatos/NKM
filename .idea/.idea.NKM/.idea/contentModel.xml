@@ -105,6 +105,11 @@
               <e p="ItadakiNoKura.cs" t="Include" />
               <e p="SonzaiNoChikara.cs" t="Include" />
             </e>
+            <e p="Itsuka Kotori" t="Include">
+              <e p="CamaelMegiddo.cs" t="Include" />
+              <e p="Conflagration.cs" t="Include" />
+              <e p="ElohimGibor.cs" t="Include" />
+            </e>
             <e p="Rem" t="Include">
               <e p="AlHuma.cs" t="Include" />
               <e p="Confession.cs" t="Include" />
@@ -135,6 +140,10 @@
             <e p="MovementDisability.cs" t="Include" />
             <e p="PassiveBuff.cs" t="Include" />
             <e p="StatModifier.cs" t="Include" />
+            <e p="Stun.cs" t="Include" />
+          </e>
+          <e p="HexCellEffects" t="Include">
+            <e p="Conflagration.cs" t="Include" />
           </e>
           <e p="Items" t="Include">
             <e p="GlassEye.cs" t="Include" />

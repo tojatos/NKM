@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Helpers;
 using Hex;
 using MyGameObjects.MyGameObject_templates;
 
@@ -35,8 +36,9 @@ Zasięg: {3}	Czas odnowienia: {4}",
 			Active.Prepare(this, cellRange, false, false);
 			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, AbilityRadius);
 		}
-		public override void Use(List<Character> characters)
+		public override void Use(List<HexCell> cells)
 		{
+			List<Character> characters = cells.GetCharacters();
 			try
 			{
 				ItadakiNoKura passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();

@@ -28,11 +28,11 @@ zada on {2}% obrażeń."
 				, ParentCharacter.Name, Range, AaDamageModifier*100);
 		}
 
-		public override void AttackEnemy(Character attackedCharacter)
+		public override void AttackEnemy(Character attackedCharacter, int damage)
 		{
 			var modifier = 1;
 			if (GetRangeCells().Contains(attackedCharacter.ParentCell)) modifier = AaDamageModifier;
-			ParentCharacter.Attack(attackedCharacter, AttackType.Physical, ParentCharacter.AttackPoints.Value * modifier);
+			ParentCharacter.Attack(attackedCharacter, AttackType.Physical, damage * modifier);
 		}
 	}
 }

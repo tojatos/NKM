@@ -13,6 +13,6 @@ namespace MyGameObjects.Abilities.Aqua
 
 		public override string GetDescription() => $"{ParentCharacter.Name} może używać podstawowych ataków na sojuszników, lecząc ich za ilość HP równą jej obecnemu atakowi.";
 
-		public override void AttackFriend(Character attackedCharacter) => ParentCharacter.Heal(attackedCharacter, ParentCharacter.AttackPoints.Value);
+		public override void AttackFriend(Character attackedCharacter, int damage) => ParentCharacter.Heal(attackedCharacter, damage);
 	}
 }

@@ -35,7 +35,7 @@ Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdziela
 			Active.MakeAction(cellRange);
 		}
 
-		public override void Use(List<Character> characters)
+		public override void Use(List<HexCell> cells)
 		{
 			try
 			{

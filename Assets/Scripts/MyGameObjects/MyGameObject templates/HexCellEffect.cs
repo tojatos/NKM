@@ -13,13 +13,8 @@ namespace MyGameObjects.MyGameObject_templates
 		
 		protected int CurrentCooldown { get; private set; }
 		protected HexCell ParentCell { get; }
-		public EffectType Type { get; protected set; }
 
 		public abstract string GetDescription();
-		public virtual int Modifier(StatType statType)
-		{
-			return 0;
-		}
 
 		public void OnPhaseFinish()
 		{

@@ -40,8 +40,9 @@ namespace MyGameObjects.Abilities.Crona
 			Active.Prepare(this, cellRange);
 			Active.MakeAction(cellRange);
 		}
-		public override void Use(List<Character> characters)
+		public override void Use(List<HexCell> cells)
 		{
+			List<Character> characters = cells.GetCharacters();
 			characters.ForEach(c =>
 			{
 				c.Effects.Add(new Stun(1, c, Name)); 
