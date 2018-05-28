@@ -179,31 +179,31 @@ namespace Hex
 
 			throw new Exception("direction not found");
 		}
-		public HexCell GetCell(HexDirection direction, int value)
+		public HexCell GetCell(HexDirection direction, int distance)
 		{
-			if (value <= 0)
-				throw new ArgumentOutOfRangeException(nameof(value), value, null);
+			if (distance <= 0)
+				throw new ArgumentOutOfRangeException(nameof(distance), distance, null);
 
 			HexCell cellToReturn;
 			switch (direction)
 			{
 				case HexDirection.Ne:
-					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y - value);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y - distance);
 					break;
 				case HexDirection.E:
-					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + value && c.Coordinates.Y == Coordinates.Y - value);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + distance && c.Coordinates.Y == Coordinates.Y - distance);
 					break;
 				case HexDirection.Se:
-					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + value && c.Coordinates.Y == Coordinates.Y);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + distance && c.Coordinates.Y == Coordinates.Y);
 					break;
 				case HexDirection.Sw:
-					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y + value);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y + distance);
 					break;
 				case HexDirection.W:
-					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - value && c.Coordinates.Y == Coordinates.Y + value);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - distance && c.Coordinates.Y == Coordinates.Y + distance);
 					break;
 				case HexDirection.Nw:
-					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - value && c.Coordinates.Y == Coordinates.Y);
+					cellToReturn = Game.HexMapDrawer.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - distance && c.Coordinates.Y == Coordinates.Y);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);

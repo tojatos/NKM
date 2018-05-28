@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Helpers;
 using Hex;
@@ -9,7 +10,6 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
 	public class CamaelMegiddo : Ability
 	{
 		private const int Damage = 35;
-		private const int Width = 1;
 
 		public CamaelMegiddo()
 		{
@@ -23,44 +23,74 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
 			return string.Format(
 @"{0} wystrzeliwuje falę płomieni w wybranym kierunku zadając {1} obrażeń wszystkim trafionym wrogom.
 Jeżeli ta umiejętność uderzy w obszar Conflagration, zada ona obrażenia na całym tym obszarze, ale nie poleci dalej.
-Szerokość: {2}	Czas odnowienia: {3}",
-				ParentCharacter.Name, Damage, Width, Cooldown);
+Czas odnowienia: {2}",
+				ParentCharacter.Name, Damage, Cooldown);
 		}
 		public override List<HexCell> GetRangeCells()
 		{
-			return (List<HexCell>) Enumerable.Empty<HexCell>(); //TODO
+			List<HexCell> cells = new List<HexCell>();
+			bool hitConflargation = false;
+			foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
+			{
+				HexCell lastCell = ParentCharacter.ParentCell;
+				do
+				{
+					HexCell neighbor = lastCell.GetCell(direction, 1);
+					if(neighbor==null) break;
+					if (neighbor.Effects.ContainsType(typeof(HexCellEffects.Conflagration)))
+					{
+						hitConflargation = true;
+						break;
+					}
+					cells.Add(neighbor);
+					lastCell = neighbor;
+				} while (true);
+			}
+				if(hitConflargation) cells.AddRange(HexMapDrawer.Instance.Cells.Where(c => c.Effects.ContainsType(typeof(HexCellEffects.Conflagration))));
+				return cells.Distinct().ToList();
 		}
 		protected override void Use()
 		{
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(1);
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
 
-			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
+			MessageLogger.DebugLog("Nie ma komórek dookoła postaci!");
 			OnFailedUseFinish();
 		}
-//		public override void Use(Character targetCharacter)
-//		{
-//			Active.PlayAudio(Name);
-//			HexCell targetCell = targetCharacter.ParentCell;
-//			SendShockwave(targetCell);
-//			SendShockwave(targetCell);
-//			SendShockwave(targetCell);
-//			OnUseFinish();
-//		}
 
-//		private void SendShockwave(HexCell targetCell)
-//		{
-//			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCell);
-//			List<HexCell> shockwaveCells = ParentCharacter.ParentCell.GetLine(direction, AbilityRange).ToList();
-//			foreach (HexCell c in shockwaveCells)
-//			{
-//				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
-//
-//				ParentCharacter.Attack(c.CharacterOnCell, AttackType.Physical, AbilityDamage);
-//				break;
-//			}
-//		}
+		public override void Use(HexCell cell)
+		{
+			SendFlamewave(cell);
+			OnUseFinish();
+		}
+
+		private void SendFlamewave(HexCell targetCell)
+		{
+			List<HexCell> cells = new List<HexCell>();
+			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCell);
+			bool hitConflargation = false;
+			HexCell lastCell = ParentCharacter.ParentCell;
+				do
+				{
+					HexCell neighbor = lastCell.GetCell(direction, 1);
+					if(neighbor==null) break;
+					if (neighbor.Effects.ContainsType(typeof(HexCellEffects.Conflagration)))
+					{
+						hitConflargation = true;
+						break;
+					}
+					cells.Add(neighbor);
+					lastCell = neighbor;
+				} while (true);
+			
+				if(hitConflargation) cells.AddRange(HexMapDrawer.Instance.Cells.Where(c => c.Effects.ContainsType(typeof(HexCellEffects.Conflagration))));
+			foreach (HexCell c in cells)
+			{
+				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
+
+				ParentCharacter.Attack(c.CharacterOnCell, AttackType.Magical, Damage);
+			}
+		}
 	}
 }

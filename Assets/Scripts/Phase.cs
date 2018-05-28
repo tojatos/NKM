@@ -15,7 +15,7 @@ public class Phase
 	public void Finish()
 	{
 		Game.Players.ForEach(p => p.Characters.ForEach(c => c.OnPhaseFinish()));
-		Game.HexMapDrawer.Cells.ForEach(c=> c.Effects.ForEach(e=>e.OnPhaseFinish()));
+//		Game.HexMapDrawer.Cells.ForEach(c=> c.Effects.ForEach(e=>e.OnPhaseFinish()));
 		Number++;
 		UIManager.Instance.UpdateActivePhaseText();
 	}

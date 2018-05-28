@@ -35,7 +35,7 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
 
         public override List<HexCell> GetBasicAttackCells()
         {
-            List<HexCell> cellRange = new List<HexCell>();
+            List<HexCell> cellRange;
             switch (ParentCharacter.Type)
 			{
 				case FightType.Ranged:
