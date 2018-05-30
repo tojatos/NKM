@@ -58,12 +58,14 @@
     <Compile Include="Assets\Scripts\AllMyGameObjects.cs" />
     <Compile Include="Assets\Scripts\AnimationPlayer.cs" />
     <Compile Include="Assets\Scripts\Animations\AsterYo.cs" />
+    <Compile Include="Assets\Scripts\Animations\Destroy.cs" />
     <Compile Include="Assets\Scripts\Animations\ItadakiNoKura.cs" />
     <Compile Include="Assets\Scripts\Animations\MoveTo.cs" />
     <Compile Include="Assets\Scripts\Animations\NkmAnimation.cs" />
     <Compile Include="Assets\Scripts\Animations\NkmAnimationPart.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\AsterYoFinish.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\AsterYoStart.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\Destroy.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\FloatingInfoFinish.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\FloatingInfoStart.cs" />
     <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraFinish.cs" />

@@ -35,7 +35,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 			{
 				HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);
 				HexCell moveCell = c.GetCell(direction, 2);
-				return moveCell != null && moveCell.Type != HexTileType.Wall;
+				return moveCell != null && moveCell.Type != HexTileType.Wall && moveCell.CharacterOnCell == null;
 			}))
 			{
 				throw new Exception("Nie ma gdzie się ruszyć!");
@@ -45,26 +45,35 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
-			var canUseAbility = Active.Prepare(Action.UseAbility, cellRange);
+			List<HexCell> validatedCellRange = new List<HexCell>();
+				cellRange.ForEach(c =>
+				{
+					HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);
+					HexCell moveCell = c.GetCell(direction, 2);
+					if (moveCell == null || moveCell.Type == HexTileType.Wall || moveCell.CharacterOnCell != null)
+					{
+//						throw new Exception("Nie ma gdzie się ruszyć!");
+//						cellRange.Remove(c);
+						return;
+					}
+					validatedCellRange.Add(c);
+
+				});
+			var canUseAbility = Active.Prepare(Action.UseAbility, validatedCellRange);
 			try
 			{
 				if (!canUseAbility)
 				{
 					throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
 				}
-
-				cellRange.ForEach(c =>
+				
+				validatedCellRange.ForEach(c =>
 				{
+					c.ToggleHighlight(HiglightColor.Red);
 					HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);
 					HexCell moveCell = c.GetCell(direction, 2);
-					if (moveCell == null || moveCell.Type == HexTileType.Wall)
-					{
-						throw new Exception("Nie ma gdzie się ruszyć!");
-					}
-
 					moveCell.ToggleHighlight(HiglightColor.WhiteOrange);
 				});
-				cellRange.ForEach(c => c.ToggleHighlight(HiglightColor.Red));
 				Active.Ability = this;
 				Active.PlayAudio("oni");
 			}
@@ -78,8 +87,8 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		{
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCharacter.ParentCell);
 			HexCell moveCell = targetCharacter.ParentCell.GetCell(direction, 2);
-			ParentCharacter.Attack(targetCharacter, AttackType.Physical, ParentCharacter.AttackPoints.Value);
 			ParentCharacter.MoveTo(moveCell);
+			ParentCharacter.Attack(targetCharacter, AttackType.Physical, ParentCharacter.AttackPoints.Value);
 			Active.PlayAudio("giri");
 			OnUseFinish();
 		}

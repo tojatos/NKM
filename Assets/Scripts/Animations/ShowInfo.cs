@@ -8,7 +8,7 @@ namespace Animations
         
         public ShowInfo(Transform trans, string value, Color color)
         {
-            AllowPlayingOtherAnimations = true;
+//            AllowPlayingOtherAnimations = true;
             var f = new FloatingInfoStart(trans, value, color);
             GameObject textObject = f.TextObject;
             AnimationParts.Enqueue(f);

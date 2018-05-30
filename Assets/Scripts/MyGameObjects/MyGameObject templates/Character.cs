@@ -193,8 +193,8 @@ namespace MyGameObjects.MyGameObject_templates
 			{
                 MessageLogger.Log($"{this.FormattedFirstName()} atakuje {attackedCharacter.FormattedFirstName()}, ale nie zadaje żadnych obrażeń!");
 			}
-			attackedCharacter.AfterBeingAttacked();
 			OnDamage?.Invoke(attackedCharacter, damage);
+			attackedCharacter.AfterBeingAttacked();
 		}
 		private void Damage(ref int damage)
 		{
@@ -235,7 +235,8 @@ namespace MyGameObjects.MyGameObject_templates
 			ParentCell.CharacterOnCell = null;
 			ParentCell = null;
 			IsOnMap = false;
-			Object.Destroy(CharacterObject);
+//			Object.Destroy(CharacterObject);//TODO: enqueue that as animation
+			AnimationPlayer.Add(new Destroy(CharacterObject));
 		}
 		private void DamageModifier(Character targetCharacter, ref int damage)
 		{
@@ -425,10 +426,18 @@ namespace MyGameObjects.MyGameObject_templates
 			foreach (AbilityType type in Enum.GetValues(typeof(AbilityType)))
 			{
 				var abilitiesOfType = abilities.Count(a => a.Type == type);
-				if (abilitiesOfType==0) Abilities.Add(new Empty(type));
-				else if (abilitiesOfType==1) Abilities.Add(abilities.First(a=>a.Type == type));
-				else Abilities.AddRange(abilities.FindAll(a=>a.Type==type));
-//				Abilities.Add(abilities.All(a => a.Type != type) ? new Empty(type) : abilities.First(a => a.Type == type));
+				switch (abilitiesOfType)
+				{
+					case 0:
+						Abilities.Add(new Empty(type));
+						break;
+					case 1:
+						Abilities.Add(abilities.First(a=>a.Type == type));
+						break;
+					default:
+						Abilities.AddRange(abilities.FindAll(a=>a.Type==type));
+						break;
+				}
 			}
 
 			Abilities.ForEach(a => a.ParentCharacter = this);

@@ -15,7 +15,7 @@ namespace Animations.Parts
         {
             _textToShow = value;
             _textColor = color;
-            TextObject = Object.Instantiate(Stuff.Prefabs.Single(p => p.name == "Floating Info"), trans);
+            TextObject = Object.Instantiate(Stuff.Prefabs.Single(p => p.name == "Floating Info"), trans.position, trans.rotation);
             TextObject.Hide();
         }
 
@@ -24,6 +24,7 @@ namespace Animations.Parts
             var mesh = TextObject.GetComponent<TextMesh>();
             mesh.color = _textColor;
             mesh.text = _textToShow;
+            mesh.fontSize = 120;
             TextObject.Show();
             
             IsFinished = true;

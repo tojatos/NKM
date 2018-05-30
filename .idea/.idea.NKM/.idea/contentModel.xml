@@ -18,6 +18,7 @@
         <e p="AnimationPlayer.cs" t="Include" />
         <e p="Animations" t="Include">
           <e p="AsterYo.cs" t="Include" />
+          <e p="Destroy.cs" t="Include" />
           <e p="ItadakiNoKura.cs" t="Include" />
           <e p="MoveTo.cs" t="Include" />
           <e p="NkmAnimation.cs" t="Include" />
@@ -25,6 +26,7 @@
           <e p="Parts" t="Include">
             <e p="AsterYoFinish.cs" t="Include" />
             <e p="AsterYoStart.cs" t="Include" />
+            <e p="Destroy.cs" t="Include" />
             <e p="FloatingInfoFinish.cs" t="Include" />
             <e p="FloatingInfoStart.cs" t="Include" />
             <e p="ItadakiNoKuraFinish.cs" t="Include" />
