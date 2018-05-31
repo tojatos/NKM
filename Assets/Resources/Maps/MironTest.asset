@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Name: MironTest
   m_EditorClassIdentifier: 
   Name: Test Mirona
-  Map: {fileID: 2800000, guid: 14d6c887b91e14865ac8b409151672a7, type: 3}
-  MaxCharacters: 2
+  Map: {fileID: 2800000, guid: a47902292321241309968651493ce2d0, type: 3}
+  MaxCharacters: 6
   SpawnPoints: 0200000003000000
   ColorMappings:
   - Color: {r: 0, g: 0, b: 0, a: 1}
     HexTileType: 1
   - Color: {r: 1, g: 1, b: 1, a: 1}
     HexTileType: 0
+  - Color: {r: 1, g: 0, b: 0, a: 1}
+    HexTileType: 2
+  - Color: {r: 1, g: 1, b: 0, a: 1}
+    HexTileType: 3

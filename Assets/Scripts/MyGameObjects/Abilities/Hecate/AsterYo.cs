@@ -11,7 +11,7 @@ namespace MyGameObjects.Abilities.Hecate
 	{
 		private const int AbilityDamage = 12;
 		private const int AbilityRange = 10;
-		private const int AbilityRadius = 10;
+		private const int AbilityRadius = 7;
 		public AsterYo()
 		{
 			Name = "Aster Yo";

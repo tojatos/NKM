@@ -8,7 +8,7 @@ namespace MyGameObjects.Abilities.Aqua
 {
 	public class Purification : Ability
 	{
-		private const int AbilityRange = 8;
+		private const int AbilityRange = 5;
 
 		public Purification()
 		{

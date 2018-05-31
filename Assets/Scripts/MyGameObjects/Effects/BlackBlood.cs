@@ -15,7 +15,7 @@ namespace MyGameObjects.Effects
         {
             _characterThatAttacks = characterThatAttacks;
             Type = effectTarget.Owner == characterThatAttacks.Owner ? EffectType.Positive : EffectType.Negative;
-            ParentCharacter.BeforeParentDamage += () =>
+            Character.VoidDelegate tryToActivateEffect = () =>
             {
                 if(_wasActivatedOnce) return;//prevent infinite loop
                 _wasActivatedOnce = true; 
@@ -25,6 +25,8 @@ namespace MyGameObjects.Effects
                 enemiesInRange.ForEach(enemy => characterThatAttacks.Attack(enemy, AttackType.Magical, Damage));
                 _wasActivatedOnce = false;
             };
+            ParentCharacter.BeforeParentDamage += tryToActivateEffect;
+            OnRemove += () => ParentCharacter.BeforeParentDamage -= tryToActivateEffect;
         }
 
         public override string GetDescription()

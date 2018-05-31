@@ -14,12 +14,15 @@ namespace MyGameObjects.Effects
 			_damagePerTick = damagePerTick;
 			_characterThatAttacks = characterThatAttacks;
 			Type = EffectType.Negative;
-			ParentCharacter.JustBeforeFirstAction += () =>
+			Character.VoidDelegate tryToActivateEffect = 
+			() =>
 			{
 				_characterThatAttacks.Attack(ParentCharacter, attackType, _damagePerTick);
 				if (ParentCharacter.IsAlive)
 					ParentCharacter.Heal(_characterThatAttacks, _damagePerTick);
 			};
+			ParentCharacter.JustBeforeFirstAction += tryToActivateEffect;
+			OnRemove += () => ParentCharacter.JustBeforeFirstAction -= tryToActivateEffect;
 		}
 		public override string GetDescription()
 		{

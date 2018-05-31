@@ -11,7 +11,9 @@ namespace MyGameObjects.Effects
 			Name = name ?? "Damage Over Time";
 			_damagePerTick = damagePerTick;
 			Type = EffectType.Negative;
-			ParentCharacter.JustBeforeFirstAction += () => characterThatAttacks.Attack(ParentCharacter, attackType, _damagePerTick);
+            Character.VoidDelegate tryToActivateEffect = () => characterThatAttacks.Attack(ParentCharacter, attackType, _damagePerTick);
+			ParentCharacter.JustBeforeFirstAction += tryToActivateEffect;
+			OnRemove += () => ParentCharacter.JustBeforeFirstAction -= tryToActivateEffect;
 		}
 		public override string GetDescription()
 		{

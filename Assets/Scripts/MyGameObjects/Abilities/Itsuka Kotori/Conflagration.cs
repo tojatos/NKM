@@ -60,7 +60,7 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
                 @"{0} wywołuje Pożar na wskazanym obszarze o promieniu 6.
 {0} może atakować wrogów znajdujących się na terenie Pożaru podstawowymi atakami, zadając 50% dodatkowych obrażeń, niezależnie od tego gdzie sama się znajduje.
 Zasięg: {1}	Czas trwania: {2} Czas odnowienia: {3}",
-                ParentCharacter.Name, Radius, EffectTime, Cooldown);
+                ParentCharacter.Name, Range, EffectTime, Cooldown);
         }
 
         public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);

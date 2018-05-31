@@ -9,7 +9,7 @@ namespace MyGameObjects.MyGameObject_templates
 			CurrentCooldown = cooldown >= 0 ? cooldown : int.MaxValue; //effect is infinite
 			ParentCell = parentCell;
 			if (name != null) Name = name;
-			Active.Turn.TurnFinished += () =>
+			Active.Phase.PhaseFinished += () =>//TODO
 			{
 				if (CurrentCooldown > 0) --CurrentCooldown;
 				if (CurrentCooldown != 0) return;
