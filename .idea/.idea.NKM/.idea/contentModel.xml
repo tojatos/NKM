@@ -81,6 +81,11 @@
               <e p="LambentLight.cs" t="Include" />
               <e p="SwordDance.cs" t="Include" />
             </e>
+            <e p="Bezimienni" t="Include">
+              <e p="AceInTheHole.cs" t="Include" />
+              <e p="Castling.cs" t="Include" />
+              <e p="Check.cs" t="Include" />
+            </e>
             <e p="Crona" t="Include">
               <e p="BlackBlood.cs" t="Include" />
               <e p="Infection.cs" t="Include" />

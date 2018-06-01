@@ -40,7 +40,8 @@ namespace Managers
 							{
 //								new Character("Sinon"),
 								new Character("Hecate"),
-								new Character("Roronoa Zoro"),
+//								new Character("Roronoa Zoro"),
+								new Character("Bezimienni"),
 								new Character("Itsuka Kotori"),
 								
 							}

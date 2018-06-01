@@ -106,6 +106,9 @@
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\Dash.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\LambentLight.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\SwordDance.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Bezimienni\AceInTheHole.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Bezimienni\Castling.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Bezimienni\Check.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\BlackBlood.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\Infection.cs" />
     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\ScreechAlpha.cs" />
