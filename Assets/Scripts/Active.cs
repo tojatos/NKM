@@ -149,8 +149,16 @@ public class Active
 
 	public void PlayAudio(string path, float volume = 0.8f)
 	{
-		var ac = Resources.Load("Audio/"+path) as AudioClip;
-		AudioSource.PlayClipAtPoint(ac, Camera.main.transform.position, volume);
+		try
+		{
+			var ac = Resources.Load("Audio/"+path) as AudioClip;
+            AudioSource.PlayClipAtPoint(ac, Camera.main.transform.position, volume);
+		}
+		catch (Exception e)
+		{
+			Debug.LogWarning(e.Message);
+		}
+		
 	}
 
 	public void RemoveMoveCells()
