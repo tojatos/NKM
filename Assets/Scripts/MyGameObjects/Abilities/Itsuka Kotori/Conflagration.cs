@@ -12,7 +12,7 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
         private const int Range = 13;
         private const int Radius = 6;
         private const int EffectTime = 3;
-        private const int AdditionalDamagePercent = 50;
+        private const int DamagePercent = 50;
 
         public Conflagration()
         {
@@ -29,7 +29,7 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
            ParentCharacter.BeforeBasicAttack += (Character character, ref int value) =>
             {
                 if (character.ParentCell.Effects.ContainsType(typeof(HexCellEffects.Conflagration)))
-                    value = (int) (value * (AdditionalDamagePercent / 100f + 1));
+                    value = (int) (value * (DamagePercent / 100f));
             };   
         }
 
@@ -58,7 +58,7 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
         {
             return string.Format(
                 @"{0} wywołuje Pożar na wskazanym obszarze o promieniu 6.
-{0} może atakować wrogów znajdujących się na terenie Pożaru podstawowymi atakami, zadając 50% dodatkowych obrażeń, niezależnie od tego gdzie sama się znajduje.
+{0} może atakować wrogów znajdujących się na terenie Pożaru podstawowymi atakami, zadając 50% zwykłych obrażeń, niezależnie od tego gdzie sama się znajduje.
 Zasięg: {1}	Czas trwania: {2} Czas odnowienia: {3}",
                 ParentCharacter.Name, Range, EffectTime, Cooldown);
         }

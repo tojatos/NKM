@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using MyGameObjects.MyGameObject_templates;
 using UIManagers;
+using UnityEngine;
 
 public class Turn
 {
@@ -34,6 +35,9 @@ public class Turn
 		Game.Active.Turn.IsDone = false;
 		Game.Active.Reset();
 		UIManager.Instance.UpdateActivePlayerUI();
+		TurnStarted?.Invoke(gamePlayer);
+		
+		
 		if (Game.Active.Phase.Number != 0) return;
 		if (Game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap))
 		{
@@ -42,7 +46,9 @@ public class Turn
 	}
 
 	public delegate void OnTurnFinish();
+	public delegate void PlayerDelegate(GamePlayer player);
 	public event OnTurnFinish TurnFinished;
+	public event PlayerDelegate TurnStarted;
 
 	public void Finish()
 	{

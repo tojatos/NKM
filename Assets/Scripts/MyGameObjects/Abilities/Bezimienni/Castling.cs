@@ -46,15 +46,22 @@ namespace MyGameObjects.Abilities.Bezimienni
 			{
 				_secondCharacterToSwap = character;
 				Swap();
+				Reset();
 				OnUseFinish();
 			}
 		}
 
+
+	    private void Reset()
+	    {
+		  _firstCharacterToSwap = null;
+		  _secondCharacterToSwap = null;   
+	    }
+	    
 	    public override void Cancel()
 	    {
 		    base.Cancel();
-		    _firstCharacterToSwap = null;
-		    _secondCharacterToSwap = null;
+		    Reset();
 	    }
 
 	    private void Swap()

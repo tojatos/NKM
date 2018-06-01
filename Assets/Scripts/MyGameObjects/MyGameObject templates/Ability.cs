@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Helpers;
 using Hex;
+using MyGameObjects.Abilities.Bezimienni;
 using UIManagers;
 
 namespace MyGameObjects.MyGameObject_templates
@@ -66,7 +69,10 @@ namespace MyGameObjects.MyGameObject_templates
 			}
 			if (CurrentCooldown != 0)
 			{
-				throw new Exception("Umiejętność nie jest jeszcze odnowiona");
+				bool hasFreeAbility = ParentCharacter.Abilities.ContainsType(typeof(AceInTheHole)) &&
+				                        ((AceInTheHole) ParentCharacter.Abilities.Single(a => a.GetType() == typeof(AceInTheHole)))
+				                        .HasFreeAbility;
+				if(!hasFreeAbility) throw new Exception("Umiejętność nie jest jeszcze odnowiona");
 			}
 			if (!ParentCharacter.CanTakeAction||
 					Type == AbilityType.Normal && !ParentCharacter.CanUseNormalAbility ||
@@ -124,7 +130,15 @@ namespace MyGameObjects.MyGameObject_templates
 
 		protected virtual void OnUseFinish(int cooldown)
 		{
-			CurrentCooldown = cooldown;
+
+			if (ParentCharacter.Abilities.ContainsType(typeof(AceInTheHole)))
+			{
+				AceInTheHole ability = (ParentCharacter.Abilities.Single(a => a.GetType() == typeof(AceInTheHole)) as AceInTheHole);
+				if (ability.HasFreeAbility) ability.HasFreeAbility = false;
+				else CurrentCooldown = cooldown;
+
+			}
+			else CurrentCooldown = cooldown;
 			switch (Type)
 			{
 				case AbilityType.Normal:

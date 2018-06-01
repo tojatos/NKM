@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Helpers;
 using Hex;
 using MyGameObjects.MyGameObject_templates;
@@ -45,7 +46,7 @@ Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 		}
 		public override void Use(Character character)
 		{
-			character.Effects.RemoveAll(e => e.Type == EffectType.Negative);
+			character.Effects.Where(e => e.Type == EffectType.Negative).ToList().ForEach(e => e.RemoveFromParent());
 			OnUseFinish();
 		}
 	}

@@ -13,8 +13,8 @@ namespace MyGameObjects.MyGameObject_templates
 			ParentCharacter.JustBeforeFirstAction += () =>{ if (CurrentCooldown > 0) CurrentCooldown--; };
 			Active.Turn.TurnFinished += () => {
 				if (CurrentCooldown != 0) return;
-				ParentCharacter.Effects.Remove(this);
-				OnRemove?.Invoke();
+				RemoveFromParent();
+				
 				if (Active.CharacterOnMap == ParentCharacter) CharacterEffects.Instance.UpdateButtons();
 			};
 
@@ -32,6 +32,12 @@ namespace MyGameObjects.MyGameObject_templates
 			return 0;
 		}
 
+		public void RemoveFromParent()
+		{
+			ParentCharacter.Effects.Remove(this);
+			OnRemove?.Invoke();
+		}
+		
 	}
 
 	public enum EffectType

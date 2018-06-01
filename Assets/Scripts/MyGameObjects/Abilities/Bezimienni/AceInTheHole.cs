@@ -5,7 +5,7 @@ namespace MyGameObjects.Abilities.Bezimienni
     public class AceInTheHole : Ability
     {
         private int _damageThisTurn;
-        private bool _hasFreeAbility;
+        public bool HasFreeAbility { get; set; }
         public AceInTheHole()
         {
             Name = "Ace in the hole";
@@ -23,9 +23,9 @@ namespace MyGameObjects.Abilities.Bezimienni
         {
             ParentCharacter.OnParentDamage += value =>
             {
-                if (_hasFreeAbility) return;
+                if (HasFreeAbility) return;
                 _damageThisTurn += value;
-                if (_damageThisTurn > ParentCharacter.HealthPoints.BaseValue * (4 / 10f)) _hasFreeAbility = true;
+                if (_damageThisTurn > ParentCharacter.HealthPoints.BaseValue * (4 / 10f)) HasFreeAbility = true;
             };
             Active.Turn.TurnFinished += () => _damageThisTurn = 0;
 

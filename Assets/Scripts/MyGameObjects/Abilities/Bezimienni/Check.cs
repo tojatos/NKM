@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Helpers;
 using Hex;
 using MyGameObjects.Effects;
 using MyGameObjects.MyGameObject_templates;
+using UnityEngine;
 
 namespace MyGameObjects.Abilities.Bezimienni
 {
@@ -27,31 +29,32 @@ namespace MyGameObjects.Abilities.Bezimienni
         protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-//			List<HexCell> cellRange = GetRangeCells();
-//			cellRange.RemoveNonEnemies();
-//			if (cellRange.Count == 0)
-//			{
-//				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-//			}TODO
+			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
+			if (cellRange.Count == 0)
+			{
+				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
+			}
 		}
 	    
-//		protected override void Use()
-//		{
-//			List<HexCell> cellRange = GetRangeCells();
-//			Active.Prepare(this, cellRange);
+		protected override void Use()
+		{
+			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
+			Active.Prepare(this, cellRange);
 //			Active.MakeAction(cellRange);
-//		}
-//		public override void Use(List<HexCell> cells)
-//		{
-//			List<Character> characters = cells.GetCharacters();
-//			characters.ForEach(c =>
-//			{
-//				c.Effects.Add(new Stun(1, c, Name)); 
-//				c.Effects.Add(new StatModifier(2, -3, c, StatType.Speed, Name));
-//			});
-//			OnUseFinish();
-//		}
-//TODO
+		}
+		public override void Use(Character character)
+		{
+			Turn.PlayerDelegate forceAction = null; 
+			forceAction = (player) =>
+			{
+				if (player != character.Owner) return;
+				Active.Turn.CharacterThatTookActionInTurn = character;
+				Active.Turn.TurnStarted -= forceAction;
+			};
+			Active.Turn.TurnStarted += forceAction;
+//			Active.Turn.TurnStarted += (player) => Active.Turn.TurnStarted -= forceAction;
+			OnUseFinish();
+		}
 
     }
 }

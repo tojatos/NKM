@@ -12,8 +12,8 @@ public class Phase
 		Number = 0;
 	}
 
-	public delegate void OnPhaseFinish();
-	public event OnPhaseFinish PhaseFinished;
+	public delegate void VoidDelegate();
+	public event VoidDelegate PhaseFinished;
 	
 	public void Finish()
 	{
