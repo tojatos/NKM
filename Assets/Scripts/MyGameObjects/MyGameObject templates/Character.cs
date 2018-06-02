@@ -385,6 +385,7 @@ namespace MyGameObjects.MyGameObject_templates
 				//	Effects.ForEach(e => e.OnPhaseFinish());
 				//	Effects.Where(e => e.CurrentCooldown <= 0).ToList().ForEach(e =>
 				//	{
+
 				//		Effects.Remove(e);
 				//		OnRemoveHandler();
 				//	});

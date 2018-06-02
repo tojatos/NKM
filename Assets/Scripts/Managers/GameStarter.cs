@@ -38,12 +38,12 @@ namespace Managers
 							Name = "Ryszard",
 							Characters = new List<Character>
 							{
-//								new Character("Sinon"),
 								new Character("Aqua"),
 								new Character("Roronoa Zoro"),
+								new Character("Shana"),
 //								new Character("Bezimienni"),
 //								new Character("Itsuka Kotori"),
-								
+
 							}
 						},
 						new GamePlayer
@@ -52,8 +52,8 @@ namespace Managers
 							Characters = new List<Character>
 							{
 								new Character("Hanekawa Tsubasa"),
-//								new Character("Dekomori Sanae"),
-//								new Character("Gilgamesh")
+								new Character("Dekomori Sanae"),
+								new Character("Gilgamesh")
 							}
 						}
 					},
