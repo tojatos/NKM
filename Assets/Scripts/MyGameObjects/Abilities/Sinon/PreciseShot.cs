@@ -9,7 +9,7 @@ namespace MyGameObjects.Abilities.Sinon
 	public class PreciseShot : Ability
 	{
 		private const int AbilityDamage = 40;
-		private const int AbilityRange = 12;
+		private const int AbilityRange = 15;
 
 		public PreciseShot()
 		{

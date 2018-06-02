@@ -24,7 +24,7 @@ namespace MyGameObjects.MyGameObject_templates
 			HasUsedNormalAbilityInPhaseBefore = false;
 			HasUsedUltimatumAbilityInPhaseBefore = false;
 			Effects = new List<Effect>();
-			
+
 			//Add triggers to events
 			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
 			AfterBeingAttacked += RemoveIfDead;
@@ -50,7 +50,7 @@ namespace MyGameObjects.MyGameObject_templates
 			Description = characterData.GetValue("Description");
 			Quote = characterData.GetValue("Quote");
 			Author = characterData.GetValue("Author.Name");
-			
+
 			//Create and initiate abilites
 			IEnumerable<string> abilityClassNames = GameData.Conn.GetAbilityClassNames(name);
 			var abilityNamespaceName = "Abilities." + name.Replace(' ', '_');
@@ -89,7 +89,7 @@ namespace MyGameObjects.MyGameObject_templates
 		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
 		private bool CanUseBasicAttack => !HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect;
 		public bool CanUseNormalAbility => !HasUsedNormalAbilityInPhaseBefore && !HasUsedBasicAttackInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
-		public bool CanUseUltimatumAbility => !(HasUsedUltimatumAbilityInPhaseBefore || Active.Turn.CharacterThatTookActionInTurn == this);
+		public bool CanUseUltimatumAbility => !(HasUsedUltimatumAbilityInPhaseBefore || HasUsedBasicMoveInPhaseBefore || HasUsedBasicAttackInPhaseBefore || HasUsedNormalAbilityInPhaseBefore || TookActionInPhaseBefore);//Active.Turn.CharacterThatTookActionInTurn == this);
 
 		public bool TookActionInPhaseBefore { get; set; }
 		public bool IsAlive => HealthPoints.Value > 0;
@@ -97,7 +97,7 @@ namespace MyGameObjects.MyGameObject_templates
 		private bool IsStunned => Effects.Any(e => e.GetType() == typeof(Stun));
 		private bool CanMove => Effects.All(e => e.GetType() != typeof(MovementDisability));
 		private bool HasBasicAttackInabilityEffect => Effects.Any(e => e.GetType() == typeof(BasicAttackInability));
-		
+
 		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive || Active.Turn.CharacterThatTookActionInTurn != null && Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
 
 		#endregion
@@ -292,7 +292,7 @@ namespace MyGameObjects.MyGameObject_templates
 			Active.HexCells.ForEach(c=>c.ToggleHighlight(c.CharacterOnCell!=null ? HiglightColor.Red: HiglightColor.GreenTransparent));
 			Active.RemoveMoveCells();
 			Active.MoveCells.Add(ParentCell);
-			
+
 		}
 		private List<HexCell> GetPrepareMoveCells()
 		{
@@ -395,7 +395,7 @@ namespace MyGameObjects.MyGameObject_templates
 				DeathTimer++;
 			}
 		}
-		
+
 		public void Select()
 		{
 			Active.Clean();

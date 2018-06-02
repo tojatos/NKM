@@ -9,7 +9,7 @@ namespace MyGameObjects.Abilities.Gilgamesh
 	{
 		private const int AbilityDamage = 25;
 		private const int AbilityRange = 10;
-		private const int AbilityRadius = 9;
+		private const int AbilityRadius = 6;
 		public GateOfBabylon()
 		{
 			Name = "Gate Of Babylon";

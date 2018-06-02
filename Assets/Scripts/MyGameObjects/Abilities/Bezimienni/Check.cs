@@ -25,7 +25,7 @@ namespace MyGameObjects.Abilities.Bezimienni
         }
 
 	    public override List<HexCell> GetRangeCells() => new List<HexCell>(HexMapDrawer.Instance.Cells);
-	    
+
         protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
@@ -35,7 +35,7 @@ namespace MyGameObjects.Abilities.Bezimienni
 				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
 			}
 		}
-	    
+
 		protected override void Use()
 		{
 			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
@@ -44,7 +44,7 @@ namespace MyGameObjects.Abilities.Bezimienni
 		}
 		public override void Use(Character character)
 		{
-			Turn.PlayerDelegate forceAction = null; 
+			Turn.PlayerDelegate forceAction = null;
 			forceAction = (player) =>
 			{
 				if (player != character.Owner) return;
@@ -53,6 +53,7 @@ namespace MyGameObjects.Abilities.Bezimienni
 			};
 			Active.Turn.TurnStarted += forceAction;
 //			Active.Turn.TurnStarted += (player) => Active.Turn.TurnStarted -= forceAction;
+      character.Effects.Add(new BasicAttackInability(1, character, Name));
 			OnUseFinish();
 		}
 
