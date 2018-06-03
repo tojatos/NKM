@@ -41,7 +41,7 @@ namespace MyGameObjects.Abilities.Dekomori_Sanae
 		{
 			return string.Format(
 @"{0} uderza dwukrotnie, zadając {1} obrażeń fizycznych przy każdym ciosie.
-Jeżeli obydwa ataki wymierzone są w ten zam cel, otrzymuje on połowę obrażeń od drugiego uderzenia.
+Jeżeli obydwa ataki wymierzone są w ten sam cel, otrzymuje on połowę obrażeń od drugiego uderzenia.
 Zasięg: {2}	Czas odnowienia: {3}",
 ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
 		}
