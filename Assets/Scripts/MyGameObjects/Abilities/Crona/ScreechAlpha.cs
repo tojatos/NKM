@@ -17,12 +17,13 @@ namespace MyGameObjects.Abilities.Crona
             CurrentCooldown = 0;
             Type = AbilityType.Normal;
         }
-        public override string GetDescription()
-        {
-            return "Miecz Crony, Ragnarok, wydaje z siebie krzyk,\nogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną.";
-        }
+        public override string GetDescription()=>
+$@"Miecz Crony, Ragnarok, wydaje z siebie krzyk,
+ogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną.
+Promień: {Radius} Czas odnowienia: {Cooldown}";
+
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Radius);
-	    
+
         protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
@@ -33,7 +34,7 @@ namespace MyGameObjects.Abilities.Crona
 				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
 			}
 		}
-	    
+
 		protected override void Use()
 		{
 			List<HexCell> cellRange = GetRangeCells();
@@ -45,7 +46,7 @@ namespace MyGameObjects.Abilities.Crona
 			List<Character> characters = cells.GetCharacters();
 			characters.ForEach(c =>
 			{
-				c.Effects.Add(new Stun(1, c, Name)); 
+				c.Effects.Add(new Stun(1, c, Name));
 				c.Effects.Add(new StatModifier(2, -3, c, StatType.Speed, Name));
 			});
 			OnUseFinish();
