@@ -15,11 +15,10 @@ namespace MyGameObjects.Abilities.Sinon
 			CurrentCooldown = 0;
 			Type = AbilityType.Normal;
 		}
-		public override string GetDescription()
-		{
-			return $@"Zwiększa szybkość {ParentCharacter.Name} o {SpeedIncrease}.
+		public override string GetDescription() => 
+$@"Zwiększa szybkość {ParentCharacter.Name} o {SpeedIncrease}.
 Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
-		}
+
 		protected override void Use()
 		{
 			ParentCharacter.Effects.Add(new StatModifier(Duration, SpeedIncrease, ParentCharacter, StatType.Speed, Name));

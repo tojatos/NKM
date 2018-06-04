@@ -32,6 +32,7 @@
             <e p="ItadakiNoKuraFinish.cs" t="Include" />
             <e p="ItadakiNoKuraStart.cs" t="Include" />
             <e p="MoveToPosition.cs" t="Include" />
+            <e p="TeleportToPosition.cs" t="Include" />
           </e>
           <e p="ShowInfo.cs" t="Include" />
           <e p="Tilt.cs" t="Include" />

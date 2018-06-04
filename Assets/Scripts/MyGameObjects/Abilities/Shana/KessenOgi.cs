@@ -14,6 +14,7 @@ namespace MyGameObjects.Abilities.Shana
 		private const int ShinkuKnockback = 2;
 		private const int ShinpanAndDanzaiDamage = 5;
 		private const int ShinpanAndDanzaiRange = 6;
+		private const int FlameWidth = 1;	
 
 
 		public KessenOgi()
@@ -24,9 +25,21 @@ namespace MyGameObjects.Abilities.Shana
 			Type = AbilityType.Ultimatum;
 		}
 
-public override string GetDescription() => "";
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} używa kolejno po sobie występujących umiejętności:
 
-	protected override void CheckIfCanBePrepared()
+<b>Shinku:</b>
+Odpycha wroga o {ShinkuKnockback} pola w stronę, w którą był wykonany atak.
+
+<b>Hien:</b>
+Uderza falą płomieni za {FlameDamage}, fala, o szerokości {FlameWidth}, ma  zasięg do lini, w której stoi odepchnięty wróg.
+
+<b>Shinpan + Danzai:</b>
+Bije {ShinpanAndDanzaiDamage} nieuchronnych obrażeń celowi za każdą postać (poza sobą),
+która jest w obszarze oddalonym od Shany o {ShinpanAndDanzaiRange}.
+Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
+
+		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
 			List<HexCell> cellRange = GetRangeCells();
