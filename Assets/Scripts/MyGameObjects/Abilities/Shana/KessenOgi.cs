@@ -10,10 +10,10 @@ namespace MyGameObjects.Abilities.Shana
 {
 	public class KessenOgi : Ability
 	{
-		private const int Range = 5;
-		private const int ShinkuKnockback = 2;
 		private const int FlameDamage = 15;
+		private const int Range = 5;
 		private const int FlameWidth = 1;
+		private const int ShinkuKnockback = 2;
 		private const int ShinpanAndDanzaiDamage = 5;
 		private const int ShinpanAndDanzaiRange = 6;
 
@@ -26,19 +26,20 @@ namespace MyGameObjects.Abilities.Shana
 			Type = AbilityType.Ultimatum;
 		}
 
-	public override string GetDescription()
-	{
-		return string.Format(
-		@"{0} używa kolejno po sobie występujących umiejętności:
-		Shinku:
-		Odpycha wroga o {1} pola w stronę, w którą był wykonany atak.
-		Hien:
-		Uderza falą płomieni za {2}, fala, o szerokości {3}, ma  zasięg do lini, w której stoi odepchnięty wróg.
-		Shinpan + Danzai:
-		Bije {4} nieuchronnych obrażeń celowi za każdą postać (poza sobą), która jest w obszarze oddalonym od Shany o {5)
-		Zasięg użycia: {6}	Czas odnowienia: {7}",
+		public override string GetDescription()
+		{
+			return string.Format(
+			@"{0} używa kolejno po sobie występujących umiejętności:
+			Shinku:
+			Odpycha wroga o {1} pola w stronę, w którą był wykonany atak.
+			Hien:
+			Uderza falą płomieni za {2}, fala, o szerokości {3}, ma  zasięg do lini, w której stoi odepchnięty wróg.
+			Shinpan + Danzai:
+			Bije {4} nieuchronnych obrażeń celowi za każdą postać (poza sobą),
+			która jest w obszarze oddalonym od Shany o {5}.
+			Zasięg użycia: {6} Czas odnowienia: {7}",
 			ParentCharacter.Name, ShinkuKnockback, FlameDamage, FlameWidth, ShinpanAndDanzaiDamage, ShinpanAndDanzaiRange, Range, Cooldown);
-	}
+		}
 
 	protected override void CheckIfCanBePrepared()
 		{
