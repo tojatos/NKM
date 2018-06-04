@@ -20,8 +20,10 @@ namespace MyGameObjects.Abilities.Dekomori_Sanae
 		public override string GetDescription()
 		{
 			return string.Format(
-@"{0} uderza swoim młotem w wybrany obszar, zadając {1} obrażeń fizycznych wszystkim wrogom na tym terenie.
-Jeżeli {0} zabije chociaż jedną postać za pomocą tej umiejętności, może ona użyć tej umiejętności ponownie, w tej samej turze.
+@"{0} uderza swoim młotem w wybrany obszar,
+zadając {1} obrażeń fizycznych wszystkim wrogom na tym terenie.
+Jeżeli {0} zabije chociaż jedną postać za pomocą tej umiejętności,
+może ona użyć tej umiejętności ponownie, w tej samej turze.
 Zasięg: {2}	Czas odnowienia: {3}",
 				ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
 		}
