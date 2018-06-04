@@ -38,7 +38,7 @@ namespace Managers
 							Name = "Ryszard",
 							Characters = new List<Character>
 							{
-								new Character("Aqua"),
+								new Character("Sinon"),
 								new Character("Roronoa Zoro"),
 								new Character("Shana"),
 //								new Character("Bezimienni"),

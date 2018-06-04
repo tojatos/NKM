@@ -9,7 +9,7 @@ namespace MyGameObjects.Abilities.Sinon
 	public class PreciseShot : Ability
 	{
 		private const int AbilityDamage = 40;
-		private const int AbilityRange = 15;
+		private const int AbilityRange = 11;
 
 		public PreciseShot()
 		{
@@ -21,10 +21,12 @@ namespace MyGameObjects.Abilities.Sinon
 		public override string GetDescription() => $@"{ParentCharacter.Name} strzela w wybranego wroga, zadając {AbilityDamage} obrażeń fizycznych.
 Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			if (cellRange.Count == 0)
 			{
@@ -33,7 +35,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		}
 		protected override void Use()
 		{
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;

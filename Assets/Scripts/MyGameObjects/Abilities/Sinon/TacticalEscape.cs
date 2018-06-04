@@ -5,7 +5,7 @@ namespace MyGameObjects.Abilities.Sinon
 {
 	public class TacticalEscape : Ability
 	{
-		private const int SpeedIncrease = 10;
+		private const int SpeedIncrease = 8;
 		private const int Duration = 1;
 
 		public TacticalEscape()
