@@ -16,10 +16,11 @@ namespace MyGameObjects.Abilities.Crona
             CurrentCooldown = 0;
             Type = AbilityType.Ultimatum;
         }
-        public override string GetDescription()
-        {
-            return $"{ParentCharacter.Name} infekuje cel Czarną Krwią (nakłada efekt Black Blood) na 3 tury.\nZainfekowany wróg również otrzymuje obrażenia przy zdetonowaniu Black Blood.";
-        }
+        public override string GetDescription() =>
+$@"{ParentCharacter.Name} infekuje cel Czarną Krwią (nakłada efekt Black Blood) na {EffectCooldown} tury.
+Zainfekowany wróg również otrzymuje obrażenia przy zdetonowaniu Black Blood.
+Zasięg: {Range} Czas odnowienia: {Cooldown}";
+
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
         protected override void Use()
 		{
