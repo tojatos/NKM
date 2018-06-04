@@ -17,17 +17,13 @@ namespace MyGameObjects.Abilities.Gilgamesh
 			CurrentCooldown = 0;
 			Type = AbilityType.Ultimatum;
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} otwiera wrota Babilonu, zsyłając deszcz mieczy na wskazanym obszarze w promieniu {1},
-zadając {2} obrażeń magicznych lub fizycznych, zależnie od odporności przeciwnika.
+		public override string GetDescription() =>
+$@"{ParentCharacter.Name} otwiera wrota Babilonu, zsyłając deszcz mieczy na wskazanym obszarze w promieniu {AbilityRadius},
+zadając {AbilityDamage} obrażeń magicznych lub fizycznych, zależnie od odporności przeciwnika.
 Jeżeli wróg ma więcej obrony fizycznej od magicznej, umiejętność zada obrażenia magiczne,
 a w przeciwnym razie - fizyczne.
-Zasięg: {3}	Czas odnowienia: {4}
-",
-			ParentCharacter.Name, AbilityRadius, AbilityDamage, AbilityRange, Cooldown);
-		}
+Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
+		
 		public override List<HexCell> GetRangeCells()
 		{
 			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
