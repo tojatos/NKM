@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Hex;
 using MyGameObjects.MyGameObject_templates;
 using Helpers;

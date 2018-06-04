@@ -128,6 +128,11 @@
               <e p="LackOfOrientation.cs" t="Include" />
               <e p="OniGiri.cs" t="Include" />
             </e>
+            <e p="Shana" t="Include">
+              <e p="GurenNoOodachi.cs" t="Include" />
+              <e p="GurenNoSouyoku.cs" t="Include" />
+              <e p="KessenOgi.cs" t="Include" />
+            </e>
             <e p="Sinon" t="Include">
               <e p="PreciseShot.cs" t="Include" />
               <e p="SnipersSight.cs" t="Include" />
@@ -143,6 +148,7 @@
             <e p="BasicAttackInability.cs" t="Include" />
             <e p="BlackBlood.cs" t="Include" />
             <e p="DamageOverTime.cs" t="Include" />
+            <e p="GurenNoSouyoku.cs" t="Include" />
             <e p="HPDrain.cs" t="Include" />
             <e p="MovementDisability.cs" t="Include" />
             <e p="PassiveBuff.cs" t="Include" />

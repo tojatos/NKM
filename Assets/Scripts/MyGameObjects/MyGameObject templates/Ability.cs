@@ -130,11 +130,10 @@ namespace MyGameObjects.MyGameObject_templates
 
 		protected virtual void OnUseFinish(int cooldown)
 		{
-
 			if (ParentCharacter.Abilities.ContainsType(typeof(AceInTheHole)))
 			{
-				AceInTheHole ability = (ParentCharacter.Abilities.Single(a => a.GetType() == typeof(AceInTheHole)) as AceInTheHole);
-				if (ability.HasFreeAbility) ability.HasFreeAbility = false;
+				var ability = (ParentCharacter.Abilities.Single(a => a.GetType() == typeof(AceInTheHole)) as AceInTheHole);
+				if (ability != null && ability.HasFreeAbility) ability.HasFreeAbility = false;
 				else CurrentCooldown = cooldown;
 
 			}

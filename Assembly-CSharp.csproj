@@ -2,6 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <LangVersion>6</LangVersion>
+    <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -22,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Temp\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_3_0;UNITY_2017_3;UNITY_2017;PLATFORM_ARCH_64;UNITY_64;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_GRID;ENABLE_TILEMAP;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_DIRECTOR;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_TIMELINE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;ENABLE_SPRITE_MASKING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;ENABLE_MONO_BDWGC;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_VIDEO;ENABLE_RMGUI;ENABLE_PACKMAN;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_STYLE_SHEETS;ENABLE_LOCALIZATION;PLATFORM_STANDALONE_LINUX;PLATFORM_STANDALONE;UNITY_STANDALONE_LINUX;UNITY_STANDALONE;UNITY_STANDALONE_LINUX_API;ENABLE_SUBSTANCE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLUSTERINPUT;ENABLE_VR;ENABLE_SPATIALTRACKING;ENABLE_MODULAR_UNITYENGINE_ASSEMBLIES;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_4_6;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_LINUX;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_TEAM_LICENSE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_3_1;UNITY_2017_3;UNITY_2017;PLATFORM_ARCH_64;UNITY_64;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_GRID;ENABLE_TILEMAP;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_DIRECTOR;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_TIMELINE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;ENABLE_SPRITE_MASKING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;ENABLE_MONO_BDWGC;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_VIDEO;ENABLE_RMGUI;ENABLE_PACKMAN;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_STYLE_SHEETS;ENABLE_LOCALIZATION;PLATFORM_STANDALONE_LINUX;PLATFORM_STANDALONE;UNITY_STANDALONE_LINUX;UNITY_STANDALONE;UNITY_STANDALONE_LINUX_API;ENABLE_SUBSTANCE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLUSTERINPUT;ENABLE_VR;ENABLE_SPATIALTRACKING;ENABLE_MODULAR_UNITYENGINE_ASSEMBLIES;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_4_6;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_LINUX;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_TEAM_LICENSE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
@@ -39,197 +40,253 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.XML" />
+    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/Managed/UnityEngine.dll</HintPath>
+      <HintPath>/opt/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
+      <HintPath>/opt/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Action.cs" />
-     <Compile Include="Assets\Scripts\Active.cs" />
-     <Compile Include="Assets\Scripts\AirSelection.cs" />
-     <Compile Include="Assets\Scripts\AllMyGameObjects.cs" />
-     <Compile Include="Assets\Scripts\AnimationPlayer.cs" />
-     <Compile Include="Assets\Scripts\Animations\AsterYo.cs" />
-     <Compile Include="Assets\Scripts\Animations\Destroy.cs" />
-     <Compile Include="Assets\Scripts\Animations\ItadakiNoKura.cs" />
-     <Compile Include="Assets\Scripts\Animations\MoveTo.cs" />
-     <Compile Include="Assets\Scripts\Animations\NkmAnimation.cs" />
-     <Compile Include="Assets\Scripts\Animations\NkmAnimationPart.cs" />
-     <Compile Include="Assets\Scripts\Animations\Parts\AsterYoFinish.cs" />
-     <Compile Include="Assets\Scripts\Animations\Parts\AsterYoStart.cs" />
-     <Compile Include="Assets\Scripts\Animations\Parts\Destroy.cs" />
-     <Compile Include="Assets\Scripts\Animations\Parts\FloatingInfoFinish.cs" />
-     <Compile Include="Assets\Scripts\Animations\Parts\FloatingInfoStart.cs" />
-     <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraFinish.cs" />
-     <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraStart.cs" />
-     <Compile Include="Assets\Scripts\Animations\Parts\MoveToPosition.cs" />
-     <Compile Include="Assets\Scripts\Animations\ShowInfo.cs" />
-     <Compile Include="Assets\Scripts\Animations\Tilt.cs" />
-     <Compile Include="Assets\Scripts\ColorToHighlight.cs" />
-     <Compile Include="Assets\Scripts\ColorToTileType.cs" />
-     <Compile Include="Assets\Scripts\CreatableSingletonMonoBehaviour.cs" />
-     <Compile Include="Assets\Scripts\Game.cs" />
-     <Compile Include="Assets\Scripts\GameData.cs" />
-     <Compile Include="Assets\Scripts\GameOptions.cs" />
-     <Compile Include="Assets\Scripts\GamePlayer.cs" />
-     <Compile Include="Assets\Scripts\Helpers\AsyncExtensions.cs" />
-     <Compile Include="Assets\Scripts\Helpers\MyGameObjectExtensions.cs" />
-     <Compile Include="Assets\Scripts\Helpers\SqliteExtensions.cs" />
-     <Compile Include="Assets\Scripts\Helpers\TooltipExtentions.cs" />
-     <Compile Include="Assets\Scripts\Helpers\UnityGameObjectExtentions.cs" />
-     <Compile Include="Assets\Scripts\Hex\HexCell.cs" />
-     <Compile Include="Assets\Scripts\Hex\HexCoordinates.cs" />
-     <Compile Include="Assets\Scripts\Hex\HexDirection.cs" />
-     <Compile Include="Assets\Scripts\Hex\HexMap.cs" />
-     <Compile Include="Assets\Scripts\Hex\HexMapDrawer.cs" />
-     <Compile Include="Assets\Scripts\Hex\HexMesh.cs" />
-     <Compile Include="Assets\Scripts\Hex\HexMetrics.cs" />
-     <Compile Include="Assets\Scripts\HighlightColor.cs" />
-     <Compile Include="Assets\Scripts\IsRaycastValid.cs" />
-     <Compile Include="Assets\Scripts\MainCameraController.cs" />
-     <Compile Include="Assets\Scripts\Managers\GameStarter.cs" />
-     <Compile Include="Assets\Scripts\Managers\MainMenu.cs" />
-     <Compile Include="Assets\Scripts\Managers\MusicManager.cs" />
-     <Compile Include="Assets\Scripts\Managers\PreGameOptions.cs" />
-     <Compile Include="Assets\Scripts\MessageLogger.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Aqua\NaturesBeauty.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Aqua\Purification.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Aqua\Resurrection.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\Dash.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\LambentLight.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\SwordDance.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Bezimienni\AceInTheHole.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Bezimienni\Castling.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Bezimienni\Check.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\BlackBlood.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\Infection.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\ScreechAlpha.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Dekomori Sanae\MjolnirDestinyImpulse.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Dekomori Sanae\MjolnirHammer.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Dekomori Sanae\WickedEyesServant.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Empty.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Gilgamesh\Enkidu.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Gilgamesh\GateOfBabylon.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Gilgamesh\TheFistHero.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hanekawa Tsubasa\BloodKiss.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hanekawa Tsubasa\CurseOfTheBlackCat.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hanekawa Tsubasa\NineLives.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hecate\AsterYo.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hecate\ItadakiNoKura.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hecate\SonzaiNoChikara.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Itsuka Kotori\CamaelMegiddo.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Itsuka Kotori\Conflagration.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Itsuka Kotori\ElohimGibor.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\AlHuma.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\Confession.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\DemonicForm.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\MorgensternHit.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Roronoa Zoro\HyakuHachiPoundHou.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Roronoa Zoro\LackOfOrientation.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Roronoa Zoro\OniGiri.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Sinon\PreciseShot.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Sinon\SnipersSight.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Sinon\TacticalEscape.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Yasaka Mahiro\SharpenedForks.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Yasaka Mahiro\TerrorOfTheUniverse.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Yasaka Mahiro\WhenTheyCry.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Effects\BasicAttackInability.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Effects\BlackBlood.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Effects\DamageOverTime.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Effects\HPDrain.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Effects\MovementDisability.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Effects\PassiveBuff.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Effects\StatModifier.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Effects\Stun.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\HexCellEffects\Conflagration.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Items\GlassEye.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Items\RikkiBand.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Items\SachikoScissors.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Items\Yoshinon.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Items\YuzuruHeart.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Ability.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Character.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Effect.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\EnableableAbility.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\HexCellEffect.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Item.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\MyGameObject.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Potion.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Potions\FreezePotion.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Potions\HealthPotion.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Potions\InvisibilityPotion.cs" />
-     <Compile Include="Assets\Scripts\MyGameObjects\Potions\OraclePotion.cs" />
-     <Compile Include="Assets\Scripts\Phase.cs" />
-     <Compile Include="Assets\Scripts\PlayerPrefsX.cs" />
-     <Compile Include="Assets\Scripts\Scenes.cs" />
-     <Compile Include="Assets\Scripts\SessionSettings.cs" />
-     <Compile Include="Assets\Scripts\SingletonMonoBehaviour.cs" />
-     <Compile Include="Assets\Scripts\Spawner.cs" />
-     <Compile Include="Assets\Scripts\SpriteSelect.cs" />
-     <Compile Include="Assets\Scripts\Stat.cs" />
-     <Compile Include="Assets\Scripts\Stuff.cs" />
-     <Compile Include="Assets\Scripts\Tooltip.cs" />
-     <Compile Include="Assets\Scripts\Turn.cs" />
-     <Compile Include="Assets\Scripts\UIManagers\CharacterAbilities.cs" />
-     <Compile Include="Assets\Scripts\UIManagers\CharacterEffects.cs" />
-     <Compile Include="Assets\Scripts\UIManagers\CharacterFace.cs" />
-     <Compile Include="Assets\Scripts\UIManagers\CharacterInfo.cs" />
-     <Compile Include="Assets\Scripts\UIManagers\CharacterStats.cs" />
-     <Compile Include="Assets\Scripts\UIManagers\UIManager.cs" />
-     <None Include="Assets\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.xml" />
-     <None Include="Assets\VertexColors.shader" />
- <Reference Include="UnityEngine.UI">
- <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Networking">
- <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.TestRunner">
- <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll</HintPath>
- </Reference>
- <Reference Include="nunit.framework">
- <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Timeline">
- <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.UIAutomation">
- <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/UnityExtensions/Unity/UIAutomation/UnityEngine.UIAutomation.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.GoogleAudioSpatializer">
- <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.HoloLens">
- <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.SpatialTracking">
- <HintPath>/home/tojatos/Unity-2017.3.0f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
- </Reference>
- <Reference Include="Mono.Data.Sqlite">
- <HintPath>/home/tojatos/UnityProjects/NKM/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
- </Reference>
- <Reference Include="System.Data">
- <HintPath>/home/tojatos/UnityProjects/NKM/Assets/Plugins/System.Data.dll</HintPath>
- </Reference>
- <Reference Include="Newtonsoft.Json">
- <HintPath>/home/tojatos/UnityProjects/NKM/Assets/packages/Newtonsoft.Json.10.0.3/lib/net45/Newtonsoft.Json.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.ads@0.0.18/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Analytics">
- <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.analytics@0.0.19/UnityEngine.Analytics.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Purchasing">
- <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.purchasing@0.0.19/UnityEngine.Purchasing.dll</HintPath>
- </Reference>
+    <Compile Include="Assets\Scripts\Action.cs" />
+    <Compile Include="Assets\Scripts\Active.cs" />
+    <Compile Include="Assets\Scripts\AirSelection.cs" />
+    <Compile Include="Assets\Scripts\AllMyGameObjects.cs" />
+    <Compile Include="Assets\Scripts\AnimationPlayer.cs" />
+    <Compile Include="Assets\Scripts\Animations\AsterYo.cs" />
+    <Compile Include="Assets\Scripts\Animations\Destroy.cs" />
+    <Compile Include="Assets\Scripts\Animations\ItadakiNoKura.cs" />
+    <Compile Include="Assets\Scripts\Animations\MoveTo.cs" />
+    <Compile Include="Assets\Scripts\Animations\NkmAnimation.cs" />
+    <Compile Include="Assets\Scripts\Animations\NkmAnimationPart.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\AsterYoFinish.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\AsterYoStart.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\Destroy.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\FloatingInfoFinish.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\FloatingInfoStart.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraFinish.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\ItadakiNoKuraStart.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\MoveToPosition.cs" />
+    <Compile Include="Assets\Scripts\Animations\Parts\TeleportToPosition.cs" />
+    <Compile Include="Assets\Scripts\Animations\ShowInfo.cs" />
+    <Compile Include="Assets\Scripts\Animations\Tilt.cs" />
+    <Compile Include="Assets\Scripts\ColorToHighlight.cs" />
+    <Compile Include="Assets\Scripts\ColorToTileType.cs" />
+    <Compile Include="Assets\Scripts\CreatableSingletonMonoBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Game.cs" />
+    <Compile Include="Assets\Scripts\GameData.cs" />
+    <Compile Include="Assets\Scripts\GameOptions.cs" />
+    <Compile Include="Assets\Scripts\GamePlayer.cs" />
+    <Compile Include="Assets\Scripts\Helpers\AsyncExtensions.cs" />
+    <Compile Include="Assets\Scripts\Helpers\MyGameObjectExtensions.cs" />
+    <Compile Include="Assets\Scripts\Helpers\SqliteExtensions.cs" />
+    <Compile Include="Assets\Scripts\Helpers\TooltipExtentions.cs" />
+    <Compile Include="Assets\Scripts\Helpers\UnityGameObjectExtentions.cs" />
+    <Compile Include="Assets\Scripts\Hex\HexCell.cs" />
+    <Compile Include="Assets\Scripts\Hex\HexCoordinates.cs" />
+    <Compile Include="Assets\Scripts\Hex\HexDirection.cs" />
+    <Compile Include="Assets\Scripts\Hex\HexMap.cs" />
+    <Compile Include="Assets\Scripts\Hex\HexMapDrawer.cs" />
+    <Compile Include="Assets\Scripts\Hex\HexMesh.cs" />
+    <Compile Include="Assets\Scripts\Hex\HexMetrics.cs" />
+    <Compile Include="Assets\Scripts\HighlightColor.cs" />
+    <Compile Include="Assets\Scripts\IsRaycastValid.cs" />
+    <Compile Include="Assets\Scripts\MainCameraController.cs" />
+    <Compile Include="Assets\Scripts\Managers\GameStarter.cs" />
+    <Compile Include="Assets\Scripts\Managers\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Managers\MusicManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\PreGameOptions.cs" />
+    <Compile Include="Assets\Scripts\MessageLogger.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Aqua\NaturesBeauty.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Aqua\Purification.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Aqua\Resurrection.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\Dash.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\LambentLight.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Asuna\SwordDance.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Bezimienni\AceInTheHole.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Bezimienni\Castling.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Bezimienni\Check.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\BlackBlood.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\Infection.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Crona\ScreechAlpha.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Dekomori Sanae\MjolnirDestinyImpulse.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Dekomori Sanae\MjolnirHammer.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Dekomori Sanae\WickedEyesServant.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Empty.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Gilgamesh\Enkidu.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Gilgamesh\GateOfBabylon.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Gilgamesh\TheFistHero.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hanekawa Tsubasa\BloodKiss.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hanekawa Tsubasa\CurseOfTheBlackCat.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hanekawa Tsubasa\NineLives.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hecate\AsterYo.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hecate\ItadakiNoKura.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Hecate\SonzaiNoChikara.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Itsuka Kotori\CamaelMegiddo.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Itsuka Kotori\Conflagration.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Itsuka Kotori\ElohimGibor.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\AlHuma.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\Confession.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\DemonicForm.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Rem\MorgensternHit.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Roronoa Zoro\HyakuHachiPoundHou.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Roronoa Zoro\LackOfOrientation.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Roronoa Zoro\OniGiri.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Shana\GurenNoOodachi.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Shana\GurenNoSouyoku.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Shana\KessenOgi.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Sinon\PreciseShot.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Sinon\SnipersSight.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Sinon\TacticalEscape.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Yasaka Mahiro\SharpenedForks.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Yasaka Mahiro\TerrorOfTheUniverse.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Abilities\Yasaka Mahiro\WhenTheyCry.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\BasicAttackInability.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\BlackBlood.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\DamageOverTime.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\GurenNoSouyoku.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\HPDrain.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\MovementDisability.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\PassiveBuff.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\StatModifier.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Effects\Stun.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\HexCellEffects\Conflagration.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Items\GlassEye.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Items\RikkiBand.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Items\SachikoScissors.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Items\Yoshinon.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Items\YuzuruHeart.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Ability.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Character.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Effect.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\EnableableAbility.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\HexCellEffect.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Item.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\MyGameObject.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\MyGameObject templates\Potion.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Potions\FreezePotion.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Potions\HealthPotion.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Potions\InvisibilityPotion.cs" />
+    <Compile Include="Assets\Scripts\MyGameObjects\Potions\OraclePotion.cs" />
+    <Compile Include="Assets\Scripts\Phase.cs" />
+    <Compile Include="Assets\Scripts\PlayerPrefsX.cs" />
+    <Compile Include="Assets\Scripts\Scenes.cs" />
+    <Compile Include="Assets\Scripts\SessionSettings.cs" />
+    <Compile Include="Assets\Scripts\SingletonMonoBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Spawner.cs" />
+    <Compile Include="Assets\Scripts\SpriteSelect.cs" />
+    <Compile Include="Assets\Scripts\Stat.cs" />
+    <Compile Include="Assets\Scripts\Stuff.cs" />
+    <Compile Include="Assets\Scripts\Tooltip.cs" />
+    <Compile Include="Assets\Scripts\Turn.cs" />
+    <Compile Include="Assets\Scripts\UIManagers\CharacterAbilities.cs" />
+    <Compile Include="Assets\Scripts\UIManagers\CharacterEffects.cs" />
+    <Compile Include="Assets\Scripts\UIManagers\CharacterFace.cs" />
+    <Compile Include="Assets\Scripts\UIManagers\CharacterInfo.cs" />
+    <Compile Include="Assets\Scripts\UIManagers\CharacterStats.cs" />
+    <Compile Include="Assets\Scripts\UIManagers\UIManager.cs" />
+    <None Include="Assets\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.xml" />
+    <None Include="Assets\VertexColors.shader" />
+    <Reference Include="UnityEngine.UI">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Networking">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.TestRunner">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TestRunner">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Timeline">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Timeline">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/Timeline/Editor/UnityEditor.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.TreeEditor">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIAutomation">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/UIAutomation/UnityEngine.UIAutomation.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UIAutomation">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/UIAutomation/Editor/UnityEditor.UIAutomation.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.GoogleAudioSpatializer">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/Editor/UnityEditor.GoogleAudioSpatializer.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.GoogleAudioSpatializer">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.HoloLens">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.HoloLens">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.SpatialTracking">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/Editor/UnityEditor.SpatialTracking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SpatialTracking">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.VR">
+      <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Graphs">
+      <HintPath>/opt/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.LinuxStandalone.Extensions">
+      <HintPath>/opt/Unity/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>/home/tojatos/UnityProjects/NKM/Assets/packages/Newtonsoft.Json.10.0.3/lib/net45/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Data.Sqlite">
+      <HintPath>/home/tojatos/UnityProjects/NKM/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>/home/tojatos/UnityProjects/NKM/Assets/Plugins/System.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Rider.Unity.Editor.Plugin.Repacked">
+      <HintPath>/home/tojatos/UnityProjects/NKM/Assets/Plugins/Editor/JetBrains/JetBrains.Rider.Unity.Editor.Plugin.Repacked.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Advertisements">
+      <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.ads@2.0.3/UnityEngine.Advertisements.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Advertisements">
+      <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.ads@2.0.3/Editor/UnityEditor.Advertisements.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Analytics">
+      <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.analytics@2.0.13/UnityEngine.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Analytics">
+      <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.analytics@2.0.13/Editor/UnityEditor.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Purchasing">
+      <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.purchasing@0.0.19/UnityEngine.Purchasing.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Purchasing">
+      <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.purchasing@0.0.19/Editor/UnityEditor.Purchasing.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.StandardEvents">
+      <HintPath>/home/tojatos/.config/unity3d/cache/packages/packages.unity.com/com.unity.standardevents@1.0.10/UnityEngine.StandardEvents.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -239,5 +296,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  
 </Project>

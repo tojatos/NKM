@@ -12,7 +12,8 @@ namespace Animations
             var f = new FloatingInfoStart(trans, value, color);
             GameObject textObject = f.TextObject;
             AnimationParts.Enqueue(f);
-            AnimationParts.Enqueue(new MoveToPosition(textObject.transform, textObject.transform.position + Vector3.forward * 15, 0.4f));
+            AnimationParts.Enqueue(new TeleportToPosition(textObject.transform, trans));
+            AnimationParts.Enqueue(new MoveToPosition(textObject.transform, Vector3.forward * 15, 0.4f, true));
             AnimationParts.Enqueue(new FloatingInfoFinish(textObject));
         }
         

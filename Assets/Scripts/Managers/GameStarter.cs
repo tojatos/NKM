@@ -30,7 +30,7 @@ namespace Managers
 		{
 			var gameOptions = new GameOptions
 			{
-				Map = Stuff.Maps[0],
+				Map = Stuff.Maps.Single(m => m.Map.name == "TestMap"),
 				Players = new List<GamePlayer>
 					{
 						new GamePlayer

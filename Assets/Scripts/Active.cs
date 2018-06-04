@@ -32,7 +32,7 @@ public class Active
 	public  Ability Ability;
 	public  MyGameObject MyGameObject;
 	public  Character CharacterOnMap;
-	public List<HexCell> MoveCells = new List<HexCell>();
+	public readonly List<HexCell> MoveCells = new List<HexCell>();
 
 	
 	public List<HexCell> HexCells { get; set; }

@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NKM", "Assembly-CSharp.csproj", "{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NKM", "Assembly-CSharp-Editor.csproj", "{7FFE6B30-FB89-4E31-16F2-F7965E87D984}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{7FFE6B30-FB89-4E31-16F2-F7965E87D984}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

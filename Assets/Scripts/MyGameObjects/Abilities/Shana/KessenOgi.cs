@@ -4,7 +4,6 @@ using Helpers;
 using Hex;
 using MyGameObjects.MyGameObject_templates;
 using System.Linq;
-using UnityEngine;
 
 namespace MyGameObjects.Abilities.Shana
 {
@@ -63,14 +62,13 @@ public override string GetDescription() => "";
 		{
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(character.ParentCell);
 			HexCell lastCell = character.ParentCell;
-			for (int i = 2; i > 0; i--) {
+			for (int i = ShinkuKnockback; i > 0; i--) {
 				HexCell cell = lastCell.GetCell(direction, 1);
 				if(cell==null || cell.CharacterOnCell != null || cell.Type == HexTileType.Wall) break;
 				lastCell = cell;
 			}
 			if(lastCell!=ParentCharacter.ParentCell) character.MoveTo(lastCell);
 		}
-
 		private void Hien(Character character)
 		{
 			List<HexCell> cells = new List<HexCell>();
@@ -84,7 +82,6 @@ public override string GetDescription() => "";
 				cells.Add(neighbor);
 				lastCell = neighbor;
 			} while (neighbor != character.ParentCell);
-			// Debug.Log(cells.Count());
 			foreach (HexCell c in cells)
 			{
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;

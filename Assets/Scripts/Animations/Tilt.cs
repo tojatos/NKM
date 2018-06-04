@@ -11,8 +11,8 @@ namespace Animations
         {
 //            AllowPlayingOtherAnimations = true;
             var tilt = new Vector3(0.5f, 0, 0.3f);
-            AnimationParts.Enqueue(new MoveToPosition(trans, trans.position + tilt, TimeToMove));
-            AnimationParts.Enqueue(new MoveToPosition(trans, trans.position, TimeToMove));
+            AnimationParts.Enqueue(new MoveToPosition(trans, tilt, TimeToMove, true));
+            AnimationParts.Enqueue(new MoveToPosition(trans, -tilt, TimeToMove, true));
         }
         
     }
