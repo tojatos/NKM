@@ -33,14 +33,11 @@ namespace MyGameObjects.Abilities.Gilgamesh
 			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 		}
 
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} wypuszcza niebiańskie łańcuchy, unieruchamiając przeciwnika na {1} fazy
+		public override string GetDescription() =>
+$@"{ParentCharacter.Name} wypuszcza niebiańskie łańcuchy, unieruchamiając przeciwnika na {SnarDuration} fazy
 i podwajając bonusy zdolności biernej na ten okres.
-Zasięg: {2}	Czas odnowienia: {3}",
-				ParentCharacter.Name, SnarDuration, AbilityRange, Cooldown);
-		}
+Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
+
 		protected override void Use()
 		{
 			List<HexCell> cellRange = GetRangeCells();
