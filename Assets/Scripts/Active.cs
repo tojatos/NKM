@@ -209,7 +209,8 @@ public class Active
 	public void MakeAction(HexCell cell)
 	{
 		if (!HexCells.Contains(cell)) return;
-		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
+//		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
+		if(CharacterOnMap!=null && !CharacterOnMap.TookActionInPhaseBefore) CharacterOnMap.InvokeJustBeforeFirstAction();
 		switch (Action)
 		{
 			case Action.None:
