@@ -49,7 +49,8 @@ ParentCharacter.Name, DoTDamage, DoTTime, AbilityRange, Cooldown);
 		}
 		public override void Use(Character targetCharacter)
 		{
-			targetCharacter.Effects.Add(new DamageOverTime(ParentCharacter, DoTDamage, AttackType.True, DoTTime, targetCharacter, "Blood Kiss"));
+			var damage = new Damage(DoTDamage, DamageType.True);
+			targetCharacter.Effects.Add(new DamageOverTime(ParentCharacter, damage, DoTTime, targetCharacter, "Blood Kiss"));
 			OnUseFinish();
 		}
 	}

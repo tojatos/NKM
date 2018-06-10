@@ -9,7 +9,7 @@ namespace MyGameObjects.Abilities.Roronoa_Zoro
 {
 	public class OniGiri : Ability
 	{
-		private const int AbilityRange = 7;
+		private const int AbilityRange = 4;
 
 		public OniGiri()
 		{
@@ -88,7 +88,8 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCharacter.ParentCell);
 			HexCell moveCell = targetCharacter.ParentCell.GetCell(direction, 2);
 			ParentCharacter.MoveTo(moveCell);
-			ParentCharacter.Attack(targetCharacter, AttackType.Physical, ParentCharacter.AttackPoints.Value);
+			var damage = new Damage(ParentCharacter.AttackPoints.Value, DamageType.Physical);
+			ParentCharacter.Attack(targetCharacter, damage);
 			Active.PlayAudio("giri");
 			OnUseFinish();
 		}

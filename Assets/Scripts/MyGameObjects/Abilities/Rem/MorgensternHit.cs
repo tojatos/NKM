@@ -51,7 +51,8 @@ Czas odnowienia: {3}",
 		public override void Use(List<HexCell> cells)
 		{
 			List<Character> characters = cells.GetCharacters();
-			characters.ForEach(c =>ParentCharacter.Attack(c, AttackType.Physical, AbilityDamage));
+			var damage = new Damage(AbilityDamage, DamageType.Physical);
+			characters.ForEach(c =>ParentCharacter.Attack(c, damage));
 			OnUseFinish();
 		}
 	}

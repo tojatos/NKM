@@ -40,6 +40,7 @@
         <e p="ColorToHighlight.cs" t="Include" />
         <e p="ColorToTileType.cs" t="Include" />
         <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
+        <e p="Damage.cs" t="Include" />
         <e p="Game.cs" t="Include" />
         <e p="GameData.cs" t="Include" />
         <e p="GameOptions.cs" t="Include" />
@@ -149,7 +150,7 @@
             <e p="BasicAttackInability.cs" t="Include" />
             <e p="BlackBlood.cs" t="Include" />
             <e p="DamageOverTime.cs" t="Include" />
-            <e p="GurenNoSouyoku.cs" t="Include" />
+            <e p="Flying.cs" t="Include" />
             <e p="HPDrain.cs" t="Include" />
             <e p="MovementDisability.cs" t="Include" />
             <e p="PassiveBuff.cs" t="Include" />

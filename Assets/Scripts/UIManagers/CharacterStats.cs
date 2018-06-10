@@ -46,7 +46,7 @@ namespace UIManagers
 		{
 			EventTrigger trigger = SpeedObject.GetComponent<EventTrigger>() ?? SpeedObject.AddComponent<EventTrigger>();
 			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-			entry.callback.AddListener((eventData) => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetMoveCells());
+			entry.callback.AddListener((eventData) => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetBasicMoveCells());
 			trigger.triggers.Add(entry);
 
 			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};

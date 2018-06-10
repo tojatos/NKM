@@ -38,11 +38,10 @@ namespace Managers
 							Name = "Ryszard",
 							Characters = new List<Character>
 							{
-//								new Character("Sinon"),
-//								new Character("Roronoa Zoro"),
-//								new Character("Shana"),
+								new Character("Sinon"),
+								new Character("Roronoa Zoro"),
 								new Character("Bezimienni"),
-//								new Character("Itsuka Kotori"),
+								new Character("Itsuka Kotori"),
 
 							}
 						},
@@ -51,10 +50,10 @@ namespace Managers
 							Name = "Maciej",
 							Characters = new List<Character>
 							{
-//								new Character("Bezimienni"),
-								new Character("Shana")
-//								new Character("Dekomori Sanae"),
-//								new Character("Gilgamesh")
+								new Character("Bezimienni"),
+								new Character("Shana"),
+								new Character("Dekomori Sanae"),
+								new Character("Gilgamesh")
 							}
 						}
 					},

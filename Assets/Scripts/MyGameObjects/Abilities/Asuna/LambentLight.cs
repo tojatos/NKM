@@ -12,7 +12,7 @@ namespace MyGameObjects.Abilities.Asuna
 		{
 			Name = "Lambent Light";
 			Type = AbilityType.Passive;
-			OverridesEnemyAttack = true;
+//			OverridesEnemyAttack = true;
 		}
 
 		public override List<HexCell> GetRangeCells()
@@ -28,11 +28,25 @@ zada on {2}% obrażeń."
 				, ParentCharacter.Name, Range, AaDamageModifier*100);
 		}
 
-		public override void AttackEnemy(Character attackedCharacter, int damage)
+		public override void Awake()
 		{
-			var modifier = 1;
-			if (GetRangeCells().Contains(attackedCharacter.ParentCell)) modifier = AaDamageModifier;
-			ParentCharacter.Attack(attackedCharacter, AttackType.Physical, damage * modifier);
+			ParentCharacter.BasicAttack = character =>
+			{
+				var modifier = 1;
+				if (GetRangeCells().Contains(character.ParentCell)) modifier = AaDamageModifier;
+				var damageValue = ParentCharacter.AttackPoints.Value * modifier;
+				var damage = new Damage(damageValue, DamageType.Physical);
+				ParentCharacter.Attack(character, damage);
+			};
 		}
+
+//		public override void AttackEnemy(Character attackedCharacter, int damage)
+//		{
+//			var modifier = 1;
+//			if (GetRangeCells().Contains(attackedCharacter.ParentCell)) modifier = AaDamageModifier;
+////			var damageValue = damage * modifier;
+////			var damage = new Damage(damageValue, DamageType.Physical);
+//			ParentCharacter.Attack(attackedCharacter, damage);
+//		}
 	}
 }

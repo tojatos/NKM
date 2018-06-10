@@ -227,26 +227,29 @@ public class Active
 				break;
 			case Action.AttackAndMove:
 				Character character = CharacterOnMap;
+				if(character==null) throw new NullReferenceException();
 				if (cell.CharacterOnCell != null)
 				{
 					character.BasicAttack(cell.CharacterOnCell);
 				}
 				else
 				{
-					if (cell == MoveCells.LastOrDefault())
-					{
-                        if (character.Abilities.Any(a => a.OverridesMove))
-                                                                              {
-                                                                              if (character.Abilities.Count(a => a.OverridesMove) > 1)
-                                                                              throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać akcję ruchu!");
-                                                                              
-                                                                              character.Abilities.Single(a => a.OverridesMove).Move(MoveCells);
-                                                                              }
-                        else
-                        {
-                            character.BasicMove(MoveCells);
-                        }
-					}
+					if(cell.Type == HexTileType.Wall) return;
+//					if (cell == MoveCells.LastOrDefault())
+//					{
+//                        if (character.Abilities.Any(a => a.OverridesMove))
+//                          {
+//                          if (character.Abilities.Count(a => a.OverridesMove) > 1)
+//                          throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać akcję ruchu!");
+//                          
+//                          character.Abilities.Single(a => a.OverridesMove).Move(MoveCells);
+//                          }
+//                        else
+//                        {
+//                            character.BasicMove(MoveCells);
+//                        }
+//					}
+					character.BasicMove(MoveCells);
 				}
 
 				HexCells = null;//TODO is this really needed?
@@ -275,6 +278,11 @@ public class Active
 			default:
 				throw new ArgumentOutOfRangeException();
 		}
+	}
+
+	public void MakeAction()
+	{
+		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 	}
 
 	public bool IsPointerOverUIObject()

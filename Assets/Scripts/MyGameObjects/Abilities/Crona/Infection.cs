@@ -12,7 +12,7 @@ namespace MyGameObjects.Abilities.Crona
         public Infection()
         {
             Name = "Infection";
-            Cooldown = 7;
+            Cooldown = 5;
             CurrentCooldown = 0;
             Type = AbilityType.Ultimatum;
         }

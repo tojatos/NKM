@@ -7,6 +7,7 @@ namespace MyGameObjects.Effects
     public class BlackBlood : Effect
     {
         private const int Damage = 10;
+        public const int Range = 2;
         private readonly Character _characterThatAttacks;
         private bool _wasActivatedOnce;
 
@@ -15,18 +16,19 @@ namespace MyGameObjects.Effects
         {
             _characterThatAttacks = characterThatAttacks;
             Type = effectTarget.Owner == characterThatAttacks.Owner ? EffectType.Positive : EffectType.Negative;
-            Character.VoidDelegate tryToActivateEffect = () =>
+            Character.DamageDelegate tryToActivateEffect = d => 
             {
                 if(_wasActivatedOnce) return;//prevent infinite loop
                 _wasActivatedOnce = true; 
                 List<Character> enemiesInRange =
-                    ParentCharacter.ParentCell.GetNeighbors(1).Select(c => c.CharacterOnCell).Where(c => c != null && c.Owner != characterThatAttacks.Owner).ToList();
+                    ParentCharacter.ParentCell.GetNeighbors(Range).Select(c => c.CharacterOnCell).Where(c => c != null && c.Owner != characterThatAttacks.Owner).ToList();
                 if(effectTarget.Owner != characterThatAttacks.Owner) enemiesInRange.Add(effectTarget);
-                enemiesInRange.ForEach(enemy => characterThatAttacks.Attack(enemy, AttackType.Magical, Damage));
+                var damage = new Damage(Damage, DamageType.Magical);
+                enemiesInRange.ForEach(enemy => characterThatAttacks.Attack(enemy, damage));
                 _wasActivatedOnce = false;
             };
-            ParentCharacter.BeforeParentDamage += tryToActivateEffect;
-            OnRemove += () => ParentCharacter.BeforeParentDamage -= tryToActivateEffect;
+            ParentCharacter.BeforeBeingDamaged += tryToActivateEffect;
+            OnRemove += () => ParentCharacter.BeforeBeingDamaged -= tryToActivateEffect;
         }
 
         public override string GetDescription()

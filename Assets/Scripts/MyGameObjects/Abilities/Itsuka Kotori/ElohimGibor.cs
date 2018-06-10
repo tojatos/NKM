@@ -4,6 +4,7 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
 {
 	public class ElohimGibor : EnableableAbility
 	{
+		private const int Percent = 50;
 		private int _turnsWithoutBeingHurt;
 		private int _amountToHeal;
 		
@@ -23,9 +24,9 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
 				_turnsWithoutBeingHurt = 0;
 				_amountToHeal = 0;
 			};
-			ParentCharacter.OnParentDamage += value =>
+			ParentCharacter.AfterBeingDamaged += damage =>
 			{
-				_amountToHeal += (int) (value * 0.75f);
+				_amountToHeal += (int) (damage.Value * Percent / 100f);
 				_turnsWithoutBeingHurt = 0;
 			};
 		}

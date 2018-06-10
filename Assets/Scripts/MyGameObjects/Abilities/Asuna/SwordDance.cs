@@ -56,20 +56,24 @@ Pozostałe ataki do zablokowania: {_attacksToBlock}";
 
 		protected override void Use()
 		{
+			Active.MakeAction();
 			_isEnabled = true;
 			OnUseFinish(0);
 			CharacterAbilities.Instance.UpdateButtonData();
 		}
 
-		public override bool BeforeParentBasicAttacked(Character attackingCharacter)
+		public override void Awake()
 		{
-			if (!IsEnabled) return true;
+			ParentCharacter.BeforeBeingBasicAttacked += (attackingCharacter, damage) =>
+			{
+				if (!IsEnabled) return;
 
-			MessageLogger.Log(string.Format("{0} blokuje atak {1}!", ParentCharacter.FormattedFirstName(), attackingCharacter.FormattedFirstName()));
-			_attacksToBlock--;
-			_currentBonusAttack += AbilityBonusAttackGain;
-			if(_attacksToBlock == 0) Disable();
-			return false;
+                MessageLogger.Log(string.Format("{0} blokuje atak {1}!", ParentCharacter.FormattedFirstName(), attackingCharacter.FormattedFirstName()));
+                _attacksToBlock--;
+                _currentBonusAttack += AbilityBonusAttackGain;
+                if(_attacksToBlock == 0) Disable();
+			};
+			ParentCharacter.BeforeAttack += (character, damage) => damage.Value += _currentBonusAttack;
 		}
 
 		public override void OnPhaseFinish()
@@ -86,10 +90,6 @@ Pozostałe ataki do zablokowania: {_attacksToBlock}";
 			_attacksToBlock = 3;
 			_phasesRemain = 2;
 			CurrentCooldown = Cooldown;
-		}
-		public override void DamageModifier(Character targetCharacter, ref int damage)
-		{
-			damage += _currentBonusAttack;
 		}
 	}
 }

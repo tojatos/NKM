@@ -46,8 +46,9 @@ Zasięg: {4}	Czas odnowienia: {5}",
 			{
 				if (targetCharacter.Owner == Active.GamePlayer) return;
 
-				var dmg = AbilityCurrentHealthPercentDamage / 100 * targetCharacter.HealthPoints.Value;
-				ParentCharacter.Attack(targetCharacter, AttackType.Physical, (int)dmg);
+				int damageValue = (int) (AbilityCurrentHealthPercentDamage / 100 * targetCharacter.HealthPoints.Value);
+				var damage = new Damage(damageValue, DamageType.Physical);
+				ParentCharacter.Attack(targetCharacter, damage);
 				targetCharacter.Effects.Add(new StatModifier(2, -(targetCharacter.Speed.Value / 2), targetCharacter, StatType.Speed, Name));
 				//targetCharacter.Effects.Add(new MovementDisability(SlowDuration, targetCharacter, Name));
 			});

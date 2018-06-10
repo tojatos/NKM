@@ -8,7 +8,7 @@ namespace MyGameObjects.Abilities.Dekomori_Sanae
 {
 	public class MjolnirHammer : Ability
 	{
-		private const int AbilityDamage = 15;
+		private const int AbilityDamage = 18;
 		private const int AbilityRange = 7;
 		private bool WasUsedOnceThisTurn { get; set; }
 		private Character FirstAbilityTarget { get; set; }
@@ -64,12 +64,13 @@ ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
 		}
 		public override void Use(Character targetCharacter)
 		{
-			var damage = AbilityDamage;
+			var damageToDeal = AbilityDamage;
 			if (FirstAbilityTarget == targetCharacter)
 			{
-				damage /= 2;
+				damageToDeal /= 2;
 			}
-			ParentCharacter.Attack(targetCharacter, AttackType.Physical, damage);
+			var damage = new Damage(damageToDeal, DamageType.Physical);
+			ParentCharacter.Attack(targetCharacter, damage);
 			if (!WasUsedOnceThisTurn)
 			{
 				WasUsedOnceThisTurn = true;

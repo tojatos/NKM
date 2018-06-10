@@ -36,7 +36,6 @@ namespace Animations.Parts
             {
                 t += Time.deltaTime / _timeToMove;
                 if (_targetTransform != null) _endPos = _targetTransform.position;
-//                else if (_useReference) _endPos = _transformToMove.position + _refPos;
                 _transformToMove.position = Vector3.Lerp(currentPos, _endPos, t);
                 yield return null;
             }

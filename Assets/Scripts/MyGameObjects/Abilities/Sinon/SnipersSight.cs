@@ -11,7 +11,6 @@ namespace MyGameObjects.Abilities.Sinon
 		{
 			Name = "Sniper's Sight";
 			Type = AbilityType.Passive;
-			OverridesGetBasicAttackCells = true;
 		}
 
 		public override string GetDescription()
@@ -20,8 +19,9 @@ namespace MyGameObjects.Abilities.Sinon
 		}
 
 		public override bool CanUse => false;
+		public override void Awake() => ParentCharacter.GetBasicAttackCells = GetBasicAttackCellsOverride;
 
-		public override List<HexCell> GetBasicAttackCells()
+		private List<HexCell> GetBasicAttackCellsOverride()
 		{
 			List<HexCell> cellRange;
 			switch (ParentCharacter.Type)

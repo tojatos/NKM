@@ -11,16 +11,17 @@ namespace MyGameObjects.Abilities.Roronoa_Zoro
 		{
 			Name = "Lack Of Orientation";
 			Type = AbilityType.Passive;
-			OverridesMove = true;
 		}
 
 		public override string GetDescription() => $"{ParentCharacter.Name} ma 50% szansy na pójście w losowe miejsce podczas wykonania ruchu.";
 
-		public override void Move(List<HexCell> moveCells)
+		public override void Awake() => ParentCharacter.BasicMove = MoveOverride;
+
+		private void MoveOverride(List<HexCell> moveCells)
 		{
 			if (UnityEngine.Random.Range(0,2) == 0)
 			{
-				ParentCharacter.BasicMove(moveCells);
+				ParentCharacter.DefaultBasicMove(moveCells);
 			}
 			else
 			{
@@ -36,7 +37,7 @@ namespace MyGameObjects.Abilities.Roronoa_Zoro
 					lastCell = neighborMoveCells[r];
 					Active.AddMoveCell(lastCell);
 				}
-				ParentCharacter.BasicMove(Active.MoveCells);
+				ParentCharacter.DefaultBasicMove(Active.MoveCells);
 				MessageLogger.Log($"{ParentCharacter.FormattedFirstName()}: Cholera, znowu się zgubili?");
 			}
 		}

@@ -16,16 +16,19 @@ namespace MyGameObjects.Abilities.Gilgamesh
 		public override string GetDescription() => $@"Dzięki nieznającemu kresu skarbcowi, {ParentCharacter.Name} jest w stanie znaleźć odpowiedź na każdego wroga.
 W walce otrzymuje on {DamageReductionPercent}% mniej obrażeń, a jego ataki i umiejętności zadają dodatkowe {AdditionalDamagePercent}% obrażeń.";
 
-		public override void DamageModifier(Character targetCharacter, ref int damage)
+		public override void Awake()
 		{
-			var modifier = ParentCharacter.Effects.OfType<PassiveBuff>().SingleOrDefault() == null ? 1 : 2;
-			damage += modifier * damage * AdditionalDamagePercent / 100;
+			ParentCharacter.BeforeAttack += (character, damage) =>
+			{
+				var modifier = ParentCharacter.Effects.OfType<PassiveBuff>().SingleOrDefault() == null ? 1 : 2;
+				damage.Value += modifier * damage.Value * AdditionalDamagePercent / 100;
+			};
+			ParentCharacter.BeforeBeingDamaged += damage =>
+			{
+				var modifier = ParentCharacter.Effects.OfType<PassiveBuff>().SingleOrDefault() == null ? 1 : 2;
+				damage.Value -= modifier * damage.Value * DamageReductionPercent / 100;
+			};
 		}
 
-		public override void BeforeParentDamage(ref int damage)
-		{
-			var modifier = ParentCharacter.Effects.OfType<PassiveBuff>().SingleOrDefault() == null ? 1 : 2;
-			damage -= modifier * damage * DamageReductionPercent / 100;
-		}
 	}
 }

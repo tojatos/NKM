@@ -61,12 +61,13 @@ Zasięg: {3}	Czas odnowienia: {4}",
 		}
 		public override void Use(Character targetCharacter)
 		{
-			var dmg = AbilityDamage + AbilityMissingHealthPercentDamage / 100 *
-			          (targetCharacter.HealthPoints.BaseValue - targetCharacter.HealthPoints.Value);
+			var damageValue = (int) (AbilityDamage + AbilityMissingHealthPercentDamage / 100 *
+			                 (targetCharacter.HealthPoints.BaseValue - targetCharacter.HealthPoints.Value));
 //			AnimationPlayer.Instance.StartCoroutine(
 //				AnimationPlayer.Instance.SharpenedForkEnumerator(ParentCharacter.CharacterObject.transform,
 //					targetCharacter.CharacterObject.transform)); TODO: animation
-			ParentCharacter.Attack(targetCharacter, AttackType.Physical, (int)dmg);
+			var damage = new Damage(damageValue, DamageType.Physical);
+			ParentCharacter.Attack(targetCharacter, damage);
 			_numberOfUses++;
 			if (_numberOfUses < 3)
 			{

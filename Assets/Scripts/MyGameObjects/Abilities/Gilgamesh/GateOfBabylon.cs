@@ -8,7 +8,7 @@ namespace MyGameObjects.Abilities.Gilgamesh
 	public class GateOfBabylon : Ability
 	{
 		private const int AbilityDamage = 25;
-		private const int AbilityRange = 10;
+		private const int AbilityRange = 6;
 		private const int AbilityRadius = 6;
 		public GateOfBabylon()
 		{
@@ -44,8 +44,12 @@ Zasięg: {3}	Czas odnowienia: {4}
 			characters.ForEach(targetCharacter =>
 			{
 				if (targetCharacter.Owner == Active.GamePlayer) return;
+				DamageType damageType = targetCharacter.MagicalDefense.Value <= targetCharacter.PhysicalDefense.Value
+					? DamageType.Magical
+					: DamageType.Physical;
+				var damage = new Damage(AbilityDamage, damageType);
 
-				ParentCharacter.Attack(targetCharacter, targetCharacter.MagicalDefense.Value <= targetCharacter.PhysicalDefense.Value ? AttackType.Magical : AttackType.Physical, AbilityDamage);
+				ParentCharacter.Attack(targetCharacter, damage);
 			});
 			OnUseFinish();
 		}

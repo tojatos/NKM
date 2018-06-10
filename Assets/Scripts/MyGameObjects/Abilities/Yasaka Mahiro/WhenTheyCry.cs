@@ -17,17 +17,22 @@ namespace MyGameObjects.Abilities.Yasaka_Mahiro
 		{
 			return $"{ParentCharacter.Name} zadaje dodatkowe {AdditionalDamagePercent}% obrażeń zranionym wcześniej wrogom.";
 		}
-		public override void DamageModifier(Character targetCharacter, ref int damage)
-		{
-			if (_damagedCharacters.Contains(targetCharacter))
-			{
-				damage += damage * AdditionalDamagePercent / 100;
-			}
-		}
 
-		public override void OnDamage(Character targetCharacter, int damageDealt)
+		public override void Awake()
 		{
-			if(targetCharacter.Owner!=Active.GamePlayer&&!_damagedCharacters.Contains(targetCharacter)) _damagedCharacters.Add(targetCharacter);
+			ParentCharacter.BeforeAttack += (character, damage) =>
+			{
+				if (_damagedCharacters.Contains(character))
+				{
+					damage.Value += damage.Value * AdditionalDamagePercent / 100;
+				}
+			};
+			ParentCharacter.AfterAttack += (character, damage) =>
+			{
+				if (damage.Value <= 0) return;
+				if (character.Owner != Active.GamePlayer && !_damagedCharacters.Contains(character))
+					_damagedCharacters.Add(character);
+			};
 		}
 	}
 }

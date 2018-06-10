@@ -6,6 +6,7 @@ namespace MyGameObjects.Abilities.Dekomori_Sanae
 	public class WickedEyesServant : EnableableAbility
 	{
 		private int _additionalDamage;
+		private bool _isBeingUsed;
 		public WickedEyesServant()
 		{
 			Name = "Wicked Eye's Servant";
@@ -27,13 +28,19 @@ Zabicie wroga dodaje dodatkowy punkt obrażeń nieuchronnych tej umiejętności 
 				return Game.Players.Any(p => p.Characters.Any(c => c.IsOnMap && (c.AttackPoints.Value > ParentCharacter.AttackPoints.Value || c.Name == "Takanashi Rikka")));
 			}
 		}
-		public override void TrueDamageModifier(Character targetCharacter, ref int damage)
+		public override void Awake()
 		{
-			damage += IsEnabled ? _additionalDamage : 0;
-		}
-		public override void OnEnemyKill()
-		{
-			_additionalDamage++;
+//			ParentCharacter.JustBeforeAttack += (character, damage) => damage.Value += IsEnabled ? _additionalDamage : 0;
+			ParentCharacter.BeforeAttack += (character, d) =>
+			{
+				if (!IsEnabled || _isBeingUsed) return;
+				_isBeingUsed = true; //prevent infinite loop
+				var damage = new Damage(_additionalDamage, DamageType.True);
+				ParentCharacter.Attack(character, damage);
+				_isBeingUsed = false;
+
+			};
+			ParentCharacter.OnEnemyKill += () => _additionalDamage++;
 		}
 	}
 }

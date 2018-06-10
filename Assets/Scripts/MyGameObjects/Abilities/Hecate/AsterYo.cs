@@ -49,8 +49,8 @@ Zasięg: {3}	Czas odnowienia: {4}",
 				AnimationPlayer.Add(new Animations.AsterYo(ParentCharacter.CharacterObject.transform, characters.Select(c => c.CharacterObject.transform).ToList()));
 				characters.ForEach(targetCharacter =>
 				{
-					//if (targetCharacter.Owner == ParentCharacter.Owner) return;
-					ParentCharacter.Attack(targetCharacter, AttackType.Magical, AbilityDamage);
+					var damage = new Damage(AbilityDamage, DamageType.Magical);
+					ParentCharacter.Attack(targetCharacter, damage);
 					passiveAbility.TryCollectingEnergy(targetCharacter);
 				});
 				OnUseFinish();

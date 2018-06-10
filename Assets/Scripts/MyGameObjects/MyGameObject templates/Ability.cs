@@ -48,11 +48,11 @@ namespace MyGameObjects.MyGameObject_templates
 				}
 			}
 		}
-		public bool OverridesFriendAttack { get; protected set; }
-		public bool OverridesEnemyAttack { get; protected set; }
-		public bool OverridesGetBasicAttackCells { get; protected set; }
-		public bool OverridesGetMoveCells { get; protected set; }
-		public bool OverridesMove { get; protected set; }
+//		public bool OverridesFriendAttack { get; protected set; }
+//		public bool OverridesEnemyAttack { get; protected set; }
+//		public bool OverridesGetBasicAttackCells { get; protected set; }
+//		public bool OverridesGetMoveCells { get; protected set; }
+//		public bool OverridesMove { get; protected set; }
 
 		/// <summary>
 		/// Throws an exception when you cannot use this ability.
@@ -160,35 +160,35 @@ namespace MyGameObjects.MyGameObject_templates
 			Active.CleanAndTrySelecting();
 		}
 
-		public virtual void DamageModifier(Character targetCharacter, ref int damage){}
-		public virtual void TrueDamageModifier(Character targetCharacter, ref int damage){}
+//		public virtual void DamageModifier(Character targetCharacter, ref int damage){}
+//		public virtual void TrueDamageModifier(Character targetCharacter, ref int damage){}
 		public virtual void Awake(){}
 		public virtual void OnEnemyKill(){}
-		public virtual void AttackFriend(Character attackedCharacter, int damage){}
-		public virtual void AttackEnemy(Character attackedCharacter, int damage){}
-		public virtual void OnDamage(Character targetCharacter, int damageDealt){}
-		public virtual void BeforeParentDamage(ref int damage){}
+//		public virtual void AttackFriend(Character attackedCharacter, Damage damage){}
+//		public virtual void AttackEnemy(Character attackedCharacter, Damage damage){}
+//		public virtual void OnDamage(Character targetCharacter, int damageDealt){}
+//		public virtual void BeforeParentDamage(ref int damage){}
 		/// <summary>
 		/// Triggers before any character uses basic attack on parent.
 		/// If returns false, parent cannot be attacked.
 		/// </summary>
 		/// <returns>Can attack</returns>
-		public virtual bool BeforeParentBasicAttacked(Character attackingCharacter) { return true; }
+//		public virtual bool BeforeParentBasicAttacked(Character attackingCharacter) { return true; }
 
 		public virtual void Cancel() => OnFailedUseFinish();
 
-		public virtual List<HexCell> GetBasicAttackCells()
-		{
-			throw new NotImplementedException();
-		}
-		public virtual List<HexCell> GetMoveCells()
-		{
-			throw new NotImplementedException();
-		}
-		public virtual void Move(List<HexCell> moveCells)
-		{
-			throw new NotImplementedException();
-		}
+//		public virtual List<HexCell> GetBasicAttackCells()
+//		{
+//			throw new NotImplementedException();
+//		}
+//		public virtual List<HexCell> GetMoveCells()
+//		{
+//			throw new NotImplementedException();
+//		}
+//		public virtual void Move(List<HexCell> moveCells)
+//		{
+//			throw new NotImplementedException();
+//		}
 
 	}
 	public enum AbilityType

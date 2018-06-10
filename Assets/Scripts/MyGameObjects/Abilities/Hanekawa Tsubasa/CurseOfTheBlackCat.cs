@@ -50,16 +50,9 @@ Zasięg: {4} Czas odnowienia: {5}",
 		}
 		public override void Use(Character targetCharacter)
 		{
-			try
-			{
-				targetCharacter.Effects.Add(new HPDrain(ParentCharacter, DoTDamage, AttackType.True, DoTTime, targetCharacter, "Curse of The Black Cat"));
-				OnUseFinish();
-			}
-			catch (Exception e)
-			{
-				MessageLogger.DebugLog(e.Message);
-				OnFailedUseFinish();
-			}
+			var damage = new Damage(DoTDamage, DamageType.True);
+            targetCharacter.Effects.Add(new HPDrain(ParentCharacter, damage, DoTTime, targetCharacter, "Curse of The Black Cat"));
+            OnUseFinish();
 		}
 	}
 }

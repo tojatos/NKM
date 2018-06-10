@@ -23,6 +23,7 @@ Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
 		}
 		protected override void Use()
 		{
+			Active.MakeAction();
 			ParentCharacter.Effects.Add(new StatModifier(Duration, AttackIncrease, ParentCharacter, StatType.AttackPoints, Name));
 			ParentCharacter.Effects.Add(new StatModifier(Duration, BasicAttackRangeIncrease, ParentCharacter, StatType.BasicAttackRange, Name));
 			OnUseFinish();

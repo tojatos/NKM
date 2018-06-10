@@ -10,7 +10,7 @@ namespace MyGameObjects.Abilities.Roronoa_Zoro
 	public class HyakuHachiPoundHou : Ability
 	{
 		private const int AbilityDamage = 18;
-		private const int AbilityRange = 7;
+		private const int AbilityRange = 6;
 
 		public HyakuHachiPoundHou()
 		{
@@ -68,7 +68,8 @@ Zasięg: {2}	Czas odnowienia: {3}",
 			{
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
 
-				ParentCharacter.Attack(c.CharacterOnCell, AttackType.Physical, AbilityDamage);
+				var damage = new Damage(AbilityDamage, DamageType.Physical);
+				ParentCharacter.Attack(c.CharacterOnCell, damage);
 				break;
 			}
 		}

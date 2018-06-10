@@ -16,7 +16,7 @@ namespace MyGameObjects.Abilities.Hecate
 		{
 			Name = "Itadaki no Kura";
 			Type = AbilityType.Passive;
-			OverridesEnemyAttack = true;
+//			OverridesEnemyAttack = true;
 			CollectedEnergyCharacters = new List<Character>();
 		}
 		public override string GetDescription()
@@ -30,11 +30,15 @@ ParentCharacter.Name, HealthPercent, CollectedEnergy
 );
 		}
 
-		public override void AttackEnemy(Character attackedCharacter, int damage)
+		public override void Awake()
 		{
-			//We have to collect energy before attacking to prevent missing reference exception if the enemy is killed (animation has to know the target hexcell)
-			TryCollectingEnergy(attackedCharacter);
-			ParentCharacter.Attack(attackedCharacter, AttackType.Physical, damage);
+			ParentCharacter.AfterAttack += (character, damage) =>
+			{
+				//We have to collect energy before attacking to prevent missing reference exception if the enemy is killed (animation has to know the target hexcell)
+				TryCollectingEnergy(character);
+//				ParentCharacter.Attack(character, AttackType.Physical, damage);
+			};
+
 		}
 
 		public void TryCollectingEnergy(Character targetCharacter)

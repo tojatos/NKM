@@ -14,7 +14,7 @@ namespace MyGameObjects.Abilities.Gilgamesh
 		public Enkidu()
 		{
 			Name = "Enkidu";
-			Cooldown = 3;
+			Cooldown = 4;
 			CurrentCooldown = 0;
 			Type = AbilityType.Normal;
 		}

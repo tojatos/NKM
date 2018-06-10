@@ -8,7 +8,7 @@ namespace MyGameObjects.Abilities.Dekomori_Sanae
 	public class MjolnirDestinyImpulse : Ability
 	{
 		private const int AbilityDamage = 25;
-		private const int AbilityRange = 6;
+		private const int AbilityRange = 8;
 		private bool _wasUsedOnceThisTurn;
 		public MjolnirDestinyImpulse()
 		{
@@ -47,8 +47,10 @@ Zasięg: {2}	Czas odnowienia: {3}",
 			characters.ForEach(targetCharacter =>
 			{
 				if (targetCharacter.Owner == Active.GamePlayer) return;
+				
+				var damage = new Damage(AbilityDamage, DamageType.Physical);
 
-				ParentCharacter.Attack(targetCharacter, AttackType.Physical, AbilityDamage);
+				ParentCharacter.Attack(targetCharacter, damage);
 				_wasUsedOnceThisTurn = true;
 				if (!targetCharacter.IsAlive)
 				{

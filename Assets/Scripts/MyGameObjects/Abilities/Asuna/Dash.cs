@@ -76,7 +76,11 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 		{
 			var modifier = 1;
 			if (ParentCharacter.ParentCell.GetNeighbors(2).Contains(targetCharacter.ParentCell)) modifier = AbilityCriticalHitModifier;
-			ParentCharacter.Attack(targetCharacter, AttackType.Physical, ParentCharacter.AttackPoints.Value * modifier);
+			var damageValue = ParentCharacter.AttackPoints.Value * modifier;
+			var damage = new Damage(damageValue, DamageType.Physical);
+			
+			ParentCharacter.Attack(targetCharacter, damage);
+			
 			OnUseFinish(Cooldown+1);
 		}
 

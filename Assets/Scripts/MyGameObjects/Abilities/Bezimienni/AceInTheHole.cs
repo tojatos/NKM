@@ -4,6 +4,7 @@ namespace MyGameObjects.Abilities.Bezimienni
 {
     public class AceInTheHole : Ability
     {
+        private const int HpPercentActivate = 50;
         private int _damageThisTurn;
         public bool HasFreeAbility { get; set; }
         public AceInTheHole()
@@ -21,11 +22,11 @@ namespace MyGameObjects.Abilities.Bezimienni
 
         public override void Awake()
         {
-            ParentCharacter.OnParentDamage += value =>
+            ParentCharacter.AfterBeingDamaged += damage =>
             {
                 if (HasFreeAbility) return;
-                _damageThisTurn += value;
-                if (_damageThisTurn > ParentCharacter.HealthPoints.BaseValue * (4 / 10f)) HasFreeAbility = true;
+                _damageThisTurn += damage.Value;
+                if (_damageThisTurn > ParentCharacter.HealthPoints.Value * (HpPercentActivate / 100f)) HasFreeAbility = true;
             };
             Active.Turn.TurnFinished += () => _damageThisTurn = 0;
 

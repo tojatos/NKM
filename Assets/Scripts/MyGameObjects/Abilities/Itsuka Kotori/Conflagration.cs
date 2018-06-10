@@ -21,37 +21,25 @@ namespace MyGameObjects.Abilities.Itsuka_Kotori
             CurrentCooldown = 0;
             Type = AbilityType.Normal;
 
-            OverridesGetBasicAttackCells = true;
+//            OverridesGetBasicAttackCells = true;
         }
 
         public override void Awake()
         {
-           ParentCharacter.BeforeBasicAttack += (Character character, ref int value) =>
+            ParentCharacter.BeforeBasicAttack += (character, damage) =>
             {
                 if (character.ParentCell.Effects.ContainsType(typeof(HexCellEffects.Conflagration)))
-                    value = (int) (value * (DamagePercent / 100f));
-            };   
-        }
-
-        public override List<HexCell> GetBasicAttackCells()
-        {
-            List<HexCell> cellRange;
-            switch (ParentCharacter.Type)
-			{
-				case FightType.Ranged:
-					cellRange = ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.BasicAttackRange.Value, false, false, true);
-					break;
-				case FightType.Melee:
-					cellRange = ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.BasicAttackRange.Value, true, false, true);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-            IEnumerable<HexCell> cellsWithConflagrationAndEnemyCharacters = HexMapDrawer.Instance.Cells
-                .Where(c => c.Effects.Any(e => e.GetType() == typeof(HexCellEffects.Conflagration)))
-                .Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner);
-            cellRange.AddRange(cellsWithConflagrationAndEnemyCharacters);
-            return cellRange.Distinct().ToList();
+                    damage.Value = (int) (damage.Value * (DamagePercent / 100f));
+            };
+            ParentCharacter.GetBasicAttackCells = () =>
+            {
+                var cellRange = ParentCharacter.DefaultGetBasicAttackCells();
+                IEnumerable<HexCell> cellsWithConflagrationAndEnemyCharacters = HexMapDrawer.Instance.Cells
+                    .Where(c => c.Effects.Any(e => e.GetType() == typeof(HexCellEffects.Conflagration)))
+                    .Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner);
+                cellRange.AddRange(cellsWithConflagrationAndEnemyCharacters);
+                return cellRange.Distinct().ToList();
+            };
         }
 
         public override string GetDescription()

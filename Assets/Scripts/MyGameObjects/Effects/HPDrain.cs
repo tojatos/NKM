@@ -6,20 +6,19 @@ namespace MyGameObjects.Effects
 	public class HPDrain : Effect
 	{
 		private readonly Character _characterThatAttacks;
-		private readonly int _damagePerTick;
+		private readonly Damage _damagePerTick;
 
-		public HPDrain(Character characterThatAttacks, int damagePerTick, AttackType attackType, int cooldown, Character parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
+		public HPDrain(Character characterThatAttacks, Damage damagePerTick, int cooldown, Character parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
 		{
 			Name = name ?? "HP Drain";
 			_damagePerTick = damagePerTick;
 			_characterThatAttacks = characterThatAttacks;
 			Type = EffectType.Negative;
-			Character.VoidDelegate tryToActivateEffect = 
-			() =>
+			Character.VoidDelegate tryToActivateEffect = () =>
 			{
-				_characterThatAttacks.Attack(ParentCharacter, attackType, _damagePerTick);
+				_characterThatAttacks.Attack(ParentCharacter, _damagePerTick);
 				if (ParentCharacter.IsAlive)
-					ParentCharacter.Heal(_characterThatAttacks, _damagePerTick);
+					ParentCharacter.Heal(_characterThatAttacks, _damagePerTick.Value);
 			};
 			ParentCharacter.JustBeforeFirstAction += tryToActivateEffect;
 			OnRemove += () => ParentCharacter.JustBeforeFirstAction -= tryToActivateEffect;

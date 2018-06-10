@@ -54,7 +54,8 @@ Czas odnowiania: {3}",
 		}
 		public override void Use(Character targetCharacter)
 		{
-			ParentCharacter.Attack(targetCharacter, AttackType.Magical, AbilityDamage);
+			var damage = new Damage(AbilityDamage, DamageType.Magical);
+			ParentCharacter.Attack(targetCharacter, damage);
 			targetCharacter.Effects.Add(new MovementDisability(1, targetCharacter, "Al Huma's Freeze"));
 			OnUseFinish();
 		}

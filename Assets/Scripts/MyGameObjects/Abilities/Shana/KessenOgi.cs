@@ -98,13 +98,16 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 			foreach (HexCell c in cells)
 			{
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
-				ParentCharacter.Attack(c.CharacterOnCell, AttackType.Magical, FlameDamage);
+				var damage = new Damage(FlameDamage, DamageType.Magical);
+				ParentCharacter.Attack(c.CharacterOnCell, damage);
 			}
 		}
 		private void ShinpanAndDanzai(Character character)
 		{
-			int charactersNearParent = ParentCharacter.ParentCell.GetNeighbors(ShinpanAndDanzaiRange).Where(c => c.CharacterOnCell != null).Count();
-			ParentCharacter.Attack(character, AttackType.True, ShinpanAndDanzaiDamage*charactersNearParent);
+			int charactersNearParent = ParentCharacter.ParentCell.GetNeighbors(ShinpanAndDanzaiRange).Count(c => c.CharacterOnCell != null);
+			var damageValue = ShinpanAndDanzaiDamage * charactersNearParent;
+			var damage = new Damage(damageValue, DamageType.True);
+			ParentCharacter.Attack(character, damage);
 
 		}
 	}

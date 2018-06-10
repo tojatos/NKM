@@ -14,51 +14,6 @@ namespace MyGameObjects.MyGameObject_templates
 {
 	public class Character : MyGameObject
 	{
-		public Character(string name)
-		{
-			//Define basic properties
-			IsOnMap = false;
-			TookActionInPhaseBefore = true;
-			HasUsedBasicAttackInPhaseBefore = false;
-			HasUsedBasicMoveInPhaseBefore = false;
-			HasUsedNormalAbilityInPhaseBefore = false;
-			HasUsedUltimatumAbilityInPhaseBefore = false;
-			Effects = new List<Effect>();
-
-			//Add triggers to events
-			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
-			AfterBeingAttacked += RemoveIfDead;
-			OnEnemyKill += () => Abilities.ForEach(a => a.OnEnemyKill());
-			OnDamage += (targetCharacter, damageDealt) => Abilities.ForEach(a => a.OnDamage(targetCharacter, damageDealt));
-			OnDamage += (targetCharacter, damageDealt) => AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
-			OnDamage += (targetCharacter, damageDealt) => AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damageDealt.ToString(), Color.red));
-			OnHeal += (targetCharacter, valueHealed) => AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(), Color.blue));
-
-			//Define database properties
-			SqliteRow characterData = GameData.Conn.GetCharacterData(name);
-
-			Name = name;
-			AttackPoints = new Stat(this, StatType.AttackPoints, int.Parse(characterData.GetValue("AttackPoints")));
-			HealthPoints = new Stat(this, StatType.HealthPoints, int.Parse(characterData.GetValue("HealthPoints")));
-			BasicAttackRange = new Stat(this, StatType.BasicAttackRange, int.Parse(characterData.GetValue("BasicAttackRange")));
-			Speed = new Stat(this, StatType.Speed, int.Parse(characterData.GetValue("Speed")));
-			PhysicalDefense = new Stat(this, StatType.PhysicalDefense, int.Parse(characterData.GetValue("PhysicalDefense")));
-			MagicalDefense = new Stat(this, StatType.MagicalDefense, int.Parse(characterData.GetValue("MagicalDefense")));
-
-			Type = characterData.GetValue("FightType").ToFightType();
-
-			Description = characterData.GetValue("Description");
-			Quote = characterData.GetValue("Quote");
-			Author = characterData.GetValue("Author.Name");
-
-			//Create and initiate abilites
-			IEnumerable<string> abilityClassNames = GameData.Conn.GetAbilityClassNames(name);
-			var abilityNamespaceName = "Abilities." + name.Replace(' ', '_');
-			List<Ability> abilities = Spawner.Create(abilityNamespaceName, abilityClassNames).ToList().ConvertAll(x=>x as Ability);
-			InitiateAbilities(abilities);
-
-		}
-
 		#region Properties
 		public readonly Stat HealthPoints;
 		public readonly Stat AttackPoints;
@@ -69,7 +24,7 @@ namespace MyGameObjects.MyGameObject_templates
 
 		public int DeathTimer { get; private set; }
 
-		private bool CanAttackAllies => Abilities.Any(a => a.OverridesFriendAttack);
+		public bool CanAttackAllies { get; set; }//=> Abilities.Any(a => a.OverridesFriendAttack);
 		public List<Ability> Abilities{ get; private set; }
 		public List<Effect> Effects { get; }
 		public string Description { get; }
@@ -78,7 +33,6 @@ namespace MyGameObjects.MyGameObject_templates
 		public readonly FightType Type;
 		public GameObject CharacterObject { get; set; }
 		public HexCell ParentCell { get; set; }
-//		public Item ActiveItem { get; set; }
 		public bool IsOnMap { get; set; }
 
 		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }
@@ -100,8 +54,101 @@ namespace MyGameObjects.MyGameObject_templates
 
 		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive || Active.Turn.CharacterThatTookActionInTurn != null && Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
 
+		public Action<Character> BasicAttack;
+		public Action<List<HexCell>> BasicMove;
+		public Func<List<HexCell>> GetBasicMoveCells;
+		public Func<List<HexCell>> GetBasicAttackCells;
+		
 		#endregion
+		#region Delegates
+        public delegate void VoidDelegate();
+		public delegate void DamageDelegate(Damage damage);
+		public delegate void CharacterDamageDelegate(Character character, Damage damage);
+		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
+		public delegate void CharacterRefIntDelegate(Character targetCharacter, ref int value);
+		#endregion
+		#region Events
+		public event VoidDelegate JustBeforeFirstAction;
+		public event VoidDelegate OnEnemyKill;
+		public event DamageDelegate BeforeBeingDamaged;
+		public event DamageDelegate AfterBeingDamaged;
+		public event CharacterDamageDelegate BeforeBeingBasicAttacked;
+		public event CharacterDamageDelegate BeforeBasicAttack;
+		public event CharacterDamageDelegate AfterBasicAttack;
+		public event CharacterDamageDelegate BeforeAttack;
+		/// <summary>
+		/// Triggers after calculating all modifiers and defenses,
+		/// useful for modifying `true` damage
+		/// </summary>
+//		public event CharacterDamageDelegate JustBeforeAttack;
+		public event CharacterDamageDelegate AfterAttack;
+		public event CharacterIntDelegate OnHeal;
+		#endregion
+		public Character(string name)
+		{
+			#region Property definitions
+			//Define basic properties
+			IsOnMap = false;
+			TookActionInPhaseBefore = true;
+			HasUsedBasicAttackInPhaseBefore = false;
+			HasUsedBasicMoveInPhaseBefore = false;
+			HasUsedNormalAbilityInPhaseBefore = false;
+			HasUsedUltimatumAbilityInPhaseBefore = false;
+			CanAttackAllies = false;
+			Effects = new List<Effect>();
+			
+			BasicAttack = DefaultBasicAttack;
+			BasicMove = DefaultBasicMove;
+			GetBasicAttackCells = DefaultGetBasicAttackCells;
+			GetBasicMoveCells = DefaultGetBasicMoveCells;
+			
+            //Define database properties
+			SqliteRow characterData = GameData.Conn.GetCharacterData(name);
 
+			Name = name;
+			AttackPoints = new Stat(this, StatType.AttackPoints, int.Parse(characterData.GetValue("AttackPoints")));
+			HealthPoints = new Stat(this, StatType.HealthPoints, int.Parse(characterData.GetValue("HealthPoints")));
+			BasicAttackRange = new Stat(this, StatType.BasicAttackRange, int.Parse(characterData.GetValue("BasicAttackRange")));
+			Speed = new Stat(this, StatType.Speed, int.Parse(characterData.GetValue("Speed")));
+			PhysicalDefense = new Stat(this, StatType.PhysicalDefense, int.Parse(characterData.GetValue("PhysicalDefense")));
+			MagicalDefense = new Stat(this, StatType.MagicalDefense, int.Parse(characterData.GetValue("MagicalDefense")));
+
+			Type = characterData.GetValue("FightType").ToFightType();
+
+			Description = characterData.GetValue("Description");
+			Quote = characterData.GetValue("Quote");
+			Author = characterData.GetValue("Author.Name");
+			
+			#endregion
+			
+			AddTriggersToEvents();
+			CreateAndInitiateAbilities(name);
+		}
+		private void AddTriggersToEvents()
+		{
+			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
+			AfterBeingDamaged += damage => RemoveIfDead();
+			OnEnemyKill += () => Abilities.ForEach(a => a.OnEnemyKill());
+			AfterAttack += (targetCharacter, damage) =>
+				MessageLogger.Log(
+					$"{this.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
+//			AfterAttack += (targetCharacter, damage) => Abilities.ForEach(a => a.OnDamage(targetCharacter, damageDealt));
+			AfterAttack += (targetCharacter, damage) =>
+				AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
+			AfterAttack += (targetCharacter, damage) =>
+				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damage.Value.ToString(), Color.red));
+			OnHeal += (targetCharacter, valueHealed) =>
+				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(),
+					Color.blue));
+		}
+		private void CreateAndInitiateAbilities(string name)
+		{
+			IEnumerable<string> abilityClassNames = GameData.Conn.GetAbilityClassNames(name);
+			var abilityNamespaceName = "Abilities." + name.Replace(' ', '_');
+			List<Ability> abilities =
+				Spawner.Create(abilityNamespaceName, abilityClassNames).ToList().ConvertAll(x => x as Ability);
+			InitiateAbilities(abilities);
+		}
 		public void MoveTo(HexCell targetCell)
 		{
 			ParentCell.CharacterOnCell = null;
@@ -110,12 +157,11 @@ namespace MyGameObjects.MyGameObject_templates
 			CharacterObject.transform.parent = targetCell.transform;
 			AnimationPlayer.Add(new MoveTo(CharacterObject.transform, CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f));
 		}
-		public void BasicMove(List<HexCell> cellPath)
+		public void DefaultBasicMove(List<HexCell> cellPath)
 		{
 			HasUsedBasicMoveInPhaseBefore = true;
 			Move(cellPath);
 		}
-
 		private void Move(IList<HexCell> cellPath)
 		{
 			cellPath.RemoveAt(0);//Remove parent cell
@@ -125,87 +171,77 @@ namespace MyGameObjects.MyGameObject_templates
 				MoveTo(nextCell);
 			}
 		}
-
-		public void BasicAttack(Character attackedCharacter)
+		public void DefaultBasicAttack(Character attackedCharacter)
 		{
-			int damage = AttackPoints.Value;
-			BeforeBasicAttack?.Invoke(attackedCharacter, ref damage);
-			if (attackedCharacter.Abilities.All(a => a.BeforeParentBasicAttacked(this)))
-			{
-				if (attackedCharacter.Owner == Owner)
-				{
-					if (Abilities.Any(a => a.OverridesFriendAttack))
-					{
-						if (Abilities.Count(a => a.OverridesFriendAttack) > 1)
-							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
-
-						Abilities.Single(a => a.OverridesFriendAttack).AttackFriend(attackedCharacter, damage);
-					}
-				}
-				else
-				{
-					if (Abilities.Any(a => a.OverridesEnemyAttack))
-					{
-						if (Abilities.Count(a => a.OverridesEnemyAttack) > 1)
-							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
-
-						Abilities.Single(a => a.OverridesEnemyAttack).AttackEnemy(attackedCharacter, damage);
-					}
-					else
-					{
-						Attack(attackedCharacter, AttackType.Physical, damage);
-					}
-				}
-			}
+			var damage = new Damage(AttackPoints.Value, DamageType.Physical);
+			BeforeBasicAttack?.Invoke(attackedCharacter, damage);
+			attackedCharacter.BeforeBeingBasicAttacked?.Invoke(attackedCharacter, damage);
+			Attack(attackedCharacter, damage);
+//			if (attackedCharacter.Abilities.All(a => a.BeforeParentBasicAttacked(this)))
+//			{
+//				if (attackedCharacter.Owner == Owner)
+//				{
+//					if (Abilities.Any(a => a.OverridesFriendAttack))
+//					{
+//						if (Abilities.Count(a => a.OverridesFriendAttack) > 1)
+//							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
+//
+//						Abilities.Single(a => a.OverridesFriendAttack).AttackFriend(attackedCharacter, damage);
+//					}
+//				}
+//				else
+//				{
+//					if (Abilities.Any(a => a.OverridesEnemyAttack))
+//					{
+//						if (Abilities.Count(a => a.OverridesEnemyAttack) > 1)
+//							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
+//
+//						Abilities.Single(a => a.OverridesEnemyAttack).AttackEnemy(attackedCharacter, damage);
+//					}
+//					else
+//					{
+//						Attack(attackedCharacter, damage));
+//					}
+//				}
+//			}
+			AfterBasicAttack?.Invoke(attackedCharacter, damage);
+			
 
 			HasUsedBasicAttackInPhaseBefore = true;
 			//HasUsedNormalAbilityInPhaseBefore = true;
 		}
-		public void Attack(Character attackedCharacter, AttackType attackType, int atkPoints)
+		public void Attack(Character character, Damage damage)//, AttackType attackType, int atkPoints)
 		{
-			var defense = 0;//isMagic ? attackedCharacter.MagicalDefense : attackedCharacter.PhysicalDefense;
-			switch (attackType)
-			{
-				case AttackType.Physical:
-					defense = attackedCharacter.PhysicalDefense.Value;
-					break;
-				case AttackType.Magical:
-					defense = attackedCharacter.MagicalDefense.Value;
-					break;
-				case AttackType.True:
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(attackType), attackType, null);
-			}
-
-			var damage = atkPoints;
-			DamageModifier(attackedCharacter, ref damage);
-			damage -= defense;
-			damage = damage < 0 ? 0 : damage;
-			TrueDamageModifier(attackedCharacter, ref damage);
-			if (damage > 0)
-			{
-				attackedCharacter.Damage(ref damage);
-                MessageLogger.Log($"{this.FormattedFirstName()} atakuje {attackedCharacter.FormattedFirstName()}, zadając <color=red><b>{damage}</b></color> obrażeń!");
-				if (!attackedCharacter.IsAlive) OnEnemyKill?.Invoke();
-			}
-			else
-			{
-                MessageLogger.Log($"{this.FormattedFirstName()} atakuje {attackedCharacter.FormattedFirstName()}, ale nie zadaje żadnych obrażeń!");
-			}
-			OnDamage?.Invoke(attackedCharacter, damage);
-			attackedCharacter.AfterBeingAttacked();
+			BeforeAttack?.Invoke(character, damage);
+            character.ReceiveDamage(damage);
+			AfterAttack?.Invoke(character, damage);
+            if (!character.IsAlive) OnEnemyKill?.Invoke();
 		}
-		private void Damage(ref int damage)
-		{
-			foreach (Ability a in Abilities)
-			{
-				a.BeforeParentDamage(ref damage); //TODO event?
-			}
 
-			BeforeParentDamage?.Invoke();
-			HealthPoints.Value -= damage;
-			OnParentDamage?.Invoke(damage);
+		private int GetDefense(DamageType damageType)
+		{
+			switch (damageType)
+			{
+				case DamageType.Physical:
+					return PhysicalDefense.Value;
+				case DamageType.Magical:
+					return MagicalDefense.Value;
+				case DamageType.True:
+					return 0;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(damageType), damageType, null);
+			}
+		}
+		private void ReceiveDamage(Damage damage)
+		{
+			BeforeBeingDamaged?.Invoke(damage);
+			
+			var defense = GetDefense(damage.Type);
+			damage.Value -= defense;
+			damage.Value = damage.Value < 0 ? 0 : damage.Value;
+			HealthPoints.Value -= damage.Value;
+			
+			AfterBeingDamaged?.Invoke(damage);
 		}
 		public void RemoveIfDead()
 		{
@@ -216,18 +252,6 @@ namespace MyGameObjects.MyGameObject_templates
 			DeathTimer = 0;
 			if (Active.CharacterOnMap == this) Deselect();
 		}
-		public delegate void VoidDelegate();
-		public delegate void IntDelegate(int value);
-		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
-		public delegate void CharacterRefIntDelegate(Character targetCharacter, ref int value);
-		public event VoidDelegate JustBeforeFirstAction;
-		public event VoidDelegate AfterBeingAttacked;
-		public event VoidDelegate OnEnemyKill;
-		public event VoidDelegate BeforeParentDamage;
-		public event CharacterRefIntDelegate BeforeBasicAttack;
-		public event IntDelegate OnParentDamage;
-		public event CharacterIntDelegate OnDamage;
-		public event CharacterIntDelegate OnHeal;
 		public void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
 
 		private void RemoveFromMap()
@@ -238,20 +262,20 @@ namespace MyGameObjects.MyGameObject_templates
 //			Object.Destroy(CharacterObject);//TODO: enqueue that as animation
 			AnimationPlayer.Add(new Destroy(CharacterObject));
 		}
-		private void DamageModifier(Character targetCharacter, ref int damage)
-		{
-			foreach (Ability ability in Abilities)
-			{
-				ability.DamageModifier(targetCharacter, ref damage);
-			}
-		}
-		private void TrueDamageModifier(Character targetCharacter, ref int damage)
-		{
-			foreach (Ability ability in Abilities)
-			{
-				ability.DamageModifier(targetCharacter, ref damage);
-			}
-		}
+//		private void DamageModifier(Character targetCharacter, ref int damage)
+//		{
+//			foreach (Ability ability in Abilities)
+//			{
+//				ability.DamageModifier(targetCharacter, ref damage);
+//			}
+//		}
+//		private void TrueDamageModifier(Character targetCharacter, ref int damage)
+//		{
+//			foreach (Ability ability in Abilities)
+//			{
+//				ability.DamageModifier(targetCharacter, ref damage);
+//			}
+//		}
 		private void PrepareAttackAndMove()
 		{
 //			Game.HexMapDrawer.RemoveAllHighlights();
@@ -275,11 +299,11 @@ namespace MyGameObjects.MyGameObject_templates
 			}
 			else if (CanUseBasicMove && !CanUseBasicAttack)
 			{
-				isPreparationSuccessful = Active.Prepare(Action.AttackAndMove, GetPrepareMoveCells());
+				isPreparationSuccessful = Active.Prepare(Action.AttackAndMove, GetPrepareBasicMoveCells());
 			}
 			else
 			{
-				var p1 = Active.Prepare(Action.AttackAndMove, GetPrepareMoveCells());
+				var p1 = Active.Prepare(Action.AttackAndMove, GetPrepareBasicMoveCells());
 				var p2 = Active.Prepare(Action.AttackAndMove, GetPrepareBasicAttackCells(), true);
 				isPreparationSuccessful = p1 || p2;
 			}
@@ -294,9 +318,9 @@ namespace MyGameObjects.MyGameObject_templates
 			Active.MoveCells.Add(ParentCell);
 
 		}
-		private List<HexCell> GetPrepareMoveCells()
+		private List<HexCell> GetPrepareBasicMoveCells()
 		{
-			if (CanMove) return GetMoveCells();
+			if (CanMove) return GetBasicMoveCells();
 			MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający ruch!");
 			return Enumerable.Empty<HexCell>().ToList();
 
@@ -311,24 +335,21 @@ namespace MyGameObjects.MyGameObject_templates
 
 			List<HexCell> cellRange = GetBasicAttackCells();
 			if (CanAttackAllies)
-			{
-					cellRange.RemoveNonCharacters();
-			}
+				cellRange.RemoveNonCharacters();
 			else
-			{
-					cellRange.RemoveNonEnemies();
-			}
+				cellRange.RemoveNonEnemies();
+
 			return cellRange;
 		}
-		public List<HexCell> GetBasicAttackCells()
+		public List<HexCell> DefaultGetBasicAttackCells()
 		{
-			if (Abilities.Any(a => a.OverridesGetBasicAttackCells))
-			{
-				if (Abilities.Count(a => a.OverridesGetBasicAttackCells) > 1)
-					throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać komórki podstawowego ataku!");
-
-				return Abilities.Single(a => a.OverridesGetBasicAttackCells).GetBasicAttackCells();
-			}
+//			if (Abilities.Any(a => a.OverridesGetBasicAttackCells))
+//			{
+//				if (Abilities.Count(a => a.OverridesGetBasicAttackCells) > 1)
+//					throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać komórki podstawowego ataku!");
+//
+//				return Abilities.Single(a => a.OverridesGetBasicAttackCells).GetBasicAttackCells();
+//			}
 
 			List<HexCell> cellRange;
 			switch (Type)
@@ -345,15 +366,15 @@ namespace MyGameObjects.MyGameObject_templates
 
 			return cellRange;
 		}
-		public List<HexCell> GetMoveCells()
+		public List<HexCell> DefaultGetBasicMoveCells()
 		{
-			if (Abilities.Any(a => a.OverridesGetMoveCells))
-			{
-				if (Abilities.Count(a => a.OverridesGetMoveCells) > 1)
-					throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać komórki ruchu!");
-
-				return Abilities.Single(a => a.OverridesGetMoveCells).GetMoveCells();
-			}
+//			if (Abilities.Any(a => a.OverridesGetMoveCells))
+//			{
+//				if (Abilities.Count(a => a.OverridesGetMoveCells) > 1)
+//					throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać komórki ruchu!");
+//
+//				return Abilities.Single(a => a.OverridesGetMoveCells).GetMoveCells();
+//			}
 
 			List<HexCell> cellRange = ParentCell.GetNeighbors(Speed.Value, true, true);
 			cellRange.RemoveAll(cell => cell.CharacterOnCell != null); //we don't want to allow stepping into our characters!
@@ -450,11 +471,11 @@ namespace MyGameObjects.MyGameObject_templates
 		Ranged,
 		Melee
 	}
-	public enum AttackType
-	{
-		Physical,
-		Magical,
-		True
-	}
+//	public enum AttackType
+//	{
+//		Physical,
+//		Magical,
+//		True
+//	}
 
 }
