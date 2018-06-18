@@ -23,20 +23,15 @@ namespace MyGameObjects.Abilities.Sinon
 
 		private List<HexCell> GetBasicAttackCellsOverride()
 		{
-			List<HexCell> cellRange;
 			switch (ParentCharacter.Type)
 			{
 				case FightType.Ranged:
-					cellRange = ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.BasicAttackRange.Value);
-					break;
+					return ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.BasicAttackRange.Value);
 				case FightType.Melee:
-					cellRange = ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.BasicAttackRange.Value, true);
-					break;
+					return ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.BasicAttackRange.Value, SearchFlags.StopAtWalls);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-
-			return cellRange;
 		}
 	}
 }

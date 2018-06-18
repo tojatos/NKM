@@ -31,8 +31,7 @@ namespace MyGameObjects.Abilities.Roronoa_Zoro
 				HexCell lastCell = ParentCharacter.ParentCell; 
 				while (movementPoints-- != 0)
 				{
-					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(1, true, true);
-                    neighborMoveCells.RemoveAll(cell => cell.CharacterOnCell != null); //we don't want to allow stepping into our characters!
+					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(1, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters | SearchFlags.StopAtWalls);
 					var r = UnityEngine.Random.Range(0, neighborMoveCells.Count);
 					lastCell = neighborMoveCells[r];
 					Active.AddMoveCell(lastCell);

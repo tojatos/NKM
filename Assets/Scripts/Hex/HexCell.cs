@@ -27,17 +27,12 @@ namespace Hex
 			_active = Game.Active;
 		}
 
-
 		private readonly HexCell[] _neighbors = new HexCell[6];
 
 		private HexCell GetNeighbor(HexDirection direction)
 		{
 			return _neighbors[(int)direction];
 		}
-		//public HexCell[] GetNeighbors()
-		//{
-		//	return _neighbors;
-		//}
 		public void SetNeighbor(HexDirection direction, HexCell cell)
 		{
 			_neighbors[(int)direction] = cell;
@@ -72,90 +67,6 @@ namespace Hex
 		{
 			//GameStarter = GameObject.Find("GameStarter").GetComponent<GameStarter>();
 			_spawner = Spawner.Instance;
-		}
-		public List<HexCell> GetNeighbors(int depth, bool stopAtWalls = false, bool stopAtEnemyCharacters = false, bool straightLine = false)
-		{
-			List<HexCell> neighborsList = new List<HexCell>();
-			if (depth == 0) return neighborsList;
-
-			foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
-			{
-				neighborsList.AddRange(GetNeighborsByDirection(depth, direction, stopAtWalls, stopAtEnemyCharacters, straightLine));
-			}
-			//remove duplicated and this hexcell
-			neighborsList = neighborsList.Distinct().ToList();
-			neighborsList.Remove(this);
-			return neighborsList;
-
-		}
-
-		private IEnumerable<HexCell> GetNeighborsByDirection(int depth, HexDirection direction, bool stopAtWalls = false, bool stopAtEnemyCharacters = false, bool straightLine = false)
-		{
-			List<HexCell> neighborsList = new List<HexCell>();
-			HexCell neighbor = GetNeighbor(direction);
-			if (neighbor == null || stopAtWalls && neighbor.Type == HexTileType.Wall || stopAtEnemyCharacters &&
-			    neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != _active.GamePlayer) return neighborsList;
-			if (neighborsList.Any(listsNeighbor => listsNeighbor == neighbor)) return neighborsList;
-
-			neighborsList.Add(neighbor);
-			if (depth <= 1) return neighborsList;
-
-			switch (direction)
-			{
-				case HexDirection.Ne:
-					if(!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Nw, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.E, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Ne, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.E:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Ne, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Se, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.E, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.Se:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.E, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Sw, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Se, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.Sw:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Se, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.W, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Sw, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.W:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Sw, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Nw, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.W, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.Nw:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.W, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Ne, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Nw, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
-			}
-
-			return neighborsList;
-
 		}
 		public HexDirection GetDirection(HexCell targetCell)
 		{
@@ -212,96 +123,79 @@ namespace Hex
 			return cellToReturn;
 
 		}
-		public IEnumerable<HexCell> GetLine(HexDirection direction, int value)
+		public IEnumerable<HexCell> GetLine(HexDirection direction, int depth)
 		{
-			return GetNeighborsByDirection(value, direction, false, false, true);
-		}
-
-		public List<HexCell> GetNeighbors(int depth, SearchFlags searchFlags)
-		{
-			List<HexCell> neighborsList = new List<HexCell>();
-			if (depth == 0) return neighborsList;
-
-			foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
+			List<HexCell> visited = new List<HexCell>();
+			HexCell lastCell = this;
+			for (var i = 0; i < depth; i++)
 			{
-				neighborsList.AddRange(GetNeighborsByDirection(depth, direction, searchFlags));
+				HexCell neighbor = lastCell.GetNeighbor(direction);
+				if(neighbor==null) continue;
+				
+				visited.Add(neighbor);
+				lastCell = neighbor;
 			}
-			//remove duplicated and this hexcell
-			neighborsList = neighborsList.Distinct().ToList();
-			neighborsList.Remove(this);
-			return neighborsList;
-		}
 
-		private IEnumerable<HexCell> GetNeighborsByDirection(int depth, HexDirection direction, SearchFlags searchFlags)
+			return visited;
+		}
+		public List<HexCell> GetNeighbors(int depth, SearchFlags searchFlags = SearchFlags.None)
 		{
 			bool stopAtWalls = searchFlags.HasFlag(SearchFlags.StopAtWalls);
 			bool stopAtEnemyCharacters = searchFlags.HasFlag(SearchFlags.StopAtEnemyCharacters);
+			bool stopAtFriendlyCharacters = searchFlags.HasFlag(SearchFlags.StopAtFriendlyCharacters);
 			bool straightLine = searchFlags.HasFlag(SearchFlags.StraightLine);
-            List<HexCell> neighborsList = new List<HexCell>();
-			HexCell neighbor = GetNeighbor(direction);
-			if (neighbor == null || searchFlags.HasFlag(SearchFlags.StopAtWalls) && neighbor.Type == HexTileType.Wall || searchFlags.HasFlag(SearchFlags.StopAtEnemyCharacters) &&
-			    neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != _active.GamePlayer || searchFlags.HasFlag(SearchFlags.StopAtFriendlyCharacters) &&
-			    neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner == _active.GamePlayer) return neighborsList;
-			if (neighborsList.Any(listsNeighbor => listsNeighbor == neighbor)) return neighborsList;
+			List<HexCell> visited = new List<HexCell>();
+			if (depth == 0) return visited;
 
-			neighborsList.Add(neighbor);
-			if (depth <= 1) return neighborsList;
-
-			switch (direction)
+			if (straightLine)
 			{
-				case HexDirection.Ne:
-					if(!straightLine)
+				foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
+				{
+					HexCell lastCell = this;
+					for (var i = 0; i < depth; i++)
 					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Nw, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.E, stopAtWalls, stopAtEnemyCharacters));
+                        HexCell neighbor = lastCell.GetNeighbor(direction);
+						if(neighbor==null) continue;
+						
+						bool isBlocked = stopAtWalls && neighbor.Type == HexTileType.Wall ||
+						                 stopAtEnemyCharacters && neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != _active.GamePlayer ||
+						                 stopAtFriendlyCharacters && neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner == _active.GamePlayer;
+						if(isBlocked) continue;
+						visited.Add(neighbor);
+						lastCell = neighbor;
 					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Ne, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.E:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Ne, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Se, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.E, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.Se:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.E, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Sw, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Se, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.Sw:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Se, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.W, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Sw, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.W:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Sw, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Nw, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.W, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				case HexDirection.Nw:
-					if (!straightLine)
-					{
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.W, stopAtWalls, stopAtEnemyCharacters));
-						neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Ne, stopAtWalls, stopAtEnemyCharacters));
-					}
-					neighborsList.AddRange(neighbor.GetNeighborsByDirection(depth - 1, HexDirection.Nw, stopAtWalls, stopAtEnemyCharacters, straightLine));
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+				}
+				return visited;
 			}
 
-			return neighborsList;		}
+			List<List<HexCell>> fringes = new List<List<HexCell>>();
+			fringes.Add(new List<HexCell>{this});
+
+			for (var i = 1; i <= depth; i++)
+			{
+				fringes.Add(new List<HexCell>());
+				foreach (HexCell cell in fringes[i-1])
+				{
+					foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
+					{
+						HexCell neighbor = cell.GetNeighbor(direction);
+						if(neighbor==null) continue;
+						
+						bool isBlocked = stopAtWalls && neighbor.Type == HexTileType.Wall ||
+						                 stopAtEnemyCharacters && neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != _active.GamePlayer ||
+						                 stopAtFriendlyCharacters && neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner == _active.GamePlayer;
+						bool isVisited = visited.Contains(neighbor);
+						
+						if(isBlocked || isVisited) continue;
+						visited.Add(neighbor);
+						fringes[i].Add(neighbor);
+					}
+				}
+			}
+
+			visited.Remove(this);
+			return visited;
+		}
 	}
 	public enum HexTileType
 	{
@@ -317,6 +211,7 @@ namespace Hex
 	[Flags]
 	public enum SearchFlags
 	{
+		None = 0,
 		StopAtWalls = 1,
 		StopAtEnemyCharacters = 2,
 		StopAtFriendlyCharacters = 4,

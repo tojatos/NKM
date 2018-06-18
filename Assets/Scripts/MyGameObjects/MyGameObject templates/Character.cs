@@ -262,24 +262,8 @@ namespace MyGameObjects.MyGameObject_templates
 //			Object.Destroy(CharacterObject);//TODO: enqueue that as animation
 			AnimationPlayer.Add(new Destroy(CharacterObject));
 		}
-//		private void DamageModifier(Character targetCharacter, ref int damage)
-//		{
-//			foreach (Ability ability in Abilities)
-//			{
-//				ability.DamageModifier(targetCharacter, ref damage);
-//			}
-//		}
-//		private void TrueDamageModifier(Character targetCharacter, ref int damage)
-//		{
-//			foreach (Ability ability in Abilities)
-//			{
-//				ability.DamageModifier(targetCharacter, ref damage);
-//			}
-//		}
 		private void PrepareAttackAndMove()
 		{
-//			Game.HexMapDrawer.RemoveAllHighlights();
-//			Active.Clean();
 			if (Active.GamePlayer != Owner)
 			{
 				MessageLogger.DebugLog("Nie jesteś właścicielem! Wara!");
@@ -323,16 +307,9 @@ namespace MyGameObjects.MyGameObject_templates
 			if (CanMove) return GetBasicMoveCells();
 			MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający ruch!");
 			return Enumerable.Empty<HexCell>().ToList();
-
 		}
 		private List<HexCell> GetPrepareBasicAttackCells()
 		{
-//			if (Effects.Any(e => e.GetType() == typeof(BasicAttackInability)))
-//			{
-//				MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający atak!");
-//				return Enumerable.Empty<HexCell>().ToList();
-//			}
-
 			List<HexCell> cellRange = GetBasicAttackCells();
 			if (CanAttackAllies)
 				cellRange.RemoveNonCharacters();
@@ -343,22 +320,14 @@ namespace MyGameObjects.MyGameObject_templates
 		}
 		public List<HexCell> DefaultGetBasicAttackCells()
 		{
-//			if (Abilities.Any(a => a.OverridesGetBasicAttackCells))
-//			{
-//				if (Abilities.Count(a => a.OverridesGetBasicAttackCells) > 1)
-//					throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać komórki podstawowego ataku!");
-//
-//				return Abilities.Single(a => a.OverridesGetBasicAttackCells).GetBasicAttackCells();
-//			}
-
 			List<HexCell> cellRange;
 			switch (Type)
 			{
 				case FightType.Ranged:
-					cellRange = ParentCell.GetNeighbors(BasicAttackRange.Value, false, false, true);
+					cellRange = ParentCell.GetNeighbors(BasicAttackRange.Value, SearchFlags.StraightLine);
 					break;
 				case FightType.Melee:
-					cellRange = ParentCell.GetNeighbors(BasicAttackRange.Value, true, false, true);
+					cellRange = ParentCell.GetNeighbors(BasicAttackRange.Value, SearchFlags.StraightLine | SearchFlags.StopAtWalls);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -366,20 +335,8 @@ namespace MyGameObjects.MyGameObject_templates
 
 			return cellRange;
 		}
-		public List<HexCell> DefaultGetBasicMoveCells()
-		{
-//			if (Abilities.Any(a => a.OverridesGetMoveCells))
-//			{
-//				if (Abilities.Count(a => a.OverridesGetMoveCells) > 1)
-//					throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać komórki ruchu!");
-//
-//				return Abilities.Single(a => a.OverridesGetMoveCells).GetMoveCells();
-//			}
+		public List<HexCell> DefaultGetBasicMoveCells() => ParentCell.GetNeighbors(Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters | SearchFlags.StopAtWalls);
 
-			List<HexCell> cellRange = ParentCell.GetNeighbors(Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters | SearchFlags.StopAtWalls);
-			cellRange.RemoveAll(cell => cell.CharacterOnCell != null); //we don't want to allow stepping into our characters!
-			return cellRange;
-		}
 		public void Heal(Character targetCharacter, int amount)
 		{
 			var hpBeforeHeal = targetCharacter.HealthPoints.Value;

@@ -34,7 +34,8 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 
 		public override List<HexCell> GetRangeCells()
 		{
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange, true, true, true);
+//			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange, true, true, true);
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls | SearchFlags.StraightLine);
 			return cellRange;
 		}
 
@@ -63,7 +64,8 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 		{
 			ParentCharacter.MoveTo(cell);
 			_hasDashed = true;
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, true, false, true);
+//			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, true, false, true);
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;

@@ -29,8 +29,7 @@ namespace MyGameObjects.Abilities.Shana
 			bool isAbilityActive = ParentCharacter.Effects.ContainsType(typeof(Effects.Flying));
 			if (!isAbilityActive) return ParentCharacter.DefaultGetBasicMoveCells();
 
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.Speed.Value, false, true);
-			cellRange.RemoveAll(cell => cell.CharacterOnCell != null); //we don't want to allow stepping into our characters!
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters);
 			return cellRange;
 		}
 

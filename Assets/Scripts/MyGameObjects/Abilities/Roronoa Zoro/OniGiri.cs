@@ -21,7 +21,7 @@ namespace MyGameObjects.Abilities.Roronoa_Zoro
 		public override string GetDescription() => $@"{ParentCharacter.Name} zadaje obrażenia podstawowe wybranej postaci, lądując 2 pola za nią.
 Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, true, false, true);
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();

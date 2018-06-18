@@ -26,10 +26,8 @@ namespace MyGameObjects.Abilities.Roronoa_Zoro
 Zasięg: {2}	Czas odnowienia: {3}",
 				ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
 		}
-		public override List<HexCell> GetRangeCells()
-		{
-			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange, true, false, true);
-		}
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
+
 		protected override void CheckIfCanBePrepared()
 		{
 			base.CheckIfCanBePrepared();

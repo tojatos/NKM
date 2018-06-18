@@ -52,7 +52,7 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 
 		public override List<HexCell> GetRangeCells()
 		{
-			return ParentCharacter.ParentCell.GetNeighbors(Range, true, false, true);
+			return ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
 		}
 		protected override void Use()
 		{

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Helpers;
 using Hex;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
@@ -57,29 +56,9 @@ public class Active
 	private List<HexCell> _helpHexCells;
 	private List<GameObject> _buttons;
 
-//	public List<string> GetInfo => new List<string>{ ((int)Action).ToString(), CharacterOnMap.Guid.ToString(), Ability.Name, MyGameObject.Guid.ToString(), string.Join("*",HexCells.Select(c=>c.Coordinates))};
 	public bool IsDebug { get; set; }
 
-	//public bool IsActivePlayerCharacterSelected
-	//{
-	//	get { return CharacterOnMap != null && CharacterOnMap.Owner == GamePlayer; }
-	//}
 	public bool IsActiveUse => !(Ability == null && (Action == Action.None || Action == Action.AttackAndMove) && MyGameObject == null);
-
-
-	/// <summary>
-	/// On set: Hide previous Buttons and show new.
-	/// </summary>
-//	public List<GameObject> Buttons
-//	{
-//		set
-//		{
-//			HelpHexCells = null;
-//			_buttons?.Hide();
-//			_buttons = value;
-//			_buttons?.Show();
-//		}
-//	}
 
 	public void Reset()
 	{
@@ -147,7 +126,7 @@ public class Active
 		return true;
 	}
 
-	public void PlayAudio(string path, float volume = 0.8f)
+	public static void PlayAudio(string path, float volume = 0.8f)
 	{
 		try
 		{
@@ -209,8 +188,8 @@ public class Active
 	public void MakeAction(HexCell cell)
 	{
 		if (!HexCells.Contains(cell)) return;
-		if (CharacterOnMap!= null && Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
-//		if(CharacterOnMap!=null && !CharacterOnMap.TookActionInPhaseBefore) CharacterOnMap.InvokeJustBeforeFirstAction();
+//		if (CharacterOnMap!= null && Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
+		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 		switch (Action)
 		{
 			case Action.None:
@@ -235,23 +214,9 @@ public class Active
 				else
 				{
 					if(cell.Type == HexTileType.Wall) return;
-//					if (cell == MoveCells.LastOrDefault())
-//					{
-//                        if (character.Abilities.Any(a => a.OverridesMove))
-//                          {
-//                          if (character.Abilities.Count(a => a.OverridesMove) > 1)
-//                          throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać akcję ruchu!");
-//                          
-//                          character.Abilities.Single(a => a.OverridesMove).Move(MoveCells);
-//                          }
-//                        else
-//                        {
-//                            character.BasicMove(MoveCells);
-//                        }
-//					}
+					if(MoveCells.Last() != cell) return;
 					character.BasicMove(MoveCells);
 				}
-
 				HexCells = null;//TODO is this really needed?
 				Action = Action.None;
 				character.Select();
@@ -285,7 +250,7 @@ public class Active
 		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 	}
 
-	public bool IsPointerOverUIObject()
+	public static bool IsPointerOverUiObject()
 	{
 		var eventDataCurrentPosition =
 			new PointerEventData(EventSystem.current) {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
@@ -295,11 +260,3 @@ public class Active
 	}
 }
 
-public static class ActivePropertyName
-{
-	public const string GamePlayer = "GamePlayer";
-	public const string Action = "Action";
-	public const string Ability = "Ability";
-	public const string MyGameObject = "MyGameObject";
-	public const string CharacterOnMap = "CharacterOnMap";
-}

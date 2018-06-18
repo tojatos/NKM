@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using Helpers;
 using JetBrains.Annotations;
 using Managers;
 using MyGameObjects.MyGameObject_templates;
@@ -10,8 +10,7 @@ namespace UIManagers
 {
 	public class CharacterInfo : SingletonMonoBehaviour<CharacterInfo>
 	{
-		private Game Game;
-//		private Active Active;
+		private static Game Game => GameStarter.Instance.Game;
 		public Text HealthPoints;
 		public Text AttackPoints;
 		public Text Range;
@@ -22,15 +21,16 @@ namespace UIManagers
 		public Text Quote;
 		public Text Author;
 
-		private void Awake()
-		{
-			Game = GameStarter.Instance.Game;
-		}
 		[UsedImplicitly]
 		public void Open()
 		{
-//			Game.UIManager.VisibleUI = new List<GameObject> { gameObject };
+			gameObject.Show();
 			UpdateInfo(AllMyGameObjects.Characters.Single(c => c.Name == Game.Active.CharacterOnMap.Name));
+		}
+
+		private void Update()
+		{
+			if(Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape)) gameObject.Hide();
 		}
 
 		private void UpdateInfo(Character character)
