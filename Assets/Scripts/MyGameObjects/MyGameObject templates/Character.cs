@@ -376,7 +376,7 @@ namespace MyGameObjects.MyGameObject_templates
 //				return Abilities.Single(a => a.OverridesGetMoveCells).GetMoveCells();
 //			}
 
-			List<HexCell> cellRange = ParentCell.GetNeighbors(Speed.Value, true, true);
+			List<HexCell> cellRange = ParentCell.GetNeighbors(Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters | SearchFlags.StopAtWalls);
 			cellRange.RemoveAll(cell => cell.CharacterOnCell != null); //we don't want to allow stepping into our characters!
 			return cellRange;
 		}
@@ -425,9 +425,9 @@ namespace MyGameObjects.MyGameObject_templates
 			Active.CharacterOnMap = this;
 			CharacterAbilities.Instance.UpdateButtons();
 			CharacterEffects.Instance.UpdateButtons();
-			List<GameObject> characterButtons = new List<GameObject>(CharacterAbilities.Instance.Buttons);
-			characterButtons.AddRange(new List<GameObject>(CharacterEffects.Instance.Buttons));
-			Active.Buttons = characterButtons;
+//			List<GameObject> characterButtons = new List<GameObject>(CharacterAbilities.Instance.Buttons);
+//			characterButtons.AddRange(new List<GameObject>(CharacterEffects.Instance.Buttons));
+//			Active.Buttons = characterButtons;
 			if (Active.GamePlayer != Owner) return;
 
 			PrepareAttackAndMove();
