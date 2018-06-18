@@ -29,7 +29,7 @@ namespace UIManagers
 		[UsedImplicitly]
 		public void Open()
 		{
-			Game.UIManager.VisibleUI = new List<GameObject> { gameObject };
+//			Game.UIManager.VisibleUI = new List<GameObject> { gameObject };
 			UpdateInfo(AllMyGameObjects.Characters.Single(c => c.Name == Game.Active.CharacterOnMap.Name));
 		}
 

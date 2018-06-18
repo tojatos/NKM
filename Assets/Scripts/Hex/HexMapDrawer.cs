@@ -8,12 +8,8 @@ namespace Hex
 {
 	public class HexMapDrawer : SingletonMonoBehaviour<HexMapDrawer>
 	{
-		private Game Game;
+		private Game Game => GameStarter.Instance.Game;
 
-		private void Awake()
-		{
-			Game = GameStarter.Instance.Game;
-		}
 		public HexMap HexMap { get; private set; }
 		public HexCell CellPrefab;
 		public int Width { get; private set; }
@@ -38,7 +34,8 @@ namespace Hex
 
 			TriangulateCells();
 		}
-		public void TriangulateCells()
+
+		private void TriangulateCells()
 		{
 			_hexMesh.Triangulate(Cells);
 		}
@@ -139,7 +136,8 @@ namespace Hex
 				}
 			}
 		}
-		public HexCell GetCellByPosition(ref Vector3 position)
+
+		private HexCell GetCellByPosition(ref Vector3 position)
 		{
 			position = transform.InverseTransformPoint(position);
 			HexCoordinates coordinates = HexCoordinates.FromPosition(position);
@@ -151,7 +149,7 @@ namespace Hex
 		public void Update()
 		{
 			if(!Game.IsInitialized) return;
-			if (Game.UIManager.VisibleUI != Game.UIManager.GameUI) return;
+//			if (Game.UIManager.VisibleUI != Game.UIManager.GameUI) return;
 
 			if (Game.Active.AirSelection.IsEnabled)
 			{
@@ -216,7 +214,7 @@ namespace Hex
 				Game.Active.Cancel();
 			}
 		}
-		private HexCell CellPointed()
+		private static HexCell CellPointed()
 		{
 			Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace Helpers
@@ -7,12 +8,10 @@ namespace Helpers
 	{
 		private static void AddSetTooltipEvent(this GameObject gameObject, EventTriggerType eventTriggerType, string tooltipText)
 		{
-			EventTrigger trigger = gameObject.GetComponent<EventTrigger>() ?? gameObject.AddComponent<EventTrigger>();
-			//if (trigger == null) trigger =  gameObject.AddComponent<EventTrigger>();
-			var entry = new EventTrigger.Entry {eventID = eventTriggerType};
-			entry.callback.AddListener((eventData) => Tooltip.Instance.Set(tooltipText));
-			trigger.triggers.Add(entry);
+			UnityAction<BaseEventData> updateTooltipText = abstractEventData => Tooltip.Instance.Set(tooltipText);
+			gameObject.AddTrigger(eventTriggerType, updateTooltipText);
 		}
+
 
 		/// <summary>
 		/// Show tooltip on PointerEnter with text

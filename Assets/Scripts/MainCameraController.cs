@@ -23,11 +23,11 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 	{
 		Game = GameStarter.Instance.Game;
 		_cam = GetComponent<Camera>();
-		var mapWidth = HexMapDrawer.Instance.Width;
-		var mapHeight = HexMapDrawer.Instance.Height;
-		var startingPosition = new Vector3(15 * mapWidth, 300, 7 * mapHeight);
+		var mapWidth = HexMapDrawer.Instance.Width * HexMetrics.OuterRadius * 2;
+		var mapHeight = HexMapDrawer.Instance.Height * HexMetrics.InnerRadius * 2;
+		var startingPosition = new Vector3(0 + mapWidth/2 - 30, 300, 0 + mapHeight/2 - 30); // some magic calculations
 		_cam.transform.position = startingPosition;
-		var startingZoom = Math.Max(mapWidth, mapHeight) * 10;
+		var startingZoom = Math.Max(mapWidth, mapHeight) / 2.3f;
 		_cam.orthographicSize = startingZoom;
 		MaxZoom = startingZoom;
 		_mainPosition = startingPosition;
@@ -35,7 +35,7 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 	private void Update()
 	{
 		if(Game==null) return;
-		if (Game.UIManager.VisibleUI != UIManager.Instance.GameUI) return;
+//		if (Game.UIManager.VisibleUI != UIManager.Instance.GameUI) return;
 
 		if (Input.touchCount == 2)
 		{

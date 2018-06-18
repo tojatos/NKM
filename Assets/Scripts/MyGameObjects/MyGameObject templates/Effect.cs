@@ -10,8 +10,9 @@ namespace MyGameObjects.MyGameObject_templates
 			ParentCharacter = parentCharacter;
 			if (name != null) Name = name;
 			if (Active.CharacterOnMap == ParentCharacter) CharacterEffects.Instance.UpdateButtons();
-			ParentCharacter.JustBeforeFirstAction += () =>{ if (CurrentCooldown > 0) CurrentCooldown--; };
+//			ParentCharacter.JustBeforeFirstAction += () =>{ if (CurrentCooldown > 0) CurrentCooldown--; };
 			Active.Turn.TurnFinished += () => {
+                if (CurrentCooldown > 0) CurrentCooldown--; 
 				if (CurrentCooldown != 0) return;
 				RemoveFromParent();
 				

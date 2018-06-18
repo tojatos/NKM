@@ -12,13 +12,13 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 	public Text LogText;
 	public Scrollbar Scrollbar;
 	public InputField InputField;
-	private Game Game;
+	private Game Game => GameStarter.Instance.Game;
 	private int _linesCount = 4;
 
-	private void Awake()
-	{
-		Game = GameStarter.Instance.Game;
-	}
+//	private void Awake()
+//	{
+//		Game = GameStarter.Instance.Game;
+//	}
 	public void Log(string text, bool endline = true)
 	{
 		LogText.text += text;
@@ -28,12 +28,10 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 
 	public void DebugLog(string text, bool endline = true)
 	{
-		if (Game.Active.IsDebug)
-		{
-			LogText.text += "<b><color=red>" + text + "</color></b>";
-			LogText.text += endline ? "\n" : "";
-			FinishLogging();
-		}
+		if (!Game.Active.IsDebug) return;
+		LogText.text += "<b><color=red>" + text + "</color></b>";
+		LogText.text += endline ? "\n" : "";
+		FinishLogging();
 	}
 
 	private int CountLines()
@@ -60,17 +58,16 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 	{
 		ResizeIfNotEnoughSpace();
 		//ScrollDown();
-		StartCoroutine(SetScrollbarToDown());
+		if(gameObject.activeSelf)
+            StartCoroutine(SetScrollbarToDown());
 	}
 
 	private void Update()
 	{
-		if (!InputField.isFocused && Input.GetKeyDown(KeyCode.Slash))
-		{
-			InputField.ActivateInputField();
-			InputField.text += "/";
-			StartCoroutine(MoveTextEnd_NextFrame());
-		}
+		if (InputField.isFocused || !Input.GetKeyDown(KeyCode.Slash)) return;
+		InputField.ActivateInputField();
+		InputField.text += "/";
+		StartCoroutine(MoveTextEnd_NextFrame());
 
 	}
 

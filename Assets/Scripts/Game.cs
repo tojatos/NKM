@@ -52,8 +52,8 @@ public class Game
 
 		HexMapDrawer.CreateMap(_options.Map);
 		UIManager.Init();
-		UIManager.VisibleUI = UIManager.GameUI;
-		Active.Buttons = UIManager.UseButtons;
+//		UIManager.VisibleUI = UIManager.GameUI;
+//		Active.Buttons = UIManager.UseButtons;
 		MainCameraController.Instance.Init();
 		CharacterAbilities.Instance.Init();
 		UIManager.UpdateActivePhaseText();

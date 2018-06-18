@@ -70,16 +70,16 @@ public class Active
 	/// <summary>
 	/// On set: Hide previous Buttons and show new.
 	/// </summary>
-	public List<GameObject> Buttons
-	{
-		set
-		{
-			HelpHexCells = null;
-			_buttons?.Hide();
-			_buttons = value;
-			_buttons?.Show();
-		}
-	}
+//	public List<GameObject> Buttons
+//	{
+//		set
+//		{
+//			HelpHexCells = null;
+//			_buttons?.Hide();
+//			_buttons = value;
+//			_buttons?.Show();
+//		}
+//	}
 
 	public void Reset()
 	{
@@ -209,8 +209,8 @@ public class Active
 	public void MakeAction(HexCell cell)
 	{
 		if (!HexCells.Contains(cell)) return;
-//		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
-		if(CharacterOnMap!=null && !CharacterOnMap.TookActionInPhaseBefore) CharacterOnMap.InvokeJustBeforeFirstAction();
+		if (CharacterOnMap!= null && Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
+//		if(CharacterOnMap!=null && !CharacterOnMap.TookActionInPhaseBefore) CharacterOnMap.InvokeJustBeforeFirstAction();
 		switch (Action)
 		{
 			case Action.None:

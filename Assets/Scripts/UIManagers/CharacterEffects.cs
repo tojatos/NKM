@@ -8,13 +8,13 @@ namespace UIManagers
 {
 	public class CharacterEffects : SingletonMonoBehaviour<CharacterEffects>
 	{
-		private Game Game;
+		private Game Game => GameStarter.Instance.Game;
 		public GameObject EffectButtonPrefab;
 		public List<GameObject> Buttons { get; private set; }
 
 		private void Awake()
 		{
-			Game = GameStarter.Instance.Game;
+//			Game = GameStarter.Instance.Game;
 			Buttons = new List<GameObject>();
 		}
 
@@ -29,6 +29,7 @@ namespace UIManagers
 
 		private void RemoveButtons()
 		{
+			if(Buttons == null) return;
 			Buttons.ForEach(Destroy);
 			Buttons.Clear();
 		}

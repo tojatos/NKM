@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Managers;
 using MyGameObjects.MyGameObject_templates;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UIManagers
@@ -15,71 +16,39 @@ namespace UIManagers
 
 		private SpriteSelect SpriteSelect;
 
-		public GameObject HexMapUI;
-		public GameObject MainGameUI;
-		public GameObject TopPanelUI;
+//		public GameObject HexMapUI;
+//		public GameObject MainGameUI;
+//		public GameObject TopPanelUI;
 
-		public GameObject PlaceCharacterButton;
-		public GameObject UseItemButton;
-		public GameObject UsePotionButton;
+//		public GameObject PlaceCharacterButton;
+//		public GameObject UseItemButton;
+//		public GameObject UsePotionButton;
 		public GameObject CancelButton;
 		public GameObject TakeActionWithCharacterButton;
+		public GameObject CharacterUI;
 
-		public GameObject EndTurnButton;
+		public GameObject EndTurnImage;
 
-		public List<GameObject> GameUI { get; private set; }
-		public List<GameObject> UseButtons { get; private set; }
+		private bool CanClickEndTurnButton => !(Game.Active.Phase.Number == 0 || Game.Active.Turn.CharacterThatTookActionInTurn == null && Game.Active.GamePlayer.Characters.Any(c => c.CanTakeAction && c.IsOnMap));
+//		public List<GameObject> GameUI { get; private set; }
+//		public List<GameObject> UseButtons { get; private set; }
 
-		private List<GameObject> CancelButtons;
+//		private List<GameObject> CancelButtons;
 
 		public Text ActivePlayerText;
 		public Text ActivePhaseText;
 
 		public bool ForcePlacingChampions { private get; set; }
 
-		//private void Awake() => Init();
-		private List<GameObject> _ui;
-		/// <summary>
-		/// On set: Hide previous UI and show new. If set to null show GameUI.
-		/// </summary>
-		public List<GameObject> VisibleUI
-		{
-			get { return _ui; }
-			set
-			{
-				_ui?.Hide();
-				_ui = value ?? GameUI;
-				_ui.Show();
-			}
-		}
 		public void Init()
 		{
 			Game = GameStarter.Instance.Game;
 			SpriteSelect = SpriteSelect.Instance;
-
-			//Game.Active.UIManager = this;
-			GameUI = new List<GameObject>
-			{
-				MainGameUI,
-				HexMapUI,
-				TopPanelUI
-			};
-			UseButtons = new List<GameObject>
-			{
-				PlaceCharacterButton,
-				UseItemButton,
-				UsePotionButton
-			};
-
-			CancelButtons = new List<GameObject>
-			{
-				CancelButton
-			};
-			//UseResurrectionSelect = new UseResurrectionSelect(Instantiate(MultipleDropdownsPrefab, gameObject.transform));
-			Game.Active.Buttons = UseButtons;
+			EndTurnImage.AddTrigger(EventTriggerType.PointerClick, e => EndTurnImageClick());
+			
 		}
-		public void UpdateActivePlayerUI() => ActivePlayerText.GetComponent<Text>().text = Game.Active.GamePlayer.Name;
-		public void UpdateActivePhaseText() => ActivePhaseText.GetComponent<Text>().text = Game.Active.Phase.Number.ToString();
+		public void UpdateActivePlayerUI() => ActivePlayerText.SetText(Game.Active.GamePlayer.Name);
+		public void UpdateActivePhaseText() => ActivePhaseText.SetText(Game.Active.Phase.Number.ToString());
 
 		//TODO: Generic methods?
 
@@ -112,53 +81,23 @@ namespace UIManagers
 					SpriteSelect.Open(characters, FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
 			}
 			}
-			UpdateButtons();
 			Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
-			CharacterStats.Instance.gameObject.ToggleIf(Game.Active.CharacterOnMap == null);
-			CharacterFace.Instance.gameObject.ToggleIf(Game.Active.CharacterOnMap == null);
+			CharacterUI.ToggleIf(Game.Active.CharacterOnMap == null);
+			EndTurnImage.ToggleIf(!CanClickEndTurnButton);
 			TakeActionWithCharacterButton.ToggleIf(!(Game.Active.CharacterOnMap != null && Game.Active.Turn.CharacterThatTookActionInTurn == null && Game.Active.CharacterOnMap.Owner == Game.Active.GamePlayer && Game.Active.CharacterOnMap.TookActionInPhaseBefore == false));
-			if (Input.GetMouseButtonDown(1)|| Input.GetKeyDown(KeyCode.Escape))
-			{
-				if (CharacterInfo.Instance.gameObject.activeSelf)
-				{
-					Game.UIManager.VisibleUI = GameUI;
-				}
-			}
 		}
-		private void UpdateButtons()
+// TODO
+//			if (Game.Active.IsActiveUse)
+//			{
+//				Game.Active.Buttons = CancelButtons;
+//			}
+
+		private void EndTurnImageClick()
 		{
-			if (Game.Active.Phase.Number == 0)
-			{
-				EndTurnButton.GetComponent<Button>().ToggleIf(true);
-			}
-			else
-			{
-				EndTurnButton.GetComponent<Button>().ToggleIf(Game.Active.Turn.CharacterThatTookActionInTurn == null && Game.Active.GamePlayer.Characters.Any(c => c.CanTakeAction && c.IsOnMap));
-			}
-			if (Game.Active.IsActiveUse)
-			{
-				Game.Active.Buttons = CancelButtons;
-			}
-			else if (Game.Active.CharacterOnMap != null)
-			{
-			}
-			else
-			{
-				Game.Active.Buttons = UseButtons;
-				PlaceCharacterButton.GetComponent<Button>().ToggleIf(Game.Active.GamePlayer.Characters.All(c => c.IsOnMap || !c.IsAlive) || Game.Active.Turn.WasCharacterPlaced || Game.Active.GamePlayer.GetSpawnPoints().All(sp => sp.CharacterOnCell != null));
-			}
+			if (Game.Active.Phase.Number == 0) return;
+			if (CanClickEndTurnButton) Game.Active.Turn.Finish();
 		}
 
-		[UsedImplicitly]
-		public void EndTurnButtonClick()
-		{
-			Game.Active.Turn.Finish();
-		}
-		[UsedImplicitly]
-		public void CancelButtonClick()
-		{
-			Game.Active.Cancel();
-		}
 		[UsedImplicitly]
 		public void TakeActionWithCharacter()
 		{

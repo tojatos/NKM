@@ -49,13 +49,15 @@ namespace UIManagers
 		/// <param name="ability">Get range from this ability</param>
 		private void SetRangeHelpTriggers(GameObject button, Ability ability)
 		{
-			EventTrigger trigger = button.GetComponent<EventTrigger>() ?? button.AddComponent<EventTrigger>();
-			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-			entry.callback.AddListener(eventData => Game.Active.HelpHexCells = ability.GetRangeCells());
-			trigger.triggers.Add(entry);
-			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
-			entry2.callback.AddListener(eventData => Game.Active.HelpHexCells = null);
-			trigger.triggers.Add(entry2);
+//			EventTrigger trigger = button.GetComponent<EventTrigger>() ?? button.AddComponent<EventTrigger>();
+//			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
+//			entry.callback.AddListener(eventData => Game.Active.HelpHexCells = ability.GetRangeCells());
+//			trigger.triggers.Add(entry);
+//			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
+//			entry2.callback.AddListener(eventData => Game.Active.HelpHexCells = null);
+//			trigger.triggers.Add(entry2);
+			button.AddTrigger(EventTriggerType.PointerEnter, eventData => Game.Active.HelpHexCells = ability.GetRangeCells());
+			button.AddTrigger(EventTriggerType.PointerExit, eventData => Game.Active.HelpHexCells = null);
 		}
 		private static void SetButtonSprite(GameObject button, Ability ability)
 		{
