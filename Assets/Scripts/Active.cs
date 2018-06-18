@@ -190,12 +190,12 @@ public class Active
 	{
 		if (!HexCells.Contains(cell)) return;
 //		if (CharacterOnMap!= null && Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
-		if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 		switch (Action)
 		{
 			case Action.None:
 				throw new Exception("Żadna akcja nie jest aktywna!");
 			case Action.UseAbility:
+                if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 				if (cell.CharacterOnCell != null)
 				{
 					Ability.Use(cell.CharacterOnCell);
@@ -210,12 +210,14 @@ public class Active
 				if(character==null) throw new NullReferenceException();
 				if (cell.CharacterOnCell != null)
 				{
+                if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 					character.BasicAttack(cell.CharacterOnCell);
 				}
 				else
 				{
 					if(cell.Type == HexTileType.Wall) return;
 					if(MoveCells.Last() != cell) return;
+                if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 					character.BasicMove(MoveCells);
 				}
 				HexCells = null;//TODO is this really needed?
