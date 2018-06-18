@@ -179,6 +179,7 @@ public class Active
 		Action = Action.None;
 		HexCells = null;
 		Game.HexMapDrawer.RemoveAllHighlights();
+		Game.HexMapDrawer.RemoveAllHelpHighlights();
 	}
 	public void CleanAndTrySelecting()
 	{
