@@ -28,7 +28,7 @@ namespace NKMObjects.Abilities.Bezimienni
                 _damageThisTurn += damage.Value;
                 if (_damageThisTurn > ParentCharacter.HealthPoints.Value * (HpPercentActivate / 100f)) HasFreeAbility = true;
             };
-            Active.Turn.TurnFinished += () => _damageThisTurn = 0;
+            Active.Turn.TurnFinished += character => _damageThisTurn = 0;
 
         }
     }

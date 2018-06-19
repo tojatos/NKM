@@ -8,7 +8,8 @@
 			ParentCharacter = parentCharacter;
 			if (name != null) Name = name;
 			if (Active.CharacterOnMap == ParentCharacter) UI.CharacterUI.Effects.Instance.UpdateButtons();
-			Active.Turn.TurnFinished += () => {
+			Active.Turn.TurnFinished += (character) => {
+				if(character != ParentCharacter) return;
                 if (CurrentCooldown > 0) CurrentCooldown--; 
 				if (CurrentCooldown != 0) return;
 				RemoveFromParent();

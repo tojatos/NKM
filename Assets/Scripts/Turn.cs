@@ -15,7 +15,7 @@ public class Turn
 		IsDone = false;
 		WasCharacterPlaced = false;
 		CharacterThatTookActionInTurn = null;
-		TurnFinished += () =>
+		TurnFinished += (character) =>
 		{
 			if (CharacterThatTookActionInTurn != null)
 			{
@@ -44,13 +44,10 @@ public class Turn
 		}
 	}
 
-	public delegate void OnTurnFinish();
+	public delegate void CharacterDelegate(Character character);
 	public delegate void PlayerDelegate(GamePlayer player);
-	public event OnTurnFinish TurnFinished;
+	public event CharacterDelegate TurnFinished;
 	public event PlayerDelegate TurnStarted;
 
-	public void Finish()
-	{
-		TurnFinished?.Invoke();
-	}
+	public void Finish() => TurnFinished?.Invoke(CharacterThatTookActionInTurn);
 }
