@@ -8,9 +8,9 @@ namespace UI.CharacterUI
 {
 	public class Effects : SingletonMonoBehaviour<Effects>
 	{
-		private Game Game => GameStarter.Instance.Game;
+		private static Game Game => GameStarter.Instance.Game;
 		public GameObject EffectButtonPrefab;
-		public List<GameObject> Buttons { get; private set; }
+		private List<GameObject> Buttons { get; set; }
 
 		private void Awake()
 		{
@@ -39,9 +39,7 @@ namespace UI.CharacterUI
 
 			button.name = character.Effects.IndexOf(effect).ToString();
 
-			button.AddSetTooltipEvent("<b>" + effect.Name + "</b>\n" + effect.GetDescription());
-			button.AddRemoveTooltipEvent();
-			//button.GetComponent<Button>().onClick.AddListener(effect.TryPrepare);
+			button.AddDefaultTooltip("<b>" + effect.Name + "</b>\n" + effect.GetDescription(), Tooltip.CharacterPosition);
 			Buttons.Add(button);
 		}
 	}

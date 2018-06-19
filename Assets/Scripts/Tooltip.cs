@@ -6,27 +6,26 @@ public class Tooltip : SingletonMonoBehaviour<Tooltip>
 	public Text Text;
 	public bool IsActive;
 	private Vector3? _position;
+	public static Vector3 CharacterPosition => new Vector3(-400, -350);
+
 
 	public void Init()
 	{
 		Text.text = "";
 		IsActive = false;
 	}
-
 	public void Set(string text, Vector3? position = null)
 	{
 		Text.text = text;
 		IsActive = true;
 		_position = position;
 	}
-
 	public void Remove()
 	{
 		Text.text = "";
 		IsActive = false;
 		_position = null;
 	}
-
 	private void LateUpdate()
 	{
 		if (!IsActive) return;

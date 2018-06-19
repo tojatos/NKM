@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Extensions;
 using Hex;
 using NKMObjects.Templates;
+using UnityEngine;
 
 namespace NKMObjects.Abilities.Rem
 {
@@ -28,19 +29,13 @@ namespace NKMObjects.Abilities.Rem
 			}
 		}
 
-		public override List<HexCell> GetRangeCells()
-		{
-			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		}
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} wymachuje morgenszternem wokół własnej osi zadając wszystkim przeciwnikom w promieniu {1},
-Zadając {2} obrażeń fizycznych.
-Czas odnowienia: {3}",
-				ParentCharacter.Name, AbilityRange, AbilityDamage, Cooldown);
-		}
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} wymachuje morgenszternem wokół własnej osi,
+zadając wszystkim przeciwnikom w promieniu {AbilityRange} {AbilityDamage} obrażeń fizycznych.
+Czas odnowienia: {Cooldown}";
+
 		protected override void Use()
 		{
 			List<HexCell> cellRange = GetRangeCells();
@@ -50,8 +45,10 @@ Czas odnowienia: {3}",
 		}
 		public override void Use(List<HexCell> cells)
 		{
+			cells.RemoveNonEnemies();
 			List<Character> characters = cells.GetCharacters();
 			var damage = new Damage(AbilityDamage, DamageType.Physical);
+			characters.ForEach(c => Debug.Log(c.Owner.Name));
 			characters.ForEach(c =>ParentCharacter.Attack(c, damage));
 			OnUseFinish();
 		}

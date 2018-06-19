@@ -66,7 +66,7 @@ namespace UI.CharacterUI
 			GameObject button = Instantiate(AbilityButtonPrefab, transform);
 			button.name = character.Abilities.IndexOf(ability).ToString(); //we do that to be able to UpdateButtonData
 
-			button.AddSetTooltipEvent("<b>" + ability.Name + "</b>\n" + ability.GetDescription(), new Vector3(-400, -350));
+			button.AddSetTooltipEvent("<b>" + ability.Name + "</b>\n" + ability.GetDescription(), Tooltip.CharacterPosition);
 			button.AddRemoveTooltipEvent();
 
 			SetButtonSprite(button, ability);
