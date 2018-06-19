@@ -28,20 +28,15 @@ namespace NKMObjects.Abilities.Rem
 				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
 			}
 		}
-
 		public override List<HexCell> GetRangeCells()
 		{
 			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 		}
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} zamraża jednego wroga w zasięgu {AbilityRange} na jedną turę,
+zadając {AbilityDamage} obrażeń magicznych.
+Czas odnowiania: {Cooldown}";
 
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} zamraża jednego wroga w zasięgu {1} na jedną turę,
-zadając {2} obrażeń magicznych.
-Czas odnowiania: {3}",
-				ParentCharacter.Name, AbilityRange, AbilityDamage, Cooldown);
-		}
 		protected override void Use()
 		{
 			List<HexCell> cellRange = GetRangeCells();
@@ -56,7 +51,7 @@ Czas odnowiania: {3}",
 		{
 			var damage = new Damage(AbilityDamage, DamageType.Magical);
 			ParentCharacter.Attack(targetCharacter, damage);
-			targetCharacter.Effects.Add(new MovementDisability(1, targetCharacter, "Al Huma's Freeze"));
+			targetCharacter.Effects.Add(new Stun(1, targetCharacter, Name));
 			OnUseFinish();
 		}
 	}

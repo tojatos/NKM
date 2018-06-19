@@ -35,10 +35,16 @@ namespace UI
 
 		public void Init()
 		{
+			Stats.Instance.Init();
+			Tooltip.Instance.Init();
 			_spriteSelect = SpriteSelect.Instance;
 			EndTurnImage.AddTrigger(EventTriggerType.PointerClick, e => EndTurnImageClick());
 			CancelButton.AddTrigger(EventTriggerType.PointerClick, e => Game.Active.Cancel());
 			HourglassImage.AddTrigger(EventTriggerType.PointerClick, e => HourglassImageClick());
+			ActivePlayerText.gameObject.AddSetTooltipEvent("Nazwa aktywnego gracza");
+			ActivePlayerText.gameObject.AddRemoveTooltipEvent();
+			ActivePhaseText.gameObject.AddSetTooltipEvent("Numer fazy");
+			ActivePhaseText.gameObject.AddRemoveTooltipEvent();
 
 		}
 		public void UpdateActivePlayerUI() => ActivePlayerText.SetText(Game.Active.GamePlayer.Name);

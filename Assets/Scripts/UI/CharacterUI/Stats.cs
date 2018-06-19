@@ -20,11 +20,22 @@ namespace UI.CharacterUI
 		public GameObject RangeObject;
 		public GameObject SpeedObject;
 
-		private void Awake()
+		public void Init()
 		{
 			EmptyTextes();
+			SetTooltipTriggers();
 			SetAttackHelpTriggers();
 			SetMoveHelpTriggers();
+		}
+
+		private void SetTooltipTriggers()
+		{
+			HealthPoints.transform.parent.gameObject.AddDefaultTooltip("Punkty życia");
+			AttackPoints.transform.parent.gameObject.AddDefaultTooltip("Punkty ataku");
+			MagicalResistance.transform.parent.gameObject.AddDefaultTooltip("Obrona magiczna");
+			PhysicalResistance.transform.parent.gameObject.AddDefaultTooltip("Obrona fizyczna");
+			Range.transform.parent.gameObject.AddDefaultTooltip("Zasięg podstawowego ataku");
+			Speed.transform.parent.gameObject.AddDefaultTooltip("Szybkość");
 		}
 
 		private void SetAttackHelpTriggers()

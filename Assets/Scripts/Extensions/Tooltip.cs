@@ -6,9 +6,9 @@ namespace Extensions
 {
 	public static class Tooltip
 	{
-		private static void AddSetTooltipEvent(this GameObject gameObject, EventTriggerType eventTriggerType, string tooltipText)
+		private static void AddSetTooltipEvent(this GameObject gameObject, EventTriggerType eventTriggerType, string tooltipText, Vector3? postion = null)
 		{
-			UnityAction<BaseEventData> updateTooltipText = abstractEventData => global::Tooltip.Instance.Set(tooltipText);
+			UnityAction<BaseEventData> updateTooltipText = abstractEventData => global::Tooltip.Instance.Set(tooltipText, postion);
 			gameObject.AddTrigger(eventTriggerType, updateTooltipText);
 		}
 
@@ -16,10 +16,8 @@ namespace Extensions
 		/// <summary>
 		/// Show tooltip on PointerEnter with text
 		/// </summary>
-		public static void AddSetTooltipEvent(this GameObject gameObject, string tooltipText)
-		{
-			gameObject.AddSetTooltipEvent(EventTriggerType.PointerEnter, tooltipText);
-		}
+		public static void AddSetTooltipEvent(this GameObject gameObject, string tooltipText, Vector3? position = null) => 
+			gameObject.AddSetTooltipEvent(EventTriggerType.PointerEnter, tooltipText, position);
 
 		private static void AddRemoveTooltipEvent(this GameObject gameObject, EventTriggerType eventTriggerType)
 		{
@@ -36,5 +34,12 @@ namespace Extensions
 		{
 			gameObject.AddRemoveTooltipEvent(EventTriggerType.PointerExit);
 		}
+
+		public static void AddDefaultTooltip(this GameObject gameObject, string tooltipText, Vector3? position = null)
+		{
+			gameObject.AddSetTooltipEvent(tooltipText, position);
+			gameObject.AddRemoveTooltipEvent();
+		}
+		
 	}
 }

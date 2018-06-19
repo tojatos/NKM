@@ -14,15 +14,12 @@ namespace UI.CharacterUI
 	/// </summary>
 	public class Abilities : SingletonMonoBehaviour<Abilities>
 	{
-		private Game Game;
+		private static Game Game => GameStarter.Instance.Game;
 
 		public GameObject AbilityButtonPrefab;
-		public List<GameObject> Buttons { get; private set; }
-		public void Init()
-		{
-			Game = GameStarter.Instance.Game;
-			Buttons = new List<GameObject>();
-		}
+		private List<GameObject> Buttons { get; set; }
+		public void Init() => Buttons = new List<GameObject>();
+
 		public void UpdateButtons()
 		{
 			if (Game.Active.CharacterOnMap == null) return;
@@ -47,7 +44,7 @@ namespace UI.CharacterUI
 		/// </summary>
 		/// <param name="button">Show range after hovering over this button</param>
 		/// <param name="ability">Get range from this ability</param>
-		private void SetRangeHelpTriggers(GameObject button, Ability ability)
+		private static void SetRangeHelpTriggers(GameObject button, Ability ability)
 		{
 //			EventTrigger trigger = button.GetComponent<EventTrigger>() ?? button.AddComponent<EventTrigger>();
 //			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
@@ -69,7 +66,7 @@ namespace UI.CharacterUI
 			GameObject button = Instantiate(AbilityButtonPrefab, transform);
 			button.name = character.Abilities.IndexOf(ability).ToString(); //we do that to be able to UpdateButtonData
 
-			button.AddSetTooltipEvent("<b>" + ability.Name + "</b>\n" + ability.GetDescription());
+			button.AddSetTooltipEvent("<b>" + ability.Name + "</b>\n" + ability.GetDescription(), new Vector3(-400, -350));
 			button.AddRemoveTooltipEvent();
 
 			SetButtonSprite(button, ability);
