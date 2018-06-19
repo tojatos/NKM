@@ -34,24 +34,24 @@ public class AirSelection
 					_hexCells.AddRange(value[0].GetNeighbors(_size));
 				}
 			}
-			_game.HexMapDrawer.RemoveAllHighlights();
+			_game.HexMapDrawer.RemoveHighlights();
 			if (_game.Active.HexCells != null && _hexCells != null)
 			{
 				_game.Active.HexCells.ForEach(c =>
 				{
 					if (_hexCells.All(ac => ac != c))
 					{
-						c.ToggleHighlight(HiglightColor.WhiteOrange);
+						c.AddHighlight(Highlights.BlueTransparent);
 					}
 				});
 			}
-			_hexCells?.ForEach(c => c.ToggleHighlight(HiglightColor.Red));
+			_hexCells?.ForEach(c => c.AddHighlight(Highlights.RedTransparent));
 		}
 	}
 
 	public void Enable(SelectionShape shape, int size)
 	{
-		_game.Active.HexCells.ForEach(c => c.ToggleHighlight(HiglightColor.WhiteOrange));
+		_game.Active.HexCells.ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
 		IsEnabled = true;
 		_shape = shape;
 		_size = size;

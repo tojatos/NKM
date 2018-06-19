@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 using Managers;
-using UIManagers;
+using UI.CharacterUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -112,7 +112,7 @@ public class MessageLogger : SingletonMonoBehaviour<MessageLogger>
 						{
 							DebugLog("<i>Nie ma takiej komendy jak </i>" + text + "<i>.</i>");
 						}
-						CharacterStats.Instance.UpdateCharacterStats(Game.Active.CharacterOnMap);
+						Stats.Instance.UpdateCharacterStats(Game.Active.CharacterOnMap);
 					}
 					else
 					{

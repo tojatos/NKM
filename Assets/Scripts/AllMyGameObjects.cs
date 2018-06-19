@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Helpers;
-using MyGameObjects.MyGameObject_templates;
+using Extensions;
+using NKMObjects.Templates;
 
 public static class AllMyGameObjects
 {

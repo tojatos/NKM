@@ -41,17 +41,17 @@
         <e p="ColorToTileType.cs" t="Include" />
         <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
         <e p="Damage.cs" t="Include" />
+        <e p="Extensions" t="Include">
+          <e p="Async.cs" t="Include" />
+          <e p="NKMObject.cs" t="Include" />
+          <e p="Sqlite.cs" t="Include" />
+          <e p="Tooltip.cs" t="Include" />
+          <e p="UnityGameObject.cs" t="Include" />
+        </e>
         <e p="Game.cs" t="Include" />
         <e p="GameData.cs" t="Include" />
         <e p="GameOptions.cs" t="Include" />
         <e p="GamePlayer.cs" t="Include" />
-        <e p="Helpers" t="Include">
-          <e p="AsyncExtensions.cs" t="Include" />
-          <e p="MyGameObjectExtensions.cs" t="Include" />
-          <e p="SqliteExtensions.cs" t="Include" />
-          <e p="TooltipExtentions.cs" t="Include" />
-          <e p="UnityGameObjectExtentions.cs" t="Include" />
-        </e>
         <e p="Hex" t="Include">
           <e p="HexCell.cs" t="Include" />
           <e p="HexCoordinates.cs" t="Include" />
@@ -62,6 +62,7 @@
           <e p="HexMetrics.cs" t="Include" />
         </e>
         <e p="HighlightColor.cs" t="Include" />
+        <e p="Highlights.cs" t="Include" />
         <e p="IsRaycastValid.cs" t="Include" />
         <e p="MainCameraController.cs" t="Include" />
         <e p="Managers" t="Include">
@@ -71,7 +72,7 @@
           <e p="PreGameOptions.cs" t="Include" />
         </e>
         <e p="MessageLogger.cs" t="Include" />
-        <e p="MyGameObjects" t="Include">
+        <e p="NKMObjects" t="Include">
           <e p="Abilities" t="Include">
             <e p="Aqua" t="Include">
               <e p="NaturesBeauty.cs" t="Include" />
@@ -160,28 +161,13 @@
           <e p="HexCellEffects" t="Include">
             <e p="Conflagration.cs" t="Include" />
           </e>
-          <e p="Items" t="Include">
-            <e p="GlassEye.cs" t="Include" />
-            <e p="RikkiBand.cs" t="Include" />
-            <e p="SachikoScissors.cs" t="Include" />
-            <e p="Yoshinon.cs" t="Include" />
-            <e p="YuzuruHeart.cs" t="Include" />
-          </e>
-          <e p="MyGameObject templates" t="Include">
+          <e p="Templates" t="Include">
             <e p="Ability.cs" t="Include" />
             <e p="Character.cs" t="Include" />
             <e p="Effect.cs" t="Include" />
             <e p="EnableableAbility.cs" t="Include" />
             <e p="HexCellEffect.cs" t="Include" />
-            <e p="Item.cs" t="Include" />
-            <e p="MyGameObject.cs" t="Include" />
-            <e p="Potion.cs" t="Include" />
-          </e>
-          <e p="Potions" t="Include">
-            <e p="FreezePotion.cs" t="Include" />
-            <e p="HealthPotion.cs" t="Include" />
-            <e p="InvisibilityPotion.cs" t="Include" />
-            <e p="OraclePotion.cs" t="Include" />
+            <e p="NKMObject.cs" t="Include" />
           </e>
         </e>
         <e p="Phase.cs" t="Include" />
@@ -195,12 +181,15 @@
         <e p="Stuff.cs" t="Include" />
         <e p="Tooltip.cs" t="Include" />
         <e p="Turn.cs" t="Include" />
-        <e p="UIManagers" t="Include">
-          <e p="CharacterAbilities.cs" t="Include" />
-          <e p="CharacterEffects.cs" t="Include" />
-          <e p="CharacterFace.cs" t="Include" />
-          <e p="CharacterInfo.cs" t="Include" />
-          <e p="CharacterStats.cs" t="Include" />
+        <e p="UI" t="Include">
+          <e p="CharacterUI" t="Include">
+            <e p="Abilities.cs" t="Include" />
+            <e p="Effects.cs" t="Include" />
+            <e p="Face.cs" t="Include" />
+            <e p="Info.cs" t="Include" />
+            <e p="MainHPBar.cs" t="Include" />
+            <e p="Stats.cs" t="Include" />
+          </e>
           <e p="UIManager.cs" t="Include" />
         </e>
       </e>

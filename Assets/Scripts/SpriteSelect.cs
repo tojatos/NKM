@@ -1,26 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Helpers;
-using MyGameObjects.MyGameObject_templates;
+using Extensions;
 using UnityEngine;
 using UnityEngine.UI;
+using NKMObject = NKMObjects.Templates.NKMObject;
 
 public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 {
-	private List<MyGameObject> _objectsToFill = new List<MyGameObject>();
-	public List<MyGameObject> SelectedObjects { get; } = new List<MyGameObject>();
+	private List<NKMObject> _objectsToFill = new List<NKMObject>();
+	public List<NKMObject> SelectedObjects { get; } = new List<NKMObject>();
 	public Button FinishSelectingButton;
 	public Text Title;
 	public GameObject SpriteObjectPrefab;
 
 	public bool IsOpened => gameObject.transform.parent.gameObject.activeSelf;
 
-	public void Open(IEnumerable<MyGameObject> objectsToFill, System.Action finishSelectingButtonClick, string title, string finishButtonText)
+	public void Open(IEnumerable<NKMObject> objectsToFill, System.Action finishSelectingButtonClick, string title, string finishButtonText)
 	{
 		gameObject.transform.parent.gameObject.Show();
 		SelectedObjects.Clear();
 		gameObject.transform.Find("Sprites").transform.Clear(); //Careful! Removes probably on the next frame
-		_objectsToFill = new List<MyGameObject>(objectsToFill);
+		_objectsToFill = new List<NKMObject>(objectsToFill);
 		_objectsToFill.ForEach(SpawnSpriteObject);
 		FinishSelectingButton.onClick.RemoveAllListeners();
 		FinishSelectingButton.onClick.AddListener(()=>finishSelectingButtonClick());
@@ -32,7 +32,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 		Transform spritesTransform = gameObject.transform.Find("Sprites").transform;
 		if (_objectsToFill.Count == 1) spritesTransform.GetComponentsInChildren<Button>()[spritesTransform.childCount-1].onClick.Invoke(); //get last button, because the others are not removed yet for some reason
 	}
-	private void SpawnSpriteObject(MyGameObject o)
+	private void SpawnSpriteObject(NKMObject o)
 	{
 		GameObject spriteObject = Instantiate(SpriteObjectPrefab, gameObject.transform.Find("Sprites").transform);
 		var button = spriteObject.GetComponent<Button>();
@@ -50,7 +50,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 	/// </summary>
 	/// <param name="o">Object to toggle</param>
 	/// <returns>Is selected</returns>
-	private bool ToggleSelected(MyGameObject o)
+	private bool ToggleSelected(NKMObject o)
 	{
 		if (SelectedObjects.Contains(o))
 		{

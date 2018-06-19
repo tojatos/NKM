@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hex;
-using MyGameObjects.MyGameObject_templates;
+using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
@@ -29,7 +29,7 @@ public class Active
 	public  GamePlayer GamePlayer;
 	public  Action Action;
 	public  Ability Ability;
-	public  MyGameObject MyGameObject;
+	public  NKMObject NkmObject;
 	public  Character CharacterOnMap;
 	public readonly List<HexCell> MoveCells = new List<HexCell>();
 
@@ -42,14 +42,8 @@ public class Active
 		set
 		{
 			_helpHexCells = value;
-			if (value == null)
-			{
-				Game.HexMapDrawer.RemoveAllHelpHighlights();
-			}
-			else
-			{
-				HelpHexCells.ForEach(c => c.ToggleHelpHighlight(HiglightColor.WhiteOrange));
-			}
+			if (value == null) Game.HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
+			else HelpHexCells.ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
 		}
 	}
 
@@ -58,7 +52,7 @@ public class Active
 
 	public bool IsDebug { get; set; }
 
-	public bool IsActiveUse => !(Ability == null && (Action == Action.None || Action == Action.AttackAndMove) && MyGameObject == null);
+	public bool IsActiveUse => !(Ability == null && (Action == Action.None || Action == Action.AttackAndMove) && NkmObject == null);
 
 	public void Reset()
 	{
@@ -69,7 +63,7 @@ public class Active
 		}
 		Ability = null;
 		HexCells = null;
-		MyGameObject = null;
+		NkmObject = null;
 		Action = Action.None;
 		if (AirSelection.IsEnabled) AirSelection.Disable();
 	}
@@ -79,10 +73,10 @@ public class Active
 		{
 			Ability.Cancel();
 		}
-		else if(MyGameObject != null)
+		else if(NkmObject != null)
 		{
-			Game.HexMapDrawer.RemoveAllHighlights();
-			MyGameObject = null;
+			Game.HexMapDrawer.RemoveHighlights();
+			NkmObject = null;
 		}
 		else
 		{
@@ -120,8 +114,8 @@ public class Active
 		Ability = abilityToPrepare;
 		if (toggleToRed)
 		{
-			Game.HexMapDrawer.RemoveAllHighlights();
-			HexCells.ForEach(c => c.ToggleHighlight(HiglightColor.Red));
+			Game.HexMapDrawer.RemoveHighlights();
+			HexCells.ForEach(c => c.AddHighlight(Highlights.RedTransparent));
 		}
 		return true;
 	}
@@ -170,7 +164,7 @@ public class Active
 		Game.Active.MoveCells.Add(cell);
 		
 	}
-
+	
 	public void Clean()
 	{
 		RemoveMoveCells();
@@ -178,8 +172,8 @@ public class Active
 		Ability = null;
 		Action = Action.None;
 		HexCells = null;
-		Game.HexMapDrawer.RemoveAllHighlights();
-		Game.HexMapDrawer.RemoveAllHelpHighlights();
+		Game.HexMapDrawer.RemoveHighlights();
+		Game.HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
 	}
 	public void CleanAndTrySelecting()
 	{

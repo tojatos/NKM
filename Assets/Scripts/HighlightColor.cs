@@ -1,7 +1,7 @@
-﻿public enum HiglightColor
-{
-	Black,
-	Red,
-	WhiteOrange,
-	GreenTransparent
-}
+﻿//public enum Highlights
+//{
+//	Black,
+//	Red,
+//	WhiteOrange,
+//	GreenTransparent
+//}

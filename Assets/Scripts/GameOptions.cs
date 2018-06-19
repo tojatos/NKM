@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Hex;
-using UIManagers;
+using UI;
 
 public class GameOptions
 {

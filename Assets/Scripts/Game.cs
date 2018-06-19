@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Helpers;
+using Extensions;
 using Hex;
 using Managers;
-using MyGameObjects.MyGameObject_templates;
-using UIManagers;
+using NKMObjects.Templates;
+using UI;
+using UI.CharacterUI;
 using UnityEngine;
 
 public class Game
@@ -55,7 +56,7 @@ public class Game
 //		UIManager.VisibleUI = UIManager.GameUI;
 //		Active.Buttons = UIManager.UseButtons;
 		MainCameraController.Instance.Init();
-		CharacterAbilities.Instance.Init();
+		Abilities.Instance.Init();
 		UIManager.UpdateActivePhaseText();
 		if (GameStarter.Instance.IsTesting) PlaceAllCharactersOnSpawns();
 		TakeTurns();
@@ -93,7 +94,7 @@ public class Game
 
 	public void TouchCell(HexCell touchedCell)
 	{
-		if (Active.MyGameObject != null)
+		if (Active.NkmObject != null)
 		{
 			UseMyGameObject(touchedCell);
 
@@ -111,7 +112,7 @@ public class Game
 			//possibility of highlighting with control pressed
 			if (!Input.GetKey(KeyCode.LeftControl))
 			{
-				HexMapDrawer.RemoveAllHighlights();
+				HexMapDrawer.RemoveHighlights();
 			}
 			if (touchedCell.CharacterOnCell != null)
 			{
@@ -120,21 +121,21 @@ public class Game
 			else
 			{
 				Active.CharacterOnMap?.Deselect();
-				touchedCell.ToggleHighlight();
+				touchedCell.AddHighlight(Highlights.BlackTransparent);
 			}
 		}
 	}
 
 	private void UseMyGameObject(HexCell cell)
 	{
-		if (Active.MyGameObject.GetType() == typeof(Character))
+		if (Active.NkmObject.GetType() == typeof(Character))
 		{
 			if (Active.Turn.WasCharacterPlaced)
 			{
 				throw new Exception("W tej turze już była wystawiona postać!");
 			}
 
-			var activeCharacter = Active.MyGameObject as Character;
+			var activeCharacter = Active.NkmObject as Character;
 			try
 			{
 				_spawner.TrySpawning(cell, activeCharacter);
@@ -153,8 +154,8 @@ public class Game
 			}
 			else
 			{
-				Active.MyGameObject = null;
-				HexMapDrawer.RemoveAllHighlights();
+				Active.NkmObject = null;
+				HexMapDrawer.RemoveHighlights();
 				activeCharacter?.Select();
 			}
 

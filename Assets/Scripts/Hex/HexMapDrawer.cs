@@ -8,7 +8,7 @@ namespace Hex
 {
 	public class HexMapDrawer : SingletonMonoBehaviour<HexMapDrawer>
 	{
-		private Game Game => GameStarter.Instance.Game;
+		private static Game Game => GameStarter.Instance.Game;
 
 		public HexMap HexMap { get; private set; }
 		public HexCell CellPrefab;
@@ -115,27 +115,28 @@ namespace Hex
 
 		}
 
-		public void RemoveAllHighlights()
+		public void RemoveHighlights(Predicate<GameObject> predicate = null)
 		{
 			foreach (HexCell hexCell in Cells)
 			{
+				if (predicate == null)
+				{
+                    hexCell.Highlights.ForEach(Destroy);
+					hexCell.Highlights.Clear();
+				}
+				else
+				{
+					hexCell.Highlights.FindAll(predicate).ForEach(Destroy);
+					hexCell.Highlights.RemoveAll(predicate);
+				}
 				//TODO: Check that somewhere else (change responsibility?)
-				if (hexCell.Highlight != null)
-				{
-					hexCell.ToggleHighlight();
-				}
+//				if (hexCell.Highlight != null)
+//				{
+//					hexCell.AddHighlight();
+//				}
 			}
 		}
-		public void RemoveAllHelpHighlights()
-		{
-			foreach (HexCell hexCell in Cells)
-			{
-				if (hexCell.HelpHighlight != null)
-				{
-					hexCell.ToggleHelpHighlight();
-				}
-			}
-		}
+		public void RemoveHighlightsOfColor(string colorName) => RemoveHighlights(h => h.GetComponent<SpriteRenderer>().sprite.name == colorName);
 
 		private HexCell GetCellByPosition(ref Vector3 position)
 		{

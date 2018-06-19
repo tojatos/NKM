@@ -1,4 +1,4 @@
-﻿using MyGameObjects.MyGameObject_templates;
+﻿using NKMObjects.Templates;
 
 public class Stat
 {

@@ -1,0 +1,78 @@
+﻿using Extensions;
+using Managers;
+using NKMObjects.Templates;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+namespace UI.CharacterUI
+{
+	public class Stats : SingletonMonoBehaviour<Stats>
+	{
+		private static Game Game => GameStarter.Instance.Game;
+
+		public Text HealthPoints;
+		public Text AttackPoints;
+		public Text MagicalResistance;
+		public Text PhysicalResistance;
+		public Text Range;
+		public Text Speed;
+		public GameObject RangeObject;
+		public GameObject SpeedObject;
+
+		private void Awake()
+		{
+			EmptyTextes();
+			SetAttackHelpTriggers();
+			SetMoveHelpTriggers();
+		}
+
+		private void SetAttackHelpTriggers()
+		{
+			RangeObject.AddTrigger(EventTriggerType.PointerEnter, e => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetBasicAttackCells());
+			RangeObject.AddTrigger(EventTriggerType.PointerExit, e => Game.Active.HelpHexCells = null);
+		}
+		private void SetMoveHelpTriggers()
+		{
+			SpeedObject.AddTrigger(EventTriggerType.PointerEnter, e => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetBasicMoveCells());
+			SpeedObject.AddTrigger(EventTriggerType.PointerExit, e => Game.Active.HelpHexCells = null);
+		}
+		private void EmptyTextes()
+		{
+			HealthPoints.text = "";
+			AttackPoints.text = "";
+			MagicalResistance.text = "";
+			PhysicalResistance.text = "";
+			Range.text = "";
+			Speed.text = "";
+		}
+		public void UpdateCharacterStats(Character character)
+		{
+			if (character != null)
+			{
+				AttackPoints.text = GetStatText(character, StatType.AttackPoints);
+				HealthPoints.text = character.HealthPoints + "/" + character.HealthPoints.BaseValue;
+				MagicalResistance.text = GetStatText(character, StatType.MagicalDefense);
+				PhysicalResistance.text = GetStatText(character, StatType.PhysicalDefense);
+				Range.text = GetStatText(character, StatType.BasicAttackRange);
+				Speed.text = GetStatText(character, StatType.Speed);
+			}
+			else
+				EmptyTextes();
+		}
+
+
+		private static string GetStatText(Character character, StatType type)
+		{
+			Stat stat = character.GetStat(type);
+			var bonus = stat.Value - stat.BaseValue;
+			var bonusText = bonus > 0
+				? "<color=green> + " + bonus + "</color>"
+				: bonus < 0
+					? "<color=red> - " + -bonus + "</color>"
+					: "";
+			return $"{stat.BaseValue}{bonusText}";
+		}
+
+	}
+}

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using MyGameObjects.MyGameObject_templates;
-using UIManagers;
+using NKMObjects.Templates;
+using UI;
 
 public class Turn
 {
@@ -25,7 +25,7 @@ public class Turn
 			WasCharacterPlaced = false;
 			CharacterThatTookActionInTurn = null;
 			Game.Active.Reset();
-			Game.HexMapDrawer.RemoveAllHighlights();
+			Game.HexMapDrawer.RemoveHighlights();
 		};
 	}
 	public void Start(GamePlayer gamePlayer)

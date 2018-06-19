@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Helpers;
+using Extensions;
 using Hex;
-using MyGameObjects.MyGameObject_templates;
-using UIManagers;
+using NKMObjects.Templates;
+using UI;
 using UnityEngine;
+using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace Managers
 {
@@ -109,7 +110,7 @@ namespace Managers
 		private async Task GetCharacters(GamePlayer p)
 		{
 			Debug.Log(p.Name);
-			List<MyGameObject> allCharacters = new List<MyGameObject>(AllMyGameObjects.Characters);
+			List<NKMObject> allCharacters = new List<NKMObject>(AllMyGameObjects.Characters);
 			SpriteSelect.Instance.Open(allCharacters, () => FinishSelectingCharacters(p), $"Wybór postaci - {p.Name}", "Zakończ wybieranie postaci");
 			Func<bool> hasSelectedCharecters = () => p.HasSelectedCharacters;
 			await hasSelectedCharecters.WaitToBeTrue();

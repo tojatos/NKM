@@ -21,12 +21,14 @@ public static class Stuff
 public class AllSprites
 {
 	public readonly List<Sprite> CharacterHexagons;
+	public readonly List<Sprite> HighlightHexagons;
 	public readonly List<Sprite> Abilities;
 	public readonly List<Sprite> Icons;
 
 	public AllSprites()
 	{
 		CharacterHexagons = new List<Sprite>(Resources.LoadAll<Sprite>("Sprites/CharacterHexagons"));
+		HighlightHexagons = new List<Sprite>(Resources.LoadAll<Sprite>("Sprites/HighlightHexagons"));
 		Abilities = new List<Sprite>(Resources.LoadAll<Sprite>("Sprites/Abilities"));
 		Icons = new List<Sprite>(Resources.LoadAll<Sprite>("Sprites/Icons"));
 	}

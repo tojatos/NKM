@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MyGameObjects.MyGameObject_templates;
+using NKMObjects.Templates;
+
 public class GamePlayer
 {
 	public string Name { get; set; }
