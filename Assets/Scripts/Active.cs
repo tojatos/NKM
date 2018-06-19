@@ -255,5 +255,10 @@ public class Active
 		EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
 		return results.Count > 0;
 	}
+    public void TakeActionWithCharacter()
+    {
+        CharacterOnMap.InvokeJustBeforeFirstAction();
+        Turn.Finish();
+    }
 }
 

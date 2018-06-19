@@ -3,6 +3,7 @@ using System.Linq;
 using Extensions;
 using JetBrains.Annotations;
 using Managers;
+using UI.CharacterUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,15 +14,16 @@ namespace UI
 	public class UIManager : SingletonMonoBehaviour<UIManager>
 	{
 		private static Game Game => GameStarter.Instance.Game;
+		private static Active Active => Game.Active;
 
 		private SpriteSelect _spriteSelect;
 
 		public GameObject CancelButton;
 		public GameObject AbilityButtons;
-		public GameObject TakeActionWithCharacterButton;
 		public GameObject CharacterUI;
 
 		public GameObject EndTurnImage;
+		public GameObject HourglassImage;
 
 		public Text ActivePlayerText;
 		public Text ActivePhaseText;
@@ -36,7 +38,8 @@ namespace UI
 			_spriteSelect = SpriteSelect.Instance;
 			EndTurnImage.AddTrigger(EventTriggerType.PointerClick, e => EndTurnImageClick());
 			CancelButton.AddTrigger(EventTriggerType.PointerClick, e => Game.Active.Cancel());
-			
+			HourglassImage.AddTrigger(EventTriggerType.PointerClick, e => HourglassImageClick());
+
 		}
 		public void UpdateActivePlayerUI() => ActivePlayerText.SetText(Game.Active.GamePlayer.Name);
 		public void UpdateActivePhaseText() => ActivePhaseText.SetText(Game.Active.Phase.Number.ToString());
@@ -72,24 +75,23 @@ namespace UI
 			Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
 			CharacterUI.ToggleIf(Game.Active.CharacterOnMap == null);
 			EndTurnImage.ToggleIf(!CanClickEndTurnButton);
-			TakeActionWithCharacterButton.ToggleIf(!(Game.Active.CharacterOnMap != null && Game.Active.Turn.CharacterThatTookActionInTurn == null && Game.Active.CharacterOnMap.Owner == Game.Active.GamePlayer && Game.Active.CharacterOnMap.TookActionInPhaseBefore == false));
 			bool isActiveUse = Game.Active.IsActiveUse;
 			AbilityButtons.ToggleIf(isActiveUse);
 			CancelButton.ToggleIf(!isActiveUse);
+			HourglassImage.ToggleIf(isActiveUse || Active.CharacterOnMap!=null && Active.CharacterOnMap.Owner != Active.GamePlayer || Active.Turn.CharacterThatTookActionInTurn != null);
 		}
 
-		private void EndTurnImageClick()
+		private static void EndTurnImageClick()
 		{
 			if (Game.Active.Phase.Number == 0) return;
 			if (CanClickEndTurnButton) Game.Active.Turn.Finish();
 		}
-
-		[UsedImplicitly]
-		public void TakeActionWithCharacter()
+		
+		private static void HourglassImageClick()
 		{
-			//Game.Active.Turn.CharacterThatTookActionInTurn = Game.Active.CharacterOnMap;
-			Game.Active.CharacterOnMap.InvokeJustBeforeFirstAction();
-			Game.Active.Turn.Finish();
-		}
+            if(Active.CharacterOnMap.Owner != Active.GamePlayer) return;
+            Active.TakeActionWithCharacter();
+        }
+
 	}
 }

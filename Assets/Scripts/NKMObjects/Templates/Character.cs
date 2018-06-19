@@ -24,7 +24,7 @@ namespace NKMObjects.Templates
 
 		public int DeathTimer { get; private set; }
 
-		public bool CanAttackAllies { get; set; }//=> Abilities.Any(a => a.OverridesFriendAttack);
+		public bool CanAttackAllies { private get; set; }
 		public List<Ability> Abilities{ get; private set; }
 		public List<Effect> Effects { get; }
 		public string Description { get; }
@@ -65,7 +65,6 @@ namespace NKMObjects.Templates
 		public delegate void DamageDelegate(Damage damage);
 		public delegate void CharacterDamageDelegate(Character character, Damage damage);
 		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
-		public delegate void CharacterRefIntDelegate(Character targetCharacter, ref int value);
 		#endregion
 		#region Events
 		public event VoidDelegate JustBeforeFirstAction;
@@ -181,38 +180,9 @@ namespace NKMObjects.Templates
 			BeforeBasicAttack?.Invoke(attackedCharacter, damage);
 			attackedCharacter.BeforeBeingBasicAttacked?.Invoke(attackedCharacter, damage);
 			Attack(attackedCharacter, damage);
-//			if (attackedCharacter.Abilities.All(a => a.BeforeParentBasicAttacked(this)))
-//			{
-//				if (attackedCharacter.Owner == Owner)
-//				{
-//					if (Abilities.Any(a => a.OverridesFriendAttack))
-//					{
-//						if (Abilities.Count(a => a.OverridesFriendAttack) > 1)
-//							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
-//
-//						Abilities.Single(a => a.OverridesFriendAttack).AttackFriend(attackedCharacter, damage);
-//					}
-//				}
-//				else
-//				{
-//					if (Abilities.Any(a => a.OverridesEnemyAttack))
-//					{
-//						if (Abilities.Count(a => a.OverridesEnemyAttack) > 1)
-//							throw new Exception("Więcej niż jedna umiejętność próbuje nadpisać atak!");
-//
-//						Abilities.Single(a => a.OverridesEnemyAttack).AttackEnemy(attackedCharacter, damage);
-//					}
-//					else
-//					{
-//						Attack(attackedCharacter, damage));
-//					}
-//				}
-//			}
 			AfterBasicAttack?.Invoke(attackedCharacter, damage);
-			
 
 			HasUsedBasicAttackInPhaseBefore = true;
-			//HasUsedNormalAbilityInPhaseBefore = true;
 		}
 		public void Attack(Character character, Damage damage)//, AttackType attackType, int atkPoints)
 		{
