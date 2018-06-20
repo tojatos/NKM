@@ -27,6 +27,7 @@ namespace UI
 
 		public Text ActivePlayerText;
 		public Text ActivePhaseText;
+		public Text ActiveCharacterText;
 
 		public bool ForcePlacingChampions { private get; set; }
 		private static bool CanClickEndTurnButton =>
@@ -80,6 +81,7 @@ namespace UI
 			}
 			Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
 			CharacterUI.ToggleIf(Game.Active.CharacterOnMap == null);
+			if (Game.Active.CharacterOnMap != null) ActiveCharacterText.text = Game.Active.CharacterOnMap.Name;
 			EndTurnImage.ToggleIf(!CanClickEndTurnButton);
 			bool isActiveUse = Game.Active.IsActiveUse;
 			AbilityButtons.ToggleIf(isActiveUse);

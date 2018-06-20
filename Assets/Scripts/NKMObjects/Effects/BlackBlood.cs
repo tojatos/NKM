@@ -7,7 +7,7 @@ namespace NKMObjects.Effects
     public class BlackBlood : Effect
     {
         private const int Damage = 10;
-        public const int Range = 2;
+        private const int Range = 2;
         private readonly Character _characterThatAttacks;
         private bool _wasActivatedOnce;
 
@@ -23,8 +23,11 @@ namespace NKMObjects.Effects
                 List<Character> enemiesInRange =
                     ParentCharacter.ParentCell.GetNeighbors(Range).Select(c => c.CharacterOnCell).Where(c => c != null && c.Owner != characterThatAttacks.Owner).ToList();
                 if(effectTarget.Owner != characterThatAttacks.Owner) enemiesInRange.Add(effectTarget);
-                var damage = new Damage(Damage, DamageType.Magical);
-                enemiesInRange.ForEach(enemy => characterThatAttacks.Attack(enemy, damage));
+                enemiesInRange.ForEach(enemy =>
+                {
+                    var damage = new Damage(Damage, DamageType.Magical);
+                    characterThatAttacks.Attack(enemy, damage);
+                });
                 _wasActivatedOnce = false;
             };
             ParentCharacter.BeforeBeingDamaged += tryToActivateEffect;

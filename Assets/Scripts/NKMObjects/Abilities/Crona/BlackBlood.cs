@@ -16,7 +16,7 @@ namespace NKMObjects.Abilities.Crona
 
 	    public override List<HexCell> GetRangeCells()
 	    {
-		    List<HexCell> rangeCells = ParentCharacter.ParentCell.GetNeighbors(1);
+		    List<HexCell> rangeCells = ParentCharacter.ParentCell.GetNeighbors(2);
 		    rangeCells.Add(ParentCharacter.ParentCell);
 		    return rangeCells;
 	    }
