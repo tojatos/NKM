@@ -25,6 +25,13 @@ namespace Animations.Parts
             mesh.color = _textColor;
             mesh.text = _textToShow;
             mesh.fontSize = 120;
+
+            var childMesh = TextObject.transform.GetChild(0).GetComponent<TextMesh>();
+            Debug.Log(childMesh.name);
+            childMesh.color = Color.black;
+            childMesh.text = _textToShow;
+            childMesh.fontSize = 127;
+            
             TextObject.Show();
             
             IsFinished = true;

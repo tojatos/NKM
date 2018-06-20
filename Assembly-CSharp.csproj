@@ -181,7 +181,6 @@
     <Compile Include="Assets\Scripts\UI\CharacterUI\MainHPBar.cs" />
     <Compile Include="Assets\Scripts\UI\CharacterUI\Stats.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
-    <None Include="Assets\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.xml" />
     <None Include="Assets\VertexColors.shader" />
     <Reference Include="UnityEngine.UI">
       <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
@@ -245,9 +244,6 @@
     </Reference>
     <Reference Include="UnityEditor.LinuxStandalone.Extensions">
       <HintPath>/opt/Unity/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>/home/tojatos/UnityProjects/NKM/Assets/packages/Newtonsoft.Json.10.0.3/lib/net45/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Data.Sqlite">
       <HintPath>/home/tojatos/UnityProjects/NKM/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>

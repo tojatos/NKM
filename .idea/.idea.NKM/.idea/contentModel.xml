@@ -186,7 +186,6 @@
             <e p="Abilities.cs" t="Include" />
             <e p="Effects.cs" t="Include" />
             <e p="Face.cs" t="Include" />
-            <e p="Hourglass.cs" t="Include" />
             <e p="Info.cs" t="Include" />
             <e p="MainHPBar.cs" t="Include" />
             <e p="Stats.cs" t="Include" />

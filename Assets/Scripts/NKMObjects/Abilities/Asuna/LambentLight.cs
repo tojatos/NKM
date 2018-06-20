@@ -30,23 +30,10 @@ zada on {2}% obrażeń."
 
 		public override void Awake()
 		{
-			ParentCharacter.BasicAttack = character =>
+			ParentCharacter.BeforeBasicAttack += (character, damage) =>
 			{
-				var modifier = 1;
-				if (GetRangeCells().Contains(character.ParentCell)) modifier = AaDamageModifier;
-				var damageValue = ParentCharacter.AttackPoints.Value * modifier;
-				var damage = new Damage(damageValue, DamageType.Physical);
-				ParentCharacter.Attack(character, damage);
+				if (GetRangeCells().Contains(character.ParentCell)) damage.Value *= 2;
 			};
 		}
-
-//		public override void AttackEnemy(Character attackedCharacter, int damage)
-//		{
-//			var modifier = 1;
-//			if (GetRangeCells().Contains(attackedCharacter.ParentCell)) modifier = AaDamageModifier;
-////			var damageValue = damage * modifier;
-////			var damage = new Damage(damageValue, DamageType.Physical);
-//			ParentCharacter.Attack(attackedCharacter, damage);
-//		}
 	}
 }
