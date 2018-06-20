@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Animations;
 using Extensions;
 using Hex;
@@ -21,7 +23,12 @@ namespace NKMObjects.Abilities.Bezimienni
         {
 	        return "Bezimienni zamieniają pozycjami na mapie 2 jednostki.";
         }
-
+        protected override void CheckIfCanBePrepared()
+		{
+			base.CheckIfCanBePrepared();
+			int characterCount = GetRangeCells().GetCharacters().Count;
+			if (characterCount < 2)	throw new Exception("Nie ma dwóch postaci w zasięgu");
+		}
 	    public override List<HexCell> GetRangeCells() => new List<HexCell>(HexMapDrawer.Instance.Cells);
         protected override void Use()
 		{
