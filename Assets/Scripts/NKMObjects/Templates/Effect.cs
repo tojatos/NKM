@@ -10,6 +10,7 @@
 			if (Active.CharacterOnMap == ParentCharacter) UI.CharacterUI.Effects.Instance.UpdateButtons();
 			Active.Turn.TurnFinished += (character) => {
 				if(character != ParentCharacter) return;
+				if(CurrentCooldown == int.MaxValue) return;
                 if (CurrentCooldown > 0) CurrentCooldown--; 
 				if (CurrentCooldown != 0) return;
 				RemoveFromParent();

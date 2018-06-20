@@ -37,7 +37,8 @@ namespace NKMObjects.Effects
         public override string GetDescription()
         {
             return
-                $"Zadaje {10} obrażeń magicznych przy otrzymaniu obrażeń wszystkim wrogom gracza {_characterThatAttacks.Owner.Name} w zasięgu 1.\nCzas do zakończenia efektu: {CurrentCooldown}";
+                $"Zadaje {10} obrażeń magicznych przy otrzymaniu obrażeń wszystkim wrogom gracza {_characterThatAttacks.Owner.Name} w zasięgu 1.\n" +
+                ((CurrentCooldown==int.MaxValue) ? "Efekt ten jest trwa wiecznie." : $"Czas do zakończenia efektu: {CurrentCooldown}");
         }
     }
 }
