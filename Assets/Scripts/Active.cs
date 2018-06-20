@@ -156,7 +156,7 @@ public class Active
 		LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null ? cell.gameObject.GetComponent<LineRenderer>() : cell.gameObject.AddComponent<LineRenderer>();
 		lRend.SetPositions(new[]
 			{MoveCells.Last().transform.position + Vector3.up, cell.transform.position + Vector3.up});
-		lRend.material = new Material(Shader.Find("Standard"));
+		lRend.material = new Material(Shader.Find("Standard")) {color = Color.black};
 		lRend.startColor = Color.black;
 		lRend.endColor = Color.black;
 		lRend.widthMultiplier = 2;

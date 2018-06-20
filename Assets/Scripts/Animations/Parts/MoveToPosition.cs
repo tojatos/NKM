@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Animations.Parts
@@ -29,6 +30,11 @@ namespace Animations.Parts
         }
         public override IEnumerator Play()
         {
+            if (_transformToMove == null)
+            {
+                IsFinished = true;
+                yield break;
+            }
             var t = 0f;
             Vector3 currentPos = _transformToMove.position;
             if (_useReference) _endPos = _transformToMove.position + _refPos;

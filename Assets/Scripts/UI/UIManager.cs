@@ -86,7 +86,7 @@ namespace UI
 			bool isActiveUse = Game.Active.IsActiveUse;
 			AbilityButtons.ToggleIf(isActiveUse);
 			CancelButton.ToggleIf(!isActiveUse);
-			HourglassImage.ToggleIf(isActiveUse || Active.CharacterOnMap!=null && Active.CharacterOnMap.Owner != Active.GamePlayer || Active.Turn.CharacterThatTookActionInTurn != null);
+			HourglassImage.ToggleIf(isActiveUse || Active.CharacterOnMap!=null && (Active.CharacterOnMap.Owner != Active.GamePlayer || Active.CharacterOnMap.TookActionInPhaseBefore)|| Active.Turn.CharacterThatTookActionInTurn != null);
 		}
 
 		private static void EndTurnImageClick()
