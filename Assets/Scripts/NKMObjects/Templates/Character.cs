@@ -47,7 +47,8 @@ namespace NKMObjects.Templates
 
 		public bool TookActionInPhaseBefore { get; set; }
 		public bool IsAlive => HealthPoints.Value > 0;
-
+		public bool IsEnemy => Owner != Active.GamePlayer;
+		
 		private bool IsStunned => Effects.Any(e => e.GetType() == typeof(Stun));
 		private bool CanMove => Effects.All(e => e.GetType() != typeof(MovementDisability));
 		private bool HasBasicAttackInabilityEffect => Effects.Any(e => e.GetType() == typeof(BasicAttackInability));

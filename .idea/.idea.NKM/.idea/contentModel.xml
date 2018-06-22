@@ -146,6 +146,9 @@
               <e p="TerrorOfTheUniverse.cs" t="Include" />
               <e p="WhenTheyCry.cs" t="Include" />
             </e>
+            <e p="Yoshino" t="Include">
+              <e p="TheHermit.cs" t="Include" />
+            </e>
           </e>
           <e p="Effects" t="Include">
             <e p="BasicAttackInability.cs" t="Include" />
@@ -194,15 +197,6 @@
         </e>
       </e>
       <e p="Assets/VertexColors.shader" t="Include" />
-      <e p="Assets/packages" t="Include">
-        <e p="Newtonsoft.Json.10.0.3" t="Include">
-          <e p="lib" t="Include">
-            <e p="net45" t="Include">
-              <e p="Newtonsoft.Json.xml" t="Include" />
-            </e>
-          </e>
-        </e>
-      </e>
       <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
       <e p="Temp" t="ExcludeRecursive">
