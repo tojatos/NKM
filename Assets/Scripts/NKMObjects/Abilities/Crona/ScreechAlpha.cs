@@ -7,15 +7,15 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Crona
 {
-    public class ScreechAlpha : Ability
+    public class ScreechAlpha : Ability, IClickable
     {
         private const int Radius = 3;
-        public ScreechAlpha()
+        public ScreechAlpha() : base(AbilityType.Normal, "Screech Alpha", 4)
         {
-            Name = "Screech Alpha";
-            Cooldown = 4;
-            CurrentCooldown = 0;
-            Type = AbilityType.Normal;
+//            Name = "Screech Alpha";
+//            Cooldown = 4;
+//            CurrentCooldown = 0;
+//            Type = AbilityType.Normal;
         }
         public override string GetDescription()
         {
@@ -33,8 +33,8 @@ namespace NKMObjects.Abilities.Crona
 				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
 			}
 		}
-	    
-		protected override void Use()
+
+	    public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange);

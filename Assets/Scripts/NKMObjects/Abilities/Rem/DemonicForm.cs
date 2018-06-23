@@ -4,16 +4,16 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Rem
 {
-	public class DemonicForm : EnableableAbility
+	public class DemonicForm : Ability, IEnableable
 	{
 		private const int HpPercent = 30;
 		private const int AdditionalAttack = 9;
 		private const int AdditionalSpeed = 4;
 
-		public DemonicForm()
+		public DemonicForm() : base(AbilityType.Passive, "Demonic Form")
 		{
-			Name = "Demonic Form";
-			Type = AbilityType.Passive;
+//			Name = "Demonic Form";
+//			Type = AbilityType.Passive;
 		}
 
 		public override void Awake()
@@ -30,7 +30,7 @@ zyskuje ona {1} ataku i {2} szybkości.",
 		}
 
 		private bool _isEnabled;
-		public override bool IsEnabled
+		public bool IsEnabled
 		{
 			get
 			{

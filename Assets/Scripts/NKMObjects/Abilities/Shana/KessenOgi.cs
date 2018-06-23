@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Shana
 {
-	public class KessenOgi : Ability
+	public class KessenOgi : Ability, IClickable
 	{
 		private const int FlameDamage = 15;
 		private const int Range = 5;
@@ -17,12 +17,12 @@ namespace NKMObjects.Abilities.Shana
 		private const int FlameWidth = 1;	
 
 
-		public KessenOgi()
+		public KessenOgi() : base(AbilityType.Ultimatum, "Kessen Ōgi", 4)
 		{
-			Name = "Kessen Ōgi";
-			Cooldown = 4;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Kessen Ōgi";
+//			Cooldown = 4;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
 
 		public override string GetDescription() => 
@@ -54,7 +54,8 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 		{
 			return ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();

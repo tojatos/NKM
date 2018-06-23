@@ -6,20 +6,20 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Dekomori_Sanae
 {
-	public class MjolnirHammer : Ability
+	public class MjolnirHammer : Ability, IClickable
 	{
 		private const int AbilityDamage = 18;
 		private const int AbilityRange = 7;
-		private bool WasUsedOnceThisTurn { get; set; }
-		private Character FirstAbilityTarget { get; set; }
-		public MjolnirHammer()
+		private bool _wasUsedOnceThisTurn;// { get; set; }
+		private Character _firstAbilityTarget;// { get; set; }
+		public MjolnirHammer() : base(AbilityType.Normal, "Mjolnir Hammer", 4)
 		{
-			Name = "Mjolnir Hammer";
-			Cooldown = 4;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
-			WasUsedOnceThisTurn = false;
-			FirstAbilityTarget = null;
+//			Name = "Mjolnir Hammer";
+//			Cooldown = 4;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
+//			WasUsedOnceThisTurn = false;
+//			FirstAbilityTarget = null;
 		}
 		protected override void CheckIfCanBePrepared()
 		{
@@ -45,14 +45,15 @@ Jeżeli obydwa ataki wymierzone są w ten sam cel, otrzymuje on połowę obraże
 Zasięg: {2}	Czas odnowienia: {3}",
 ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
 			var canUseAbility = Active.Prepare(this, cellRange);
 			if (canUseAbility) return;
 
-			if (WasUsedOnceThisTurn)
+			if (_wasUsedOnceThisTurn)
 			{
 				OnUseFinish();
 			}
@@ -65,17 +66,17 @@ ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
 		public override void Use(Character targetCharacter)
 		{
 			var damageToDeal = AbilityDamage;
-			if (FirstAbilityTarget == targetCharacter)
+			if (_firstAbilityTarget == targetCharacter)
 			{
 				damageToDeal /= 2;
 			}
 			var damage = new Damage(damageToDeal, DamageType.Physical);
 			ParentCharacter.Attack(targetCharacter, damage);
-			if (!WasUsedOnceThisTurn)
+			if (!_wasUsedOnceThisTurn)
 			{
-				WasUsedOnceThisTurn = true;
-				FirstAbilityTarget = targetCharacter;
-				Use();
+				_wasUsedOnceThisTurn = true;
+				_firstAbilityTarget = targetCharacter;
+				ImageClick();
 				return;
 			}
 
@@ -84,12 +85,12 @@ ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
 		public override void OnUseFinish()
 		{
 			base.OnUseFinish();
-			WasUsedOnceThisTurn = false;
-			FirstAbilityTarget = null;
+			_wasUsedOnceThisTurn = false;
+			_firstAbilityTarget = null;
 		}
 		public override void Cancel()
 		{
-			if (WasUsedOnceThisTurn)
+			if (_wasUsedOnceThisTurn)
 			{
 				OnUseFinish();
 			}

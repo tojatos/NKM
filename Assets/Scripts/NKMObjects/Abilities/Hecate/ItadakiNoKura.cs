@@ -6,18 +6,18 @@ namespace NKMObjects.Abilities.Hecate
 	public class ItadakiNoKura : Ability
 	{
 		private const int HealthPercent = 40;
-		public List<Character> CollectedEnergyCharacters { get; }
+		public List<Character> CollectedEnergyCharacters { get; } = new List<Character>();
 		public int CollectedEnergy { get {
 			float energy = 0;
 			CollectedEnergyCharacters.ForEach(c => energy += c.HealthPoints.BaseValue * ((float)HealthPercent /100));
 			return (int)energy;
 		} }
-		public ItadakiNoKura()
+		public ItadakiNoKura() : base(AbilityType.Passive, "Itadaki no Kura")
 		{
-			Name = "Itadaki no Kura";
-			Type = AbilityType.Passive;
+//			Name = "Itadaki no Kura";
+//			Type = AbilityType.Passive;
 //			OverridesEnemyAttack = true;
-			CollectedEnergyCharacters = new List<Character>();
+//			CollectedEnergyCharacters = new List<Character>();
 		}
 		public override string GetDescription()
 		{

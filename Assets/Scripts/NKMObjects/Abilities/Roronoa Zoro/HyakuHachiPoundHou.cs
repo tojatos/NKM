@@ -7,17 +7,17 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Roronoa_Zoro
 {
-	public class HyakuHachiPoundHou : Ability
+	public class HyakuHachiPoundHou : Ability, IClickable
 	{
 		private const int AbilityDamage = 18;
 		private const int AbilityRange = 6;
 
-		public HyakuHachiPoundHou()
+		public HyakuHachiPoundHou() : base(AbilityType.Ultimatum, "Hyaku Hachi Pound Hou", 6)
 		{
-			Name = "Hyaku Hachi Pound Hou";
-			Cooldown = 6;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Hyaku Hachi Pound Hou";
+//			Cooldown = 6;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
 		public override string GetDescription()
 		{
@@ -38,7 +38,8 @@ Zasięg: {2}	Czas odnowienia: {3}",
 				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
 			}
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();

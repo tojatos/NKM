@@ -8,7 +8,7 @@ using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace NKMObjects.Abilities.Aqua
 {
-	public class Resurrection : Ability
+	public class Resurrection : Ability, IClickable
 	{
 		private Character _characterToResurrect;
 		public override List<HexCell> GetRangeCells()
@@ -16,13 +16,13 @@ namespace NKMObjects.Abilities.Aqua
 			return Active.GamePlayer.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList();
 		}
 
-		public Resurrection()
+		public Resurrection() : base(AbilityType.Ultimatum, "Resurrection", 8)
 		{
-			Name = "Resurrection";
-			Cooldown = 8;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
-			_characterToResurrect = null;
+//			Name = "Resurrection";
+//			Cooldown = 8;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
+//			_characterToResurrect = null;
 		}
 		public override string GetDescription() => $@"{ParentCharacter.Name} wskrzesza sojuszniczą postać, która zginęła maksymalnie turę wcześniej.
 Postać odradza się z połową maksymalnego HP, na wybranym spawnie.
@@ -36,7 +36,8 @@ Czas odnowienia: {Cooldown}";
 			if (GetRangeCells().Count == 0)
 				throw new Exception("Nie ma miejsca na spawnach!");
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			Active.Ability = this;
 			SpriteSelect.Instance.Open(Active.GamePlayer.Characters.Where(c => !c.IsAlive && c.DeathTimer <= 1),

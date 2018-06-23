@@ -6,15 +6,15 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Rem
 {
-	public class Confession : Ability
+	public class Confession : Ability, IClickable
 	{
 		private const int AbilityRange = 6;
-		public Confession()
+		public Confession() : base(AbilityType.Ultimatum, "Confession", 4)
 		{
-			Name = "Confession";
-			Cooldown = 4;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Confession";
+//			Cooldown = 4;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
 		protected override void CheckIfCanBePrepared()
 		{
@@ -39,7 +39,8 @@ namespace NKMObjects.Abilities.Rem
 Zasięg: {1}	Czas odnowienia: {2}",
 				ParentCharacter.Name, AbilityRange, Cooldown);
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonFriends();

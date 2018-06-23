@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Asuna
 {
-	public class Dash : Ability
+	public class Dash : Ability, IClickable
 	{
 		private const int AbilityRange = 4;
 		private const int AbilityHitRange = 4;
@@ -15,12 +15,12 @@ namespace NKMObjects.Abilities.Asuna
 
 		private bool _hasDashed;
 
-		public Dash()
+		public Dash() : base(AbilityType.Normal, "Dash", 2)
 		{
-			Name = "Dash";
-			Cooldown = 2;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
+//			Name = "Dash";
+//			Cooldown = 2;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
 		}
 		public override string GetDescription()
 		{
@@ -49,7 +49,8 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 				throw new Exception("Nie ma gdzie się ruszyć!");
 			}
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveAll(c => c.CharacterOnCell != null);

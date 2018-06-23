@@ -6,14 +6,14 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Hecate
 {
-	public class SonzaiNoChikara : Ability
+	public class SonzaiNoChikara : Ability, IClickable
 	{
-		public SonzaiNoChikara()
+		public SonzaiNoChikara() : base(AbilityType.Ultimatum, "Sonzai no Chikara", 8)
 		{
-			Name = "Sonzai no Chikara";
-			Cooldown = 8;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Sonzai no Chikara";
+//			Cooldown = 8;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
 
 		public override List<HexCell> GetRangeCells()
@@ -28,7 +28,8 @@ namespace NKMObjects.Abilities.Hecate
 Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdzielana pomiędzy wszystkich przeciwników w postaci obrażeń magicznych.",
 				ParentCharacter.Name);
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange);

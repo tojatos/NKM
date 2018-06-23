@@ -8,10 +8,10 @@ namespace NKMObjects.Abilities.Crona
     public class BlackBlood : Ability
     {
         
-		public BlackBlood()
+		public BlackBlood() : base(AbilityType.Passive, "Black Blood")
 		{
-			Name = "Black Blood";
-			Type = AbilityType.Passive;
+//			Name = "Black Blood";
+//			Type = AbilityType.Passive;
 		}
 
 	    public override List<HexCell> GetRangeCells()

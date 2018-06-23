@@ -5,17 +5,17 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Dekomori_Sanae
 {
-	public class MjolnirDestinyImpulse : Ability
+	public class MjolnirDestinyImpulse : Ability, IClickable
 	{
 		private const int AbilityDamage = 25;
 		private const int AbilityRange = 8;
 		private bool _wasUsedOnceThisTurn;
-		public MjolnirDestinyImpulse()
+		public MjolnirDestinyImpulse() : base(AbilityType.Ultimatum, "Mjolnir Destiny Impulse", 6)
 		{
-			Name = "Mjolnir Destiny Impulse";
-			Cooldown = 6;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Mjolnir Destiny Impulse";
+//			Cooldown = 6;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
 		public override string GetDescription()
 		{
@@ -33,7 +33,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 		}
 
-		protected override void Use()
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.Add(ParentCharacter.ParentCell);
@@ -57,7 +57,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 					killedSomething = true;
 				}
 			});
-			if (killedSomething) Use();
+			if (killedSomething) ImageClick();
 			else OnUseFinish();
 		}
 		public override void Cancel()

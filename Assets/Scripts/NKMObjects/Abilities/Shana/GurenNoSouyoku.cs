@@ -6,16 +6,16 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Shana
 {
-	public class GurenNoSouyoku : EnableableAbility
+	public class GurenNoSouyoku : Ability, IEnableable
 	{
 		private const int Duration = 4;
 		private const int SpeedBonus = 3;
-		public GurenNoSouyoku()
+		public GurenNoSouyoku() : base(AbilityType.Passive, "Guren no Souyoku")
 		{
 			Name = "Guren no Souyoku";
 			Type = AbilityType.Passive;
 		}
-		public override bool IsEnabled => ParentCharacter.Effects.ContainsType(typeof(Effects.Flying));
+		public bool IsEnabled => ParentCharacter.Effects.ContainsType(typeof(Effects.Flying));
 		public override string GetDescription()
 		{
 			return "Po otrzymaniu obrażeń rozwija skrzydła dzięki którym może poruszyć się o 3 pola więcej, ponadto może przelatywać przez ściany\n" +

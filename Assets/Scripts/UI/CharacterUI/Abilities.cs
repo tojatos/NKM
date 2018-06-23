@@ -91,9 +91,9 @@ namespace UI.CharacterUI
 		}
 		private static void CreateEnableSpriteIfEnableable(GameObject button, Ability ability)
 		{
-			if (!(ability is EnableableAbility)) return;
+			if (!(ability is IEnableable)) return;
 
-			var enableableAbility = (EnableableAbility) ability;
+			var enableableAbility = (IEnableable) ability;
 			var enableGameObject = new GameObject();
 			enableGameObject.transform.parent = button.transform;
 			enableGameObject.AddComponent<Image>().sprite = Stuff.Sprites.Icons.Find(s => s.name == (enableableAbility.IsEnabled ? "Ability Active" : "Ability Inactive"));

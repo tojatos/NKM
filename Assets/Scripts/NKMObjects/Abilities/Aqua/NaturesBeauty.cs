@@ -4,12 +4,12 @@ namespace NKMObjects.Abilities.Aqua
 {
 	public class NaturesBeauty : Ability
 	{
-		public NaturesBeauty()
-		{
-			Name = "Nature's Beauty";
-			Type = AbilityType.Passive;
-//			OverridesFriendAttack = true;
-		}
+		public NaturesBeauty() : base (AbilityType.Passive, "Nature's Beauty") {}
+//		{
+//			Name = "Nature's Beauty";
+//			Type = AbilityType.Passive;
+////			OverridesFriendAttack = true;
+//		}
 
 		public override string GetDescription() => $"{ParentCharacter.Name} może używać podstawowych ataków na sojuszników, lecząc ich za ilość HP równą jej obecnemu atakowi.";
 

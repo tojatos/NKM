@@ -7,16 +7,16 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Gilgamesh
 {
-	public class Enkidu : Ability
+	public class Enkidu : Ability, IClickable
 	{
 		private const int AbilityRange = 8;
 		private const int SnarDuration = 2;
-		public Enkidu()
+		public Enkidu() : base(AbilityType.Normal, "Enkidu", 4)
 		{
-			Name = "Enkidu";
-			Cooldown = 4;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
+//			Name = "Enkidu";
+//			Cooldown = 4;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
 		}
 		protected override void CheckIfCanBePrepared()
 		{
@@ -38,7 +38,7 @@ $@"{ParentCharacter.Name} wypuszcza niebiańskie łańcuchy, unieruchamiając pr
 i podwajając bonusy zdolności biernej na ten okres.
 Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 
-		protected override void Use()
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();

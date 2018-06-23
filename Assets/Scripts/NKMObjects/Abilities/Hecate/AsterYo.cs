@@ -7,30 +7,27 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Hecate
 {
-	public class AsterYo : Ability
+	public class AsterYo : Ability, IClickable
 	{
 		private const int AbilityDamage = 12;
 		private const int AbilityRange = 10;
 		private const int AbilityRadius = 7;
-		public AsterYo()
+		public AsterYo() : base(AbilityType.Normal, "Aster Yo", 3)
 		{
-			Name = "Aster Yo";
-			Cooldown = 3;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
+//			Name = "Aster Yo";
+//			Cooldown = 3;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} wystrzeliwuje promienie energii z Astera,
-zadając {1} obrażeń magicznych i gromadząc Energię Życiową wszystkich trafionych celów
-na wskazanym obszarze w promieniu {2}.
-Zasięg: {3}	Czas odnowienia: {4}",
-				ParentCharacter.Name, AbilityDamage, AbilityRadius, AbilityRange, Cooldown);
-		}
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} wystrzeliwuje promienie energii z Astera,
+zadając {AbilityDamage} obrażeń magicznych i gromadząc Energię Życiową wszystkich trafionych celów
+na wskazanym obszarze w promieniu {AbilityRadius}.
+Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
+		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 
-		protected override void Use()
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange, false, false);

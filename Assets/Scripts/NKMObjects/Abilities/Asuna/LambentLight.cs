@@ -8,10 +8,10 @@ namespace NKMObjects.Abilities.Asuna
 	{
 		private const int AaDamageModifier = 2;
 		private const int Range = 2;
-		public LambentLight()
+		public LambentLight() : base(AbilityType.Passive, "Lamben Light")
 		{
-			Name = "Lambent Light";
-			Type = AbilityType.Passive;
+//			Name = "Lambent Light";
+//			Type = AbilityType.Passive;
 //			OverridesEnemyAttack = true;
 		}
 

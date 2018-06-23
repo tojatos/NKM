@@ -14,10 +14,10 @@ namespace NKMObjects.Abilities.Yoshino
 
 	    private int _lastTreshold;
         
-		public TheHermit()
+		public TheHermit() : base(AbilityType.Passive, "The Hermit")
 		{
-			Name = "The Hermit";
-			Type = AbilityType.Passive;
+//			Name = "The Hermit";
+//			Type = AbilityType.Passive;
 			_lastTreshold = ParentCharacter.GetStat(StatType.HealthPoints).BaseValue;
 		}
 

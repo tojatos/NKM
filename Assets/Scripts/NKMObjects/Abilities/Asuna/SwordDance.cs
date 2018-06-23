@@ -4,28 +4,28 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Asuna
 {
-	public class SwordDance : EnableableAbility
+	public class SwordDance : Ability, IClickable, IEnableable
 	{
 		private const int AbilityMaxDuration = 3;
 		private const int AbilityMaxHits = 3;
 		private const int AbilityBonusAttackGain = 2;
 
-		private int _attacksToBlock;
-		private int _phasesRemain;
+		private int _attacksToBlock = 3;
+		private int _phasesRemain = 2;
 		private int _currentBonusAttack;
 
-		public SwordDance()
+		public SwordDance() : base(AbilityType.Ultimatum, "Sword Dance", 4)
 		{
-			Name = "Sword Dance";
-			Cooldown = 4;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
-			_attacksToBlock = 3;
-			_phasesRemain = 2;
-			_currentBonusAttack = 0;
+//			Name = "Sword Dance";
+//			Cooldown = 4;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
+//			_attacksToBlock = 3;
+//			_phasesRemain = 2;
+//			_currentBonusAttack = 0;
 		}
-		private bool _isEnabled;
-		public override bool IsEnabled => _isEnabled;
+
+		public bool IsEnabled { get; private set; }
 
 		public override string GetDescription()
 		{
@@ -53,10 +53,10 @@ Pozostałe ataki do zablokowania: {_attacksToBlock}";
 			if(IsEnabled) throw new Exception("Umiejętność nie może zostać użyta jeżeli jest już aktywna!");
 		}
 
-		protected override void Use()
+		public void ImageClick()
 		{
 			Active.MakeAction();
-			_isEnabled = true;
+			IsEnabled = true;
 			OnUseFinish(0);
 			UI.CharacterUI.Abilities.Instance.UpdateButtonData();
 		}
@@ -85,7 +85,7 @@ Pozostałe ataki do zablokowania: {_attacksToBlock}";
 		}
 		private void Disable()
 		{
-			_isEnabled = false;
+			IsEnabled = false;
 			_attacksToBlock = 3;
 			_phasesRemain = 2;
 			CurrentCooldown = Cooldown;

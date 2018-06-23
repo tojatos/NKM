@@ -7,18 +7,18 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 {
-	public class CurseOfTheBlackCat : Ability
+	public class CurseOfTheBlackCat : Ability, IClickable
 	{
 		private const int AbilityRange = 5;
 		private const int DoTDamage = 6;
 		private const int DoTTime = 5;
 		private const int AdditionalDamagePercent = 25;
-		public CurseOfTheBlackCat()
+		public CurseOfTheBlackCat() : base(AbilityType.Ultimatum, "Curse of The Black Cat", 7)
 		{
-			Name = "Curse of The Black Cat";
-			Cooldown = 7;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Curse of The Black Cat";
+//			Cooldown = 7;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
 		public override string GetDescription()
 		{
@@ -42,7 +42,8 @@ Zasięg: {4} Czas odnowienia: {5}",
 				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
 			}
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();

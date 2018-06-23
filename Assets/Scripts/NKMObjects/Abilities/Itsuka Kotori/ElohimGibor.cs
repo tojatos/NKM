@@ -2,16 +2,16 @@
 
 namespace NKMObjects.Abilities.Itsuka_Kotori
 {
-	public class ElohimGibor : EnableableAbility
+	public class ElohimGibor : Ability, IEnableable
 	{
 		private const int Percent = 50;
 		private int _turnsWithoutBeingHurt;
 		private int _amountToHeal;
 		
-		public ElohimGibor()
+		public ElohimGibor() : base(AbilityType.Passive, "Elohim Gibor")
 		{
-			Name = "Elohim Gibor";
-			Type = AbilityType.Passive;
+//			Name = "Elohim Gibor";
+//			Type = AbilityType.Passive;
 		}
 
 		public override void Awake()
@@ -33,6 +33,6 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
 
 		public override string GetDescription() => $@"Jeżeli {ParentCharacter.Name} nie otrzyma obrażeń przez 2 tury z rzędu, regeneruje ona ilość HP równą 75% obrażeń otrzymywanych przez nią od ostatniego uaktywnienia tej umiejętności";
 
-		public override bool IsEnabled => _turnsWithoutBeingHurt >= 2;
+		public bool IsEnabled => _turnsWithoutBeingHurt >= 2;
 	}
 }

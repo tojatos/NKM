@@ -148,6 +148,7 @@
             </e>
             <e p="Yoshino" t="Include">
               <e p="TheHermit.cs" t="Include" />
+              <e p="Zadkiel.cs" t="Include" />
             </e>
           </e>
           <e p="Effects" t="Include">
@@ -170,6 +171,8 @@
             <e p="Effect.cs" t="Include" />
             <e p="EnableableAbility.cs" t="Include" />
             <e p="HexCellEffect.cs" t="Include" />
+            <e p="IClickable.cs" t="Include" />
+            <e p="IRunable.cs" t="Include" />
             <e p="NKMObject.cs" t="Include" />
           </e>
         </e>

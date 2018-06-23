@@ -44,7 +44,7 @@ namespace Managers
 								new Character("Hecate"),
 								new Character("Itsuka Kotori"),
 								new Character("Rem"),
-								new Character("Asuna"),
+								new Character("Aqua"),
 							}
 						},
 						new GamePlayer
@@ -57,9 +57,9 @@ namespace Managers
 								new Character("Dekomori Sanae"),
 								new Character("Gilgamesh"),
 								new Character("Crona"),
-								new Character("Hanekawa Tsubasa"),
+								new Character("Aqua"),
 							}
-						}
+						},
 					},
 				UIManager = UIManager.Instance
 			};

@@ -6,19 +6,19 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Yasaka_Mahiro
 {
-	public class SharpenedForks : Ability
+	public class SharpenedForks : Ability, IClickable
 	{
 		private const int AbilityDamage = 5;
 		private const float AbilityMissingHealthPercentDamage = 20;
 		private const int AbilityRange = 7;
 		private int _numberOfUses;
-		public SharpenedForks()
+		public SharpenedForks() : base(AbilityType.Normal, "Sharpened Forks", 3)
 		{
-			Name = "Sharpened Forks";
-			Cooldown = 3;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
-			_numberOfUses = 0;
+//			Name = "Sharpened Forks";
+//			Cooldown = 3;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
+//			_numberOfUses = 0;
 		}
 		protected override void CheckIfCanBePrepared()
 		{
@@ -42,7 +42,8 @@ Każdy widelec może zostać wymierzony w innego wroga.
 Zasięg: {3}	Czas odnowienia: {4}",
 						 ParentCharacter.Name, AbilityDamage, AbilityMissingHealthPercentDamage, AbilityRange, Cooldown);
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();
@@ -71,7 +72,7 @@ Zasięg: {3}	Czas odnowienia: {4}",
 			_numberOfUses++;
 			if (_numberOfUses < 3)
 			{
-				Use();
+				ImageClick();
 				return;
 			}
 

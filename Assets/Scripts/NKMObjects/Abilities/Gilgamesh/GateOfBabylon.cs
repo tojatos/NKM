@@ -5,34 +5,31 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Gilgamesh
 {
-	public class GateOfBabylon : Ability
+	public class GateOfBabylon : Ability, IClickable
 	{
 		private const int AbilityDamage = 25;
 		private const int AbilityRange = 6;
 		private const int AbilityRadius = 6;
-		public GateOfBabylon()
+		public GateOfBabylon() : base(AbilityType.Ultimatum, "Gate Of Babylon", 5)
 		{
-			Name = "Gate Of Babylon";
-			Cooldown = 5;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Gate Of Babylon";
+//			Cooldown = 5;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} otwiera wrota Babilonu, zsyłając deszcz mieczy na wskazanym obszarze w promieniu {1},
-zadając {2} obrażeń magicznych lub fizycznych, zależnie od odporności przeciwnika.
+		public override string GetDescription() =>
+$@"{ParentCharacter.Name} otwiera wrota Babilonu, zsyłając deszcz mieczy na wskazanym obszarze w promieniu {AbilityRadius},
+zadając {AbilityDamage} obrażeń magicznych lub fizycznych, zależnie od odporności przeciwnika.
 Jeżeli wróg ma więcej obrony fizycznej od magicznej, umiejętność zada obrażenia magiczne,
 a w przeciwnym razie - fizyczne.
-Zasięg: {3}	Czas odnowienia: {4}
-",
-			ParentCharacter.Name, AbilityRadius, AbilityDamage, AbilityRange, Cooldown);
-		}
+Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
+
 		public override List<HexCell> GetRangeCells()
 		{
 			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange, false, false);

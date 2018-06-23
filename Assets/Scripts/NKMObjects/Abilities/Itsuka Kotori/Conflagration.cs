@@ -7,19 +7,19 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Itsuka_Kotori
 {
-    public class Conflagration : Ability
+    public class Conflagration : Ability, IClickable
     {
         private const int Range = 13;
         private const int Radius = 6;
         private const int EffectTime = 3;
         private const int DamagePercent = 50;
 
-        public Conflagration()
+        public Conflagration() : base(AbilityType.Normal, "Conflagration", 6)
         {
-            Name = "Conflagration";
-            Cooldown = 6;
-            CurrentCooldown = 0;
-            Type = AbilityType.Normal;
+//            Name = "Conflagration";
+//            Cooldown = 6;
+//            CurrentCooldown = 0;
+//            Type = AbilityType.Normal;
 
 //            OverridesGetBasicAttackCells = true;
         }
@@ -42,18 +42,15 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
             };
         }
 
-        public override string GetDescription()
-        {
-            return string.Format(
-                @"{0} wywołuje Pożar na wskazanym obszarze o promieniu 6.
+        public override string GetDescription() => string.Format(
+            @"{0} wywołuje Pożar na wskazanym obszarze o promieniu 6.
 {0} może atakować wrogów znajdujących się na terenie Pożaru podstawowymi atakami, zadając 50% zwykłych obrażeń, niezależnie od tego gdzie sama się znajduje.
 Zasięg: {1}	Czas trwania: {2} Czas odnowienia: {3}",
-                ParentCharacter.Name, Range, EffectTime, Cooldown);
-        }
+            ParentCharacter.Name, Range, EffectTime, Cooldown);
 
         public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
 
-        protected override void Use()
+        public void ImageClick()
         {
             List<HexCell> cellRange = GetRangeCells();
             Active.Prepare(this, cellRange, false, false);

@@ -7,16 +7,16 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Roronoa_Zoro
 {
-	public class OniGiri : Ability
+	public class OniGiri : Ability, IClickable
 	{
 		private const int AbilityRange = 4;
 
-		public OniGiri()
+		public OniGiri() : base(AbilityType.Normal, "Oni Giri", 3)
 		{
-			Name = "Oni Giri";
-			Cooldown = 3;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
+//			Name = "Oni Giri";
+//			Cooldown = 3;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
 		}
 		public override string GetDescription() => $@"{ParentCharacter.Name} zadaje obrażenia podstawowe wybranej postaci, lądując 2 pola za nią.
 Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
@@ -41,7 +41,8 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 				throw new Exception("Nie ma gdzie się ruszyć!");
 			}
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();

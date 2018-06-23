@@ -7,16 +7,16 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Itsuka_Kotori
 {
-	public class CamaelMegiddo : Ability
+	public class CamaelMegiddo : Ability, IClickable
 	{
 		private const int Damage = 35;
 
-		public CamaelMegiddo()
+		public CamaelMegiddo() : base(AbilityType.Ultimatum, "Camael - Megiddo", 6)
 		{
-			Name = "Camael - Megiddo";
-			Cooldown = 6;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Camael - Megiddo";
+//			Cooldown = 6;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
 		public override string GetDescription()
 		{
@@ -49,7 +49,8 @@ Czas odnowienia: {2}",
 				if(hitConflargation) cells.AddRange(HexMapDrawer.Instance.Cells.Where(c => c.Effects.ContainsType(typeof(HexCellEffects.Conflagration))));
 				return cells.Distinct().ToList();
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(1);
 			var canUseAbility = Active.Prepare(this, cellRange);

@@ -6,17 +6,17 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Sinon
 {
-	public class PreciseShot : Ability
+	public class PreciseShot : Ability, IClickable
 	{
 		private const int AbilityDamage = 40;
 		private const int AbilityRange = 11;
 
-		public PreciseShot()
+		public PreciseShot() : base(AbilityType.Ultimatum, "Precise Shot", 6)
 		{
-			Name = "Precise Shot";
-			Cooldown = 6;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Precise Shot";
+//			Cooldown = 6;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
 		public override string GetDescription() => $@"{ParentCharacter.Name} strzela w wybranego wroga, zadając {AbilityDamage} obrażeń fizycznych.
 Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
@@ -33,7 +33,8 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
 			}
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();

@@ -7,10 +7,10 @@ namespace NKMObjects.Abilities.Sinon
 {
 	public class SnipersSight : Ability
 	{
-		public SnipersSight()
+		public SnipersSight() : base(AbilityType.Passive, "Sniper's Sight")
 		{
-			Name = "Sniper's Sight";
-			Type = AbilityType.Passive;
+//			Name = "Sniper's Sight";
+//			Type = AbilityType.Passive;
 		}
 
 		public override string GetDescription()

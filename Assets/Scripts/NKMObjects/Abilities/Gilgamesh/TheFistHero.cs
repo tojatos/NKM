@@ -8,10 +8,10 @@ namespace NKMObjects.Abilities.Gilgamesh
 	{
 		private const int DamageReductionPercent = 10;
 		private const int AdditionalDamagePercent = 10;
-		public TheFistHero()
+		public TheFistHero() : base(AbilityType.Passive, "The Fist Hero")
 		{
-			Name = "The Fist Hero";
-			Type = AbilityType.Passive;
+//			Name = "The Fist Hero";
+//			Type = AbilityType.Passive;
 		}
 		public override string GetDescription() => $@"Dzięki nieznającemu kresu skarbcowi, {ParentCharacter.Name} jest w stanie znaleźć odpowiedź na każdego wroga.
 W walce otrzymuje on {DamageReductionPercent}% mniej obrażeń, a jego ataki i umiejętności zadają dodatkowe {AdditionalDamagePercent}% obrażeń.";

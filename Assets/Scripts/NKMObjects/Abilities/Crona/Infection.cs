@@ -5,23 +5,24 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Crona
 {
-    public class Infection : Ability
+    public class Infection : Ability, IClickable
     {
         private const int Range = 4;
         private const int EffectCooldown = 3;
-        public Infection()
+        public Infection() : base(AbilityType.Ultimatum, "Infection", 5)
         {
-            Name = "Infection";
-            Cooldown = 5;
-            CurrentCooldown = 0;
-            Type = AbilityType.Ultimatum;
+//            Name = "Infection";
+//            Cooldown = 5;
+//            CurrentCooldown = 0;
+//            Type = AbilityType.Ultimatum;
         }
         public override string GetDescription()
         {
             return $"{ParentCharacter.Name} infekuje cel Czarną Krwią (nakłada efekt Black Blood) na 3 tury.\nZainfekowany wróg również otrzymuje obrażenia przy zdetonowaniu Black Blood.";
         }
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-        protected override void Use()
+
+	    public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();

@@ -7,16 +7,16 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Rem
 {
-	public class AlHuma : Ability
+	public class AlHuma : Ability, IClickable
 	{
 		private const int AbilityDamage = 10;
 		private const int AbilityRange = 7;
-		public AlHuma()
+		public AlHuma() : base(AbilityType.Normal, "Al Huma", 4)
 		{
-			Name = "Al Huma";
-			Cooldown = 4;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
+//			Name = "Al Huma";
+//			Cooldown = 4;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
 		}
 		protected override void CheckIfCanBePrepared()
 		{
@@ -37,7 +37,7 @@ $@"{ParentCharacter.Name} zamraża jednego wroga w zasięgu {AbilityRange} na je
 zadając {AbilityDamage} obrażeń magicznych.
 Czas odnowiania: {Cooldown}";
 
-		protected override void Use()
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();

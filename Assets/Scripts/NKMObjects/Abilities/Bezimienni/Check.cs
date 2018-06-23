@@ -7,14 +7,14 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Bezimienni
 {
-    public class Check : Ability
+    public class Check : Ability, IClickable
     {
-        public Check()
+        public Check() : base(AbilityType.Normal, "Check", 2)
         {
-            Name = "Check";
-            Cooldown = 2;
-            CurrentCooldown = 0;
-            Type = AbilityType.Normal;
+//            Name = "Check";
+//            Cooldown = 2;
+//            CurrentCooldown = 0;
+//            Type = AbilityType.Normal;
         }
         public override string GetDescription()
         {
@@ -34,7 +34,7 @@ namespace NKMObjects.Abilities.Bezimienni
 			}
 		}
 
-		protected override void Use()
+	    public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
 			Active.Prepare(this, cellRange);

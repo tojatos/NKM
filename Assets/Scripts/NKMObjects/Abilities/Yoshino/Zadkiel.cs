@@ -4,22 +4,21 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Yoshino
 {
-    public class Zadkiel : EnableableAbility
+    public class Zadkiel : Ability, IEnableable, IClickable
     {
         private const int StunDuration = 1;
         private const int HitDurability = 3;
         private const int TimeDurability = 5;
 
-        private bool _isEnabled;
         private int _currentHitRemains;
         private int _currentTimeDurability;
         
-        public Zadkiel()
+        public Zadkiel() : base(AbilityType.Normal, "Zadkiel", 3)
         {
-            Name = "Zadkiel";
-            Cooldown = 3;
-            CurrentCooldown = 0;
-            Type = AbilityType.Normal;
+//            Name = "Zadkiel";
+//            Cooldown = 3;
+//            CurrentCooldown = 0;
+//            Type = AbilityType.Normal;
         }
 
         public override string GetDescription() => 
@@ -28,11 +27,11 @@ Każdy wróg, który zaatakuje {ParentCharacter.Name} zostanie ogłuszony na {St
 Zbroja niszczy się po otrzymaniu {HitDurability} ciosów bądź po {TimeDurability} fazach.
 Wraz ze zniszczeniem zbroi, uaktywnia się umiejętność bierna {ParentCharacter.Name}.";
 
-        protected override void Use()
+        public void ImageClick()
         {
             Active.MakeAction();
 
-            _isEnabled = true;
+            IsEnabled = true;
             _currentHitRemains = HitDurability;
             _currentTimeDurability = TimeDurability;
 
@@ -59,13 +58,13 @@ Wraz ze zniszczeniem zbroi, uaktywnia się umiejętność bierna {ParentCharacte
 
         private void Disable()
         {
-            _isEnabled = false;
+            IsEnabled = false;
             //TODO: unsubscribe
             
             var runablePassive = ParentCharacter.Abilities.SingleOrDefault(a => a.Type == AbilityType.Passive && a is IRunable) as IRunable;
             runablePassive?.Run();
         }
 
-        public override bool IsEnabled => _isEnabled;
+        public bool IsEnabled { get; private set; }
     }
 }

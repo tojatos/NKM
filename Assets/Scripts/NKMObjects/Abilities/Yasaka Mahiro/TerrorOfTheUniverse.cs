@@ -6,34 +6,31 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Yasaka_Mahiro
 {
-	public class TerrorOfTheUniverse : Ability
+	public class TerrorOfTheUniverse : Ability, IClickable
 	{
 		private const float AbilityCurrentHealthPercentDamage = 40f;
 		private const int AbilityRange = 6;
 		private const int AbilityRadius = 5;
 		private const int SlowDuration = 2;
-		public TerrorOfTheUniverse()
+		public TerrorOfTheUniverse() : base(AbilityType.Ultimatum, "Terror Of The Universe")
 		{
-			Name = "Terror Of The Universe";
-			Cooldown = 6;
-			CurrentCooldown = 0;
-			Type = AbilityType.Ultimatum;
+//			Name = "Terror Of The Universe";
+//			Cooldown = 6;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Ultimatum;
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} wbija wielki widelec w ziemie, zadając obrażenia fizyczne równe {1}% obecnego HP celu wszystkim wrogom w promieniu {2}.
+		public override string GetDescription() => string.Format(
+			@"{0} wbija wielki widelec w ziemie, zadając obrażenia fizyczne równe {1}% obecnego HP celu wszystkim wrogom w promieniu {2}.
 Dodatkowo, na następne {3} fazy wszyscy trafieni przeciwnicy są spowolnieni o połowę.
 Zasięg: {4}	Czas odnowienia: {5}",
-				ParentCharacter.Name, AbilityCurrentHealthPercentDamage, AbilityRadius, SlowDuration, AbilityRange, Cooldown);
-		}
+			ParentCharacter.Name, AbilityCurrentHealthPercentDamage, AbilityRadius, SlowDuration, AbilityRange, Cooldown);
 
 		public override List<HexCell> GetRangeCells()
 		{
 			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 		}
 
-		protected override void Use()
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange, false, false);

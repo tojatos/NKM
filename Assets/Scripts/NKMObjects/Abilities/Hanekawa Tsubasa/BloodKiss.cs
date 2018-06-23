@@ -7,18 +7,18 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 {
-	public class BloodKiss : Ability
+	public class BloodKiss : Ability, IClickable
 	{
 		private const int AbilityRange = 3;
 		private const int DoTDamage = 8;
 		private const int DoTTime = 4;
 
-		public BloodKiss()
+		public BloodKiss() : base(AbilityType.Normal, "Blood Kiss", 4)
 		{
-			Name = "Blood Kiss";
-			Cooldown = 4;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
+//			Name = "Blood Kiss";
+//			Cooldown = 4;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
 		}
 		public override string GetDescription()
 		{
@@ -41,7 +41,8 @@ ParentCharacter.Name, DoTDamage, DoTTime, AbilityRange, Cooldown);
 		{
 			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonEnemies();

@@ -3,25 +3,26 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Shana
 {
-	public class GurenNoOodachi : Ability
+	public class GurenNoOodachi : Ability, IClickable
 	{
 		private const int AttackIncrease = 5;
 		private const int BasicAttackRangeIncrease = 4;
 		private const int Duration = 2;
 
-		public GurenNoOodachi()
+		public GurenNoOodachi() : base(AbilityType.Normal, "Guren no Oodachi", 5)
 		{
-			Name = "Guren no Oodachi";
-			Cooldown = 5;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
+//			Name = "Guren no Oodachi";
+//			Cooldown = 5;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
 		}
 		public override string GetDescription()
 		{
 			return $@"Zwiększa atak o {AttackIncrease}, oraz zasięg ataków o {BasicAttackRangeIncrease}
 Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
 		}
-		protected override void Use()
+
+		public void ImageClick()
 		{
 			Active.MakeAction();
 			ParentCharacter.Effects.Add(new StatModifier(Duration, AttackIncrease, ParentCharacter, StatType.AttackPoints, Name));

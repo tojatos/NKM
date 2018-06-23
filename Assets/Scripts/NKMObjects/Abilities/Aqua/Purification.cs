@@ -7,16 +7,16 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Aqua
 {
-	public class Purification : Ability
+	public class Purification : Ability, IClickable
 	{
 		private const int AbilityRange = 5;
 
-		public Purification()
+		public Purification() : base(AbilityType.Normal, "Purification", 4)
 		{
-			Name = "Purification";
-			Cooldown = 4;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
+//			Name = "Purification";
+//			Cooldown = 4;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
 		}
 		public override string GetDescription() => $@"{ParentCharacter.Name} rzuca oczyszczający czar na sojusznika, zdejmując z niego wszelkie negatywne efekty.
 Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
@@ -34,7 +34,7 @@ Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 
-		protected override void Use()
+		public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonFriends();

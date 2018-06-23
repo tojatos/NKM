@@ -3,15 +3,15 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Dekomori_Sanae
 {
-	public class WickedEyesServant : EnableableAbility
+	public class WickedEyesServant : Ability, IEnableable
 	{
-		private int _additionalDamage;
+		private int _additionalDamage = 3;
 		private bool _isBeingUsed;
-		public WickedEyesServant()
+		public WickedEyesServant() : base(AbilityType.Passive, "Wicked Eye's Servant")
 		{
-			Name = "Wicked Eye's Servant";
-			Type = AbilityType.Passive;
-			_additionalDamage = 3;
+//			Name = "Wicked Eye's Servant";
+//			Type = AbilityType.Passive;
+//			_additionalDamage = 3;
 		}
 		public override string GetDescription()
 		{
@@ -21,13 +21,8 @@ jeżeli na polu gry znajduje się chociaż jedna postać z atakiem większym od 
 Zabicie wroga dodaje dodatkowy punkt obrażeń nieuchronnych tej umiejętności na stałe."
 						 ,ParentCharacter.Name, _additionalDamage);
 		}
-		public override bool IsEnabled
-		{
-			get
-			{
-				return Game.Players.Any(p => p.Characters.Any(c => c.IsOnMap && (c.AttackPoints.Value > ParentCharacter.AttackPoints.Value || c.Name == "Takanashi Rikka")));
-			}
-		}
+		public bool IsEnabled => Game.Players.Any(p => p.Characters.Any(c => c.IsOnMap && (c.AttackPoints.Value > ParentCharacter.AttackPoints.Value || c.Name == "Takanashi Rikka")));
+
 		public override void Awake()
 		{
 //			ParentCharacter.JustBeforeAttack += (character, damage) => damage.Value += IsEnabled ? _additionalDamage : 0;

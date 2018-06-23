@@ -7,10 +7,10 @@ namespace NKMObjects.Abilities.Bezimienni
         private const int HpPercentActivate = 50;
         private int _damageThisTurn;
         public bool HasFreeAbility { get; set; }
-        public AceInTheHole()
+        public AceInTheHole() : base(AbilityType.Passive, "Ace in the hole")
         {
-            Name = "Ace in the hole";
-            Type = AbilityType.Passive;
+//            Name = "Ace in the hole";
+//            Type = AbilityType.Passive;
         }
         public override string GetDescription()
         {

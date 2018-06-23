@@ -3,23 +3,23 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Sinon
 {
-	public class TacticalEscape : Ability
+	public class TacticalEscape : Ability, IClickable
 	{
 		private const int SpeedIncrease = 8;
 		private const int Duration = 1;
 
-		public TacticalEscape()
+		public TacticalEscape() : base(AbilityType.Normal, "Tactical Escape", 4)
 		{
-			Name = "Tactical Escape";
-			Cooldown = 4;
-			CurrentCooldown = 0;
-			Type = AbilityType.Normal;
+//			Name = "Tactical Escape";
+//			Cooldown = 4;
+//			CurrentCooldown = 0;
+//			Type = AbilityType.Normal;
 		}
 		public override string GetDescription() => 
 $@"Zwiększa szybkość {ParentCharacter.Name} o {SpeedIncrease}.
 Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
 
-		protected override void Use()
+		public void ImageClick()
 		{
 			Active.MakeAction();
 			ParentCharacter.Effects.Add(new StatModifier(Duration, SpeedIncrease, ParentCharacter, StatType.Speed, Name));

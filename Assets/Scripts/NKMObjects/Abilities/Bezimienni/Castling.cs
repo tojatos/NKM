@@ -7,11 +7,11 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Bezimienni
 {
-    public class Castling : Ability
+    public class Castling : Ability, IClickable
     {
 	    private Character _firstCharacterToSwap;
 	    private Character _secondCharacterToSwap;
-        public Castling()
+        public Castling() : base(AbilityType.Ultimatum, "Castling", 6)
         {
             Name = "Castling";
             Cooldown = 6;
@@ -29,7 +29,8 @@ namespace NKMObjects.Abilities.Bezimienni
 			if (characterCount < 2)	throw new Exception("Nie ma dwóch postaci w zasięgu");
 		}
 	    public override List<HexCell> GetRangeCells() => new List<HexCell>(HexMapDrawer.Instance.Cells);
-        protected override void Use()
+
+	    public void ImageClick()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.RemoveNonCharacters();
@@ -46,7 +47,7 @@ namespace NKMObjects.Abilities.Bezimienni
 			if (_firstCharacterToSwap == null)
 			{
 				_firstCharacterToSwap = character;
-				Use();
+				ImageClick();
 			}
 			else
 			{
