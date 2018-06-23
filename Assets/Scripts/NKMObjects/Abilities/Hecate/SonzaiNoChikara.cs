@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Extensions;
 using Hex;
 using NKMObjects.Templates;
 
@@ -8,32 +9,19 @@ namespace NKMObjects.Abilities.Hecate
 {
 	public class SonzaiNoChikara : Ability, IClickable
 	{
-		public SonzaiNoChikara() : base(AbilityType.Ultimatum, "Sonzai no Chikara", 8)
-		{
-//			Name = "Sonzai no Chikara";
-//			Cooldown = 8;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Ultimatum;
-		}
+		public SonzaiNoChikara() : base(AbilityType.Ultimatum, "Sonzai no Chikara", 8){}
 
-		public override List<HexCell> GetRangeCells()
-		{
-			return Game.HexMapDrawer.Cells;
-		}
+		public override List<HexCell> GetRangeCells() => Game.HexMapDrawer.Cells;
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
 
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} uwalnia zgromadzoną Energię Życiową, raniąc każdego wroga na mapie.
-Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdzielana pomiędzy wszystkich przeciwników w postaci obrażeń magicznych.",
-				ParentCharacter.Name);
-		}
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} uwalnia zgromadzoną Energię Życiową, raniąc każdego wroga na mapie.
+Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdzielana pomiędzy wszystkich przeciwników w postaci obrażeń magicznych.";
 
-		public void ImageClick()
+		public void Click()
 		{
-			List<HexCell> cellRange = GetRangeCells();
-			Active.Prepare(this, cellRange);
-			Active.MakeAction(cellRange);
+			Active.Prepare(this, GetTargetsInRange());
+			Active.MakeAction(Active.HexCells);
 		}
 
 		public override void Use(List<HexCell> cells)

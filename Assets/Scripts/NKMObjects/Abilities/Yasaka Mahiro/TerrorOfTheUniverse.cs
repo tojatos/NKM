@@ -30,7 +30,7 @@ Zasięg: {4}	Czas odnowienia: {5}",
 			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 		}
 
-		public void ImageClick()
+		public void Click()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange, false, false);

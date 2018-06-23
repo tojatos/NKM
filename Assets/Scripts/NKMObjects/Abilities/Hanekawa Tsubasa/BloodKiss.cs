@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Extensions;
 using Hex;
 using NKMObjects.Effects;
@@ -15,43 +14,21 @@ namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 
 		public BloodKiss() : base(AbilityType.Normal, "Blood Kiss", 4)
 		{
-//			Name = "Blood Kiss";
-//			Cooldown = 4;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Normal;
+			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} liże wroga, wywołując silne krwawienie, które zadaje {1} nieuchronnych obrażeń przez {2} fazy.
-Zasięg: {3} Czas odnowienia: {4}",
-ParentCharacter.Name, DoTDamage, DoTTime, AbilityRange, Cooldown);
-		}
-		protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			if (cellRange.Count == 0)
-			{
-				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-			}
-		}
-		public override List<HexCell> GetRangeCells()
-		{
-			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		}
+		
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		
+		public override string GetDescription() =>
+$@"{ParentCharacter.Name} liże wroga, wywołując silne krwawienie, które zadaje {DoTDamage} nieuchronnych obrażeń przez {DoTTime} fazy.
+Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 
-		public void ImageClick()
-		{
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			Active.Prepare(this, cellRange);
-		}
+		public void Click() => Active.Prepare(this, GetTargetsInRange());
 		public override void Use(Character targetCharacter)
 		{
 			var damage = new Damage(DoTDamage, DamageType.True);
-			targetCharacter.Effects.Add(new DamageOverTime(ParentCharacter, damage, DoTTime, targetCharacter, "Blood Kiss"));
+			targetCharacter.Effects.Add(new DamageOverTime(ParentCharacter, damage, DoTTime, targetCharacter, Name));
 			OnUseFinish();
 		}
 	}

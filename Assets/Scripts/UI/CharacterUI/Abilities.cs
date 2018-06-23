@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Extensions;
+using Hex;
 using Managers;
 using NKMObjects.Templates;
 using UnityEngine;
@@ -46,15 +47,16 @@ namespace UI.CharacterUI
 		/// <param name="ability">Get range from this ability</param>
 		private static void SetRangeHelpTriggers(GameObject button, Ability ability)
 		{
-//			EventTrigger trigger = button.GetComponent<EventTrigger>() ?? button.AddComponent<EventTrigger>();
-//			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-//			entry.callback.AddListener(eventData => Game.Active.HelpHexCells = ability.GetRangeCells());
-//			trigger.triggers.Add(entry);
-//			var entry2 = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
-//			entry2.callback.AddListener(eventData => Game.Active.HelpHexCells = null);
-//			trigger.triggers.Add(entry2);
-			button.AddTrigger(EventTriggerType.PointerEnter, eventData => Game.Active.HelpHexCells = ability.GetRangeCells());
-			button.AddTrigger(EventTriggerType.PointerExit, eventData => Game.Active.HelpHexCells = null);
+			button.AddTrigger(EventTriggerType.PointerEnter, e =>
+			{
+				Game.Active.HelpHexCells = ability.GetRangeCells();
+				ability.GetTargetsInRange().ForEach(c => c.AddHighlight(Highlights.BlackTransparent));
+			});
+			button.AddTrigger(EventTriggerType.PointerExit, e =>
+			{
+				Game.Active.HelpHexCells = null;
+				HexMapDrawer.Instance.RemoveHighlightsOfColor(Highlights.BlackTransparent);
+			});
 		}
 		private static void SetButtonSprite(GameObject button, Ability ability)
 		{
@@ -70,20 +72,32 @@ namespace UI.CharacterUI
 			button.AddRemoveTooltipEvent();
 
 			SetButtonSprite(button, ability);
-			button.GetComponent<Button>().onClick.AddListener(ability.TryPrepare); //try to prepare an ability on click
+			if (ability is IClickable)
+			{
+				button.AddTrigger(EventTriggerType.PointerClick, e =>
+				{
+                    if(ability.CanBeUsed) ((IClickable) ability).Click();	
+				});
+//                button.GetComponent<Button>().onClick.AddListener(()=>
+//                {
+//                    if(ability.CanBeUsed) ((IClickable) ability).ImageClick();
+//    				ability.TryPrepare();
+//                }); //try to prepare an ability on click
+                    
+			}
 			SetRangeHelpTriggers(button, ability);
 
 			Buttons.Add(button);
 		}
 		public void UpdateButtonData()
 		{
-			if(Game==null||Game.Active.CharacterOnMap==null) return;
+			if(Game?.Active.CharacterOnMap == null) return;
 
 			Character character = Game.Active.CharacterOnMap;
 			Buttons.ForEach(button =>
 			{
 				Ability ability = character.Abilities[int.Parse(button.name)];
-				button.ChangeImageColor(!ability.CanUse ? Color.grey : Color.white);
+				button.ChangeImageColor(!ability.CanBeUsed ? Color.grey : Color.white);
 				button.GetComponentInChildren<Text>().text = ability.CurrentCooldown > 0 ? ability.CurrentCooldown.ToString() : "";
 
 				CreateEnableSpriteIfEnableable(button, ability);

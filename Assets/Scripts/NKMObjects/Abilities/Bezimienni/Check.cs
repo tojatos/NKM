@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Hex;
 using NKMObjects.Effects;
@@ -11,34 +10,30 @@ namespace NKMObjects.Abilities.Bezimienni
     {
         public Check() : base(AbilityType.Normal, "Check", 2)
         {
-//            Name = "Check";
-//            Cooldown = 2;
-//            CurrentCooldown = 0;
-//            Type = AbilityType.Normal;
+	        OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
-        public override string GetDescription()
-        {
-	        return
-		        "Bezimienni szachują wybranego przeciwnika, wymuszając jego ruch.\nSzachowany wróg nie może użyć podstawowego ataku.";
-        }
+        public override string GetDescription() => "Bezimienni szachują wybranego przeciwnika, wymuszając jego ruch.\nSzachowany wróg nie może użyć podstawowego ataku.";
 
 	    public override List<HexCell> GetRangeCells() => new List<HexCell>(HexMapDrawer.Instance.Cells);
+	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
 
-        protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
-			if (cellRange.Count == 0)
-			{
-				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-			}
-		}
+//        protected override void CheckIfCanBePrepared()
+//		{
+//			base.CheckIfCanBePrepared();
+//			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
+//			if (cellRange.Count == 0)
+//			{
+//				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
+//			}
+//		}
 
-	    public void ImageClick()
+
+	    public void Click()
 		{
-			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
-			Active.Prepare(this, cellRange);
+//			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
+//			Active.Prepare(this, cellRange);
 //			Active.MakeAction(cellRange);
+			Active.Prepare(this, GetTargetsInRange());
 		}
 		public override void Use(Character character)
 		{

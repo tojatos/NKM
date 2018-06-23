@@ -12,22 +12,19 @@ namespace NKMObjects.Abilities.Hecate
 		private const int AbilityDamage = 12;
 		private const int AbilityRange = 10;
 		private const int AbilityRadius = 7;
-		public AsterYo() : base(AbilityType.Normal, "Aster Yo", 3)
-		{
-//			Name = "Aster Yo";
-//			Cooldown = 3;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Normal;
-		}
+		
+		public AsterYo() : base(AbilityType.Normal, "Aster Yo", 3){}
+		
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+		
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} wystrzeliwuje promienie energii z Astera,
 zadając {AbilityDamage} obrażeń magicznych i gromadząc Energię Życiową wszystkich trafionych celów
 na wskazanym obszarze w promieniu {AbilityRadius}.
 Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 
-		public void ImageClick()
+		public void Click()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange, false, false);

@@ -12,29 +12,25 @@ namespace NKMObjects.Abilities.Yoshino
 	    private const int EffectDuration = 2;
 	    private const int AfterLosingHP = 15;
 
-	    private int _lastTreshold;
-        
-		public TheHermit() : base(AbilityType.Passive, "The Hermit")
+	    public TheHermit() : base(AbilityType.Passive, "The Hermit")
 		{
-//			Name = "The Hermit";
-//			Type = AbilityType.Passive;
-			_lastTreshold = ParentCharacter.GetStat(StatType.HealthPoints).BaseValue;
+			int lastTreshold = ParentCharacter.GetStat(StatType.HealthPoints).BaseValue;
+			OnAwake += () =>
+			{
+				Stat hp = ParentCharacter.GetStat(StatType.HealthPoints);
+				hp.StatChanged += () =>
+				{
+					while (hp.Value < lastTreshold - 15)
+					{
+						lastTreshold -= 15;
+						StunEnemiesInRange();
+					}
+				};
+			};
 		}
 
 	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
 	    public override string GetDescription() => $"{ParentCharacter.Name} ogłusza wrogów w promieniu {Range} pól na {EffectDuration} tury co każde {AfterLosingHP} HP, które straci.";
-	    public override void Awake()
-	    {
-		    Stat hp = ParentCharacter.GetStat(StatType.HealthPoints);
-		    hp.StatChanged += () =>
-		    {
-			    while (hp.Value < _lastTreshold - 15)
-			    {
-				    _lastTreshold -= 15;
-				    StunEnemiesInRange();
-			    }
-		    };
-	    }
 
 	    private void StunEnemiesInRange()
 	    {

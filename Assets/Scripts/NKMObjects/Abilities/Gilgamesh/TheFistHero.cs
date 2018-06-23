@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using Extensions;
 using NKMObjects.Effects;
 using NKMObjects.Templates;
 
@@ -10,25 +10,22 @@ namespace NKMObjects.Abilities.Gilgamesh
 		private const int AdditionalDamagePercent = 10;
 		public TheFistHero() : base(AbilityType.Passive, "The Fist Hero")
 		{
-//			Name = "The Fist Hero";
-//			Type = AbilityType.Passive;
+			OnAwake += () =>
+			{
+				ParentCharacter.BeforeAttack += (character, damage) =>
+				{
+					int modifier = ParentCharacter.Effects.ContainsType(typeof(PassiveBuff)) ? 2 : 1;
+					damage.Value += modifier * damage.Value * AdditionalDamagePercent / 100;
+				};
+				ParentCharacter.BeforeBeingDamaged += damage =>
+				{
+					int modifier = ParentCharacter.Effects.ContainsType(typeof(PassiveBuff)) ? 2 : 1;
+					damage.Value -= modifier * damage.Value * DamageReductionPercent / 100;
+				};
+			};
 		}
-		public override string GetDescription() => $@"Dzięki nieznającemu kresu skarbcowi, {ParentCharacter.Name} jest w stanie znaleźć odpowiedź na każdego wroga.
+		public override string GetDescription() => 
+$@"Dzięki nieznającemu kresu skarbcowi, {ParentCharacter.Name} jest w stanie znaleźć odpowiedź na każdego wroga.
 W walce otrzymuje on {DamageReductionPercent}% mniej obrażeń, a jego ataki i umiejętności zadają dodatkowe {AdditionalDamagePercent}% obrażeń.";
-
-		public override void Awake()
-		{
-			ParentCharacter.BeforeAttack += (character, damage) =>
-			{
-				var modifier = ParentCharacter.Effects.OfType<PassiveBuff>().SingleOrDefault() == null ? 1 : 2;
-				damage.Value += modifier * damage.Value * AdditionalDamagePercent / 100;
-			};
-			ParentCharacter.BeforeBeingDamaged += damage =>
-			{
-				var modifier = ParentCharacter.Effects.OfType<PassiveBuff>().SingleOrDefault() == null ? 1 : 2;
-				damage.Value -= modifier * damage.Value * DamageReductionPercent / 100;
-			};
-		}
-
 	}
 }

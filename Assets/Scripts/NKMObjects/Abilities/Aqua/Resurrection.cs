@@ -11,33 +11,25 @@ namespace NKMObjects.Abilities.Aqua
 	public class Resurrection : Ability, IClickable
 	{
 		private Character _characterToResurrect;
-		public override List<HexCell> GetRangeCells()
-		{
-			return Active.GamePlayer.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList();
-		}
+		public override List<HexCell> GetRangeCells() => Active.GamePlayer.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList();
 
 		public Resurrection() : base(AbilityType.Ultimatum, "Resurrection", 8)
 		{
-//			Name = "Resurrection";
-//			Cooldown = 8;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Ultimatum;
-//			_characterToResurrect = null;
+			OnAwake += () =>
+			{
+                Validator.ToCheck.Add(() => IsAnyCharacterToRevive);
+                Validator.ToCheck.Add(() => IsAnyFreeCellToPlaceACharacter);
+				Active.Phase.PhaseFinished += () => _characterToResurrect = null; //TODO: is this really needed?
+			};
 		}
 		public override string GetDescription() => $@"{ParentCharacter.Name} wskrzesza sojuszniczą postać, która zginęła maksymalnie turę wcześniej.
 Postać odradza się z połową maksymalnego HP, na wybranym spawnie.
 Czas odnowienia: {Cooldown}";
 
-		protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			if(!ParentCharacter.Owner.Characters.Any(c=>!c.IsAlive&&c.DeathTimer<=1))
-				throw new Exception("Nie ma postaci do ożywienia!");
-			if (GetRangeCells().Count == 0)
-				throw new Exception("Nie ma miejsca na spawnach!");
-		}
+		private bool IsAnyCharacterToRevive => ParentCharacter.Owner.Characters.Any(c => !c.IsAlive && c.DeathTimer <= 1);
+		private bool IsAnyFreeCellToPlaceACharacter => GetRangeCells().Count >= 1;
 
-		public void ImageClick()
+		public void Click()
 		{
 			Active.Ability = this;
 			SpriteSelect.Instance.Open(Active.GamePlayer.Characters.Where(c => !c.IsAlive && c.DeathTimer <= 1),
@@ -70,17 +62,5 @@ Czas odnowienia: {Cooldown}";
 				throw;
 			}
 		}
-
-		public override void OnPhaseFinish()
-		{
-			base.OnPhaseFinish();
-			_characterToResurrect = null;
-		}
-
-		//public override void Cancel()
-		//{
-		//	if(_characterToResurrect!=null) return;
-		//	OnFailedUseFinish();
-		//}
 	}
 }

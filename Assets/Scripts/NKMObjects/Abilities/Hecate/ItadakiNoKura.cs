@@ -14,32 +14,14 @@ namespace NKMObjects.Abilities.Hecate
 		} }
 		public ItadakiNoKura() : base(AbilityType.Passive, "Itadaki no Kura")
 		{
-//			Name = "Itadaki no Kura";
-//			Type = AbilityType.Passive;
-//			OverridesEnemyAttack = true;
-//			CollectedEnergyCharacters = new List<Character>();
+			OnAwake += () => ParentCharacter.AfterAttack += (character, damage) => TryCollectingEnergy(character);
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} gromadzi Energię Życiową każdym podstawowym atakiem.
-Jeden ładunek Energii Życiowej przechowuje {1}% maksymalnego HP celu.
+		
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} gromadzi Energię Życiową każdym podstawowym atakiem.
+Jeden ładunek Energii Życiowej przechowuje {HealthPercent}% maksymalnego HP celu.
 Energia Życiowa tej samej postaci może zostać zgromadzona tylko raz.
-Aktualna wartość zebranej energii: {2}",
-ParentCharacter.Name, HealthPercent, CollectedEnergy
-);
-		}
-
-		public override void Awake()
-		{
-			ParentCharacter.AfterAttack += (character, damage) =>
-			{
-				//We have to collect energy before attacking to prevent missing reference exception if the enemy is killed (animation has to know the target hexcell)
-				TryCollectingEnergy(character);
-//				ParentCharacter.Attack(character, AttackType.Physical, damage);
-			};
-
-		}
+Aktualna wartość zebranej energii: {CollectedEnergy}";
 
 		public void TryCollectingEnergy(Character targetCharacter)
 		{

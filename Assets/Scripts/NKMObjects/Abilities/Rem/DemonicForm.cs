@@ -12,22 +12,12 @@ namespace NKMObjects.Abilities.Rem
 
 		public DemonicForm() : base(AbilityType.Passive, "Demonic Form")
 		{
-//			Name = "Demonic Form";
-//			Type = AbilityType.Passive;
+			OnAwake += () => ParentCharacter.HealthPoints.StatChanged += TryToActivateDemonicForm;			
 		}
 
-		public override void Awake()
-		{
-			ParentCharacter.HealthPoints.StatChanged += TryToActivateDemonicForm;
-		}
-
-		public override string GetDescription()
-		{
-			return string.Format(
-@"Gdy życie tej postaci spadnie poniżej <color=red>{0}</color>%,
-zyskuje ona {1} ataku i {2} szybkości.",
-				HpPercent, AdditionalAttack, AdditionalSpeed);
-		}
+		public override string GetDescription() => 
+$@"Gdy życie tej postaci spadnie poniżej <color=red>{HpPercent}</color>%,
+zyskuje ona {AdditionalAttack} ataku i {AdditionalSpeed} szybkości.";
 
 		private bool _isEnabled;
 		public bool IsEnabled

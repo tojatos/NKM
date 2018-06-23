@@ -9,33 +9,26 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 		private bool _isBeingUsed;
 		public WickedEyesServant() : base(AbilityType.Passive, "Wicked Eye's Servant")
 		{
-//			Name = "Wicked Eye's Servant";
-//			Type = AbilityType.Passive;
-//			_additionalDamage = 3;
+			OnAwake += () =>
+			{
+
+				ParentCharacter.BeforeAttack += (character, d) =>
+				{
+					if (!IsEnabled || _isBeingUsed) return;
+					_isBeingUsed = true; //prevent infinite loop
+					var damage = new Damage(_additionalDamage, DamageType.True);
+					ParentCharacter.Attack(character, damage);
+					_isBeingUsed = false;
+				};
+				ParentCharacter.OnEnemyKill += () => _additionalDamage++;
+			};
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
+		public override string GetDescription() => string.Format(
 @"{0} zyskuje <color=blue>{1}</color> obrażeń nieuchronnych na każdym ataku i umiejętności,
 jeżeli na polu gry znajduje się chociaż jedna postać z atakiem większym od {0} lub Rikka Takanashi.
 Zabicie wroga dodaje dodatkowy punkt obrażeń nieuchronnych tej umiejętności na stałe."
-						 ,ParentCharacter.Name, _additionalDamage);
-		}
+			,ParentCharacter.Name, _additionalDamage);
+		
 		public bool IsEnabled => Game.Players.Any(p => p.Characters.Any(c => c.IsOnMap && (c.AttackPoints.Value > ParentCharacter.AttackPoints.Value || c.Name == "Takanashi Rikka")));
-
-		public override void Awake()
-		{
-//			ParentCharacter.JustBeforeAttack += (character, damage) => damage.Value += IsEnabled ? _additionalDamage : 0;
-			ParentCharacter.BeforeAttack += (character, d) =>
-			{
-				if (!IsEnabled || _isBeingUsed) return;
-				_isBeingUsed = true; //prevent infinite loop
-				var damage = new Damage(_additionalDamage, DamageType.True);
-				ParentCharacter.Attack(character, damage);
-				_isBeingUsed = false;
-
-			};
-			ParentCharacter.OnEnemyKill += () => _additionalDamage++;
-		}
 	}
 }

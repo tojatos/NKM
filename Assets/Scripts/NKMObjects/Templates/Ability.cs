@@ -15,14 +15,20 @@ namespace NKMObjects.Templates
 			Name = name;
 			Cooldown = cooldown;
 			CurrentCooldown = 0;
+			OnAwake += () => Validator = new AbilityUseValidator(this);
+			OnAwake += () => Active.Phase.PhaseFinished += () =>
+			{
+				if (CurrentCooldown > 0) CurrentCooldown--;
+			};
 		}
-		
-		
-		public AbilityType Type { get; protected set; }
+
+		protected AbilityUseValidator Validator;
+		public AbilityType Type { get; }
 		public abstract string GetDescription();
 		public virtual List<HexCell> GetRangeCells() => new List<HexCell>();
+		public virtual List<HexCell> GetTargetsInRange() => new List<HexCell>();
 
-		protected int Cooldown;
+		protected readonly int Cooldown;
 
 		private int _currentCooldown;
 		public int CurrentCooldown
@@ -36,80 +42,9 @@ namespace NKMObjects.Templates
 		}
 
 		public Character ParentCharacter { get; set; }
-		public virtual bool CanUse
-		{
-			get
-			{
-				if (Type == AbilityType.Passive)
-				{
-					return false;
-				}
 
-				try
-				{
-					CheckIfCanBePrepared();
-					return true;
-				}
-				catch
-				{
-					return false;
-				}
-			}
-		}
+		public bool CanBeUsed => Validator.AbilityCanBeUsed;
 
-		/// <summary>
-		/// Throws an exception when you cannot use this ability.
-		/// </summary>
-		protected virtual void CheckIfCanBePrepared()
-		{
-			if (ParentCharacter.Owner != Active.GamePlayer)
-			{
-				throw new Exception("Nie możesz używać umiejętności innej postaci!");
-			}
-			if (Type == AbilityType.Passive)
-			{
-				throw new Exception("Nie można używać pasywnych umiejętności");
-			}
-			if (CurrentCooldown != 0)
-			{
-				bool hasFreeAbility = ParentCharacter.Abilities.ContainsType(typeof(AceInTheHole)) &&
-				                        ((AceInTheHole) ParentCharacter.Abilities.Single(a => a.GetType() == typeof(AceInTheHole)))
-				                        .HasFreeAbility;
-				if(!hasFreeAbility) throw new Exception("Umiejętność nie jest jeszcze odnowiona");
-			}
-			if (!ParentCharacter.CanTakeAction||
-					Type == AbilityType.Normal && !ParentCharacter.CanUseNormalAbility ||
-			    Type == AbilityType.Ultimatum && !ParentCharacter.CanUseUltimatumAbility)
-			{
-				throw new Exception("Postać posiadająca tą umiejętność nie może jej użyć");
-			}
-			if (Type==AbilityType.Ultimatum && Active.Phase.Number < 4)
-			{
-				throw new Exception("Nie można używać superumiejętności w pierwszych trzech fazach!");
-			}
-		}
-		public void TryPrepare()
-		{
-			try
-			{
-				CheckIfCanBePrepared();
-			}
-			catch (Exception e)
-			{
-				MessageLogger.DebugLog("Umiejetność " + Name + " nie może zostać użyta:");
-				MessageLogger.DebugLog("\t" + e.Message);
-				return;
-			}
-
-//			Game.HexMapDrawer.RemoveAllHighlights();
-			Active.Clean();
-//			ImageClick();
-			if(this is IClickable) ((IClickable) this).ImageClick();
-		}
-//		protected virtual void ImageClick()
-//		{
-//			throw new NotImplementedException();
-//		}
 		public virtual void Use(Character character)
 		{
 			throw new NotImplementedException();
@@ -122,10 +57,10 @@ namespace NKMObjects.Templates
 		{
 			throw new NotImplementedException();
 		}
-		public virtual void OnPhaseFinish()
-		{
-			if (CurrentCooldown > 0) CurrentCooldown--;
-		} // TODO: Move to Awake
+//		public virtual void OnPhaseFinish()
+//		{
+//			if (CurrentCooldown > 0) CurrentCooldown--;
+//		} // TODO: Move to Awake
 		public virtual void OnUseFinish() => OnUseFinish(Cooldown);
 
 		protected virtual void OnUseFinish(int cooldown)
@@ -155,12 +90,10 @@ namespace NKMObjects.Templates
 
 			Active.CleanAndTrySelecting();
 		}
-		protected void OnFailedUseFinish()
-		{
-			Active.CleanAndTrySelecting();
-		}
-		public virtual void Awake(){}
-		public virtual void OnEnemyKill(){}
+		protected void OnFailedUseFinish() => Active.CleanAndTrySelecting();
+		
+		protected event Character.VoidDelegate OnAwake;
+		public void Awake() => OnAwake?.Invoke();
 
 		public virtual void Cancel() => OnFailedUseFinish();
 

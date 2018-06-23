@@ -11,6 +11,7 @@
         <e p="HexCoordinatesDrawer.cs" t="Include" />
       </e>
       <e p="Assets/Scripts" t="Include">
+        <e p="AbilityUseValidator.cs" t="Include" />
         <e p="Action.cs" t="Include" />
         <e p="Active.cs" t="Include" />
         <e p="AirSelection.cs" t="Include" />
@@ -45,6 +46,7 @@
           <e p="Async.cs" t="Include" />
           <e p="NKMObject.cs" t="Include" />
           <e p="Sqlite.cs" t="Include" />
+          <e p="SystemGeneric.cs" t="Include" />
           <e p="Tooltip.cs" t="Include" />
           <e p="UnityGameObject.cs" t="Include" />
         </e>
@@ -172,6 +174,7 @@
             <e p="EnableableAbility.cs" t="Include" />
             <e p="HexCellEffect.cs" t="Include" />
             <e p="IClickable.cs" t="Include" />
+            <e p="IEnableable.cs" t="Include" />
             <e p="IRunable.cs" t="Include" />
             <e p="NKMObject.cs" t="Include" />
           </e>

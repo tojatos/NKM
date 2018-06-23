@@ -7,9 +7,14 @@ namespace NKMObjects.Abilities.Roronoa_Zoro
 {
 	public class LackOfOrientation : Ability
 	{
-		public LackOfOrientation() : base(AbilityType.Passive, "Lack Of Orientation"){}
-		public override string GetDescription() => $"{ParentCharacter.Name} ma 50% szansy na pójście w losowe miejsce podczas wykonania ruchu.";
-		public override void Awake() => ParentCharacter.BasicMove = MoveOverride;
+		public LackOfOrientation() : base(AbilityType.Passive, "Lack Of Orientation")
+		{
+			OnAwake += () => ParentCharacter.BasicMove = MoveOverride;
+		}
+		
+		public override string GetDescription() => 
+$"{ParentCharacter.Name} ma 50% szansy na pójście w losowe miejsce podczas wykonania ruchu.";
+		
 		private void MoveOverride(List<HexCell> moveCells)
 		{
 			bool isLost = UnityEngine.Random.Range(0, 2) == 0;

@@ -11,6 +11,8 @@ namespace Extensions
 {
 	public static class NKMObject
 	{
+		private static Game Game => GameStarter.Instance.Game;
+		private static Active Active => Game.Active;
 
 		public static IEnumerable<string> GetClassNames<T>(this List<T> list)
 		{
@@ -43,6 +45,10 @@ namespace Extensions
 			//cellRange.ForEach(c => unavailableRange.Remove(c));
 			//return;
 		}
+
+		public static List<HexCell> WhereOnlyEnemies(this List<HexCell> cells) => cells.FindAll(c => c.CharacterOnCell!= null && c.CharacterOnCell.Owner != Active.GamePlayer);
+		public static List<HexCell> WhereOnlyFriends(this List<HexCell> cells) => cells.FindAll(c => c.CharacterOnCell!= null && c.CharacterOnCell.Owner == Active.GamePlayer);
+		public static List<HexCell> WhereOnlyCharacters(this List<HexCell> cells) => cells.FindAll(c => c.CharacterOnCell != null);
 
 		private static string ToHex(this Color32 color) => $"#{color.r:X2}{color.g:X2}{color.b:X2}";
 		public static void Clear(this Transform transform)

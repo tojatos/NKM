@@ -22,7 +22,7 @@ namespace NKMObjects.Abilities.Shana
 Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
 		}
 
-		public void ImageClick()
+		public void Click()
 		{
 			Active.MakeAction();
 			ParentCharacter.Effects.Add(new StatModifier(Duration, AttackIncrease, ParentCharacter, StatType.AttackPoints, Name));

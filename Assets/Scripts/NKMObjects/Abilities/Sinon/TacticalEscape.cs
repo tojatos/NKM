@@ -19,7 +19,7 @@ namespace NKMObjects.Abilities.Sinon
 $@"Zwiększa szybkość {ParentCharacter.Name} o {SpeedIncrease}.
 Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
 
-		public void ImageClick()
+		public void Click()
 		{
 			Active.MakeAction();
 			ParentCharacter.Effects.Add(new StatModifier(Duration, SpeedIncrease, ParentCharacter, StatType.Speed, Name));

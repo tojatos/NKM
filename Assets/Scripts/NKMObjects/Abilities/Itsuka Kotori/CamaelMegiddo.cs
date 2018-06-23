@@ -11,21 +11,12 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
 	{
 		private const int Damage = 35;
 
-		public CamaelMegiddo() : base(AbilityType.Ultimatum, "Camael - Megiddo", 6)
-		{
-//			Name = "Camael - Megiddo";
-//			Cooldown = 6;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Ultimatum;
-		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} wystrzeliwuje falę płomieni w wybranym kierunku zadając {1} obrażeń wszystkim trafionym wrogom.
+		public CamaelMegiddo() : base(AbilityType.Ultimatum, "Camael - Megiddo", 6){}
+		public override string GetDescription() =>
+$@"{ParentCharacter.Name} wystrzeliwuje falę płomieni w wybranym kierunku zadając {Damage} obrażeń wszystkim trafionym wrogom.
 Jeżeli ta umiejętność uderzy w obszar Conflagration, zada ona obrażenia na całym tym obszarze, ale nie poleci dalej.
-Czas odnowienia: {2}",
-				ParentCharacter.Name, Damage, Cooldown);
-		}
+Czas odnowienia: {Cooldown}";
+
 		public override List<HexCell> GetRangeCells()
 		{
 			List<HexCell> cells = new List<HexCell>();
@@ -49,15 +40,17 @@ Czas odnowienia: {2}",
 				if(hitConflargation) cells.AddRange(HexMapDrawer.Instance.Cells.Where(c => c.Effects.ContainsType(typeof(HexCellEffects.Conflagration))));
 				return cells.Distinct().ToList();
 		}
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
 
-		public void ImageClick()
+		public void Click()
 		{
 			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(1);
-			var canUseAbility = Active.Prepare(this, cellRange);
-			if (canUseAbility) return;
+			Active.Prepare(this, cellRange); //TODO: Air selection magic? Or maybe new mechanism?
+//			var canUseAbility = Active.Prepare(this, cellRange);
+//			if (canUseAbility) return;
 
-			MessageLogger.DebugLog("Nie ma komórek dookoła postaci!");
-			OnFailedUseFinish();
+//			MessageLogger.DebugLog("Nie ma komórek dookoła postaci!");
+//			OnFailedUseFinish();
 		}
 
 		public override void Use(HexCell cell)

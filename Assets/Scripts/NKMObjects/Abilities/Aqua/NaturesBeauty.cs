@@ -1,32 +1,30 @@
-﻿using NKMObjects.Templates;
+﻿using System.Collections.Generic;
+using Extensions;
+using Hex;
+using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Aqua
 {
 	public class NaturesBeauty : Ability
 	{
-		public NaturesBeauty() : base (AbilityType.Passive, "Nature's Beauty") {}
-//		{
-//			Name = "Nature's Beauty";
-//			Type = AbilityType.Passive;
-////			OverridesFriendAttack = true;
-//		}
-
-		public override string GetDescription() => $"{ParentCharacter.Name} może używać podstawowych ataków na sojuszników, lecząc ich za ilość HP równą jej obecnemu atakowi.";
-
-//		public override void AttackFriend(Character attackedCharacter, int damage) => ParentCharacter.Heal(attackedCharacter, damage);
-		public override void Awake()
+		public NaturesBeauty() : base(AbilityType.Passive, "Nature's Beauty")
 		{
-			ParentCharacter.CanAttackAllies = true;
-			ParentCharacter.BasicAttack = character =>
+			OnAwake += () =>
 			{
-				if (character.Owner == ParentCharacter.Owner)
+				ParentCharacter.CanAttackAllies = true;
+				ParentCharacter.BasicAttack = character =>
 				{
-					ParentCharacter.Heal(character, ParentCharacter.AttackPoints.Value);
-					ParentCharacter.HasUsedBasicAttackInPhaseBefore = true;
-				}
-				else ParentCharacter.DefaultBasicAttack(character);
-
+					if (character.Owner == ParentCharacter.Owner)
+					{
+						ParentCharacter.Heal(character, ParentCharacter.AttackPoints.Value);
+						ParentCharacter.HasUsedBasicAttackInPhaseBefore = true;
+					}
+					else ParentCharacter.DefaultBasicAttack(character);
+				};
 			};
 		}
+		public override string GetDescription() => $"{ParentCharacter.Name} może używać podstawowych ataków na sojuszników, lecząc ich za ilość HP równą jej obecnemu atakowi.";
+		public override List<HexCell> GetRangeCells() => ParentCharacter.GetBasicAttackCells();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyFriends();
 	}
 }

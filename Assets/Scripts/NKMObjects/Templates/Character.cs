@@ -128,7 +128,6 @@ namespace NKMObjects.Templates
 		{
 			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
 			AfterBeingDamaged += damage => RemoveIfDead();
-			OnEnemyKill += () => Abilities.ForEach(a => a.OnEnemyKill());
 			AfterAttack += (targetCharacter, damage) =>
 				MessageLogger.Log(
 					$"{this.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
@@ -323,7 +322,7 @@ namespace NKMObjects.Templates
 				: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{diff}</b></color> punktów życia!");
 			OnHeal?.Invoke(targetCharacter, diff);
 		}
-		public void OnPhaseFinish()
+		public void OnPhaseFinish()//TODO: move this to event
 		{
 			if (IsOnMap)
 			{
@@ -332,17 +331,6 @@ namespace NKMObjects.Templates
 				HasUsedNormalAbilityInPhaseBefore = false;
 				HasUsedUltimatumAbilityInPhaseBefore = false;
 				TookActionInPhaseBefore = false;
-				Abilities?.ForEach(a => a.OnPhaseFinish());
-				//if (Effects != null)
-				//{
-				//	Effects.ForEach(e => e.OnPhaseFinish());
-				//	Effects.Where(e => e.CurrentCooldown <= 0).ToList().ForEach(e =>
-				//	{
-
-				//		Effects.Remove(e);
-				//		OnRemoveHandler();
-				//	});
-				//}
 			}
 			if (!IsAlive)
 			{

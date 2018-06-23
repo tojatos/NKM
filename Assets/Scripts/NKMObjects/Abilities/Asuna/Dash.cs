@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Extensions;
 using Hex;
 using NKMObjects.Templates;
@@ -17,48 +17,41 @@ namespace NKMObjects.Abilities.Asuna
 
 		public Dash() : base(AbilityType.Normal, "Dash", 2)
 		{
-//			Name = "Dash";
-//			Cooldown = 2;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Normal;
+			OnAwake += () => Validator.ToCheck.Add(IsThereACellToMove);
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} dashuje maksymalnie o {1} pola w linii prostej.
-Jeżeli będzie w zasięgu {2} od przeciwnika w linii prostej, może go zaatakować,
-a jeżeli będzie dodatkowo w zasięgu {3} od przeciwnika, atak ten zada {4}% obrażeń.
-Czas odnowienia: {5} z atakiem, {6} bez ataku.",
-ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, AbilityCriticalHitModifier * 100, Cooldown + 1, Cooldown);
-		}
+		
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls | SearchFlags.StraightLine);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.CharacterOnCell == null);
+		
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} dashuje maksymalnie o {AbilityRange} pola w linii prostej.
+Jeżeli będzie w zasięgu {AbilityHitRange} od przeciwnika w linii prostej, może go zaatakować,
+a jeżeli będzie dodatkowo w zasięgu {AbilityCriticalHitRange} od przeciwnika, atak ten zada {AbilityCriticalHitModifier * 100}% obrażeń.
+Czas odnowienia: {Cooldown + 1} z atakiem, {Cooldown} bez ataku.";
 
-		public override List<HexCell> GetRangeCells()
-		{
-//			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange, true, true, true);
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls | SearchFlags.StraightLine);
-			return cellRange;
-		}
+//		protected override void CheckIfCanBePrepared()
+//		{
+//			base.CheckIfCanBePrepared();
+//			List<HexCell> cellRange = GetRangeCells();
+//			cellRange.RemoveAll(c => c.CharacterOnCell != null);
+//			if (cellRange.Count == 0)
+//			{
+//				throw new Exception("Nie ma gdzie się ruszyć!");
+//			}
+//		}
 
-		protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveAll(c => c.CharacterOnCell != null);
-			if (cellRange.Count == 0)
-			{
-				throw new Exception("Nie ma gdzie się ruszyć!");
-			}
-		}
+		private bool IsThereACellToMove() => GetRangeCells().Any(c => c.CharacterOnCell == null);
 
-		public void ImageClick()
+		public void Click()
 		{
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveAll(c => c.CharacterOnCell != null);
-			var canUseAbility = Active.Prepare(this, cellRange);
-			if (canUseAbility) return;
+//			List<HexCell> cellRange = GetRangeCells();
+//			cellRange.RemoveAll(c => c.CharacterOnCell != null);
+//			var canUseAbility = Active.Prepare(this, cellRange);
+//			if (canUseAbility) return;
 
-			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
-			OnFailedUseFinish();
+//			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
+//			OnFailedUseFinish();
+			Active.Prepare(this, GetTargetsInRange());
 		}
 
 		public override void Use(HexCell cell)
@@ -66,13 +59,14 @@ ParentCharacter.Name, AbilityRange, AbilityHitRange, AbilityCriticalHitRange, Ab
 			ParentCharacter.MoveTo(cell);
 			_hasDashed = true;
 //			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, true, false, true);
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
-			cellRange.RemoveNonEnemies();
-			var canUseAbility = Active.Prepare(this, cellRange);
-			if (canUseAbility) return;
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine).WhereOnlyEnemies();
+//			cellRange.RemoveNonEnemies();
+			if(cellRange.Count > 0) Active.Prepare(this, cellRange);
+//			var canUseAbility = Active.Prepare(this, cellRange);
+//			if (canUseAbility) return;
 
-			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
-			OnUseFinish();
+//			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
+//			OnUseFinish();
 		}
 
 		public override void Use(Character targetCharacter)

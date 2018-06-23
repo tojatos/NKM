@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Extensions;
 using Hex;
 using NKMObjects.Effects;
@@ -10,35 +9,23 @@ namespace NKMObjects.Abilities.Crona
     public class ScreechAlpha : Ability, IClickable
     {
         private const int Radius = 3;
-        public ScreechAlpha() : base(AbilityType.Normal, "Screech Alpha", 4)
-        {
-//            Name = "Screech Alpha";
-//            Cooldown = 4;
-//            CurrentCooldown = 0;
-//            Type = AbilityType.Normal;
-        }
-        public override string GetDescription()
-        {
-            return "Miecz Crony, Ragnarok, wydaje z siebie krzyk,\nogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną.";
-        }
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Radius);
-	    
-        protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			if (cellRange.Count == 0)
-			{
-				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-			}
-		}
 
-	    public void ImageClick()
+	    public ScreechAlpha() : base(AbilityType.Normal, "Screech Alpha", 4)
+	    {
+		    OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
+	    }
+	    
+	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Radius);
+	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+	    
+        public override string GetDescription() => "Miecz Crony, Ragnarok, wydaje z siebie krzyk,\nogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną.";
+
+	    public void Click()
 		{
-			List<HexCell> cellRange = GetRangeCells();
-			Active.Prepare(this, cellRange);
-			Active.MakeAction(cellRange);
+//			List<HexCell> cellRange = GetRangeCells();
+//			Active.Prepare(this, cellRange);
+			Active.Prepare(this, GetTargetsInRange());
+			Active.MakeAction(Active.HexCells);
 		}
 		public override void Use(List<HexCell> cells)
 		{

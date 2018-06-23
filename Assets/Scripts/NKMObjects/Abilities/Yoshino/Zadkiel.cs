@@ -27,7 +27,7 @@ Każdy wróg, który zaatakuje {ParentCharacter.Name} zostanie ogłuszony na {St
 Zbroja niszczy się po otrzymaniu {HitDurability} ciosów bądź po {TimeDurability} fazach.
 Wraz ze zniszczeniem zbroi, uaktywnia się umiejętność bierna {ParentCharacter.Name}.";
 
-        public void ImageClick()
+        public void Click()
         {
             Active.MakeAction();
 

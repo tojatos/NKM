@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using Hex;
@@ -14,41 +13,18 @@ namespace NKMObjects.Abilities.Roronoa_Zoro
 
 		public HyakuHachiPoundHou() : base(AbilityType.Ultimatum, "Hyaku Hachi Pound Hou", 6)
 		{
-//			Name = "Hyaku Hachi Pound Hou";
-//			Cooldown = 6;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Ultimatum;
+			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} wysyła 3 fale uderzeniowe w wybranego wroga, z czego każda zadaje {1} obrażeń fizycznych.
-Zasięg: {2}	Czas odnowienia: {3}",
-				ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
-		}
+		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
 
-		protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			if (cellRange.Count == 0)
-			{
-				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-			}
-		}
+		public override string GetDescription() =>
+$@"{ParentCharacter.Name} wysyła 3 fale uderzeniowe w wybranego wroga, z czego każda zadaje {AbilityDamage} obrażeń fizycznych.
+Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 
-		public void ImageClick()
-		{
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			var canUseAbility = Active.Prepare(this, cellRange);
-			if (canUseAbility) return;
+		public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
-			OnFailedUseFinish();
-		}
 		public override void Use(Character targetCharacter)
 		{
 			Active.PlayAudio(Name);

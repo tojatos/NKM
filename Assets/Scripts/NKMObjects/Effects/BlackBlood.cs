@@ -6,12 +6,12 @@ namespace NKMObjects.Effects
 {
     public class BlackBlood : Effect
     {
-        private const int Damage = 10;
-        private const int Range = 2;
+//        private const int Damage = 10;
+//        private const int Range = 2;
         private readonly Character _characterThatAttacks;
         private bool _wasActivatedOnce;
 
-        public BlackBlood(Character characterThatAttacks, Character effectTarget, int cooldown = -1) : base(cooldown,
+        public BlackBlood(Character characterThatAttacks, Character effectTarget, int cooldown, int damage, int range) : base(cooldown,
             effectTarget, "Black Blood")
         {
             _characterThatAttacks = characterThatAttacks;
@@ -21,12 +21,12 @@ namespace NKMObjects.Effects
                 if(_wasActivatedOnce) return;//prevent infinite loop
                 _wasActivatedOnce = true; 
                 List<Character> enemiesInRange =
-                    ParentCharacter.ParentCell.GetNeighbors(Range).Select(c => c.CharacterOnCell).Where(c => c != null && c.Owner != characterThatAttacks.Owner).ToList();
+                    ParentCharacter.ParentCell.GetNeighbors(range).Select(c => c.CharacterOnCell).Where(c => c != null && c.Owner != characterThatAttacks.Owner).ToList();
                 if(effectTarget.Owner != characterThatAttacks.Owner) enemiesInRange.Add(effectTarget);
                 enemiesInRange.ForEach(enemy =>
                 {
-                    var damage = new Damage(Damage, DamageType.Magical);
-                    characterThatAttacks.Attack(enemy, damage);
+                    var dmg = new Damage(damage, DamageType.Magical);
+                    characterThatAttacks.Attack(enemy, dmg);
                 });
                 _wasActivatedOnce = false;
             };

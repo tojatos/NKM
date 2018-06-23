@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Extensions;
 using Hex;
 using NKMObjects.Templates;
@@ -12,53 +11,31 @@ namespace NKMObjects.Abilities.Yasaka_Mahiro
 		private const float AbilityMissingHealthPercentDamage = 20;
 		private const int AbilityRange = 7;
 		private int _numberOfUses;
+
 		public SharpenedForks() : base(AbilityType.Normal, "Sharpened Forks", 3)
 		{
-//			Name = "Sharpened Forks";
-//			Cooldown = 3;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Normal;
-//			_numberOfUses = 0;
+			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
-		protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			if (cellRange.Count == 0)
-			{
-				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-			}
-		}
-		public override List<HexCell> GetRangeCells()
-		{
-			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} rzuca 3 naostrzone widelce, zadając {1} + {2}% brakującego zdrowia przewiwnika obrażeń fizycznych przy każdym trafieniu.
+		
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		
+		public override string GetDescription() =>
+$@"{ParentCharacter.Name} rzuca 3 naostrzone widelce,
+zadając {AbilityDamage} + {AbilityMissingHealthPercentDamage}% brakującego zdrowia przewiwnika obrażeń fizycznych przy każdym trafieniu.
 Każdy widelec może zostać wymierzony w innego wroga.
-Zasięg: {3}	Czas odnowienia: {4}",
-						 ParentCharacter.Name, AbilityDamage, AbilityMissingHealthPercentDamage, AbilityRange, Cooldown);
-		}
+Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 
-		public void ImageClick()
+		public void Click() => PrepareFork();
+
+		private void PrepareFork()
 		{
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			var canUseAbility = Active.Prepare(this, cellRange);
-			if (canUseAbility) return;
-
-			if (_numberOfUses != 0)
+			if (!CanBeUsed)
 			{
-				OnUseFinish();
+				Cancel();
+				return;
 			}
-			else
-			{
-				MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
-				OnFailedUseFinish();
-			}
+			Active.Prepare(this, GetTargetsInRange());
 		}
 		public override void Use(Character targetCharacter)
 		{
@@ -72,7 +49,7 @@ Zasięg: {3}	Czas odnowienia: {4}",
 			_numberOfUses++;
 			if (_numberOfUses < 3)
 			{
-				ImageClick();
+				PrepareFork();
 				return;
 			}
 
@@ -85,10 +62,8 @@ Zasięg: {3}	Czas odnowienia: {4}",
 		}
 		public override void Cancel()
 		{
-			if (_numberOfUses == 0)
-				OnFailedUseFinish();
-			else
-				OnUseFinish();
+			if (_numberOfUses == 0) OnFailedUseFinish();
+			else OnUseFinish();
 		}
 	}
 }

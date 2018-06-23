@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Extensions;
 using Hex;
 using NKMObjects.Effects;
@@ -11,42 +10,21 @@ namespace NKMObjects.Abilities.Rem
 	{
 		private const int AbilityDamage = 10;
 		private const int AbilityRange = 7;
+
 		public AlHuma() : base(AbilityType.Normal, "Al Huma", 4)
 		{
-//			Name = "Al Huma";
-//			Cooldown = 4;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Normal;
+			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
-		protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			if (cellRange.Count == 0)
-			{
-				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-			}
-		}
-		public override List<HexCell> GetRangeCells()
-		{
-			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		}
+		
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} zamraża jednego wroga w zasięgu {AbilityRange} na jedną turę,
 zadając {AbilityDamage} obrażeń magicznych.
 Czas odnowiania: {Cooldown}";
 
-		public void ImageClick()
-		{
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			var canUseAbility = Active.Prepare(this, cellRange);
-			if (canUseAbility) return;
-
-			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
-			OnFailedUseFinish();
-		}
+		public void Click() => Active.Prepare(this, GetTargetsInRange());
 		public override void Use(Character targetCharacter)
 		{
 			var damage = new Damage(AbilityDamage, DamageType.Magical);

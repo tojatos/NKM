@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Animations;
 using Extensions;
 using Hex;
@@ -13,53 +12,38 @@ namespace NKMObjects.Abilities.Bezimienni
 	    private Character _secondCharacterToSwap;
         public Castling() : base(AbilityType.Ultimatum, "Castling", 6)
         {
-            Name = "Castling";
-            Cooldown = 6;
-            CurrentCooldown = 0;
-            Type = AbilityType.Ultimatum;
+	        OnAwake += () => Validator.ToCheck.Add(() => GetRangeCells().GetCharacters().Count >= 2); 
         }
-        public override string GetDescription()
-        {
-	        return "Bezimienni zamieniają pozycjami na mapie 2 jednostki.";
-        }
-        protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			int characterCount = GetRangeCells().GetCharacters().Count;
-			if (characterCount < 2)	throw new Exception("Nie ma dwóch postaci w zasięgu");
-		}
 	    public override List<HexCell> GetRangeCells() => new List<HexCell>(HexMapDrawer.Instance.Cells);
+	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyCharacters();
+        public override string GetDescription() => "Bezimienni zamieniają pozycjami na mapie 2 jednostki.";
 
-	    public void ImageClick()
-		{
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonCharacters();
-			if (_firstCharacterToSwap != null) cellRange.RemoveAll(c => c.CharacterOnCell == _firstCharacterToSwap);
-			
-			var canUseAbility = Active.Prepare(this, cellRange);
-			if (canUseAbility) return;
+	    public void Click() => PrepareCharacterSelection();
 
-			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
-			OnFailedUseFinish();
-		}
-		public override void Use(Character character)
+	    private void PrepareCharacterSelection()
+	    {
+		    List<HexCell> cellRange = GetTargetsInRange();
+		    if (_firstCharacterToSwap != null) cellRange.RemoveAll(c => c.CharacterOnCell == _firstCharacterToSwap);
+		    Active.Prepare(this, cellRange);
+	    }
+
+	    public override void Use(Character character)
 		{
 			if (_firstCharacterToSwap == null)
 			{
 				_firstCharacterToSwap = character;
-				ImageClick();
+				PrepareCharacterSelection();
 			}
 			else
 			{
 				_secondCharacterToSwap = character;
 				Swap();
-				Reset();
+				Cleanup();
 				OnUseFinish();
 			}
 		}
 
-
-	    private void Reset()
+	    private void Cleanup()
 	    {
 		  _firstCharacterToSwap = null;
 		  _secondCharacterToSwap = null;   
@@ -68,7 +52,7 @@ namespace NKMObjects.Abilities.Bezimienni
 	    public override void Cancel()
 	    {
 		    base.Cancel();
-		    Reset();
+		    Cleanup();
 	    }
 
 	    private void Swap()

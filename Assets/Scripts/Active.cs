@@ -83,6 +83,8 @@ public class Active
 			CharacterOnMap?.Deselect();
 		}
 	}
+
+	public void Prepare(Ability abilityToPrepare) => Ability = abilityToPrepare;
 	public bool Prepare(Action actionToPrepare, List<HexCell> cellRange, bool addToRange = false)
 	{
 		if (cellRange == null)
@@ -106,18 +108,17 @@ public class Active
 		Action = actionToPrepare;
 		return true;
 	}
-	public bool Prepare(Ability abilityToPrepare, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
+	public void Prepare(Ability abilityToPrepare, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
 	{
-		var isPrepared = Prepare(Action.UseAbility, cellRange, addToRange);
-		if (!isPrepared) return false;
+//		var isPrepared = Prepare(Action.UseAbility, cellRange, addToRange);
+		Prepare(Action.UseAbility, cellRange, addToRange);
+//		if (!isPrepared) return false;
 
 		Ability = abilityToPrepare;
-		if (toggleToRed)
-		{
-			Game.HexMapDrawer.RemoveHighlights();
-			HexCells.ForEach(c => c.AddHighlight(Highlights.RedTransparent));
-		}
-		return true;
+		if (!toggleToRed) return;
+		Game.HexMapDrawer.RemoveHighlights();
+		HexCells.ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+//		return true;
 	}
 
 	public static void PlayAudio(string path, float volume = 0.8f)

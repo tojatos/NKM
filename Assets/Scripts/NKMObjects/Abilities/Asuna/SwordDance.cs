@@ -1,5 +1,4 @@
-﻿using System;
-using Extensions;
+﻿using Extensions;
 using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Asuna
@@ -16,26 +15,38 @@ namespace NKMObjects.Abilities.Asuna
 
 		public SwordDance() : base(AbilityType.Ultimatum, "Sword Dance", 4)
 		{
-//			Name = "Sword Dance";
-//			Cooldown = 4;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Ultimatum;
-//			_attacksToBlock = 3;
-//			_phasesRemain = 2;
-//			_currentBonusAttack = 0;
+			OnAwake += () =>
+			{
+				Validator.ToCheck.Add(() => IsEnabled);
+				ParentCharacter.BeforeBeingBasicAttacked += (attackingCharacter, damage) =>
+				{
+					if (!IsEnabled) return;
+
+					MessageLogger.Log(
+						$"{ParentCharacter.FormattedFirstName()} blokuje atak {attackingCharacter.FormattedFirstName()}!");
+					_attacksToBlock--;
+					_currentBonusAttack += AbilityBonusAttackGain;
+					if (_attacksToBlock == 0) Disable();
+				};
+				ParentCharacter.BeforeAttack += (character, damage) => damage.Value += _currentBonusAttack;
+				Active.Phase.PhaseFinished += () =>
+				{
+					if (!IsEnabled) return;
+					_phasesRemain--;
+					if (_phasesRemain == 0) Disable();
+				};
+			};
 		}
 
 		public bool IsEnabled { get; private set; }
 
 		public override string GetDescription()
 		{
-			var description = string.Format(
-@"{0} na {1} fazy lub {2} ataki blokuje wszystkie nadchodzące ataki podstawowe.
-Dodatkowo, za każdy sparowany atak zadaje {3} dodatkowych obrażeń na atakach i umiejętnościach.
-Aktualny bonus: {4} 
+			string description = $@"{ParentCharacter.Name} na {AbilityMaxDuration} fazy lub {AbilityMaxHits} ataki blokuje wszystkie nadchodzące ataki podstawowe.
+Dodatkowo, za każdy sparowany atak zadaje {AbilityBonusAttackGain} dodatkowych obrażeń na atakach i umiejętnościach.
+Aktualny bonus: {_currentBonusAttack} 
 
-Czas odnowienia: {5} (po zakończeniu efektu)",
-				ParentCharacter.Name, AbilityMaxDuration, AbilityMaxHits, AbilityBonusAttackGain, _currentBonusAttack, Cooldown);
+Czas odnowienia: {Cooldown} (po zakończeniu efektu)";
 			if (IsEnabled)
 			{
 				description += $@"
@@ -45,43 +56,12 @@ Pozostałe ataki do zablokowania: {_attacksToBlock}";
 			}
 			return description;
 		}
-
-
-		protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			if(IsEnabled) throw new Exception("Umiejętność nie może zostać użyta jeżeli jest już aktywna!");
-		}
-
-		public void ImageClick()
+		public void Click()
 		{
 			Active.MakeAction();
 			IsEnabled = true;
 			OnUseFinish(0);
 			UI.CharacterUI.Abilities.Instance.UpdateButtonData();
-		}
-
-		public override void Awake()
-		{
-			ParentCharacter.BeforeBeingBasicAttacked += (attackingCharacter, damage) =>
-			{
-				if (!IsEnabled) return;
-
-                MessageLogger.Log(string.Format("{0} blokuje atak {1}!", ParentCharacter.FormattedFirstName(), attackingCharacter.FormattedFirstName()));
-                _attacksToBlock--;
-                _currentBonusAttack += AbilityBonusAttackGain;
-                if(_attacksToBlock == 0) Disable();
-			};
-			ParentCharacter.BeforeAttack += (character, damage) => damage.Value += _currentBonusAttack;
-		}
-
-		public override void OnPhaseFinish()
-		{
-			base.OnPhaseFinish();
-			if (!IsEnabled) return;
-
-			_phasesRemain--;
-			if (_phasesRemain == 0) Disable();
 		}
 		private void Disable()
 		{

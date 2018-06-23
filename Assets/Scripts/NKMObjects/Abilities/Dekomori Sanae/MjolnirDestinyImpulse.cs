@@ -33,7 +33,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
 		}
 
-		public void ImageClick()
+		public void Click()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.Add(ParentCharacter.ParentCell);
@@ -57,7 +57,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 					killedSomething = true;
 				}
 			});
-			if (killedSomething) ImageClick();
+			if (killedSomething) Click();
 			else OnUseFinish();
 		}
 		public override void Cancel()

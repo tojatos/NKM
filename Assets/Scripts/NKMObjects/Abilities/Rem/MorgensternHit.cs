@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Extensions;
 using Hex;
 using NKMObjects.Templates;
@@ -10,47 +9,31 @@ namespace NKMObjects.Abilities.Rem
 	{
 		private const int AbilityDamage = 15;
 		private const int AbilityRange = 4;
+
 		public MorgensternHit() : base(AbilityType.Normal, "Morgenstern Hit", 4)
 		{
-//			Name = "Morgenstern Hit";
-//			Cooldown = 4;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Normal;
+			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
-		protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			if (cellRange.Count == 0)
-			{
-				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-			}
-		}
-
+		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
 
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} wymachuje morgenszternem wokół własnej osi,
 zadając wszystkim przeciwnikom w promieniu {AbilityRange} {AbilityDamage} obrażeń fizycznych.
 Czas odnowienia: {Cooldown}";
 
-		public void ImageClick()
+		public void Click()
 		{
-			List<HexCell> cellRange = GetRangeCells();
-			Active.Prepare(this, cellRange);
-			Active.MakeAction(cellRange);
-
+			Active.Prepare(this, GetTargetsInRange());
+			Active.MakeAction(Active.HexCells);
 		}
 		public override void Use(List<HexCell> cells)
 		{
-			cells.RemoveNonEnemies();
-			List<Character> characters = cells.GetCharacters();
-			characters.ForEach(c =>
-			{
-                var damage = new Damage(AbilityDamage, DamageType.Physical);
-				ParentCharacter.Attack(c, damage);
-			});
+//			cells.RemoveNonEnemies();
+//			List<Character> characters = cells.GetCharacters();
+//			characters.ForEach(c =>
+			cells.GetCharacters().ForEach(c => ParentCharacter.Attack(c, new Damage(AbilityDamage, DamageType.Physical)));
 			OnUseFinish();
 		}
 	}

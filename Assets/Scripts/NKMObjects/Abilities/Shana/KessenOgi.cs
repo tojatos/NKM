@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using Hex;
@@ -14,16 +13,15 @@ namespace NKMObjects.Abilities.Shana
 		private const int ShinkuKnockback = 2;
 		private const int ShinpanAndDanzaiDamage = 5;
 		private const int ShinpanAndDanzaiRange = 6;
-		private const int FlameWidth = 1;	
-
+		private const int FlameWidth = 1;
 
 		public KessenOgi() : base(AbilityType.Ultimatum, "Kessen Ōgi", 4)
 		{
-//			Name = "Kessen Ōgi";
-//			Cooldown = 4;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Ultimatum;
+			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
+			
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
 
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} używa kolejno po sobie występujących umiejętności:
@@ -39,32 +37,8 @@ Bije {ShinpanAndDanzaiDamage} nieuchronnych obrażeń celowi za każdą postać 
 która jest w obszarze oddalonym od Shany o {ShinpanAndDanzaiRange}.
 Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 
-		protected override void CheckIfCanBePrepared()
-		{
-			base.CheckIfCanBePrepared();
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			if (cellRange.Count == 0)
-			{
-				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-			}
-		}
+		public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-		public override List<HexCell> GetRangeCells()
-		{
-			return ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
-		}
-
-		public void ImageClick()
-		{
-			List<HexCell> cellRange = GetRangeCells();
-			cellRange.RemoveNonEnemies();
-			var canUseAbility = Active.Prepare(this, cellRange);
-			if (canUseAbility) return;
-
-			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
-			OnFailedUseFinish();
-		}
 		public override void Use(Character character)
 		{
 			Shinku(character);

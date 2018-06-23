@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Extensions;
 using Hex;
 using NKMObjects.Templates;
 
@@ -9,17 +10,15 @@ namespace NKMObjects.Abilities.Sinon
 	{
 		public SnipersSight() : base(AbilityType.Passive, "Sniper's Sight")
 		{
-//			Name = "Sniper's Sight";
-//			Type = AbilityType.Passive;
+			OnAwake += () =>
+			{
+				ParentCharacter.GetBasicAttackCells = GetBasicAttackCellsOverride;
+			};
 		}
 
-		public override string GetDescription()
-		{
-			return "Zasięg ataków podstawowych tej postaci jest kulisty.";
-		}
-
-		public override bool CanUse => false;
-		public override void Awake() => ParentCharacter.GetBasicAttackCells = GetBasicAttackCellsOverride;
+		public override string GetDescription() => "Zasięg ataków podstawowych tej postaci jest kulisty.";
+		public override List<HexCell> GetRangeCells() => ParentCharacter.GetBasicAttackCells();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
 
 		private List<HexCell> GetBasicAttackCellsOverride()
 		{
