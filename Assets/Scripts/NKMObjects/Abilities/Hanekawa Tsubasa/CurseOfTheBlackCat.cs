@@ -19,7 +19,7 @@ namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 		}
 		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 		public override string GetDescription() => string.Format(
 @"{0} rzuca klątwę na wroga wysysając z niego {1} HP co fazę przez {2} fazy (zadaje obrażenia nieuchronne).

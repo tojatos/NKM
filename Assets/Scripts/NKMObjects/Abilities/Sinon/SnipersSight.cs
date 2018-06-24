@@ -18,7 +18,7 @@ namespace NKMObjects.Abilities.Sinon
 
 		public override string GetDescription() => "Zasięg ataków podstawowych tej postaci jest kulisty.";
 		public override List<HexCell> GetRangeCells() => ParentCharacter.GetBasicAttackCells();
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 		private List<HexCell> GetBasicAttackCellsOverride()
 		{

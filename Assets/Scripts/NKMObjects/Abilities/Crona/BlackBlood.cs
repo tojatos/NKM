@@ -17,18 +17,9 @@ namespace NKMObjects.Abilities.Crona
 		}
 
 	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range).AddOne(ParentCharacter.ParentCell);
-	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 	    public override string GetDescription() => $"Przy otrzymaniu obrażeń, {ParentCharacter.Name} zadaje 10 obrażeń wrogom dookoła";
-	    
-//	    public override List<HexCell> GetRangeCells()
-//	    {
-//		    List<HexCell> rangeCells = ParentCharacter.ParentCell.GetNeighbors(2);
-//		    rangeCells.Add(ParentCharacter.ParentCell);
-//		    return rangeCells;
-//	    }
-	    
-
 	    private void AddBlackBloodEffect() 
 	    {
 		    if (ParentCharacter.Effects.Any(e => e.Name == "Black Blood")) return;

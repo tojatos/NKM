@@ -47,13 +47,14 @@ namespace NKMObjects.Templates
 
 		public bool TookActionInPhaseBefore { get; set; }
 		public bool IsAlive => HealthPoints.Value > 0;
-		public bool IsEnemy => Owner != Active.GamePlayer;
+		public bool IsEnemyFor(GamePlayer player) => Owner != player;
 		
 		private bool IsStunned => Effects.Any(e => e.GetType() == typeof(Stun));
 		private bool CanMove => Effects.All(e => e.GetType() != typeof(MovementDisability));
 		private bool HasBasicAttackInabilityEffect => Effects.Any(e => e.GetType() == typeof(BasicAttackInability));
 
 		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive || Active.Turn.CharacterThatTookActionInTurn != null && Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
+		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore || Active.Turn.CharacterThatTookActionInTurn != null);
 
 		public Action<Character> BasicAttack;
 		public Action<List<HexCell>> BasicMove;
@@ -70,6 +71,7 @@ namespace NKMObjects.Templates
 		#region Events
 		public event VoidDelegate JustBeforeFirstAction;
 		public event VoidDelegate OnEnemyKill;
+		public event VoidDelegate AfterMove;
 		public event DamageDelegate BeforeBeingDamaged;
 		public event DamageDelegate AfterBeingDamaged;
 		public event CharacterDamageDelegate BeforeBeingBasicAttacked;
@@ -159,6 +161,7 @@ namespace NKMObjects.Templates
 			targetCell.CharacterOnCell = this;
 			CharacterObject.transform.parent = targetCell.transform;
 			AnimationPlayer.Add(new MoveTo(CharacterObject.transform, CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f));
+			AfterMove?.Invoke();
 		}
 		public void DefaultBasicMove(List<HexCell> cellPath)
 		{
@@ -178,7 +181,7 @@ namespace NKMObjects.Templates
 		{
 			var damage = new Damage(AttackPoints.Value, DamageType.Physical);
 			BeforeBasicAttack?.Invoke(attackedCharacter, damage);
-			attackedCharacter.BeforeBeingBasicAttacked?.Invoke(attackedCharacter, damage);
+			attackedCharacter.BeforeBeingBasicAttacked?.Invoke(this, damage);
 			Attack(attackedCharacter, damage);
 			AfterBasicAttack?.Invoke(attackedCharacter, damage);
 
@@ -282,16 +285,10 @@ namespace NKMObjects.Templates
 			MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający ruch!");
 			return Enumerable.Empty<HexCell>().ToList();
 		}
-		private List<HexCell> GetPrepareBasicAttackCells()
-		{
-			List<HexCell> cellRange = GetBasicAttackCells();
-			if (CanAttackAllies)
-				cellRange.RemoveNonCharacters();
-			else
-				cellRange.RemoveNonEnemies();
+		private List<HexCell> GetPrepareBasicAttackCells() => CanAttackAllies
+			? GetBasicAttackCells().WhereOnlyCharacters()
+			: GetBasicAttackCells().WhereOnlyEnemiesOf(Owner);
 
-			return cellRange;
-		}
 		public List<HexCell> DefaultGetBasicAttackCells()
 		{
 			List<HexCell> cellRange;

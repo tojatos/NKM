@@ -17,7 +17,7 @@ namespace NKMObjects.Abilities.Asuna
 		{
 			OnAwake += () =>
 			{
-				Validator.ToCheck.Add(() => IsEnabled);
+				Validator.ToCheck.Add(() => !IsEnabled);
 				ParentCharacter.BeforeBeingBasicAttacked += (attackingCharacter, damage) =>
 				{
 					if (!IsEnabled) return;

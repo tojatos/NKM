@@ -15,7 +15,7 @@ namespace NKMObjects.Abilities.Roronoa_Zoro
 		}
 
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies().FindAll(c =>
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner).FindAll(c =>
 		{
 			//check if target move cell is free
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);

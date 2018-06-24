@@ -4,6 +4,7 @@ using Extensions;
 using JetBrains.Annotations;
 using Managers;
 using UI.CharacterUI;
+using UI.HexCellUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -21,6 +22,7 @@ namespace UI
 		public GameObject CancelButton;
 		public GameObject AbilityButtons;
 		public GameObject CharacterUI;
+		public GameObject HexCellUI;
 
 		public GameObject EndTurnImage;
 		public GameObject HourglassImage;
@@ -32,7 +34,7 @@ namespace UI
 		public bool ForcePlacingChampions { private get; set; }
 		private static bool CanClickEndTurnButton =>
 			!(Game.Active.Phase.Number == 0 || Game.Active.Turn.CharacterThatTookActionInTurn == null &&
-			  Game.Active.GamePlayer.Characters.Any(c => c.CanTakeAction && c.IsOnMap));
+			  Game.Active.GamePlayer.Characters.Any(c => (c.CanWait || c.CanTakeAction) && c.IsOnMap));
 
 		public void Init()
 		{
@@ -86,7 +88,10 @@ namespace UI
 			bool isActiveUse = Game.Active.IsActiveUse;
 			AbilityButtons.ToggleIf(isActiveUse);
 			CancelButton.ToggleIf(!isActiveUse);
-			HourglassImage.ToggleIf(isActiveUse || Active.CharacterOnMap!=null && (Active.CharacterOnMap.Owner != Active.GamePlayer || Active.CharacterOnMap.TookActionInPhaseBefore)|| Active.Turn.CharacterThatTookActionInTurn != null);
+			HourglassImage.ToggleIf(isActiveUse || Active.CharacterOnMap!=null && !Active.CharacterOnMap.CanWait);
+			
+			HexCellUI.ToggleIf(Active.SelectedCell == null);
+            if(Active.SelectedCell!=null) HexImage.Instance.UpdateImage();
 		}
 
 		private static void EndTurnImageClick()

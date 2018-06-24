@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Hecate
 		public SonzaiNoChikara() : base(AbilityType.Ultimatum, "Sonzai no Chikara", 8){}
 
 		public override List<HexCell> GetRangeCells() => Game.HexMapDrawer.Cells;
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} uwalnia zgromadzoną Energię Życiową, raniąc każdego wroga na mapie.

@@ -14,7 +14,19 @@ namespace Hex
 		private static Spawner Spawner => Spawner.Instance;
 		
 		public HexCoordinates Coordinates;
-		public Character CharacterOnCell;// { get; set; }
+
+		private Character _characterOnCell;
+		public Character CharacterOnCell
+		{
+			get { return _characterOnCell; }
+			set
+			{
+				if(_characterOnCell!=null) OnLeave?.Invoke(_characterOnCell);
+				if(value!=null) OnEnter?.Invoke(value);
+				_characterOnCell = value;
+			}
+		}
+
 		public List<GameObject> Highlights;//{ get; set; }
 //		public GameObject HelpHighlight;// { get; set; }
 		public HexTileType Type;// { get; set; }
@@ -22,6 +34,7 @@ namespace Hex
 		public List<HexCellEffect> Effects = new List<HexCellEffect>();
 
 		private readonly HexCell[] _neighbors = new HexCell[6];
+
 		private HexCell GetNeighbor(HexDirection direction)
 		{
 			return _neighbors[(int)direction];
@@ -155,6 +168,11 @@ namespace Hex
 			visited.Remove(this);
 			return visited;
 		}
+
+		public delegate void CharacterDelegate(Character character);
+
+		public event CharacterDelegate OnEnter;
+		public event CharacterDelegate OnLeave;
 	}
 	public enum HexTileType
 	{

@@ -17,7 +17,7 @@ namespace NKMObjects.Abilities.Roronoa_Zoro
 		}
 		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} wysyła 3 fale uderzeniowe w wybranego wroga, z czego każda zadaje {AbilityDamage} obrażeń fizycznych.

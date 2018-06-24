@@ -16,7 +16,7 @@ namespace NKMObjects.Abilities.Rem
 		}
 		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} wymachuje morgenszternem wokół własnej osi,

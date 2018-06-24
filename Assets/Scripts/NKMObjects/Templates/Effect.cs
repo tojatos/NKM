@@ -23,7 +23,7 @@
 		public event OnRemoveHandler OnRemove;
 
 		protected int CurrentCooldown { get; private set; }
-		protected Character ParentCharacter { get; }
+		public Character ParentCharacter { get; }
 		public EffectType Type { get; protected set; }
 
 		public abstract string GetDescription();

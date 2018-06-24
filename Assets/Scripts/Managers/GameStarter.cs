@@ -38,12 +38,12 @@ namespace Managers
 							Name = "Ryszard",
 							Characters = new List<Character>
 							{
-								new Character("Sinon"),
-								new Character("Roronoa Zoro"),
-								new Character("Hecate"),
-								new Character("Itsuka Kotori"),
-								new Character("Rem"),
-								new Character("Aqua"),
+//								new Character("Sinon"),
+//								new Character("Roronoa Zoro"),
+//								new Character("Hecate"),
+//								new Character("Itsuka Kotori"),
+//								new Character("Rem"),
+								new Character("Yoshino"),
 							}
 						},
 						new GamePlayer
@@ -51,12 +51,12 @@ namespace Managers
 							Name = "Maciej",
 							Characters = new List<Character>
 							{
-								new Character("Bezimienni"),
-								new Character("Shana"),
-								new Character("Dekomori Sanae"),
-								new Character("Gilgamesh"),
-								new Character("Crona"),
-								new Character("Aqua"),
+//								new Character("Bezimienni"),
+//								new Character("Shana"),
+//								new Character("Dekomori Sanae"),
+//								new Character("Gilgamesh"),
+//								new Character("Crona"),
+								new Character("Asuna"),
 							}
 						},
 					},

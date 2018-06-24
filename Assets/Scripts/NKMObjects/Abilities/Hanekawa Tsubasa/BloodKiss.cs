@@ -18,7 +18,7 @@ namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 		}
 		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 		
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} liże wroga, wywołując silne krwawienie, które zadaje {DoTDamage} nieuchronnych obrażeń przez {DoTTime} fazy.

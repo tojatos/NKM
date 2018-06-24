@@ -21,7 +21,7 @@ namespace NKMObjects.Abilities.Shana
 		}
 			
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} używa kolejno po sobie występujących umiejętności:

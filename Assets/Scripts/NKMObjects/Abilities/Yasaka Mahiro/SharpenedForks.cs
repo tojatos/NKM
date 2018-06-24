@@ -18,7 +18,7 @@ namespace NKMObjects.Abilities.Yasaka_Mahiro
 		}
 		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 		
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} rzuca 3 naostrzone widelce,

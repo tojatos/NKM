@@ -22,7 +22,7 @@ Zainfekowany wróg również otrzymuje obrażenia przy zdetonowaniu Black Blood.
 Zasięg: {Range}	Czas odnowienia: {CurrentCooldown}";
 	    
 	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 	    public void Click()
 		{

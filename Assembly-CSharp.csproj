@@ -149,6 +149,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yasaka Mahiro\SharpenedForks.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yasaka Mahiro\TerrorOfTheUniverse.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yasaka Mahiro\WhenTheyCry.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yoshino\HowlingBlizzard.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yoshino\TheHermit.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yoshino\Zadkiel.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\BasicAttackInability.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Effects\StatModifier.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Stun.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\HexCellEffects\Conflagration.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\HexCellEffects\HowlingBlizzard.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\Ability.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\Character.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\Effect.cs" />
@@ -187,6 +189,8 @@
     <Compile Include="Assets\Scripts\UI\CharacterUI\Info.cs" />
     <Compile Include="Assets\Scripts\UI\CharacterUI\MainHPBar.cs" />
     <Compile Include="Assets\Scripts\UI\CharacterUI\Stats.cs" />
+    <Compile Include="Assets\Scripts\UI\HexCellUI\Effects.cs" />
+    <Compile Include="Assets\Scripts\UI\HexCellUI\HexImage.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <None Include="Assets\VertexColors.shader" />
     <Reference Include="UnityEngine.UI">

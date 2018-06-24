@@ -5,6 +5,7 @@ using Hex;
 using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using NKMObject = NKMObjects.Templates.NKMObject;
 using Object = UnityEngine.Object;
 /// <summary>
 /// Main utility class.
@@ -31,6 +32,7 @@ public class Active
 	public  Ability Ability;
 	public  NKMObject NkmObject;
 	public  Character CharacterOnMap;
+	public  HexCell SelectedCell;
 	public readonly List<HexCell> MoveCells = new List<HexCell>();
 
 	
@@ -64,6 +66,7 @@ public class Active
 		Ability = null;
 		HexCells = null;
 		NkmObject = null;
+		SelectedCell = null;
 		Action = Action.None;
 		if (AirSelection.IsEnabled) AirSelection.Disable();
 	}
@@ -81,6 +84,7 @@ public class Active
 		else
 		{
 			CharacterOnMap?.Deselect();
+			SelectedCell = null;
 		}
 	}
 

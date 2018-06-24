@@ -15,7 +15,7 @@ namespace NKMObjects.Abilities.Rem
 		}
 		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyFriends().FindAll(c => !c.CharacterOnCell.TookActionInPhaseBefore);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyFriendsOf(Owner).FindAll(c => !c.CharacterOnCell.TookActionInPhaseBefore);
 
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} wyznaje miłość wybranej postaci, umożliwiając jej ponowną akcję w tej fazie.

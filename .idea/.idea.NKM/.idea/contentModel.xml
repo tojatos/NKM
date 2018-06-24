@@ -149,6 +149,7 @@
               <e p="WhenTheyCry.cs" t="Include" />
             </e>
             <e p="Yoshino" t="Include">
+              <e p="HowlingBlizzard.cs" t="Include" />
               <e p="TheHermit.cs" t="Include" />
               <e p="Zadkiel.cs" t="Include" />
             </e>
@@ -166,6 +167,7 @@
           </e>
           <e p="HexCellEffects" t="Include">
             <e p="Conflagration.cs" t="Include" />
+            <e p="HowlingBlizzard.cs" t="Include" />
           </e>
           <e p="Templates" t="Include">
             <e p="Ability.cs" t="Include" />
@@ -199,15 +201,17 @@
             <e p="MainHPBar.cs" t="Include" />
             <e p="Stats.cs" t="Include" />
           </e>
+          <e p="HexCellUI" t="Include">
+            <e p="Effects.cs" t="Include" />
+            <e p="HexImage.cs" t="Include" />
+          </e>
           <e p="UIManager.cs" t="Include" />
         </e>
       </e>
       <e p="Assets/VertexColors.shader" t="Include" />
       <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp" t="ExcludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-      </e>
+      <e p="Temp/bin" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>

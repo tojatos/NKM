@@ -8,14 +8,10 @@ namespace UI.CharacterUI
 {
 	public class Face : SingletonMonoBehaviour<Face>
 	{
-		private Image Image;
-		private Game Game;
+		private Image _image;
+		private static Game Game => GameStarter.Instance.Game;
 
-		private void Awake()
-		{
-			Game = GameStarter.Instance.Game;
-			Image = GetComponent<Image>();
-		}
+		private void Awake() => _image = GetComponent<Image>();
 
 		private void Update() //TODO: Remove Update
 		{
@@ -28,7 +24,7 @@ namespace UI.CharacterUI
 		private void UpdateFace(Character characterOnMap)
 		{
 			Sprite characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterOnMap.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
-			Image.sprite = characterSprite;
+			_image.sprite = characterSprite;
 			characterOnMap.CharacterObject.transform.Find("Character Sprite").GetComponent<SpriteRenderer>().sprite = characterSprite;
 		}
 	}

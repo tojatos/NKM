@@ -22,7 +22,7 @@ namespace NKMObjects.Abilities.Asuna
 		}
 
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(2);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 		public override string GetDescription() => 
 $@"Jeżeli {ParentCharacter.Name} użyje ataku podstawowego na przeciwnika w zasięgu {Range},

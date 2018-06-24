@@ -40,7 +40,7 @@ Czas odnowienia: {Cooldown}";
 				if(hitConflargation) cells.AddRange(HexMapDrawer.Instance.Cells.Where(c => c.Effects.ContainsType(typeof(HexCellEffects.Conflagration))));
 				return cells.Distinct().ToList();
 		}
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 		public void Click()
 		{

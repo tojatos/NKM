@@ -16,7 +16,7 @@ namespace NKMObjects.Abilities.Crona
 	    }
 	    
 	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Radius);
-	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 	    
         public override string GetDescription() => "Miecz Crony, Ragnarok, wydaje z siebie krzyk,\nogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną.";
 

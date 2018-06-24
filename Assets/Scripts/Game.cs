@@ -16,7 +16,7 @@ public class Game
 
 	public List<GamePlayer> Players;
 	public readonly Active Active;
-	public UIManager UIManager;
+	private UIManager _uiManager;
 	private Spawner _spawner;
 	public HexMapDrawer HexMapDrawer;
 
@@ -31,7 +31,7 @@ public class Game
 		_options = gameOptions;
 
 		Players = new List<GamePlayer>(gameOptions.Players);
-		UIManager = _options.UIManager;
+		_uiManager = _options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
 		_spawner = Spawner.Instance;
 //		Spawner.Init(this);
@@ -52,12 +52,12 @@ public class Game
 		if (!IsInitialized) return false;
 
 		HexMapDrawer.CreateMap(_options.Map);
-		UIManager.Init();
+		_uiManager.Init();
 //		UIManager.VisibleUI = UIManager.GameUI;
 //		Active.Buttons = UIManager.UseButtons;
 		MainCameraController.Instance.Init();
 		Abilities.Instance.Init();
-		UIManager.UpdateActivePhaseText();
+		_uiManager.UpdateActivePhaseText();
 		if (GameStarter.Instance.IsTesting) PlaceAllCharactersOnSpawns();
 		TakeTurns();
 		return true;
@@ -94,6 +94,7 @@ public class Game
 
 	public void TouchCell(HexCell touchedCell)
 	{
+		Active.SelectedCell = touchedCell;
 		if (Active.NkmObject != null)
 		{
 			UseMyGameObject(touchedCell);
@@ -149,7 +150,7 @@ public class Game
 			Active.Turn.WasCharacterPlaced = true;
 			if (Active.Phase.Number == 0)
 			{
-				UIManager.ForcePlacingChampions = false;
+				_uiManager.ForcePlacingChampions = false;
 				Active.Turn.Finish();
 			}
 			else

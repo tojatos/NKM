@@ -38,7 +38,7 @@ Czas odnowienia: {Cooldown + 1} z atakiem, {Cooldown} bez ataku.";
 		{
 			ParentCharacter.MoveTo(cell);
 			_hasDashed = true;
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine).WhereOnlyEnemies();
+			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine).WhereOnlyEnemiesOf(Owner);
 			if(cellRange.Count > 0) Active.Prepare(this, cellRange);
 			else OnUseFinish();
 		}

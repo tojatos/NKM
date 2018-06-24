@@ -18,7 +18,7 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 		}
 
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemies();
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
 		public override string GetDescription() =>
 			$@"{ParentCharacter.Name} uderza dwukrotnie, zadając {AbilityDamage} obrażeń fizycznych przy każdym ciosie.
