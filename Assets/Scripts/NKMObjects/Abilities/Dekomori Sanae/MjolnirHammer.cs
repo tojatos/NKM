@@ -50,7 +50,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 				damageToDeal /= 2;
 			}
 			var damage = new Damage(damageToDeal, DamageType.Physical);
-			ParentCharacter.Attack(targetCharacter, damage);
+			ParentCharacter.Attack(this,targetCharacter, damage);
 			if (!_wasUsedOnceThisTurn)
 			{
 				_wasUsedOnceThisTurn = true;

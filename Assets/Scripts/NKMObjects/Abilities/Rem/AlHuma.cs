@@ -28,7 +28,7 @@ Czas odnowiania: {Cooldown}";
 		public override void Use(Character targetCharacter)
 		{
 			var damage = new Damage(AbilityDamage, DamageType.Magical);
-			ParentCharacter.Attack(targetCharacter, damage);
+			ParentCharacter.Attack(this,targetCharacter, damage);
 			targetCharacter.Effects.Add(new Stun(1, targetCharacter, Name));
 			OnUseFinish();
 		}

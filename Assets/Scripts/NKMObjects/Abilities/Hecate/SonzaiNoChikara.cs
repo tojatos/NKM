@@ -37,7 +37,7 @@ Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdziela
 				enemyCharactersOnMap.ForEach(c =>
 				{
                     var damage = new Damage(damageValue, DamageType.Magical);
-					ParentCharacter.Attack(c, damage);
+					ParentCharacter.Attack(this, c, damage);
 				});
 
 				passiveAbility.CollectedEnergyCharacters.Clear();

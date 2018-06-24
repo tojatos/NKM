@@ -84,7 +84,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 			HexCell moveCell = targetCharacter.ParentCell.GetCell(direction, 2);
 			ParentCharacter.MoveTo(moveCell);
 			var damage = new Damage(ParentCharacter.AttackPoints.Value, DamageType.Physical);
-			ParentCharacter.Attack(targetCharacter, damage);
+			ParentCharacter.Attack(this, targetCharacter, damage);
 			Active.PlayAudio("giri");
 			OnUseFinish();
 		}

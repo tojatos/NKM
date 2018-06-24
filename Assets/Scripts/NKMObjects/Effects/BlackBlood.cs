@@ -26,7 +26,7 @@ namespace NKMObjects.Effects
                 enemiesInRange.ForEach(enemy =>
                 {
                     var dmg = new Damage(damage, DamageType.Magical);
-                    characterThatAttacks.Attack(enemy, dmg);
+                    characterThatAttacks.Attack(this, enemy, dmg);
                 });
                 _wasActivatedOnce = false;
             };

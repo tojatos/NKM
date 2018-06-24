@@ -192,6 +192,5 @@ namespace Hex
 		StopAtEnemyCharacters = 2,
 		StopAtFriendlyCharacters = 4,
 		StraightLine = 8,
-		
 	}
 }

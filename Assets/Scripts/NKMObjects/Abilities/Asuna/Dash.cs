@@ -50,7 +50,7 @@ Czas odnowienia: {Cooldown + 1} z atakiem, {Cooldown} bez ataku.";
 			var damageValue = ParentCharacter.AttackPoints.Value * modifier;
 			var damage = new Damage(damageValue, DamageType.Physical);
 			
-			ParentCharacter.Attack(targetCharacter, damage);
+			ParentCharacter.Attack(this, targetCharacter, damage);
 			
 			OnUseFinish(Cooldown+1);
 		}

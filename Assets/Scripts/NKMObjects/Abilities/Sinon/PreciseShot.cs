@@ -26,7 +26,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		public override void Use(Character character)
 		{
 			var damage = new Damage(AbilityDamage, DamageType.Physical);
-			ParentCharacter.Attack(character, damage);
+			ParentCharacter.Attack(this, character, damage);
 			OnUseFinish();
 		}
 	}

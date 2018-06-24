@@ -133,6 +133,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Itsuka Kotori\CamaelMegiddo.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Itsuka Kotori\Conflagration.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Itsuka Kotori\ElohimGibor.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Kurogane Ikki\IttoShura.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Kurogane Ikki\RakudaiKishi.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Kurogane Ikki\SwordSteal.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\AlHuma.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\Confession.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\DemonicForm.cs" />

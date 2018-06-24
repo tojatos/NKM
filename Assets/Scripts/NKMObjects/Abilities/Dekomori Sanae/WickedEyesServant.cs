@@ -17,7 +17,7 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 					if (!IsEnabled || _isBeingUsed) return;
 					_isBeingUsed = true; //prevent infinite loop
 					var damage = new Damage(_additionalDamage, DamageType.True);
-					ParentCharacter.Attack(character, damage);
+					ParentCharacter.Attack(this, character, damage);
 					_isBeingUsed = false;
 				};
 				ParentCharacter.OnEnemyKill += () => _additionalDamage++;

@@ -74,7 +74,7 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 			{
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
 				var damage = new Damage(FlameDamage, DamageType.Magical);
-				ParentCharacter.Attack(c.CharacterOnCell, damage);
+				ParentCharacter.Attack(this, c.CharacterOnCell, damage);
 			}
 		}
 		private void ShinpanAndDanzai(Character character)
@@ -82,7 +82,7 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 			int charactersNearParent = ParentCharacter.ParentCell.GetNeighbors(ShinpanAndDanzaiRange).Count(c => c.CharacterOnCell != null);
 			var damageValue = ShinpanAndDanzaiDamage * charactersNearParent;
 			var damage = new Damage(damageValue, DamageType.True);
-			ParentCharacter.Attack(character, damage);
+			ParentCharacter.Attack(this, character, damage);
 
 		}
 	}

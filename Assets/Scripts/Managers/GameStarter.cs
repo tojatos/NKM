@@ -42,8 +42,8 @@ namespace Managers
 //								new Character("Roronoa Zoro"),
 //								new Character("Hecate"),
 //								new Character("Itsuka Kotori"),
-//								new Character("Rem"),
-								new Character("Yoshino"),
+								new Character("Rem"),
+//								new Character("Yoshino"),
 							}
 						},
 						new GamePlayer
@@ -53,10 +53,10 @@ namespace Managers
 							{
 //								new Character("Bezimienni"),
 //								new Character("Shana"),
-//								new Character("Dekomori Sanae"),
+								new Character("Kurogane Ikki"),
 //								new Character("Gilgamesh"),
 //								new Character("Crona"),
-								new Character("Asuna"),
+//								new Character("Asuna"),
 							}
 						},
 					},

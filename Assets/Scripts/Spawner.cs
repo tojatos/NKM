@@ -53,7 +53,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 //		}
 //	}
 
-	private static NKMObject Create(string namespaceName, string className)
+	public static NKMObject Create(string namespaceName, string className)
 	{
 		var typeName = "NKMObjects." + namespaceName + "." + className;
 		Type type = Type.GetType(typeName);

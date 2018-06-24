@@ -46,7 +46,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 					: DamageType.Physical;
 				var damage = new Damage(AbilityDamage, damageType);
 
-				ParentCharacter.Attack(targetCharacter, damage);
+				ParentCharacter.Attack(this, targetCharacter, damage);
 			});
 			OnUseFinish();
 		}

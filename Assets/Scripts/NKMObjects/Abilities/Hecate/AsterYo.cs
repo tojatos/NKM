@@ -19,7 +19,7 @@ namespace NKMObjects.Abilities.Hecate
 		
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} wystrzeliwuje promienie energii z Astera,
-zadając {AbilityDamage} obrażeń magicznych i gromadząc Energię Życiową wszystkich trafionych celów
+zadając {AbilityDamage} obrażeń magicznych
 na wskazanym obszarze w promieniu {AbilityRadius}.
 Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		
@@ -36,7 +36,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 			try
 			{
 				ItadakiNoKura passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();
-				if (passiveAbility == null) throw new Exception("Pasywna umiejętność nie znaleziona!");
+//				if (passiveAbility == null) throw new Exception("Pasywna umiejętność nie znaleziona!");
 
 				characters = characters.Where(c => c.Owner != ParentCharacter.Owner).ToList();
 //				AnimationPlayer.Instance.AsterYo(ParentCharacter.CharacterObject.transform, characters.Select(c => c.CharacterObject.transform).ToList());
@@ -44,8 +44,8 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 				characters.ForEach(targetCharacter =>
 				{
 					var damage = new Damage(AbilityDamage, DamageType.Magical);
-					ParentCharacter.Attack(targetCharacter, damage);
-					passiveAbility.TryCollectingEnergy(targetCharacter);
+					ParentCharacter.Attack(this, targetCharacter, damage);
+					passiveAbility?.TryCollectingEnergy(targetCharacter);
 				});
 				OnUseFinish();
 			}

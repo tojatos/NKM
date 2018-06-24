@@ -14,5 +14,7 @@ namespace NKMObjects.Effects
 			return "Ta postać nie może atakować.\n" +
 						 "Czas do zakończenia efektu: " + CurrentCooldown;
 		}
+
+		public override bool IsCC => true;
 	}
 }
