@@ -33,7 +33,7 @@ Czas odnowienia: {Cooldown}";
 //			cells.RemoveNonEnemies();
 //			List<Character> characters = cells.GetCharacters();
 //			characters.ForEach(c =>
-			cells.GetCharacters().ForEach(c => ParentCharacter.Attack(c, new Damage(AbilityDamage, DamageType.Physical)));
+			cells.GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(AbilityDamage, DamageType.Physical)));
 			OnUseFinish();
 		}
 	}

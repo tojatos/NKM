@@ -44,7 +44,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
 
 				var damage = new Damage(AbilityDamage, DamageType.Physical);
-				ParentCharacter.Attack(c.CharacterOnCell, damage);
+				ParentCharacter.Attack(this, c.CharacterOnCell, damage);
 				break;
 			}
 		}

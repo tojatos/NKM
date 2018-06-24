@@ -25,6 +25,7 @@
 		protected int CurrentCooldown { get; private set; }
 		public Character ParentCharacter { get; }
 		public EffectType Type { get; protected set; }
+		public virtual bool IsCC => false;
 
 		public abstract string GetDescription();
 		public virtual int Modifier(StatType statType)

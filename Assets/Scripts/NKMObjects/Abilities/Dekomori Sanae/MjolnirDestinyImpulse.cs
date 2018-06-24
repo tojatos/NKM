@@ -50,7 +50,7 @@ Zasięg: {2}	Czas odnowienia: {3}",
 				
 				var damage = new Damage(AbilityDamage, DamageType.Physical);
 
-				ParentCharacter.Attack(targetCharacter, damage);
+				ParentCharacter.Attack(this,targetCharacter, damage);
 				_wasUsedOnceThisTurn = true;
 				if (!targetCharacter.IsAlive)
 				{

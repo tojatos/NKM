@@ -89,7 +89,7 @@ Umiejętność jest włączona od {_currentDuration} faz.";
             foreach (var c in chara)
             {
                 var damage = new Damage(_currentDuration*DamagePerPhase, DamageType.Magical);
-                ParentCharacter.Attack(c, damage);
+                ParentCharacter.Attack(this, c, damage);
             }
 //            GetTargetsInRange().GetCharacters().ForEach(c =>
 //            {

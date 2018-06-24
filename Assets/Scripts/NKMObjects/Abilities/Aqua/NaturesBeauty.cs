@@ -18,6 +18,7 @@ namespace NKMObjects.Abilities.Aqua
 					{
 						ParentCharacter.Heal(character, ParentCharacter.AttackPoints.Value);
 						ParentCharacter.HasUsedBasicAttackInPhaseBefore = true;
+						if (ParentCharacter.HasFreeAttack) ParentCharacter.HasFreeAttack = false;
 					}
 					else ParentCharacter.DefaultBasicAttack(character);
 				};

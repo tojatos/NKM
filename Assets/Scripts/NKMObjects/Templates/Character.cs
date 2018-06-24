@@ -41,10 +41,12 @@ namespace NKMObjects.Templates
 		public bool HasUsedUltimatumAbilityInPhaseBefore { private get; set; }
 
 		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
-		private bool CanUseBasicAttack => !HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect;
+		private bool CanUseBasicAttack => !HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect || HasFreeAttack;
 		public bool CanUseNormalAbility => !HasUsedNormalAbilityInPhaseBefore && !HasUsedBasicAttackInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
 		public bool CanUseUltimatumAbility => !(HasUsedUltimatumAbilityInPhaseBefore || HasUsedBasicMoveInPhaseBefore || HasUsedBasicAttackInPhaseBefore || HasUsedNormalAbilityInPhaseBefore || TookActionInPhaseBefore);//Active.Turn.CharacterThatTookActionInTurn == this);
+		
 
+		public bool HasFreeAttack { get; set; }
 		public bool TookActionInPhaseBefore { get; set; }
 		public bool IsAlive => HealthPoints.Value > 0;
 		public bool IsEnemyFor(GamePlayer player) => Owner != player;
@@ -64,6 +66,7 @@ namespace NKMObjects.Templates
 		#endregion
 		#region Delegates
         public delegate void VoidDelegate();
+        public delegate void AbilityDelegate(Ability ability);
 		public delegate void DamageDelegate(Damage damage);
 		public delegate void CharacterDamageDelegate(Character character, Damage damage);
 		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
@@ -71,7 +74,9 @@ namespace NKMObjects.Templates
 		#region Events
 		public event VoidDelegate JustBeforeFirstAction;
 		public event VoidDelegate OnEnemyKill;
+		public event VoidDelegate OnDeath;
 		public event VoidDelegate AfterMove;
+		public event AbilityDelegate AfterBeingHitByAbility;
 		public event DamageDelegate BeforeBeingDamaged;
 		public event DamageDelegate AfterBeingDamaged;
 		public event CharacterDamageDelegate BeforeBeingBasicAttacked;
@@ -186,14 +191,22 @@ namespace NKMObjects.Templates
 			AfterBasicAttack?.Invoke(attackedCharacter, damage);
 
 			HasUsedBasicAttackInPhaseBefore = true;
+			if (HasFreeAttack) HasFreeAttack = false;
 		}
-		public void Attack(Character character, Damage damage)//, AttackType attackType, int atkPoints)
+		private void Attack(Character character, Damage damage)//, AttackType attackType, int atkPoints)
 		{
 			BeforeAttack?.Invoke(character, damage);
             character.ReceiveDamage(damage);
 			AfterAttack?.Invoke(character, damage);
             if (!character.IsAlive) OnEnemyKill?.Invoke();
 		}
+
+		public void Attack(Ability ability, Character character, Damage damage)
+		{
+			Attack(character, damage);
+			character.AfterBeingHitByAbility?.Invoke(ability);
+		}
+		public void Attack(Effect effect, Character character, Damage damage) => Attack(character, damage);
 
 		private int GetDefense(DamageType damageType)
 		{
@@ -223,6 +236,7 @@ namespace NKMObjects.Templates
 		public void RemoveIfDead()
 		{
 			if (IsAlive) return;
+			OnDeath?.Invoke();
 
 			MessageLogger.Log($"{this.FormattedFirstName()} umiera!");
 			RemoveFromMap();
@@ -381,7 +395,7 @@ namespace NKMObjects.Templates
 			}
 
 			Abilities.ForEach(a => a.ParentCharacter = this);
-			Abilities.ForEach(a => a.Awake());
+//			Abilities.ForEach(a => a.Awake());
 		}
 	}
 	public enum FightType

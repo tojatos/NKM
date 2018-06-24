@@ -45,7 +45,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 //				AnimationPlayer.Instance.SharpenedForkEnumerator(ParentCharacter.CharacterObject.transform,
 //					targetCharacter.CharacterObject.transform)); TODO: animation
 			var damage = new Damage(damageValue, DamageType.Physical);
-			ParentCharacter.Attack(targetCharacter, damage);
+			ParentCharacter.Attack(this, targetCharacter, damage);
 			_numberOfUses++;
 			if (_numberOfUses < 3)
 			{

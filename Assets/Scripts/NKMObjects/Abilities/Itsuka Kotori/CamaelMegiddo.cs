@@ -84,7 +84,7 @@ Czas odnowienia: {Cooldown}";
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
 
 				var damage = new Damage(Damage, DamageType.Magical);
-				ParentCharacter.Attack(c.CharacterOnCell, damage);
+				ParentCharacter.Attack(this, c.CharacterOnCell, damage);
 			}
 		}
 	}

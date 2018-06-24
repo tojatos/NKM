@@ -16,7 +16,7 @@ namespace NKMObjects.Effects
 			Type = EffectType.Negative;
 			Character.VoidDelegate tryToActivateEffect = () =>
 			{
-				_characterThatAttacks.Attack(ParentCharacter, _damagePerTick);
+				_characterThatAttacks.Attack(this, ParentCharacter, _damagePerTick);
 				if (ParentCharacter.IsAlive)
 					ParentCharacter.Heal(_characterThatAttacks, _damagePerTick.Value);
 			};

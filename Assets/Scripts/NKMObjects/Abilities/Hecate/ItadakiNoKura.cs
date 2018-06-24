@@ -18,7 +18,7 @@ namespace NKMObjects.Abilities.Hecate
 		}
 		
 		public override string GetDescription() => 
-$@"{ParentCharacter.Name} gromadzi Energię Życiową każdym podstawowym atakiem.
+$@"{ParentCharacter.Name} gromadzi Energię Życiową każdym podstawowym atakiem lub z Astera.
 Jeden ładunek Energii Życiowej przechowuje {HealthPercent}% maksymalnego HP celu.
 Energia Życiowa tej samej postaci może zostać zgromadzona tylko raz.
 Aktualna wartość zebranej energii: {CollectedEnergy}";

@@ -15,5 +15,6 @@ namespace NKMObjects.Effects
 			return "Ta postać nie może się ruszać.\n" +
 						 "Czas do zakończenia efektu: " + CurrentCooldown;
 		}
+		public override bool IsCC => true;
 	}
 }

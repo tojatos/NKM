@@ -19,8 +19,5 @@ namespace Animations
             }
 		    AnimationParts.Enqueue(new AsterYoFinish(particlesWithTargets));
 	    }
-	    
-  
-        
     }
 }

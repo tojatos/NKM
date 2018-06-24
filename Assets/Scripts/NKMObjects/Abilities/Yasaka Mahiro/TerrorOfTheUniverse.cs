@@ -45,7 +45,7 @@ Zasięg: {4}	Czas odnowienia: {5}",
 
 				int damageValue = (int) (AbilityCurrentHealthPercentDamage / 100 * targetCharacter.HealthPoints.Value);
 				var damage = new Damage(damageValue, DamageType.Physical);
-				ParentCharacter.Attack(targetCharacter, damage);
+				ParentCharacter.Attack(this, targetCharacter, damage);
 				targetCharacter.Effects.Add(new StatModifier(2, -(targetCharacter.Speed.Value / 2), targetCharacter, StatType.Speed, Name));
 				//targetCharacter.Effects.Add(new MovementDisability(SlowDuration, targetCharacter, Name));
 			});
