@@ -9,15 +9,23 @@ namespace Managers
 {
 	public class PreGameOptions : MonoBehaviour
 	{
+		private Dropdown _pickTypeDropdown;
 		private Dropdown _playerCountDropdown;
 		private Dropdown _mapSelectDropdown;
 		private Dropdown _cppDropdown;
 		private void Awake()
 		{
+			_pickTypeDropdown = GameObject.Find("PickType").GetComponentInChildren<Dropdown>();
 			_mapSelectDropdown = GameObject.Find("MapSelect").GetComponentInChildren<Dropdown>();
 			_playerCountDropdown = GameObject.Find("PlayerCount").GetComponentInChildren<Dropdown>();
 			_cppDropdown = GameObject.Find("CPPSelect").GetComponentInChildren<Dropdown>();
 
+			_pickTypeDropdown.options = new List<Dropdown.OptionData>()
+			{
+				new Dropdown.OptionData("Blind"),
+				new Dropdown.OptionData("Draft"),
+			};
+			
 			_mapSelectDropdown.options = Stuff.Maps.Select(map => new Dropdown.OptionData(map.Name)).ToList();
 			_mapSelectDropdown.onValueChanged.AddListener(ReloadPlayerCountDropdown);
 			_mapSelectDropdown.onValueChanged.AddListener(ReloadCppDropdown);
@@ -35,6 +43,7 @@ namespace Managers
 		[UsedImplicitly]
 		public void PlayButtonClick()
 		{
+			SessionSettings.Instance.PickType = _pickTypeDropdown.value;
 			SessionSettings.Instance.SelectedMapIndex = _mapSelectDropdown.value;
 			SessionSettings.Instance.NumberOfPlayers = _playerCountDropdown.value + 1;
 			SessionSettings.Instance.NumberOfCharactersPerPlayer = _cppDropdown.value + 1;

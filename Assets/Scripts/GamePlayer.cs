@@ -9,6 +9,12 @@ public class GamePlayer
 	public List<Character> Characters { get; set; } = new List<Character>();
 	public bool HasFinishedSelecting => HasSelectedCharacters;
 
+	public void AddCharacter(Character character)
+	{
+		character.Owner = this;
+		Characters.Add(character);
+	}
+
 	private void AddCharacters(List<Character> characters)
 	{
 		characters.ForEach(c=> c.Owner = this);

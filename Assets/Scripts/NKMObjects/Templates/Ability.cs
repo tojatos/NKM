@@ -57,10 +57,6 @@ namespace NKMObjects.Templates
 		{
 			throw new NotImplementedException();
 		}
-//		public virtual void OnPhaseFinish()
-//		{
-//			if (CurrentCooldown > 0) CurrentCooldown--;
-//		} // TODO: Move to Awake
 		public virtual void OnUseFinish() => OnUseFinish(Cooldown);
 
 		protected virtual void OnUseFinish(int cooldown)
