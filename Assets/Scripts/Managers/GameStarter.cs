@@ -100,15 +100,24 @@ namespace Managers
 			var numberOfPlayers = SessionSettings.Instance.NumberOfPlayers;
 			List<GamePlayer> players = new List<GamePlayer>();
 			for (var i = 0; i < numberOfPlayers; i++)
-				players.Add(new GamePlayer { Name = $"GamePlayer{i + 1}" });
-
-//			foreach (GamePlayer p in players)
-//			{
-//				await GetCharacters(p);
-//			}
+			{
+				players.Add(new GamePlayer { Name = GetPlayerName(i) });
+				
+			}
 			await GetCharacters(players);
-
 			return players;
+		}
+
+		private static string GetPlayerName(int i)
+		{
+			switch (i)
+			{
+				case 0: return SessionSettings.Instance.PlayerName1;
+				case 1: return SessionSettings.Instance.PlayerName2;
+				case 2: return SessionSettings.Instance.PlayerName3;
+				case 3: return SessionSettings.Instance.PlayerName4;
+				default: return $"Player {i + 1}";
+			}
 		}
 
 		private async Task GetCharacters(List<GamePlayer> players)

@@ -103,6 +103,7 @@
     <Compile Include="Assets\Scripts\Managers\GameStarter.cs" />
     <Compile Include="Assets\Scripts\Managers\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Managers\MusicManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\Options.cs" />
     <Compile Include="Assets\Scripts\Managers\PreGameOptions.cs" />
     <Compile Include="Assets\Scripts\MessageLogger.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Aqua\NaturesBeauty.cs" />

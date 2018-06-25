@@ -127,6 +127,11 @@
               <e p="RakudaiKishi.cs" t="Include" />
               <e p="SwordSteal.cs" t="Include" />
             </e>
+            <e p="Llenn" t="Include">
+              <e p="GrenadeThrow.cs" t="Include" />
+              <e p="PChan.cs" t="Include" />
+              <e p="RunItDown.cs" t="Include" />
+            </e>
             <e p="Rem" t="Include">
               <e p="AlHuma.cs" t="Include" />
               <e p="Confession.cs" t="Include" />
@@ -216,9 +221,7 @@
       <e p="Assets/VertexColors.shader" t="Include" />
       <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp" t="ExcludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-      </e>
+      <e p="Temp/bin" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>

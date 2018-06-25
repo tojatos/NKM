@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using Extensions;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +10,7 @@ namespace Managers
 		[UsedImplicitly]
 		public void PlayButtonClick() => SceneManager.LoadScene(Scenes.PreGameOptions);
 		[UsedImplicitly]
-		public void OptionsButtonClick(){}//TODO: create options
+		public void OptionsButtonClick() => Options.Instance.Show();
 		[UsedImplicitly]
 		public void ExitButtonClick() => Application.Quit();
 	}
