@@ -6,6 +6,7 @@ using Extensions;
 using Hex;
 using NKMObjects.Templates;
 using UI;
+using UnityEngine;
 using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace Managers
@@ -164,6 +165,7 @@ namespace Managers
 
 		private async Task BlindPick(List<GamePlayer> players)
 		{
+//			players.ForEach(p => Debug.Log(p.Name));
 			foreach (GamePlayer p in players)
 			{
                 List<NKMObject> allCharacters = new List<NKMObject>(AllMyGameObjects.Characters);
