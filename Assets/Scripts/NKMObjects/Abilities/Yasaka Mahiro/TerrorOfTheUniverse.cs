@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Yasaka_Mahiro
 		private const int AbilityRange = 6;
 		private const int AbilityRadius = 5;
 		private const int SlowDuration = 2;
-		public TerrorOfTheUniverse() : base(AbilityType.Ultimatum, "Terror Of The Universe")
+		public TerrorOfTheUniverse() : base(AbilityType.Ultimatum, "Terror Of The Universe", 6)
 		{
 //			Name = "Terror Of The Universe";
 //			Cooldown = 6;

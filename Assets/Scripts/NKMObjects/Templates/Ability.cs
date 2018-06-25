@@ -20,6 +20,7 @@ namespace NKMObjects.Templates
 			{
 				if (CurrentCooldown > 0) CurrentCooldown--;
 			};
+			OnAwake += () => Owner = ParentCharacter.Owner;
 		}
 
 		protected AbilityUseValidator Validator;

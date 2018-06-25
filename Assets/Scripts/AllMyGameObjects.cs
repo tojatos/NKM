@@ -13,6 +13,7 @@ public static class AllMyGameObjects
 		Characters = new List<Character>();
 
 		List<string> characterNames = GameData.Conn.GetCharacterNames();
+		characterNames.RemoveAll(s => s == "Yoshino");
 		characterNames.ForEach(n=>Characters.Add(new Character(n)));
 	}
 }
