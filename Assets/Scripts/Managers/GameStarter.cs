@@ -42,8 +42,11 @@ namespace Managers
 //								new Character("Roronoa Zoro"),
 //								new Character("Hecate"),
 //								new Character("Itsuka Kotori"),
-								new Character("Llenn"),
+//								new Character("Llenn"),
 //								new Character("Yoshino"),
+								new Character("Dekomori Sanae"),
+								new Character("Hanekawa Tsubasa"),
+//								new Character("Rem"),
 							}
 						},
 						new GamePlayer
@@ -52,11 +55,12 @@ namespace Managers
 							Characters = new List<Character>
 							{
 //								new Character("Bezimienni"),
-//								new Character("Shana"),
-//								new Character("Kurogane Ikki"),
-//								new Character("Gilgamesh"),
-//								new Character("Crona"),
-								new Character("Asuna"),
+								new Character("Shana"),
+								new Character("Yasaka Mahiro"),
+								new Character("Kurogane Ikki"),
+								new Character("Gilgamesh"),
+								new Character("Crona"),
+//								new Character("Asuna"),
 							}
 						},
 					},
