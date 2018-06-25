@@ -25,6 +25,7 @@ namespace NKMObjects.Abilities.Asuna
 					MessageLogger.Log(
 						$"{ParentCharacter.FormattedFirstName()} blokuje atak {attackingCharacter.FormattedFirstName()}!");
 					_attacksToBlock--;
+					damage.Value = 0;
 					_currentBonusAttack += AbilityBonusAttackGain;
 					if (_attacksToBlock == 0) Disable();
 				};

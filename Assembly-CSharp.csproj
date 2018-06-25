@@ -121,6 +121,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Dekomori Sanae\MjolnirDestinyImpulse.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Dekomori Sanae\MjolnirHammer.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Dekomori Sanae\WickedEyesServant.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ditto\Transform.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Empty.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Gilgamesh\Enkidu.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Gilgamesh\GateOfBabylon.cs" />

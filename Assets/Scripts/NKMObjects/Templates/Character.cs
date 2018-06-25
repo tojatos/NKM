@@ -252,6 +252,7 @@ namespace NKMObjects.Templates
 
 		private void RemoveFromMap()
 		{
+			if(!IsOnMap) return;
 			ParentCell.CharacterOnCell = null;
 			ParentCell = null;
 			IsOnMap = false;
