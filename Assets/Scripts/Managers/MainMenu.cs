@@ -1,5 +1,4 @@
-﻿using Extensions;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

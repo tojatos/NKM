@@ -71,6 +71,7 @@
           <e p="GameStarter.cs" t="Include" />
           <e p="MainMenu.cs" t="Include" />
           <e p="MusicManager.cs" t="Include" />
+          <e p="Options.cs" t="Include" />
           <e p="PreGameOptions.cs" t="Include" />
         </e>
         <e p="MessageLogger.cs" t="Include" />
@@ -216,12 +217,15 @@
             <e p="HexImage.cs" t="Include" />
           </e>
           <e p="UIManager.cs" t="Include" />
+          <e p="Victory.cs" t="Include" />
         </e>
       </e>
       <e p="Assets/VertexColors.shader" t="Include" />
       <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp/bin" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>

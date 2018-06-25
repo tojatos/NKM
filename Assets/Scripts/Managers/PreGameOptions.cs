@@ -25,6 +25,7 @@ namespace Managers
 				new Dropdown.OptionData("Blind"),
 				new Dropdown.OptionData("Draft"),
 			};
+			_pickTypeDropdown.value = SessionSettings.Instance.PickType;
 			
 			_mapSelectDropdown.options = Stuff.Maps.Select(map => new Dropdown.OptionData(map.Name)).ToList();
 			_mapSelectDropdown.onValueChanged.AddListener(ReloadPlayerCountDropdown);

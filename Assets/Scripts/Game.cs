@@ -71,13 +71,24 @@ public class Game
 	{
 		while (true)
 		{
-			foreach (GamePlayer player in Players) await TakeTurn(player);
+			foreach (GamePlayer player in Players)
+			{
+				if(player.IsEliminated) continue;
+				await TakeTurn(player);
+			}
+
+			if (Players.Count(p => !p.IsEliminated) == 1) FinishGame();
 
 			if (!IsEveryCharacterPlacedInTheFirstPhase) continue;
 
 			if (NoCharacterOnMapCanTakeAction) Active.Phase.Finish();
 		}
 		// ReSharper disable once FunctionNeverReturns
+	}
+
+	private void FinishGame()
+	{
+		Victory.Instance.Show();
 	}
 
 	private bool NoCharacterOnMapCanTakeAction => Players.All(p => p.Characters.Where(c => c.IsOnMap).All(c => !c.CanTakeAction));

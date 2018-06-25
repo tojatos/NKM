@@ -199,6 +199,7 @@
     <Compile Include="Assets\Scripts\UI\HexCellUI\Effects.cs" />
     <Compile Include="Assets\Scripts\UI\HexCellUI\HexImage.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
+    <Compile Include="Assets\Scripts\UI\Victory.cs" />
     <None Include="Assets\VertexColors.shader" />
     <Reference Include="UnityEngine.UI">
       <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

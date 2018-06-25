@@ -8,6 +8,7 @@ public class GamePlayer
 	public bool HasSelectedCharacters { get; set; }
 	public List<Character> Characters { get; set; } = new List<Character>();
 	public bool HasFinishedSelecting => HasSelectedCharacters;
+	public bool IsEliminated => Characters.All(c => !c.IsAlive);
 
 	public void AddCharacter(Character character)
 	{
