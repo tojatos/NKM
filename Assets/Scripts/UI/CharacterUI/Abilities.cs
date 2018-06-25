@@ -115,8 +115,8 @@ namespace UI.CharacterUI
 			var rect = enableGameObject.GetComponent<RectTransform>();
 			rect.anchorMin = new Vector2(1, 1);
 			rect.anchorMax = new Vector2(1, 1);
-			rect.anchoredPosition = new Vector3(-15, -15, 0);
-			rect.sizeDelta = new Vector2(30, 30);
+			rect.anchoredPosition = new Vector3(-7.5f, -7.5f, 0);
+			rect.sizeDelta = new Vector2(15, 15);
 		}
 
 	}

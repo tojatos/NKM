@@ -40,13 +40,14 @@ namespace NKMObjects.Templates
 		public bool HasUsedNormalAbilityInPhaseBefore { private get; set; }
 		public bool HasUsedUltimatumAbilityInPhaseBefore { private get; set; }
 
-		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
+		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore || HasFreeMove;
 		private bool CanUseBasicAttack => !HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect || HasFreeAttack;
 		public bool CanUseNormalAbility => !HasUsedNormalAbilityInPhaseBefore && !HasUsedBasicAttackInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
 		public bool CanUseUltimatumAbility => !(HasUsedUltimatumAbilityInPhaseBefore || HasUsedBasicMoveInPhaseBefore || HasUsedBasicAttackInPhaseBefore || HasUsedNormalAbilityInPhaseBefore || TookActionInPhaseBefore);//Active.Turn.CharacterThatTookActionInTurn == this);
 		
 
 		public bool HasFreeAttack { get; set; }
+		public bool HasFreeMove { get; set; }
 		public bool TookActionInPhaseBefore { get; set; }
 		public bool IsAlive => HealthPoints.Value > 0;
 		public bool IsEnemyFor(GamePlayer player) => Owner != player;
@@ -76,6 +77,7 @@ namespace NKMObjects.Templates
 		public event VoidDelegate OnEnemyKill;
 		public event VoidDelegate OnDeath;
 		public event VoidDelegate AfterMove;
+		public event VoidDelegate AfterBasicMove;
 		public event AbilityDelegate AfterBeingHitByAbility;
 		public event DamageDelegate BeforeBeingDamaged;
 		public event DamageDelegate AfterBeingDamaged;
@@ -83,6 +85,8 @@ namespace NKMObjects.Templates
 		public event CharacterDamageDelegate BeforeBasicAttack;
 		public event CharacterDamageDelegate AfterBasicAttack;
 		public event CharacterDamageDelegate BeforeAttack;
+		public void InvokeAfterBasicMove() => AfterBasicMove?.Invoke();
+		
 		/// <summary>
 		/// Triggers after calculating all modifiers and defenses,
 		/// useful for modifying `true` damage
@@ -171,6 +175,7 @@ namespace NKMObjects.Templates
 		public void DefaultBasicMove(List<HexCell> cellPath)
 		{
 			HasUsedBasicMoveInPhaseBefore = true;
+			if (HasFreeMove) HasFreeMove = false;
 			Move(cellPath);
 		}
 		private void Move(IList<HexCell> cellPath)

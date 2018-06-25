@@ -6,7 +6,6 @@ using Extensions;
 using Hex;
 using NKMObjects.Templates;
 using UI;
-using UnityEngine;
 using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace Managers
@@ -39,12 +38,12 @@ namespace Managers
 							Name = "Ryszard",
 							Characters = new List<Character>
 							{
-								new Character("Sinon"),
-								new Character("Roronoa Zoro"),
-								new Character("Hecate"),
-								new Character("Itsuka Kotori"),
-								new Character("Rem"),
-								new Character("Yoshino"),
+//								new Character("Sinon"),
+//								new Character("Roronoa Zoro"),
+//								new Character("Hecate"),
+//								new Character("Itsuka Kotori"),
+								new Character("Llenn"),
+//								new Character("Yoshino"),
 							}
 						},
 						new GamePlayer
@@ -52,11 +51,11 @@ namespace Managers
 							Name = "Maciej",
 							Characters = new List<Character>
 							{
-								new Character("Bezimienni"),
-								new Character("Shana"),
-								new Character("Kurogane Ikki"),
-								new Character("Gilgamesh"),
-								new Character("Crona"),
+//								new Character("Bezimienni"),
+//								new Character("Shana"),
+//								new Character("Kurogane Ikki"),
+//								new Character("Gilgamesh"),
+//								new Character("Crona"),
 								new Character("Asuna"),
 							}
 						},

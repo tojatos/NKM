@@ -218,6 +218,7 @@ public class Active
 					if(MoveCells.Last() != cell) return;
                 if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 					character.BasicMove(MoveCells);
+					character.InvokeAfterBasicMove();
 				}
 				HexCells = null;//TODO is this really needed?
 				Action = Action.None;
