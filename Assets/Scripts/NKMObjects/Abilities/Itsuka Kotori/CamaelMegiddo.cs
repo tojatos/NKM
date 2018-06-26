@@ -53,6 +53,8 @@ Czas odnowienia: {Cooldown}";
 //			OnFailedUseFinish();
 		}
 
+		public override void Use(Character character) => Use(character.ParentCell);
+
 		public override void Use(HexCell cell)
 		{
 			SendFlamewave(cell);
