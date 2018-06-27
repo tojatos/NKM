@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Bezimienni
 {
-    public class Check : Ability, IClickable
+    public class Check : Ability, IClickable, IUseable
     {
         public Check() : base(AbilityType.Normal, "Check", 2)
         {
@@ -17,25 +17,10 @@ namespace NKMObjects.Abilities.Bezimienni
 	    public override List<HexCell> GetRangeCells() => new List<HexCell>(HexMapDrawer.Instance.Cells);
 	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
 
-//        protected override void CheckIfCanBePrepared()
-//		{
-//			base.CheckIfCanBePrepared();
-//			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
-//			if (cellRange.Count == 0)
-//			{
-//				throw new Exception("Nie ma nikogo w zasięgu umiejętności!");
-//			}
-//		}
+	    public void Click() => Active.Prepare(this, GetTargetsInRange());
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
-
-	    public void Click()
-		{
-//			List<HexCell> cellRange = GetRangeCells().Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner && c.CharacterOnCell.TookActionInPhaseBefore == false).ToList();
-//			Active.Prepare(this, cellRange);
-//			Active.MakeAction(cellRange);
-			Active.Prepare(this, GetTargetsInRange());
-		}
-		public override void Use(Character character)
+	    private void Use(Character character)
 		{
 			Turn.PlayerDelegate forceAction = null;
 			forceAction = (player) =>
@@ -45,9 +30,8 @@ namespace NKMObjects.Abilities.Bezimienni
 				Active.Turn.TurnStarted -= forceAction;
 			};
 			Active.Turn.TurnStarted += forceAction;
-//			Active.Turn.TurnStarted += (player) => Active.Turn.TurnStarted -= forceAction;
-      character.Effects.Add(new BasicAttackInability(1, character, Name));
-			OnUseFinish();
+              character.Effects.Add(new BasicAttackInability(1, character, Name));
+			Finish();
 		}
 
     }

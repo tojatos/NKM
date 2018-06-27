@@ -8,7 +8,7 @@ using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace NKMObjects.Abilities.Aqua
 {
-	public class Resurrection : Ability, IClickable
+	public class Resurrection : Ability, IClickable, IUseable
 	{
 		private Character _characterToResurrect;
 		public override List<HexCell> GetRangeCells() => Active.GamePlayer.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList();
@@ -19,10 +19,11 @@ namespace NKMObjects.Abilities.Aqua
 			{
                 Validator.ToCheck.Add(() => IsAnyCharacterToRevive);
                 Validator.ToCheck.Add(() => IsAnyFreeCellToPlaceACharacter);
-				Active.Phase.PhaseFinished += () => _characterToResurrect = null; //TODO: is this really needed?
+//				Active.Phase.PhaseFinished += () => _characterToResurrect = null; //TODO: is this really needed?
 			};
 		}
-		public override string GetDescription() => $@"{ParentCharacter.Name} wskrzesza sojuszniczą postać, która zginęła maksymalnie turę wcześniej.
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} wskrzesza sojuszniczą postać, która zginęła maksymalnie turę wcześniej.
 Postać odradza się z połową maksymalnego HP, na wybranym spawnie.
 Czas odnowienia: {Cooldown}";
 
@@ -31,30 +32,31 @@ Czas odnowienia: {Cooldown}";
 
 		public void Click()
 		{
-			Active.Ability = this;
+//			Active.AbilityToUse = this;
+			Active.Prepare(this);
 			SpriteSelect.Instance.Open(Active.GamePlayer.Characters.Where(c => !c.IsAlive && c.DeathTimer <= 1),
-				() =>
-				{
-					List<NKMObject> selectedObj = SpriteSelect.Instance.SelectedObjects;
-					if (selectedObj.Count != 1) return;
-
-					Use((Character)selectedObj[0]);
-					SpriteSelect.Instance.Close();
-				}, "Postać do ożywienia", "Zakończ wybieranie postaci");
+				FinishSelectingButtonClick, "Postać do ożywienia", "Zakończ wybieranie postaci");
 		}
-		public override void Use(Character character)
+
+		private void FinishSelectingButtonClick()
 		{
+			List<NKMObject> selectedObj = SpriteSelect.Instance.SelectedObjects;
+			if (selectedObj.Count != 1) return;
+
+			var character = (Character) selectedObj[0];
 			_characterToResurrect = character;
 			Active.Prepare(this, GetRangeCells());
+			SpriteSelect.Instance.Close();
 		}
-		public override void Use(HexCell cell)
+
+		private void Use(HexCell cell)
 		{
 			try
 			{
 				Spawner.Instance.TrySpawning(cell, _characterToResurrect);
 				_characterToResurrect.HealthPoints.Value = _characterToResurrect.HealthPoints.BaseValue / 2;
 
-				OnUseFinish();
+				Finish();
 			}
 			catch (Exception e)
 			{
@@ -62,5 +64,6 @@ Czas odnowienia: {Cooldown}";
 				throw;
 			}
 		}
+		public void Use(List<HexCell> cells) => Use(cells[0]);
 	}
 }

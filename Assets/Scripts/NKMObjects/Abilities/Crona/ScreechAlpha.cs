@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Crona
 {
-    public class ScreechAlpha : Ability, IClickable
+    public class ScreechAlpha : Ability, IClickable, IUseable
     {
         private const int Radius = 3;
 
@@ -18,16 +18,16 @@ namespace NKMObjects.Abilities.Crona
 	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Radius);
 	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 	    
-        public override string GetDescription() => "Miecz Crony, Ragnarok, wydaje z siebie krzyk,\nogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną.";
+        public override string GetDescription() => 
+@"Miecz Crony, Ragnarok, wydaje z siebie krzyk,
+ogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną.";
 
 	    public void Click()
 		{
-//			List<HexCell> cellRange = GetRangeCells();
-//			Active.Prepare(this, cellRange);
 			Active.Prepare(this, GetTargetsInRange());
 			Active.MakeAction(Active.HexCells);
 		}
-		public override void Use(List<HexCell> cells)
+		public void Use(List<HexCell> cells)
 		{
 			List<Character> characters = cells.GetCharacters();
 			characters.ForEach(c =>
@@ -35,7 +35,7 @@ namespace NKMObjects.Abilities.Crona
 				c.Effects.Add(new Stun(1, c, Name)); 
 				c.Effects.Add(new StatModifier(2, -3, c, StatType.Speed, Name));
 			});
-			OnUseFinish();
+			Finish();
 		}
 
 

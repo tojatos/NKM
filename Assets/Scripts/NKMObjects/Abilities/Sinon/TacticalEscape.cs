@@ -24,7 +24,7 @@ Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
 			Active.MakeAction();
 			ParentCharacter.Effects.Add(new StatModifier(Duration, SpeedIncrease, ParentCharacter, StatType.Speed, Name));
 			//ParentCharacter.Effects.Add(new BasicAttackInability(Duration, ParentCharacter, Name));
-			OnUseFinish();
+			Finish();
 
 		}
 	}

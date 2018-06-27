@@ -5,76 +5,57 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Dekomori_Sanae
 {
-	public class MjolnirDestinyImpulse : Ability, IClickable
+	public class MjolnirDestinyImpulse : Ability, IClickable, IUseable
 	{
-		private const int AbilityDamage = 25;
-		private const int AbilityRange = 8;
+		private const int Damage = 25;
+		private const int Range = 8;
 		private bool _wasUsedOnceThisTurn;
 		public MjolnirDestinyImpulse() : base(AbilityType.Ultimatum, "Mjolnir Destiny Impulse", 6)
 		{
-//			Name = "Mjolnir Destiny Impulse";
-//			Cooldown = 6;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Ultimatum;
+			AfterUseFinish += () => _wasUsedOnceThisTurn = false;
 		}
-		public override string GetDescription()
-		{
-			return string.Format(
-@"{0} uderza swoim młotem w wybrany obszar,
-zadając {1} obrażeń fizycznych wszystkim wrogom na tym terenie.
-Jeżeli {0} zabije chociaż jedną postać za pomocą tej umiejętności,
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} uderza swoim młotem w wybrany obszar,
+zadając {Damage} obrażeń fizycznych wszystkim wrogom na tym terenie.
+Jeżeli {ParentCharacter.Name} zabije chociaż jedną postać za pomocą tej umiejętności,
 może ona użyć tej umiejętności ponownie, w tej samej turze.
-Zasięg: {2}	Czas odnowienia: {3}",
-				ParentCharacter.Name, AbilityDamage, AbilityRange, Cooldown);
-		}
 
-		public override List<HexCell> GetRangeCells()
-		{
-			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		}
+Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
-		public void Click()
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+
+		public void Click() => PrepareImpulse();
+		private void PrepareImpulse()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.Add(ParentCharacter.ParentCell);
 			Active.Prepare(this, cellRange, false, false);
 			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, 1);
 		}
-		public override void Use(List<HexCell> cells)
+		public void Use(List<HexCell> cells)
 		{
 			List<Character> characters = cells.GetCharacters();
-			var killedSomething = false;
+			bool killedSomeone = false;
 			characters.ForEach(targetCharacter =>
 			{
 				if (targetCharacter.Owner == Active.GamePlayer) return;
 				
-				var damage = new Damage(AbilityDamage, DamageType.Physical);
+				var damage = new Damage(Damage, DamageType.Physical);
 
 				ParentCharacter.Attack(this,targetCharacter, damage);
 				_wasUsedOnceThisTurn = true;
 				if (!targetCharacter.IsAlive)
 				{
-					killedSomething = true;
+					killedSomeone = true;
 				}
 			});
-			if (killedSomething) Click();
-			else OnUseFinish();
+			if (killedSomeone) PrepareImpulse();
+			else Finish();
 		}
 		public override void Cancel()
 		{
-			if (_wasUsedOnceThisTurn)
-			{
-				OnUseFinish();
-			}
-			else
-			{
-				OnFailedUseFinish();
-			}
-		}
-		public override void OnUseFinish()
-		{
-			base.OnUseFinish();
-			_wasUsedOnceThisTurn = false;
+			if (_wasUsedOnceThisTurn) Finish();
+			else OnFailedUseFinish();
 		}
 	}
 }

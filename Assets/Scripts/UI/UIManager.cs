@@ -33,9 +33,9 @@ namespace UI
 		public Text ActiveHexCellText;
 
 		public bool ForcePlacingChampions { private get; set; }
-		private static bool CanClickEndTurnButton =>
+		public static bool CanClickEndTurnButton =>
 			!(Game.Active.Phase.Number == 0 || Game.Active.Turn.CharacterThatTookActionInTurn == null &&
-			  Game.Active.GamePlayer.Characters.Any(c => (c.CanWait || c.CanTakeAction) && c.IsOnMap));
+			  Game.Active.GamePlayer.Characters.Any(c => (c.CanWait || c.CanTakeAction) && c.IsOnMap) || Active.AbilityToUse != null);
 
 		public void Init()
 		{

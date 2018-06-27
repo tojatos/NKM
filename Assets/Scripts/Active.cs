@@ -27,12 +27,12 @@ public class Active
 	public Phase Phase { get; }
 	public AirSelection AirSelection { get; }
 
-	public  GamePlayer GamePlayer;
-	public  Action Action;
-	public  Ability Ability;
-	public  NKMObject NkmObject;
-	public  Character CharacterOnMap;
-	public  HexCell SelectedCell;
+	public GamePlayer GamePlayer;
+	public Action Action;
+	public IUseable AbilityToUse;
+	public NKMObject NkmObject;
+	public Character CharacterOnMap;
+	public HexCell SelectedCell;
 	public readonly List<HexCell> MoveCells = new List<HexCell>();
 
 	
@@ -54,16 +54,16 @@ public class Active
 
 	public bool IsDebug { get; set; }
 
-	public bool IsActiveUse => !(Ability == null && (Action == Action.None || Action == Action.AttackAndMove) && NkmObject == null);
+	public bool IsActiveUse => !(AbilityToUse == null && (Action == Action.None || Action == Action.AttackAndMove) && NkmObject == null);
 
 	public void Reset()
 	{
-		Ability?.OnUseFinish();
+//		((Ability)AbilityToUse)?.Finish();
 		if (IsActiveUse || Turn.IsDone)
 		{
 			CharacterOnMap?.Deselect();
 		}
-		Ability = null;
+		AbilityToUse = null;
 		HexCells = null;
 		NkmObject = null;
 		SelectedCell = null;
@@ -72,11 +72,8 @@ public class Active
 	}
 	public void Cancel()
 	{
-		if (Ability != null)
-		{
-			Ability.Cancel();
-		}
-		else if(NkmObject != null)
+		if (AbilityToUse != null) ((Ability)AbilityToUse).Cancel();
+		else if (NkmObject != null)
 		{
 			Game.HexMapDrawer.RemoveHighlights();
 			NkmObject = null;
@@ -88,7 +85,7 @@ public class Active
 		}
 	}
 
-	public void Prepare(Ability abilityToPrepare) => Ability = abilityToPrepare;
+	public void Prepare(IUseable abilityToPrepare) => AbilityToUse = abilityToPrepare;
 	public bool Prepare(Action actionToPrepare, List<HexCell> cellRange, bool addToRange = false)
 	{
 		if (cellRange == null)
@@ -112,13 +109,13 @@ public class Active
 		Action = actionToPrepare;
 		return true;
 	}
-	public void Prepare(Ability abilityToPrepare, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
+	public void Prepare(IUseable abilityToPrepare, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
 	{
 //		var isPrepared = Prepare(Action.UseAbility, cellRange, addToRange);
 		Prepare(Action.UseAbility, cellRange, addToRange);
 //		if (!isPrepared) return false;
 
-		Ability = abilityToPrepare;
+		AbilityToUse = abilityToPrepare;
 		if (!toggleToRed) return;
 		Game.HexMapDrawer.RemoveHighlights();
 		HexCells.ForEach(c => c.AddHighlight(Highlights.RedTransparent));
@@ -174,7 +171,7 @@ public class Active
 	{
 		RemoveMoveCells();
 		if(AirSelection.IsEnabled) AirSelection.Disable();
-		Ability = null;
+		AbilityToUse = null;
 		Action = Action.None;
 		HexCells = null;
 		Game.HexMapDrawer.RemoveHighlights();
@@ -194,15 +191,18 @@ public class Active
 			case Action.None:
 				throw new Exception("Żadna akcja nie jest aktywna!");
 			case Action.UseAbility:
-                if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
-				if (cell.CharacterOnCell != null)
-				{
-					Ability.Use(cell.CharacterOnCell);
-				}
-				else
-				{
-					Ability.Use(cell);
-				}
+//                if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
+//				if (cell.CharacterOnCell != null)
+//				{
+//					Ability.Use(cell.CharacterOnCell);
+//				}
+//				else
+//				{
+//					Ability.Use(cell);
+//				}
+
+//				throw new Exception("Cannot make Use action on single cell!");
+				AbilityToUse.Use(new List<HexCell> {cell});
 				break;
 			case Action.AttackAndMove:
 				Character character = CharacterOnMap;
@@ -236,7 +236,7 @@ public class Active
 			case Action.None:
 				throw new Exception("Żadna akcja nie jest aktywna!");
 			case Action.UseAbility:
-				Ability.Use(cells);
+				AbilityToUse.Use(cells);
 //				List<Character> characters = cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
 //				Ability.Use(characters);
 				//Turn.CharacterThatTookActionInTurn = CharacterOnMap;

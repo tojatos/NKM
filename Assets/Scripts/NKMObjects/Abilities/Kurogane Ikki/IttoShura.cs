@@ -24,7 +24,7 @@ Po użyciu tej umiejętności {ParentCharacter.Name} może użyć podstawowego a
             ParentCharacter.Effects.RemoveAll(e => e.IsCC);
             ParentCharacter.HasFreeAttack = true;
             IsEnabled = true;
-            OnUseFinish();
+            Finish();
         }
 
         public bool IsEnabled { get; private set; }

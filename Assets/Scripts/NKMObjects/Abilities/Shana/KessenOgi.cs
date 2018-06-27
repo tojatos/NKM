@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Shana
 {
-	public class KessenOgi : Ability, IClickable
+	public class KessenOgi : Ability, IClickable, IUseable
 	{
 		private const int FlameDamage = 15;
 		private const int Range = 5;
@@ -35,16 +35,18 @@ Uderza falą płomieni za {FlameDamage}, fala, o szerokości {FlameWidth}, ma  z
 <b>Shinpan + Danzai:</b>
 Bije {ShinpanAndDanzaiDamage} nieuchronnych obrażeń celowi za każdą postać (poza sobą),
 która jest w obszarze oddalonym od Shany o {ShinpanAndDanzaiRange}.
+
 Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-		public override void Use(Character character)
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+		private void Use(Character character)
 		{
 			Shinku(character);
 			Hien(character);
 			ShinpanAndDanzai(character);
-			OnUseFinish();
+			Finish();
 		}
 		private void Shinku(Character character)
 		{

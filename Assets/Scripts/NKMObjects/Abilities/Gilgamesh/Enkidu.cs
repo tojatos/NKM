@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Gilgamesh
 {
-	public class Enkidu : Ability, IClickable
+	public class Enkidu : Ability, IClickable, IUseable
 	{
 		private const int AbilityRange = 8;
 		private const int SnarDuration = 2;
@@ -25,20 +25,14 @@ i podwajając bonusy zdolności biernej na ten okres.
 Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
-		public override void Use(Character targetCharacter)
+		private void Use(Character targetCharacter)
 		{
-//			try
-//			{
 				ParentCharacter.Effects.Add(new PassiveBuff(SnarDuration, ParentCharacter, Name));
 				targetCharacter.Effects.Add(new MovementDisability(SnarDuration, targetCharacter, Name));
-				OnUseFinish();
-//			}
-//			catch (Exception e)
-//			{
-//				MessageLogger.DebugLog(e.Message);
-//				OnFailedUseFinish();
-//			}
+				Finish();
 		}
+
 	}
 }

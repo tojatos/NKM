@@ -41,7 +41,7 @@ Czas odnowienia: {Cooldown}";
             Active.MakeAction();
             IsEnabled = true;
             ParentCharacter.HasFreeMove = true;
-            OnUseFinish();
+            Finish();
         }
 
         private void Disable()

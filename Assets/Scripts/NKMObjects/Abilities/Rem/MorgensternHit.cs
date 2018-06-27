@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Rem
 {
-	public class MorgensternHit : Ability, IClickable
+	public class MorgensternHit : Ability, IClickable, IUseable
 	{
 		private const int AbilityDamage = 15;
 		private const int AbilityRange = 4;
@@ -28,13 +28,10 @@ Czas odnowienia: {Cooldown}";
 			Active.Prepare(this, GetTargetsInRange());
 			Active.MakeAction(Active.HexCells);
 		}
-		public override void Use(List<HexCell> cells)
+		public void Use(List<HexCell> cells)
 		{
-//			cells.RemoveNonEnemies();
-//			List<Character> characters = cells.GetCharacters();
-//			characters.ForEach(c =>
 			cells.GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(AbilityDamage, DamageType.Physical)));
-			OnUseFinish();
+			Finish();
 		}
 	}
 }

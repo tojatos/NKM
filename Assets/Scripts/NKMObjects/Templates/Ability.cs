@@ -46,21 +46,21 @@ namespace NKMObjects.Templates
 
 		public bool CanBeUsed => Validator.AbilityCanBeUsed;
 
-		public virtual void Use(Character character)
-		{
-			throw new NotImplementedException();
-		}
-		public virtual void Use(HexCell cell)
-		{
-			throw new NotImplementedException();
-		}
-		public virtual void Use(List<HexCell> cells)
-		{
-			throw new NotImplementedException();
-		}
-		public virtual void OnUseFinish() => OnUseFinish(Cooldown);
+//		public virtual void Use(Character character)
+//		{
+//			throw new NotImplementedException();
+//		}
+//		public virtual void Use(HexCell cell)
+//		{
+//			throw new NotImplementedException();
+//		}
+//		public virtual void Use(List<HexCell> cells)
+//		{
+//			throw new NotImplementedException();
+//		}
+		protected void Finish() => Finish(Cooldown);
 
-		protected virtual void OnUseFinish(int cooldown)
+		protected void Finish(int cooldown)
 		{
 			if (ParentCharacter.Abilities.ContainsType(typeof(AceInTheHole)))
 			{

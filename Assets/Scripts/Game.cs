@@ -81,7 +81,8 @@ public class Game
 
 			if (!IsEveryCharacterPlacedInTheFirstPhase) continue;
 
-			if (NoCharacterOnMapCanTakeAction) Active.Phase.Finish();
+//			if (NoCharacterOnMapCanTakeAction) Active.Phase.Finish();
+			if (UIManager.CanClickEndTurnButton && NoCharacterOnMapCanTakeAction || Active.Phase.Number == 0 && NoCharacterOnMapCanTakeAction) Active.Phase.Finish();//TODO
 		}
 		// ReSharper disable once FunctionNeverReturns
 	}
@@ -118,7 +119,7 @@ public class Game
 		}
 		else
 		{
-			if (Active.Ability != null)
+			if (Active.AbilityToUse != null)
 			{
 				return;
 			}

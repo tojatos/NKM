@@ -50,7 +50,7 @@ Czas odnowienia: {Cooldown} (po zakończeniu efektu)";
             IsEnabled = true;
             _currentHitRemains = HitDurability;
             _currentTimeDurability = TimeDurability;
-            OnUseFinish(0);
+            Finish(0);
         }
 
         private void Disable()

@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Itsuka_Kotori
 {
-    public class Conflagration : Ability, IClickable
+    public class Conflagration : Ability, IClickable, IUseable
     {
         private const int Range = 13;
         private const int Radius = 6;
@@ -49,20 +49,10 @@ Zasięg: {1}	Czas trwania: {2} Czas odnowienia: {3}",
             Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, Radius);
         }
 
-        public override void Use(List<HexCell> cells)
+        public void Use(List<HexCell> cells)
         {
             cells.ForEach(c => c.Effects.Add(new HexCellEffects.Conflagration(EffectTime, c, ParentCharacter)));
-//            try
-//            {
-//                cells.ForEach(c => c.Effects.Add(new HexCellEffects.Conflagration(EffectTime, c, ParentCharacter)));
-//                OnUseFinish();
-//            }
-//            catch (Exception e)
-//            {
-//                MessageLogger.DebugLog(e.Message);
-//                OnFailedUseFinish();
-//            }
-            OnUseFinish();
+            Finish();
         }
     }
 }

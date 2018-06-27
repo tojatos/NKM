@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Aqua
 {
-	public class Purification : Ability, IClickable
+	public class Purification : Ability, IClickable, IUseable
 	{
 		private const int AbilityRange = 5;
 
@@ -22,21 +22,13 @@ namespace NKMObjects.Abilities.Aqua
 Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 
 
-		public void Click()
-		{
-//			List<HexCell> cellRange = GetRangeCells();
-//			cellRange.RemoveNonFriends();
-//			var canUseAbility = Active.Prepare(this, cellRange);
-//			if (canUseAbility) return;
-//
-//			MessageLogger.DebugLog("Nie ma nikogo w zasięgu umiejętności!");
-//			OnFailedUseFinish();
-			Active.Prepare(this, GetTargetsInRange());
-		}
-		public override void Use(Character character)
+		public void Click() => Active.Prepare(this, GetTargetsInRange());
+		public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+		private void Use(Character character)
 		{
 			character.Effects.Where(e => e.Type == EffectType.Negative).ToList().ForEach(e => e.RemoveFromParent());
-			OnUseFinish();
+			Finish();
 		}
+
 	}
 }

@@ -6,13 +6,14 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Bezimienni
 {
-    public class Castling : Ability, IClickable
+    public class Castling : Ability, IClickable, IUseable
     {
 	    private Character _firstCharacterToSwap;
 	    private Character _secondCharacterToSwap;
         public Castling() : base(AbilityType.Ultimatum, "Castling", 6)
         {
-	        OnAwake += () => Validator.ToCheck.Add(() => GetRangeCells().GetCharacters().Count >= 2); 
+	        OnAwake += () => Validator.ToCheck.Add(() => GetRangeCells().GetCharacters().Count >= 2);
+	        AfterUseFinish += Cleanup;
         }
 	    public override List<HexCell> GetRangeCells() => new List<HexCell>(HexMapDrawer.Instance.Cells);
 	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyCharacters();
@@ -27,7 +28,7 @@ namespace NKMObjects.Abilities.Bezimienni
 		    Active.Prepare(this, cellRange);
 	    }
 
-	    public override void Use(Character character)
+	    private void Use(Character character)
 		{
 			if (_firstCharacterToSwap == null)
 			{
@@ -38,8 +39,7 @@ namespace NKMObjects.Abilities.Bezimienni
 			{
 				_secondCharacterToSwap = character;
 				Swap();
-				Cleanup();
-				OnUseFinish();
+				Finish();
 			}
 		}
 
@@ -65,8 +65,8 @@ namespace NKMObjects.Abilities.Bezimienni
 		    c2.CharacterOnCell = _firstCharacterToSwap;
 		    AnimationPlayer.Add(new MoveTo(_firstCharacterToSwap.CharacterObject.transform, c2.transform.position, 1f));
 		    AnimationPlayer.Add(new MoveTo(_secondCharacterToSwap.CharacterObject.transform, c1.transform.position, 1f));
-
-
 	    }
+
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
     }
 }

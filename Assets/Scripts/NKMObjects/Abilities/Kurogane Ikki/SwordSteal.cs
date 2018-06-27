@@ -21,7 +21,7 @@ namespace NKMObjects.Abilities.Kurogane_Ikki
                     if(a==null) return;
                     a.ParentCharacter = ParentCharacter;
                     a.Awake();
-                    a.AfterUseFinish += OnUseFinish;
+                    a.AfterUseFinish += Finish;
                     
                     _copiedAbility = a;
                 };
@@ -34,7 +34,7 @@ namespace NKMObjects.Abilities.Kurogane_Ikki
         public override string GetDescription()
         {
             string desc = 
-$@"{ParentCharacter.Name} kradnie wrogą technikę, używając ostatnią umiejętność, która zadała mu obrażenia.
+$@"{ParentCharacter.Name} kopiuje wrogą technikę, używając ostatnią umiejętność, która zadała mu obrażenia.
 Czas odnowienia: {Cooldown}";
             if (_copiedAbility != null) desc += $"\n<i>Ostatnia skradziona technika: \n<b>{_copiedAbility.Name}</b></i>\n" + _copiedAbility.GetDescription();
             return desc;

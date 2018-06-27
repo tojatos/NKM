@@ -7,7 +7,7 @@ namespace NKMObjects.Abilities.Shana
 	{
 		private const int AttackIncrease = 5;
 		private const int BasicAttackRangeIncrease = 4;
-		private const int Duration = 2;
+		private const int Duration = 3;
 
 		public GurenNoOodachi() : base(AbilityType.Normal, "Guren no Oodachi", 5)
 		{
@@ -27,7 +27,7 @@ Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
 			Active.MakeAction();
 			ParentCharacter.Effects.Add(new StatModifier(Duration, AttackIncrease, ParentCharacter, StatType.AttackPoints, Name));
 			ParentCharacter.Effects.Add(new StatModifier(Duration, BasicAttackRangeIncrease, ParentCharacter, StatType.BasicAttackRange, Name));
-			OnUseFinish();
+			Finish();
 
 		}
 	}

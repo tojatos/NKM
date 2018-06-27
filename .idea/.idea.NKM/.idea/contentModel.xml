@@ -102,6 +102,9 @@
               <e p="MjolnirHammer.cs" t="Include" />
               <e p="WickedEyesServant.cs" t="Include" />
             </e>
+            <e p="Ditto" t="Include">
+              <e p="Transform.cs" t="Include" />
+            </e>
             <e p="Empty.cs" t="Include" />
             <e p="Gilgamesh" t="Include">
               <e p="Enkidu.cs" t="Include" />
@@ -123,6 +126,11 @@
               <e p="Conflagration.cs" t="Include" />
               <e p="ElohimGibor.cs" t="Include" />
             </e>
+            <e p="Kirito" t="Include">
+              <e p="Parry.cs" t="Include" />
+              <e p="StarburstStream.cs" t="Include" />
+              <e p="Switch.cs" t="Include" />
+            </e>
             <e p="Kurogane Ikki" t="Include">
               <e p="IttoShura.cs" t="Include" />
               <e p="RakudaiKishi.cs" t="Include" />
@@ -132,6 +140,9 @@
               <e p="GrenadeThrow.cs" t="Include" />
               <e p="PChan.cs" t="Include" />
               <e p="RunItDown.cs" t="Include" />
+            </e>
+            <e p="MonkeyDLuffy" t="Include">
+              <e p="GumGumNoMi.cs" t="Include" />
             </e>
             <e p="Rem" t="Include">
               <e p="AlHuma.cs" t="Include" />

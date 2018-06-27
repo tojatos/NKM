@@ -5,37 +5,30 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Gilgamesh
 {
-	public class GateOfBabylon : Ability, IClickable
+	public class GateOfBabylon : Ability, IClickable, IUseable
 	{
-		private const int AbilityDamage = 25;
-		private const int AbilityRange = 6;
-		private const int AbilityRadius = 6;
-		public GateOfBabylon() : base(AbilityType.Ultimatum, "Gate Of Babylon", 5)
-		{
-//			Name = "Gate Of Babylon";
-//			Cooldown = 5;
-//			CurrentCooldown = 0;
-//			Type = AbilityType.Ultimatum;
-		}
+		private const int Damage = 25;
+		private const int Range = 6;
+		private const int Radius = 6;
+		public GateOfBabylon() : base(AbilityType.Ultimatum, "Gate Of Babylon", 5) {}
+		
 		public override string GetDescription() =>
-$@"{ParentCharacter.Name} otwiera wrota Babilonu, zsyłając deszcz mieczy na wskazanym obszarze w promieniu {AbilityRadius},
-zadając {AbilityDamage} obrażeń magicznych lub fizycznych, zależnie od odporności przeciwnika.
+$@"{ParentCharacter.Name} otwiera wrota Babilonu, zsyłając deszcz mieczy na wskazanym obszarze w promieniu {Radius},
+zadając {Damage} obrażeń magicznych lub fizycznych, zależnie od odporności przeciwnika.
 Jeżeli wróg ma więcej obrony fizycznej od magicznej, umiejętność zada obrażenia magiczne,
 a w przeciwnym razie - fizyczne.
-Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 
-		public override List<HexCell> GetRangeCells()
-		{
-			return ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		}
+Zasięg: {Range}	Czas odnowienia: {Cooldown}";
+
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
 
 		public void Click()
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			Active.Prepare(this, cellRange, false, false);
-			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, AbilityRadius);
+			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, Radius);
 		}
-		public override void Use(List<HexCell> cells)
+		public void Use(List<HexCell> cells)
 		{
 			List<Character> characters = cells.GetCharacters();
 			characters.ForEach(targetCharacter =>
@@ -44,11 +37,11 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 				DamageType damageType = targetCharacter.MagicalDefense.Value <= targetCharacter.PhysicalDefense.Value
 					? DamageType.Magical
 					: DamageType.Physical;
-				var damage = new Damage(AbilityDamage, damageType);
+				var damage = new Damage(Damage, damageType);
 
 				ParentCharacter.Attack(this, targetCharacter, damage);
 			});
-			OnUseFinish();
+			Finish();
 		}
 	}
 }

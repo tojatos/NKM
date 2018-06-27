@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Itsuka_Kotori
 {
-	public class CamaelMegiddo : Ability, IClickable
+	public class CamaelMegiddo : Ability, IClickable, IUseable
 	{
 		private const int Damage = 35;
 
@@ -46,19 +46,6 @@ Czas odnowienia: {Cooldown}";
 		{
 			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(1);
 			Active.Prepare(this, cellRange); //TODO: Air selection magic? Or maybe new mechanism?
-//			var canUseAbility = Active.Prepare(this, cellRange);
-//			if (canUseAbility) return;
-
-//			MessageLogger.DebugLog("Nie ma komórek dookoła postaci!");
-//			OnFailedUseFinish();
-		}
-
-		public override void Use(Character character) => Use(character.ParentCell);
-
-		public override void Use(HexCell cell)
-		{
-			SendFlamewave(cell);
-			OnUseFinish();
 		}
 
 		private void SendFlamewave(HexCell targetCell)
@@ -88,6 +75,12 @@ Czas odnowienia: {Cooldown}";
 				var damage = new Damage(Damage, DamageType.Magical);
 				ParentCharacter.Attack(this, c.CharacterOnCell, damage);
 			}
+		}
+
+		public void Use(List<HexCell> cells)
+		{
+			SendFlamewave(cells[0]);
+			Finish();
 		}
 	}
 }

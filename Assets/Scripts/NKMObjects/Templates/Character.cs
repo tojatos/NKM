@@ -43,10 +43,10 @@ namespace NKMObjects.Templates
 		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore || HasFreeMove;
 		private bool CanUseBasicAttack => !HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect || HasFreeAttack;
 		public bool CanUseNormalAbility => !HasUsedNormalAbilityInPhaseBefore && !HasUsedBasicAttackInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
-		public bool CanUseUltimatumAbility => !(HasUsedUltimatumAbilityInPhaseBefore || HasUsedBasicMoveInPhaseBefore || HasUsedBasicAttackInPhaseBefore || HasUsedNormalAbilityInPhaseBefore || TookActionInPhaseBefore);//Active.Turn.CharacterThatTookActionInTurn == this);
-		
+		public bool CanUseUltimatumAbility => !(HasUsedUltimatumAbilityInPhaseBefore || HasUsedBasicMoveInPhaseBefore || HasUsedBasicAttackInPhaseBefore || HasUsedNormalAbilityInPhaseBefore || TookActionInPhaseBefore) || HasFreeUltimatumAbilityUse;//Active.Turn.CharacterThatTookActionInTurn == this);
 
 		public bool HasFreeAttack { get; set; }
+		public bool HasFreeUltimatumAbilityUse { get; set; }
 		public bool HasFreeMove { get; set; }
 		public bool TookActionInPhaseBefore { get; set; }
 		public bool IsAlive => HealthPoints.Value > 0;
@@ -189,6 +189,8 @@ namespace NKMObjects.Templates
 		}
 		public void DefaultBasicAttack(Character attackedCharacter)
 		{
+			if (HasFreeAttack) HasFreeAttack = false;
+			
 			var damage = new Damage(AttackPoints.Value, DamageType.Physical);
 			BeforeBasicAttack?.Invoke(attackedCharacter, damage);
 			attackedCharacter.BeforeBeingBasicAttacked?.Invoke(this, damage);
@@ -196,7 +198,6 @@ namespace NKMObjects.Templates
 			AfterBasicAttack?.Invoke(attackedCharacter, damage);
 
 			HasUsedBasicAttackInPhaseBefore = true;
-			if (HasFreeAttack) HasFreeAttack = false;
 		}
 		private void Attack(Character character, Damage damage)//, AttackType attackType, int atkPoints)
 		{

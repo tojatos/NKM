@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 {
-	public class CurseOfTheBlackCat : Ability, IClickable
+	public class CurseOfTheBlackCat : Ability, IClickable, IUseable
 	{
 		private const int AbilityRange = 5;
 		private const int DoTDamage = 6;
@@ -28,11 +28,13 @@ Zasięg: {4} Czas odnowienia: {5}",
 			ParentCharacter.Name, DoTDamage, DoTTime, AdditionalDamagePercent, AbilityRange, Cooldown);
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
-		public override void Use(Character targetCharacter)
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+
+		private void Use(Character targetCharacter)
 		{
 			var damage = new Damage(DoTDamage, DamageType.True);
             targetCharacter.Effects.Add(new HPDrain(ParentCharacter, damage, DoTTime, targetCharacter, Name));
-            OnUseFinish();
+            Finish();
 		}
 	}
 }

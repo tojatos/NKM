@@ -44,9 +44,9 @@ namespace Managers
 //								new Character("Itsuka Kotori"),
 //								new Character("Llenn"),
 //								new Character("Yoshino"),
-								new Character("Dekomori Sanae"),
-								new Character("Hanekawa Tsubasa"),
-//								new Character("Rem"),
+//								new Character("Dekomori Sanae"),
+								new Character("Rem"),
+								new Character("Kirito"),
 							}
 						},
 						new GamePlayer
@@ -54,13 +54,15 @@ namespace Managers
 							Name = "Maciej",
 							Characters = new List<Character>
 							{
+								new Character("Hanekawa Tsubasa"),
 //								new Character("Bezimienni"),
-								new Character("Shana"),
-								new Character("Yasaka Mahiro"),
-								new Character("Kurogane Ikki"),
-								new Character("Gilgamesh"),
-								new Character("Crona"),
+//								new Character("Shana"),
+//								new Character("Yasaka Mahiro"),
+//								new Character("Kurogane Ikki"),
+//								new Character("Gilgamesh"),
+//								new Character("Crona"),
 //								new Character("Asuna"),
+//								new Character("Aqua"),
 							}
 						},
 					},

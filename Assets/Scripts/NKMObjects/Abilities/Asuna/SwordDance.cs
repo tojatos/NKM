@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Asuna
 		private const int AbilityBonusAttackGain = 2;
 
 		private int _attacksToBlock = 3;
-		private int _phasesRemain = 2;
+		private int _phasesRemain = 3;
 		private int _currentBonusAttack;
 
 		public SwordDance() : base(AbilityType.Ultimatum, "Sword Dance", 4)
@@ -61,14 +61,14 @@ Pozostałe ataki do zablokowania: {_attacksToBlock}";
 		{
 			Active.MakeAction();
 			IsEnabled = true;
-			OnUseFinish(0);
+			Finish(0);
 			UI.CharacterUI.Abilities.Instance.UpdateButtonData();
 		}
 		private void Disable()
 		{
 			IsEnabled = false;
 			_attacksToBlock = 3;
-			_phasesRemain = 2;
+			_phasesRemain = 3;
 			CurrentCooldown = Cooldown;
 		}
 	}

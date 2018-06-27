@@ -5,29 +5,32 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Sinon
 {
-	public class PreciseShot : Ability, IClickable
+	public class PreciseShot : Ability, IClickable, IUseable
 	{
-		private const int AbilityDamage = 40;
-		private const int AbilityRange = 11;
+		private const int Damage = 40;
+		private const int Range = 11;
 
 		public PreciseShot() : base(AbilityType.Ultimatum, "Precise Shot", 6)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
 		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 		
-		public override string GetDescription() => $@"{ParentCharacter.Name} strzela w wybranego wroga, zadając {AbilityDamage} obrażeń fizycznych.
-Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
+		public override string GetDescription() => 
+$@"{ParentCharacter.Name} strzela w wybranego wroga, zadając {Damage} obrażeń fizycznych.
+
+Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-		public override void Use(Character character)
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+		private void Use(Character character)
 		{
-			var damage = new Damage(AbilityDamage, DamageType.Physical);
+			var damage = new Damage(Damage, DamageType.Physical);
 			ParentCharacter.Attack(this, character, damage);
-			OnUseFinish();
+			Finish();
 		}
 	}
 }

@@ -71,7 +71,7 @@ Umiejętność jest włączona od {_currentDuration} faz.";
             IsEnabled = true;
             _currentDuration = 1;
             AddHexEffectsInRange();
-            OnUseFinish();
+            Finish();
         }
 
         private void AddHexEffectsInRange() => GetRangeCells().ForEach(c =>
