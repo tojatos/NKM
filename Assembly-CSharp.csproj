@@ -144,7 +144,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Llenn\GrenadeThrow.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Llenn\PChan.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Llenn\RunItDown.cs" />
-    <Compile Include="Assets\Scripts\NKMObjects\Abilities\MonkeyDLuffy\GumGumNoMi.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Monkey D. Luffy\GearSecond.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Monkey D. Luffy\GomuNingen.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Monkey D. Luffy\GomuGomuNoMi.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\AlHuma.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\Confession.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\DemonicForm.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Templates\HexCellEffect.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IClickable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IEnableable.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Templates\IEnchantable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IRunable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IUseable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\NKMObject.cs" />

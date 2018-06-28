@@ -199,7 +199,7 @@ namespace NKMObjects.Templates
 
 			HasUsedBasicAttackInPhaseBefore = true;
 		}
-		private void Attack(Character character, Damage damage)//, AttackType attackType, int atkPoints)
+		private void Attack(Character character, Damage damage)
 		{
 			BeforeAttack?.Invoke(character, damage);
             character.ReceiveDamage(damage);

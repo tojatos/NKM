@@ -11,7 +11,6 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 {
 	public GameObject CharacterPrefab;
 	public GameObject HighlightPrefab;
-//	public ColorToHighlight[] HighlightColorMappings;
 	private void SpawnCharacterObject(HexCell parentCell, Character characterToSpawn)
 	{
 		Sprite characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterToSpawn.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
@@ -27,37 +26,18 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	}
 	public void SpawnHighlightCellObject(HexCell parentCell, string colorName)
 	{
-//		foreach (ColorToHighlight highlightColorMapping in HighlightColorMappings)
-//		{
-//			if (highlightColorMapping.HiglightColor != highlightColor) continue;
-
-//			GameObject highlightObject = Instantiate(highlightColorMapping.HiglightPrefab, parentCell.transform);//TODO: just change the image
-//			highlightObject.transform.localPosition = new Vector3(0, 11, 0);
-//			parentCell.Highlight = highlightObject;
-//			parentCell.Highlights.Add(highlightObject);
-//		}
 		GameObject highlightObject = Instantiate(HighlightPrefab, parentCell.transform);
 		highlightObject.transform.localPosition = new Vector3(0, 11, 0);
 		highlightObject.GetComponent<SpriteRenderer>().sprite = Stuff.Sprites.HighlightHexagons.Single(s => s.name == colorName); 
 		parentCell.Highlights.Add(highlightObject);
 	}
-//	public void SpawnHelpHighlightCellObject(HexCell parentCell, HiglightColor highlightColor)
-//	{
-//		foreach (ColorToHighlight highlightColorMapping in HighlightColorMappings)
-//		{
-//			if (highlightColorMapping.HiglightColor != highlightColor) continue;
-//
-//			GameObject highlightObject = Instantiate(highlightColorMapping.HiglightPrefab, parentCell.transform);
-//			highlightObject.transform.localPosition = new Vector3(0, 12, 0);
-//			parentCell.HelpHighlight = highlightObject;
-//		}
-//	}
 
-	public static NKMObject Create(string namespaceName, string className)
+
+	private static NKMObject Create(string namespaceName, string className)
 	{
-		var typeName = "NKMObjects." + namespaceName + "." + className;
+		string typeName = "NKMObjects." + namespaceName + "." + className;
 		Type type = Type.GetType(typeName);
-		if (type == null) 	throw new ArgumentNullException();
+		if (type == null) throw new NullReferenceException();
 
 		var createdMyGameObject = Activator.CreateInstance(type) as NKMObject;
 		return createdMyGameObject;

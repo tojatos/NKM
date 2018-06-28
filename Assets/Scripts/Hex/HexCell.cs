@@ -95,14 +95,29 @@ namespace Hex
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
 			}
 		}
-		public IEnumerable<HexCell> GetLine(HexDirection direction, int depth)
+
+		public int GetDistance(HexCell cell)
+		{
+			HexDirection direction = GetDirection(cell);
+			HexCell lastCell = this;
+			int distance = 0;
+			while (lastCell!=cell)
+			{
+				distance++;
+				lastCell = lastCell.GetNeighbor(direction);
+				if (lastCell == null) return -1;
+			}
+
+			return distance;
+		}
+		public List<HexCell> GetLine(HexDirection direction, int depth)
 		{
 			List<HexCell> visited = new List<HexCell>();
 			HexCell lastCell = this;
-			for (var i = 0; i < depth; i++)
+			for (int i = 0; i < depth; i++)
 			{
 				HexCell neighbor = lastCell.GetNeighbor(direction);
-				if(neighbor==null) continue;
+				if(neighbor==null) continue; //TODO: why not break?
 				
 				visited.Add(neighbor);
 				lastCell = neighbor;

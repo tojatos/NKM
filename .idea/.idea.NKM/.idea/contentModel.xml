@@ -141,8 +141,10 @@
               <e p="PChan.cs" t="Include" />
               <e p="RunItDown.cs" t="Include" />
             </e>
-            <e p="MonkeyDLuffy" t="Include">
-              <e p="GumGumNoMi.cs" t="Include" />
+            <e p="Monkey D. Luffy" t="Include">
+              <e p="GearSecond.cs" t="Include" />
+              <e p="GomuGomuNoMi.cs" t="Include" />
+              <e p="GomuNingen.cs" t="Include" />
             </e>
             <e p="Rem" t="Include">
               <e p="AlHuma.cs" t="Include" />
@@ -199,7 +201,9 @@
             <e p="HexCellEffect.cs" t="Include" />
             <e p="IClickable.cs" t="Include" />
             <e p="IEnableable.cs" t="Include" />
+            <e p="IEnchantable.cs" t="Include" />
             <e p="IRunable.cs" t="Include" />
+            <e p="IUseable.cs" t="Include" />
             <e p="NKMObject.cs" t="Include" />
           </e>
         </e>
