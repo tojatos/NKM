@@ -60,7 +60,7 @@ namespace Managers
 //								new Character("Shana"),
 //								new Character("Yasaka Mahiro"),
 //								new Character("Kurogane Ikki"),
-								new Character("Gilgamesh"),
+//								new Character("Gilgamesh"),
 //								new Character("Crona"),
 //								new Character("Asuna"),
 //								new Character("Aqua"),

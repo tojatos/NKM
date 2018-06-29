@@ -36,7 +36,8 @@ $"{ParentCharacter.Name} ma 50% szansy na pójście w losowe miejsce podczas wyk
 
 				ParentCharacter.DefaultBasicMove(Active.MoveCells);
 				MessageLogger.Log($"{ParentCharacter.FormattedFirstName()}: Cholera, znowu się zgubili?");
-				Active.PlayAudio("one piece wtf sound");
+				int rand = UnityEngine.Random.Range(1, 4);
+				Active.PlayAudio("op wtf " + rand);
 			}
 		}
 	}

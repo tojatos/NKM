@@ -53,7 +53,11 @@ Obrażenia: {JetPistolDamage}
 
 Zasięg: {Range}    Cooldown: {Cooldown}";
 
-        public void Click() => Active.Prepare(this, GetTargetsInRange());
+        public void Click()
+        {
+            Active.Prepare(this, GetTargetsInRange());
+            Active.PlayAudio("gomu gomu no");
+        }
 
         public void Use(List<HexCell> cells)
         {
@@ -68,8 +72,11 @@ Zasięg: {Range}    Cooldown: {Cooldown}";
             Finish();
         }
 
-        private void Pistol(Character enemy) => 
-            ParentCharacter.Attack(this, enemy, new Damage(IsEnchanted?JetPistolDamage:PistolDamage, DamageType.Physical));
+        private void Pistol(Character enemy)
+        {
+            ParentCharacter.Attack(this, enemy,new Damage(IsEnchanted ? JetPistolDamage : PistolDamage, DamageType.Physical));
+            Active.PlayAudio("pistol");
+        }
 
         private void Bazooka(Character enemy)
         {
