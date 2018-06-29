@@ -14,6 +14,7 @@ namespace NKMObjects.Abilities.Kirito
         {
             OnAwake += () =>
             {
+                Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
                 ParentCharacter.AfterBasicAttack += (character, damage) =>
                 {
                     if(!IsEnabled) return;
@@ -29,7 +30,12 @@ namespace NKMObjects.Abilities.Kirito
             ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
-        public override string GetDescription() => "";
+        public override string GetDescription() =>
+$@"{ParentCharacter.Name} atakuje przeciwnika {AttackTimes} razy.
+Każdy cios zadaje {Damage} pkt obrażeń nieuchronnych.
+Po użyciu tej umiejętnoości Kirito może atakować 2 razy na turę.
+Efekt jest trwały.
+Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         private bool _gotFreeAttackThisTurn;
 

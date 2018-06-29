@@ -20,7 +20,7 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 					ParentCharacter.Attack(this, character, damage);
 					_isBeingUsed = false;
 				};
-				ParentCharacter.OnEnemyKill += () => _additionalDamage++;
+				ParentCharacter.OnKill += () => _additionalDamage++;
 			};
 		}
 		public override string GetDescription() => string.Format(

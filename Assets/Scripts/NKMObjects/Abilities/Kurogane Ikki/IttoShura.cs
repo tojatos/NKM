@@ -17,6 +17,7 @@ Po użyciu tej umiejętności {ParentCharacter.Name} może użyć podstawowego a
 
         public void Click()
         {
+            Active.MakeAction();
             ParentCharacter.AttackPoints.Value *= 2;
             ParentCharacter.BasicAttackRange.Value *= 2;
             ParentCharacter.Speed.Value *= 2;

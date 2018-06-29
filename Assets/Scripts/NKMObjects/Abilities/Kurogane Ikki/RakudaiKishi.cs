@@ -8,7 +8,7 @@ namespace NKMObjects.Abilities.Kurogane_Ikki
         public RakudaiKishi() : base(AbilityType.Passive, "Rakudai Kishi")
         {
             OnAwake += () => Game.Players.FindAll(p => p != Owner).ForEach(p =>
-                p.Characters.ForEach(c => c.OnEnemyKill += () =>
+                p.Characters.ForEach(c => c.OnDeath += () =>
                 {
                     if(!ParentCharacter.IsAlive) return;
                     ParentCharacter.Heal(ParentCharacter, HealAmount);

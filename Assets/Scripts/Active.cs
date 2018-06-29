@@ -191,7 +191,7 @@ public class Active
 			case Action.None:
 				throw new Exception("Żadna akcja nie jest aktywna!");
 			case Action.UseAbility:
-//                if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
+                if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 //				if (cell.CharacterOnCell != null)
 //				{
 //					Ability.Use(cell.CharacterOnCell);
