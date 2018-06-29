@@ -92,7 +92,7 @@ Zasięg: {Range}    Cooldown: {Cooldown}";
             int distance = ParentCharacter.ParentCell.GetDistance(cell);
             if(distance<=0) return;
             Active.PlayAudio("gomu gomu no rocket effect");
-            ThrowCharacter(ParentCharacter, direction, distance*2-1);
+            ThrowCharacter(ParentCharacter, direction, distance*2);
         }
 
         private static void ThrowCharacter(Character character, HexDirection direction, int distance)

@@ -32,6 +32,7 @@ zwiększając swoją szybkość o {SpeedIncrease} i ulepszając swoją zwykłą 
 
         public void Click()
         {
+		  	Active.MakeAction();
             ParentCharacter.Effects.Add(new StatModifier(Duration+1, SpeedIncrease, ParentCharacter, StatType.Speed, Name));
             Ability normalAbility = ParentCharacter.Abilities.Find(a => a.Type == AbilityType.Normal);
             if (normalAbility is IEnchantable) ((IEnchantable) normalAbility).IsEnchanted = true;
