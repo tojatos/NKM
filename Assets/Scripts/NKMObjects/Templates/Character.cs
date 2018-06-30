@@ -76,6 +76,7 @@ namespace NKMObjects.Templates
 		public event VoidDelegate JustBeforeFirstAction;
 		public event VoidDelegate OnKill;
 		public event VoidDelegate OnDeath;
+		public event VoidDelegate BeforeMove;
 		public event VoidDelegate AfterMove;
 		public event VoidDelegate AfterBasicMove;
 		public event AbilityDelegate AfterBeingHitByAbility;
@@ -165,6 +166,7 @@ namespace NKMObjects.Templates
 		}
 		public void MoveTo(HexCell targetCell)
 		{
+			BeforeMove?.Invoke();
 			ParentCell.CharacterOnCell = null;
 			ParentCell = targetCell;
 			targetCell.CharacterOnCell = this;

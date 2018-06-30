@@ -8,7 +8,7 @@
 			ParentCharacter = parentCharacter;
 			if (name != null) Name = name;
 			if (Active.CharacterOnMap == ParentCharacter) UI.CharacterUI.Effects.Instance.UpdateButtons();
-			Active.Turn.TurnFinished += (character) => {
+			Active.Turn.TurnFinished += character => {
 				if(character != ParentCharacter) return;
 				if(CurrentCooldown == int.MaxValue) return;
                 if (CurrentCooldown > 0) CurrentCooldown--; 

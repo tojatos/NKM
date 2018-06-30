@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Extensions;
 using Hex;
+using NKMObjects.Effects;
 using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Yoshino
@@ -25,22 +26,13 @@ namespace NKMObjects.Abilities.Yoshino
                     if (!IsEnabled) return;
                     _currentDuration++;
                     if (_currentDuration > 4) Disable();
-                    else
-                    {
-                        //refresh the effect
-                        RemoveHexEffects();
-                        AddHexEffectsInRange();
-                    }
                 };
-                ParentCharacter.AfterMove += () =>
+                ParentCharacter.BeforeMove += () =>
                 {
                     if (!IsEnabled) return;
-                    //refresh the effect
-                    RemoveHexEffects();
-                    AddHexEffectsInRange();
+                    Disable();
                 };
             };
-            
         }
 
         public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
@@ -51,6 +43,7 @@ namespace NKMObjects.Abilities.Yoshino
             string desc = 
 $@"{ParentCharacter.Name} otacza się Zamiecią na max. {MaxDuration} tury.
 Wrogowie znajdujący się wewnątrz zamieci zostają spowolnieni do {SpeedDecrease}.
+Podczas trwania tego efektu {ParentCharacter.Name} nie może się ruszać.
 Po zakończeniu efektu, {ParentCharacter.Name} zada obrażenia magiczne wszystkim wrogom w obszarze,
 tym większe im dłużej umiejętność była aktywna - {DamagePerPhase} /fazę.
 Promień: {Range}    Czas odnowienia: {Cooldown}";
@@ -71,6 +64,7 @@ Umiejętność jest włączona od {_currentDuration} faz.";
             IsEnabled = true;
             _currentDuration = 1;
             AddHexEffectsInRange();
+            ParentCharacter.Effects.Add(new MovementDisability(MaxDuration, ParentCharacter, Name));
             Finish();
         }
 
@@ -84,18 +78,19 @@ Umiejętność jest włączona od {_currentDuration} faz.";
         {
             RemoveHexEffects();
             IsEnabled = false;
-            var targets = GetTargetsInRange();
-            var chara = targets.GetCharacters();
-            foreach (var c in chara)
+//            var targets = GetTargetsInRange();
+//            var chara = targets.GetCharacters();
+//            foreach (var c in chara)
+//            {
+//                var damage = new Damage(_currentDuration*DamagePerPhase, DamageType.Magical);
+//                ParentCharacter.Attack(this, c, damage);
+//            }
+            ParentCharacter.Effects.RemoveAll(e => e.Name == Name); // Remove movement disability
+            GetTargetsInRange().GetCharacters().ForEach(c =>
             {
                 var damage = new Damage(_currentDuration*DamagePerPhase, DamageType.Magical);
                 ParentCharacter.Attack(this, c, damage);
-            }
-//            GetTargetsInRange().GetCharacters().ForEach(c =>
-//            {
-//                var damage = new Damage(_currentDuration*DamagePerPhase, DamageType.Magical);
-//                ParentCharacter.Attack(c, damage);
-//            });
+            });
             _currentDuration = 0;
         }
 
