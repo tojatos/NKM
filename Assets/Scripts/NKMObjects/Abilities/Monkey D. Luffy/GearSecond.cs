@@ -28,7 +28,8 @@ namespace NKMObjects.Abilities.Monkey_D._Luffy
 
         public override string GetDescription() =>
 $@"{ParentCharacter.Name} przyśpiesza przepływ krwi w swoim ciele,
-zwiększając swoją szybkość o {SpeedIncrease} i ulepszając swoją zwykłą umiejętność na {Duration} następne fazy.";
+zwiększając swoją szybkość o {SpeedIncrease} i ulepszając swoją zwykłą umiejętność na {Duration} następne fazy.
+Czas odnowienia: {Cooldown}";
 
         public void Click()
         {

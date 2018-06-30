@@ -74,7 +74,7 @@ namespace NKMObjects.Templates
 		#endregion
 		#region Events
 		public event VoidDelegate JustBeforeFirstAction;
-		public event VoidDelegate OnEnemyKill;
+		public event VoidDelegate OnKill;
 		public event VoidDelegate OnDeath;
 		public event VoidDelegate AfterMove;
 		public event VoidDelegate AfterBasicMove;
@@ -204,7 +204,7 @@ namespace NKMObjects.Templates
 			BeforeAttack?.Invoke(character, damage);
             character.ReceiveDamage(damage);
 			AfterAttack?.Invoke(character, damage);
-            if (!character.IsAlive) OnEnemyKill?.Invoke();
+            if (!character.IsAlive) OnKill?.Invoke();
 		}
 
 		public void Attack(Ability ability, Character character, Damage damage)
