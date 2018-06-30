@@ -39,7 +39,7 @@ namespace Managers
 							Characters = new List<Character>
 							{
 //								new Character("Sinon"),
-//								new Character("Roronoa Zoro"),
+								new Character("Roronoa Zoro"),
 //								new Character("Hecate"),
 //								new Character("Itsuka Kotori"),
 //								new Character("Llenn"),
@@ -56,8 +56,8 @@ namespace Managers
 							Characters = new List<Character>
 							{
 //								new Character("Hanekawa Tsubasa"),
-//								new Character("Bezimienni"),
-//								new Character("Shana"),
+								new Character("Bezimienni"),
+								new Character("Shana"),
 //								new Character("Yasaka Mahiro"),
 //								new Character("Kurogane Ikki"),
 //								new Character("Gilgamesh"),

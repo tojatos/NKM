@@ -232,8 +232,9 @@ namespace NKMObjects.Templates
 		{
 			BeforeBeingDamaged?.Invoke(damage);
 			
-			var defense = GetDefense(damage.Type);
-			damage.Value -= defense;
+			int defense = GetDefense(damage.Type);
+			float reduction = damage.Value * defense / 100;
+			damage.Value -= (int)reduction;
 			damage.Value = damage.Value < 0 ? 0 : damage.Value;
 			HealthPoints.Value -= damage.Value;
 			
