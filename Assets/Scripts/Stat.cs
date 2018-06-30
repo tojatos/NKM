@@ -4,7 +4,7 @@ public class Stat
 {
 	private readonly StatType _type;
 	private readonly Character _parentCharacter;
-	public readonly int BaseValue;
+	public int BaseValue;
 
 	public delegate void OnStatChange();
 	public event OnStatChange StatChanged;
@@ -14,7 +14,7 @@ public class Stat
 	{
 		get
 		{
-			var modifier = 0;
+			int modifier = 0;
 			_parentCharacter.Effects.ForEach(e => modifier += e.Modifier(_type));
 			return _value + modifier;
 		}
@@ -25,6 +25,7 @@ public class Stat
 			StatChanged?.Invoke();
 		}
 	}
+	
 
 	public Stat(Character parentCharacter, StatType type, int baseValue)
 	{

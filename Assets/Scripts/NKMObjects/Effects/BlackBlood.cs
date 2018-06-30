@@ -6,8 +6,6 @@ namespace NKMObjects.Effects
 {
     public class BlackBlood : Effect
     {
-//        private const int Damage = 10;
-//        private const int Range = 2;
         private readonly Character _characterThatAttacks;
         private bool _wasActivatedOnce;
 
@@ -18,6 +16,7 @@ namespace NKMObjects.Effects
             Type = effectTarget.Owner == characterThatAttacks.Owner ? EffectType.Positive : EffectType.Negative;
             Character.DamageDelegate tryToActivateEffect = d => 
             {
+                if(d.Value==0) return;
                 if(_wasActivatedOnce) return;//prevent infinite loop
                 _wasActivatedOnce = true; 
                 List<Character> enemiesInRange =

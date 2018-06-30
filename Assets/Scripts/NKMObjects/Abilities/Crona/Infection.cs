@@ -9,12 +9,16 @@ namespace NKMObjects.Abilities.Crona
     {
         private const int Range = 4;
         private const int EffectCooldown = 3;
-        public Infection() : base(AbilityType.Ultimatum, "Infection", 5){}
-	    //TODO: Range constraint validation?
+
+	    public Infection() : base(AbilityType.Ultimatum, "Infection", 5)
+	    {
+		    Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
+	    }
+	    
         public override string GetDescription() => 
 $@"{ParentCharacter.Name} infekuje cel Czarną Krwią (nakłada efekt Black Blood) na {EffectCooldown} tury.
 Zainfekowany wróg również otrzymuje obrażenia przy zdetonowaniu Black Blood.
-Zasięg: {Range}	Czas odnowienia: {CurrentCooldown}";
+Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 	    
 	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
 	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);

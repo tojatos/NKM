@@ -23,7 +23,7 @@ namespace NKMObjects.Abilities.Aqua
 			};
 		}
 		public override string GetDescription() => 
-$@"{ParentCharacter.Name} wskrzesza sojuszniczą postać, która zginęła maksymalnie turę wcześniej.
+$@"{ParentCharacter.Name} wskrzesza sojuszniczą postać, która zginęła maksymalnie fazę wcześniej.
 Postać odradza się z połową maksymalnego HP, na wybranym spawnie.
 Czas odnowienia: {Cooldown}";
 

@@ -19,8 +19,9 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
             {
                 ParentCharacter.BeforeBasicAttack += (character, damage) =>
                 {
-                    if (character.ParentCell.Effects.ContainsType(typeof(HexCellEffects.Conflagration)))
-                        damage.Value = (int) (damage.Value * (DamagePercent / 100f));
+                    bool isEnemyOnConflagration = character.ParentCell.Effects.ContainsType(typeof(HexCellEffects.Conflagration));
+                    bool isEnemyInBasicAttackRange = ParentCharacter.DefaultGetBasicAttackCells().GetCharacters().Contains(character);
+                    if (!isEnemyInBasicAttackRange && isEnemyOnConflagration) damage.Value = (int) (damage.Value * (DamagePercent / 100f));
                 };
                 ParentCharacter.GetBasicAttackCells = () =>
                 {

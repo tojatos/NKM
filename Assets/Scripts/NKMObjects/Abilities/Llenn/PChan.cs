@@ -8,7 +8,7 @@ namespace NKMObjects.Abilities.Llenn
         public PChan() : base(AbilityType.Passive, "P-Chan")
         {
             OnAwake += () =>
-                Owner.Characters.ForEach(c => c.OnDeath += () => ParentCharacter.Speed.Value += SpeedIncrease);
+                Owner.Characters.ForEach(c => c.OnDeath += () => ParentCharacter.Speed.Value = ParentCharacter.Speed.BaseValue + SpeedIncrease);
         }
 
         public override string GetDescription() =>

@@ -15,7 +15,7 @@ namespace NKMObjects.Abilities.Monkey_D._Luffy
         private const int JetBazookaKnockback = 14;
         private const int JetBazookaDamage = 23;
         private const int JetPistolDamage = 19;
-        public GomuGomuNoMi() : base(AbilityType.Normal, "Gomu Gomu no Mi", 2)
+        public GomuGomuNoMi() : base(AbilityType.Normal, "Gomu Gomu no Mi", 3)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }

@@ -17,7 +17,7 @@ namespace NKMObjects.Effects
 		}
 		public override string GetDescription()
 		{
-			return "Zadaje " + _damagePerTick + " obrażeń co fazę.\n" +
+			return "Zadaje " + _damagePerTick.Value + " obrażeń co fazę.\n" +
 						 "Czas do zakończenia efektu: " + CurrentCooldown;
 		}
 	}
