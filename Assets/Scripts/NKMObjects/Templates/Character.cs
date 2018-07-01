@@ -21,6 +21,7 @@ namespace NKMObjects.Templates
 		public readonly Stat Speed;
 		public readonly Stat PhysicalDefense;
 		public readonly Stat MagicalDefense;
+		public readonly Stat Shield;
 
 		public int DeathTimer { get; private set; }
 
@@ -124,6 +125,7 @@ namespace NKMObjects.Templates
 			Speed = new Stat(this, StatType.Speed, int.Parse(characterData.GetValue("Speed")));
 			PhysicalDefense = new Stat(this, StatType.PhysicalDefense, int.Parse(characterData.GetValue("PhysicalDefense")));
 			MagicalDefense = new Stat(this, StatType.MagicalDefense, int.Parse(characterData.GetValue("MagicalDefense")));
+			Shield = new Stat(this, StatType.Shield, 0);
 
 			Type = characterData.GetValue("FightType").ToFightType();
 
@@ -238,6 +240,17 @@ namespace NKMObjects.Templates
 			float reduction = damage.Value * defense / 100;
 			damage.Value -= (int)reduction;
 			damage.Value = damage.Value < 0 ? 0 : damage.Value;
+			if (Shield.Value >= damage.Value)
+			{
+				Shield.Value -= damage.Value;
+				damage.Value = 0;
+			}
+			else
+			{
+				damage.Value -= Shield.Value;
+				Shield.Value = 0;
+			}
+			
 			HealthPoints.Value -= damage.Value;
 			
 			AfterBeingDamaged?.Invoke(damage);

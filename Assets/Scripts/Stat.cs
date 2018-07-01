@@ -47,5 +47,6 @@ public enum StatType
 	BasicAttackRange,
 	Speed,
 	PhysicalDefense,
-	MagicalDefense
+	MagicalDefense,
+	Shield,
 }

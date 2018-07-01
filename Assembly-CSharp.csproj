@@ -147,6 +147,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Monkey D. Luffy\GearSecond.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Monkey D. Luffy\GomuNingen.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Monkey D. Luffy\GomuGomuNoMi.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Nibutani Shinka\FairyOfLove.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Nibutani Shinka\Mabinogion.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Nibutani Shinka\SummerBreeze.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\AlHuma.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\Confession.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\DemonicForm.cs" />

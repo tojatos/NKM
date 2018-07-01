@@ -67,6 +67,7 @@ namespace UI.CharacterUI
 				PhysicalResistance.text = GetStatText(character, StatType.PhysicalDefense);
 				Range.text = GetStatText(character, StatType.BasicAttackRange);
 				Speed.text = GetStatText(character, StatType.Speed);
+				if (character.Shield.Value > 0) HealthPoints.text += "<color=green> + " + character.Shield.Value + "</color>";
 			}
 			else
 				EmptyTextes();
@@ -76,8 +77,8 @@ namespace UI.CharacterUI
 		private static string GetStatText(Character character, StatType type)
 		{
 			Stat stat = character.GetStat(type);
-			var bonus = stat.Value - stat.BaseValue;
-			var bonusText = bonus > 0
+			int bonus = stat.Value - stat.BaseValue;
+			string bonusText = bonus > 0
 				? "<color=green> + " + bonus + "</color>"
 				: bonus < 0
 					? "<color=red> - " + -bonus + "</color>"

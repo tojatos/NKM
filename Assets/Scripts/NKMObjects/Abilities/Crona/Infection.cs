@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Crona
 
 	    public Infection() : base(AbilityType.Ultimatum, "Infection", 5)
 	    {
-		    Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
+		    OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 	    }
 	    
         public override string GetDescription() => 

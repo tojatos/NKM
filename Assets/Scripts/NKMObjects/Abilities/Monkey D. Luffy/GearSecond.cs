@@ -11,18 +11,15 @@ namespace NKMObjects.Abilities.Monkey_D._Luffy
         private int _currentDuration;
         public GearSecond() : base(AbilityType.Ultimatum, "Gear Second", 5)
         {
-            OnAwake += () =>
+            OnAwake += () => Active.Phase.PhaseFinished += () =>
             {
-                Active.Phase.PhaseFinished += () =>
-                {
-                    if (!IsEnabled) return;
-                    _currentDuration++;
-                    if (_currentDuration <= Duration) return;
+                if (!IsEnabled) return;
+                _currentDuration++;
+                if (_currentDuration <= Duration) return;
                     
-                    IsEnabled = false;
-                    Ability normalAbility = ParentCharacter.Abilities.Find(a => a.Type == AbilityType.Normal);
-                    if (normalAbility is IEnchantable) ((IEnchantable) normalAbility).IsEnchanted = false;
-                };
+                IsEnabled = false;
+                Ability normalAbility = ParentCharacter.Abilities.Find(a => a.Type == AbilityType.Normal);
+                if (normalAbility is IEnchantable) ((IEnchantable) normalAbility).IsEnchanted = false;
             };
         }
 

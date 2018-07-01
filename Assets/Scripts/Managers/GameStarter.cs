@@ -47,6 +47,7 @@ namespace Managers
 //								new Character("Dekomori Sanae"),
 //								new Character("Rem"),
 //								new Character("Kirito"),
+								new Character("Nibutani Shinka"),
 							}
 						},
 						new GamePlayer
