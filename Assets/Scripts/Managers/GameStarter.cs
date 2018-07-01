@@ -43,13 +43,13 @@ namespace Managers
 //								new Character("Hecate"),
 //								new Character("Itsuka Kotori"),
 //								new Character("Llenn"),
-//								new Character("Yoshino"),
+								new Character("Yoshino"),
 //								new Character("Dekomori Sanae"),
 //								new Character("Rem"),
 //								new Character("Kirito"),
 //								new Character("Nibutani Shinka"),
-								new Character("Kurogane Ikki"),
-								new Character("Sakai Yuuji"),
+//								new Character("Kurogane Ikki"),
+//								new Character("Sakai Yuuji"),
 							}
 						},
 						new GamePlayer
@@ -65,7 +65,7 @@ namespace Managers
 //								new Character("Gilgamesh"),
 //								new Character("Crona"),
 //								new Character("Asuna"),
-//								new Character("Aqua"),
+								new Character("Aqua"),
 							}
 						},
 					},

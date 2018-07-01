@@ -6,7 +6,7 @@ namespace NKMObjects.Abilities.Rem
 {
 	public class DemonicForm : Ability, IEnableable
 	{
-		private const int HpPercent = 30;
+		private const int HpPercent = 40;
 		private const int AdditionalAttack = 9;
 		private const int AdditionalSpeed = 4;
 

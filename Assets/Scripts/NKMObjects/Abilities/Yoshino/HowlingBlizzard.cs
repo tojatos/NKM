@@ -24,6 +24,7 @@ namespace NKMObjects.Abilities.Yoshino
                 Active.Phase.PhaseFinished += () =>
                 {
                     if (!IsEnabled) return;
+                    AddHexEffectsInRange();
                     _currentDuration++;
                     if (_currentDuration > 4) Disable();
                 };
@@ -78,13 +79,6 @@ Umiejętność jest włączona od {_currentDuration} faz.";
         {
             RemoveHexEffects();
             IsEnabled = false;
-//            var targets = GetTargetsInRange();
-//            var chara = targets.GetCharacters();
-//            foreach (var c in chara)
-//            {
-//                var damage = new Damage(_currentDuration*DamagePerPhase, DamageType.Magical);
-//                ParentCharacter.Attack(this, c, damage);
-//            }
             ParentCharacter.Effects.RemoveAll(e => e.Name == Name); // Remove movement disability
             GetTargetsInRange().GetCharacters().ForEach(c =>
             {
@@ -92,6 +86,7 @@ Umiejętność jest włączona od {_currentDuration} faz.";
                 ParentCharacter.Attack(this, c, damage);
             });
             _currentDuration = 0;
+            ParentCharacter.Select(); // Character can move immediately, and the ability button is not shown as clickable
         }
 
         public bool IsEnabled { get; private set; }

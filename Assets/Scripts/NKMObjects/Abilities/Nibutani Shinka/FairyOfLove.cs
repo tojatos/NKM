@@ -15,16 +15,18 @@ namespace NKMObjects.Abilities.Nibutani_Shinka
                 if (_currentDuration <= Duration) return;
 
                 IsEnabled = false;
-                Ability normalAbility = ParentCharacter.Abilities.Find(a => a.Type == AbilityType.Normal);
+                Ability normalAbility = ParentCharacter.Abilities.Find(a => a.Type == AbilityType.Passive);
                 if (normalAbility is IEnchantable) ((IEnchantable) normalAbility).IsEnchanted = false;
             };
         }
 
-        public override string GetDescription() => $"{ParentCharacter.Name} wzmacnia swoją umiejętność bierną.";
+        public override string GetDescription() =>
+$@"{ParentCharacter.Name} wzmacnia swoją umiejętność bierną.
+Czas trwania: {Duration}    Czas odnowienia: {Cooldown}";
 
         public void Click()
         {
-            Ability normalAbility = ParentCharacter.Abilities.Find(a => a.Type == AbilityType.Normal);
+            Ability normalAbility = ParentCharacter.Abilities.Find(a => a.Type == AbilityType.Passive);
             if (normalAbility is IEnchantable) ((IEnchantable) normalAbility).IsEnchanted = true;
             IsEnabled = true;
         }

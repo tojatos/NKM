@@ -22,7 +22,9 @@ namespace NKMObjects.Abilities.Nibutani_Shinka
 
         public override string GetDescription() =>
 $@"Przywołuje Letnią Bryzę, która odrzuca wybranego wroga o {KnockbackAmount} pól w tył.
-Jeśli wróg wpadnie na ścianę lub inną postać, zostanie ogłuszony na {StunDuration} turę i otrzyma {Damage} obrażeń magicznych.";
+Jeśli wróg wpadnie na ścianę lub inną postać, zostanie ogłuszony na {StunDuration} turę i otrzyma {Damage} obrażeń magicznych.
+
+Czas odnowienia: {Cooldown}";
 
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());

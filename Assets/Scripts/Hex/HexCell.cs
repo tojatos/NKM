@@ -21,7 +21,12 @@ namespace Hex
 			get { return _characterOnCell; }
 			set
 			{
-				if(_characterOnCell!=null) OnLeave?.Invoke(_characterOnCell);
+				if (_characterOnCell != null)
+				{
+					_characterOnCell.IsLeaving = true;
+					OnLeave?.Invoke(_characterOnCell);
+					_characterOnCell.IsLeaving = false;
+				}
 				if(value!=null) OnEnter?.Invoke(value);
 				_characterOnCell = value;
 			}

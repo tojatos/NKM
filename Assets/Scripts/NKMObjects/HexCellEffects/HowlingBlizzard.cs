@@ -29,18 +29,19 @@ namespace NKMObjects.HexCellEffects
 		{
 			if(!character.IsEnemyFor(_characterThatOwnsEffect.Owner)) return;
 			if (character.Effects.Any(e => e.Name == Name)) return;
-            var effect = new StatModifier(1, -_speedDecrease, ParentCell.CharacterOnCell, StatType.Speed, Name);
+            var effect = new StatModifier(1, -_speedDecrease, character, StatType.Speed, Name);
 			effect.OnRemove += () =>
 			{
-				if (effect.ParentCharacter.ParentCell.Effects.ContainsType(typeof(HowlingBlizzard)))
+				if (effect.ParentCharacter.ParentCell.Effects.ContainsType(typeof(HowlingBlizzard))&&!effect.ParentCharacter.IsLeaving)
 					AddEffect(effect.ParentCharacter);
 			};
             character.Effects.Add(effect);
 		}
 		private void RemoveEffect(Character character)
 		{
-			if(!character.IsEnemyFor(_characterThatOwnsEffect.Owner)) return;
-			character.Effects.RemoveAll(e => e.Name == Name);
+//			if(!character.IsEnemyFor(_characterThatOwnsEffect.Owner)) return;
+//			character.Effects.RemoveAll(e => e.Name == Name);
+			character.Effects.FindAll(e => e.Name == Name).ForEach(e => e.RemoveFromParent());
 		}
 
 

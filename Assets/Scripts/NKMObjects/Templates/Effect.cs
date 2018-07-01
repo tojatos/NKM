@@ -35,6 +35,7 @@
 
 		public void RemoveFromParent()
 		{
+			if(!ParentCharacter.Effects.Contains(this)) return;
 			ParentCharacter.Effects.Remove(this);
 			OnRemove?.Invoke();
 		}

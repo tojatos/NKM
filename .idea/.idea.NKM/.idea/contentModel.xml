@@ -146,6 +146,11 @@
               <e p="GomuGomuNoMi.cs" t="Include" />
               <e p="GomuNingen.cs" t="Include" />
             </e>
+            <e p="Nibutani Shinka" t="Include">
+              <e p="FairyOfLove.cs" t="Include" />
+              <e p="Mabinogion.cs" t="Include" />
+              <e p="SummerBreeze.cs" t="Include" />
+            </e>
             <e p="Rem" t="Include">
               <e p="AlHuma.cs" t="Include" />
               <e p="Confession.cs" t="Include" />
@@ -156,6 +161,11 @@
               <e p="HyakuHachiPoundHou.cs" t="Include" />
               <e p="LackOfOrientation.cs" t="Include" />
               <e p="OniGiri.cs" t="Include" />
+            </e>
+            <e p="Sakai Yuuji" t="Include">
+              <e p="DragonTail.cs" t="Include" />
+              <e p="Grammatica.cs" t="Include" />
+              <e p="ReijiMaigo.cs" t="Include" />
             </e>
             <e p="Shana" t="Include">
               <e p="GurenNoOodachi.cs" t="Include" />

@@ -3,7 +3,6 @@ using Extensions;
 using Hex;
 using NKMObjects.Effects;
 using NKMObjects.Templates;
-using UnityEngine;
 
 namespace NKMObjects.Abilities.Nibutani_Shinka
 {

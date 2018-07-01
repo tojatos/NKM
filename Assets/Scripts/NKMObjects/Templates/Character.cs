@@ -59,6 +59,7 @@ namespace NKMObjects.Templates
 
 		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive || Active.Turn.CharacterThatTookActionInTurn != null && Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
 		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore || Active.Turn.CharacterThatTookActionInTurn != null);
+		public bool IsLeaving { get; set; }
 
 		public Action<Character> BasicAttack;
 		public Action<List<HexCell>> BasicMove;
