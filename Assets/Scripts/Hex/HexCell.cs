@@ -32,6 +32,7 @@ namespace Hex
 		public HexTileType Type;// { get; set; }
 		public Color Color;
 		public List<HexCellEffect> Effects = new List<HexCellEffect>();
+		public bool IsFreeToStand => CharacterOnCell == null && Type != HexTileType.Wall;
 
 		private readonly HexCell[] _neighbors = new HexCell[6];
 
