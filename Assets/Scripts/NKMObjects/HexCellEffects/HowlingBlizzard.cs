@@ -10,6 +10,7 @@ namespace NKMObjects.HexCellEffects
 	{
 		private readonly Character _characterThatOwnsEffect;
 		private readonly int _speedDecrease;
+		private bool _isBeingRemoved;
 
 		public HowlingBlizzard(int cooldown, HexCell parentCell, Character characterThatOwnsEffect, int value, string name) : base(cooldown, parentCell, name)
 		{
@@ -19,6 +20,7 @@ namespace NKMObjects.HexCellEffects
 			ParentCell.OnLeave += RemoveEffect;
 			OnRemove += () =>
 			{
+				_isBeingRemoved = true;
 				if (ParentCell.CharacterOnCell != null) RemoveEffect(ParentCell.CharacterOnCell);
 				ParentCell.OnEnter -= AddEffect;
 				ParentCell.OnLeave -= RemoveEffect;
@@ -32,7 +34,7 @@ namespace NKMObjects.HexCellEffects
             var effect = new StatModifier(1, -_speedDecrease, character, StatType.Speed, Name);
 			effect.OnRemove += () =>
 			{
-				if (effect.ParentCharacter.ParentCell.Effects.ContainsType(typeof(HowlingBlizzard))&&!effect.ParentCharacter.IsLeaving)
+				if (effect.ParentCharacter.ParentCell.Effects.ContainsType(typeof(HowlingBlizzard))&&!effect.ParentCharacter.IsLeaving&&!_isBeingRemoved)
 					AddEffect(effect.ParentCharacter);
 			};
             character.Effects.Add(effect);

@@ -19,8 +19,11 @@ namespace NKMObjects.Abilities.Yoshino
         {
             OnAwake += () =>
             {
+//                Validator.ToCheck.Remove(Validator.IsActivePhaseGreaterThanThree);
                 Validator.ToCheck.Remove(Validator.IsNotOnCooldown);
+                Validator.ToCheck.Remove(Validator.IsCharacterNotSilenced);
                 Validator.ToCheck.Add(()=>Validator.IsNotOnCooldown()||IsEnabled);
+                Validator.ToCheck.Add(()=>Validator.IsCharacterNotSilenced()||IsEnabled);
                 Active.Phase.PhaseFinished += () =>
                 {
                     if (!IsEnabled) return;
@@ -44,8 +47,8 @@ namespace NKMObjects.Abilities.Yoshino
             string desc = 
 $@"{ParentCharacter.Name} otacza się Zamiecią na max. {MaxDuration} tury.
 Wrogowie znajdujący się wewnątrz zamieci zostają spowolnieni do {SpeedDecrease}.
-Podczas trwania tego efektu {ParentCharacter.Name} nie może się ruszać.
-Po zakończeniu efektu, {ParentCharacter.Name} zada obrażenia magiczne wszystkim wrogom w obszarze,
+Podczas trwania tego efektu {ParentCharacter.Name} nie może podejmować żadnych akcji poza wyłączeniem zamieci.
+Po zakończeniu zamieci, {ParentCharacter.Name} zada obrażenia magiczne wszystkim wrogom w obszarze,
 tym większe im dłużej umiejętność była aktywna - {DamagePerPhase} /fazę.
 Promień: {Range}    Czas odnowienia: {Cooldown}";
             if (IsEnabled) desc += $@"
@@ -66,6 +69,8 @@ Umiejętność jest włączona od {_currentDuration} faz.";
             _currentDuration = 1;
             AddHexEffectsInRange();
             ParentCharacter.Effects.Add(new MovementDisability(MaxDuration, ParentCharacter, Name));
+            ParentCharacter.Effects.Add(new BasicAttackInability(MaxDuration, ParentCharacter, Name));
+            ParentCharacter.Effects.Add(new Silent(MaxDuration, ParentCharacter, Name));
             Finish();
         }
 

@@ -65,7 +65,7 @@ namespace Managers
 //								new Character("Gilgamesh"),
 //								new Character("Crona"),
 //								new Character("Asuna"),
-								new Character("Aqua"),
+//								new Character("Aqua"),
 							}
 						},
 					},

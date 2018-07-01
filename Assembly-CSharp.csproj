@@ -179,6 +179,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Effects\HPDrain.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\MovementDisability.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\PassiveBuff.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Effects\Silent.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\StatModifier.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Stun.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\HexCellEffects\Conflagration.cs" />
