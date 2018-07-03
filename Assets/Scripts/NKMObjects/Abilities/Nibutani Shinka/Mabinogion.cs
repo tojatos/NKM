@@ -36,7 +36,8 @@ Dodatkowo, sojusznicy otrzymuję {ShieldAmount} tarczy, która odnawia się co u
 Umiejętność <b>{Name}</b> może zostać ulepszona:
 
 Leczenie: Działa tylko na sojuszników i jest potrojone
-Tarcza: Jest potrojona";
+Tarcza: Jest potrojona
+Dodatkowo, daje wszystkim sojusznikom w zasięgu {EnchantedSpeedAmount} szybkości na fazę.";
         public bool IsEnchanted { get; set; }
 
         public void Run()
