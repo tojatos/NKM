@@ -9,8 +9,9 @@ namespace NKMObjects.Abilities.Monkey_D._Luffy
         {
             OnAwake += () => ParentCharacter.BeforeBeingBasicAttacked += (character, damage) =>
             {
-                if (!IsEnabled) _timesAttacked++;
-                else if (character.Type == FightType.Ranged) damage.Value = 0;
+                if (character.Type != FightType.Ranged) return;
+                if(IsEnabled) damage.Value = 0;
+                _timesAttacked++;
             };
         }
 
