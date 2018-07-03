@@ -4,10 +4,10 @@ using System.Linq;
 using Animations;
 using Extensions;
 using Hex;
-using NKMObjects.Abilities;
 using NKMObjects.Effects;
 using UI.CharacterUI;
 using UnityEngine;
+using Empty = NKMObjects.Abilities.Empty;
 using Object = UnityEngine.Object;
 
 namespace NKMObjects.Templates

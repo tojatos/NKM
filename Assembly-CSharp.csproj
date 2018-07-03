@@ -115,6 +115,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Bezimienni\AceInTheHole.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Bezimienni\Castling.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Bezimienni\Check.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Carmel Wilhelmina\BindingRibbons.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Carmel Wilhelmina\ManipulatorOfObjects.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Carmel Wilhelmina\TiamatsIntervention.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Crona\BlackBlood.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Crona\Infection.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Crona\ScreechAlpha.cs" />
@@ -175,6 +178,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Effects\BasicAttackInability.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\BlackBlood.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\DamageOverTime.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Effects\Empty.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Flying.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\HPDrain.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\MovementDisability.cs" />

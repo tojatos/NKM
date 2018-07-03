@@ -92,6 +92,11 @@
               <e p="Castling.cs" t="Include" />
               <e p="Check.cs" t="Include" />
             </e>
+            <e p="Carmel Wilhelmina" t="Include">
+              <e p="BindingRibbons.cs" t="Include" />
+              <e p="ManipulatorOfObjects.cs" t="Include" />
+              <e p="TiamatsIntervention.cs" t="Include" />
+            </e>
             <e p="Crona" t="Include">
               <e p="BlackBlood.cs" t="Include" />
               <e p="Infection.cs" t="Include" />
@@ -192,6 +197,7 @@
             <e p="BasicAttackInability.cs" t="Include" />
             <e p="BlackBlood.cs" t="Include" />
             <e p="DamageOverTime.cs" t="Include" />
+            <e p="Empty.cs" t="Include" />
             <e p="Flying.cs" t="Include" />
             <e p="HPDrain.cs" t="Include" />
             <e p="MovementDisability.cs" t="Include" />
@@ -247,8 +253,11 @@
         </e>
       </e>
       <e p="Assets/VertexColors.shader" t="Include" />
+      <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp/bin" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>

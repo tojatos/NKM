@@ -43,13 +43,14 @@ namespace Managers
 //								new Character("Hecate"),
 //								new Character("Itsuka Kotori"),
 //								new Character("Llenn"),
-								new Character("Yoshino"),
+//								new Character("Yoshino"),
 //								new Character("Dekomori Sanae"),
 //								new Character("Rem"),
-//								new Character("Kirito"),
+								new Character("Kirito"),
 //								new Character("Nibutani Shinka"),
 //								new Character("Kurogane Ikki"),
 //								new Character("Sakai Yuuji"),
+								new Character("Carmel Wilhelmina"),
 							}
 						},
 						new GamePlayer
