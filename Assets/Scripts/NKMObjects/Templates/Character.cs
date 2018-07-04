@@ -238,7 +238,7 @@ namespace NKMObjects.Templates
 			BeforeBeingDamaged?.Invoke(damage);
 			
 			int defense = GetDefense(damage.Type);
-			float reduction = damage.Value * defense / 100;
+			float reduction = damage.Value * defense / 100f;
 			damage.Value -= (int)reduction;
 			damage.Value = damage.Value < 0 ? 0 : damage.Value;
 			if (Shield.Value >= damage.Value)

@@ -6,6 +6,7 @@ using Extensions;
 using Hex;
 using NKMObjects.Templates;
 using UI;
+using UnityEngine;
 using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace Managers
@@ -14,6 +15,10 @@ namespace Managers
 	{
 		public bool IsTesting;
 		public Game Game = new Game();
+		private static SessionSettings S => SessionSettings.Instance;
+		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
+		private static int GetPlayersNumber() => S.GetDropdownSetting(SettingType.NumberOfPlayers) + 2;
+		private static int GetBansNumber() => S.GetDropdownSetting(SettingType.BansNumber) + 1;
 
 		private void Awake() => PrepareAndStartGame();
 
@@ -22,7 +27,7 @@ namespace Managers
 			GameOptions gameOptions = await GetGameOptions();
 
 			Game.Init(gameOptions);
-			var isGameStarted = Game.StartGame();
+			bool isGameStarted = Game.StartGame();
 			if(!isGameStarted) throw new Exception("Game has not started!");
 		}
 
@@ -92,24 +97,21 @@ namespace Managers
 			};
 		}
 
-
-
-		private HexMap GetMap()
+		private static HexMap GetMap()
 		{
-					var mapIndex = SessionSettings.Instance.SelectedMapIndex;
-					HexMap map = Stuff.Maps[mapIndex];
-					return map;
+//					var mapIndex = SessionSettings.Instance.SelectedMapIndex;
+            int mapIndex = S.GetDropdownSetting(SettingType.SelectedMapIndex);
+            HexMap map = Stuff.Maps[mapIndex];
+            return map;
 		}
 		
-		private async Task<List<GamePlayer>> GetPlayers()
+		private static async Task<List<GamePlayer>> GetPlayers()
 		{
-			var numberOfPlayers = SessionSettings.Instance.NumberOfPlayers;
+//			var numberOfPlayers = SessionSettings.Instance.NumberOfPlayers;
+			int numberOfPlayers = GetPlayersNumber();
 			List<GamePlayer> players = new List<GamePlayer>();
-			for (var i = 0; i < numberOfPlayers; i++)
-			{
-				players.Add(new GamePlayer { Name = GetPlayerName(i) });
-				
-			}
+			for (int i = 0; i < numberOfPlayers; i++)
+				players.Add(new GamePlayer {Name = GetPlayerName(i)});
 			await GetCharacters(players);
 			return players;
 		}
@@ -126,42 +128,53 @@ namespace Managers
 			}
 		}
 
-		private async Task GetCharacters(List<GamePlayer> players)
+		private static async Task GetCharacters(List<GamePlayer> players)
 		{
-			switch (SessionSettings.Instance.PickType)
+			switch (S.GetDropdownSetting(SettingType.PickType))
 			{
 				case 0:
 					await BlindPick(players);
 					break;
 				case 1:
-					await DraftPick(players);
+                    List<Character> charactersToPick = new List<Character>(AllMyGameObjects.Characters);
+					if(S.GetDropdownSetting(SettingType.AreBansEnabled)==1) await Bans(players, charactersToPick);
+					await DraftPick(players, charactersToPick);
 					break;
 			}
 		}
 
-		private async Task DraftPick(List<GamePlayer> players)
+		private static async Task DraftPick(List<GamePlayer> players, ICollection<Character> charactersToPick)
 		{
-            List<Character> charactersToPick = new List<Character>(AllMyGameObjects.Characters);
-			while (players.Any(p => p.Characters.Count != SessionSettings.Instance.NumberOfCharactersPerPlayer))
+			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
+			while (players.Any(p => p.Characters.Count != numberOfCharactersPerPlayer))
 			{
-				for (int i = 0; i < players.Count; i++)
-				{
-                    GamePlayer player = players[i];
+				foreach (GamePlayer player in players) 
 					await SelectOneCharacter(charactersToPick, player);
-				}
-				
-				for (int i = players.Count-1; i >= 0 ; i--)
-				{
-                    GamePlayer player = players[i];
+				foreach (GamePlayer player in players.AsEnumerable().Reverse()) 
 					await SelectOneCharacter(charactersToPick, player);
-				}
+			}
+			players.ForEach(p=>p.HasSelectedCharacters=true);
+		}
+		private static async Task Bans(List<GamePlayer> players, ICollection<Character> charactersToPick)
+		{
+			int bansNumber = GetBansNumber();
+			while(bansNumber != 0)
+			{
+				foreach (GamePlayer player in players) 
+					await BanOneCharacter(charactersToPick, player);
+				bansNumber--;
+				if(bansNumber==0) break;
+				foreach (GamePlayer player in players.AsEnumerable().Reverse()) 
+					await BanOneCharacter(charactersToPick, player);
+				bansNumber--;
 			}
 			players.ForEach(p=>p.HasSelectedCharacters=true);
 		}
 
-		private static async Task SelectOneCharacter(List<Character> charactersToPick, GamePlayer player)
+		private static async Task SelectOneCharacter(ICollection<Character> charactersToPick, GamePlayer player)
 		{
-			if(player.Characters.Count == SessionSettings.Instance.NumberOfCharactersPerPlayer) return;
+			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
+			if(player.Characters.Count == numberOfCharactersPerPlayer) return;
 			bool hasSelected = false;
 			Func<bool> wait = () => hasSelected;
 			Action<GamePlayer> finishSelectingCharacter = p =>
@@ -180,8 +193,26 @@ namespace Managers
 				$"Wybór postaci - {player.Name}", "Zakończ wybieranie postaci");
 			await wait.WaitToBeTrue();
 		}
+        private static async Task BanOneCharacter(ICollection<Character> charactersToPick, GamePlayer player)
+		{
+			bool hasSelected = false;
+			Func<bool> wait = () => hasSelected;
+			Action<GamePlayer> finishSelectingCharacter = p =>
+			{
+				if (SpriteSelect.Instance.SelectedObjects.Count != 1) return;
 
-		private async Task BlindPick(List<GamePlayer> players)
+				IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o => o.Name);
+				Character picked = charactersToPick.Single(c => c.Name == names.First());
+				charactersToPick.Remove(picked);
+				hasSelected = true;
+				SpriteSelect.Instance.Close();
+			};
+
+			SpriteSelect.Instance.Open(charactersToPick, () => finishSelectingCharacter(player),
+				$"Banowanie postaci - {player.Name}", "Zakończ banowanie postaci");
+			await wait.WaitToBeTrue();
+		}
+		private static async Task BlindPick(IEnumerable<GamePlayer> players)
 		{
 //			players.ForEach(p => Debug.Log(p.Name));
 			foreach (GamePlayer p in players)
@@ -194,11 +225,12 @@ namespace Managers
 			}
 		}
 
-		private void FinishSelectingCharacters(GamePlayer p)
+		private static void FinishSelectingCharacters(GamePlayer p)
 		{
-			var charactersPerPlayer = GetCharactersPerPlayer();
+//			int numberOfCharactersPerPlayer = 
+//			var charactersPerPlayer = GetCharactersPerPlayer();
 
-			if (SpriteSelect.Instance.SelectedObjects.Count != charactersPerPlayer) return;
+			if (SpriteSelect.Instance.SelectedObjects.Count != GetCharactersPerPlayerNumber()) return;
 
 			IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o=>o.Name);
 			p.AddCharacters(names);
@@ -206,10 +238,6 @@ namespace Managers
 			SpriteSelect.Instance.Close();
 		}
 
-		private int GetCharactersPerPlayer()
-		{
-					return SessionSettings.Instance.NumberOfCharactersPerPlayer;
-		}
 
 
 

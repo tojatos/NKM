@@ -142,37 +142,24 @@ public class Game
 
 	private void UseMyGameObject(HexCell cell)
 	{
-		if (Active.NkmObject.GetType() == typeof(Character))
+		if (Active.NkmObject.GetType() != typeof(Character)) return;
+		if (Active.Turn.WasCharacterPlaced) return;
+		var activeCharacter = Active.NkmObject as Character;
+		if(!Spawner.CanSpawn(activeCharacter, cell)) return;
+			
+		_spawner.Spawn(cell, activeCharacter);
+
+		Active.Turn.WasCharacterPlaced = true;
+		if (Active.Phase.Number == 0)
 		{
-			if (Active.Turn.WasCharacterPlaced)
-			{
-				throw new Exception("W tej turze już była wystawiona postać!");
-			}
-
-			var activeCharacter = Active.NkmObject as Character;
-			try
-			{
-				_spawner.TrySpawning(cell, activeCharacter);
-			}
-			catch (Exception e)
-			{
-				MessageLogger.Instance.DebugLog(e.Message);
-				throw;
-			}
-
-			Active.Turn.WasCharacterPlaced = true;
-			if (Active.Phase.Number == 0)
-			{
-				_uiManager.ForcePlacingChampions = false;
-				Active.Turn.Finish();
-			}
-			else
-			{
-				Active.NkmObject = null;
-				HexMapDrawer.RemoveHighlights();
-				activeCharacter?.Select();
-			}
-
+			_uiManager.ForcePlacingChampions = false;
+			Active.Turn.Finish();
+		}
+		else
+		{
+			Active.NkmObject = null;
+			HexMapDrawer.RemoveHighlights();
+			activeCharacter?.Select();
 		}
 	}
 
@@ -194,6 +181,6 @@ public class Game
 		HexCell spawnPoint = p.GetSpawnPoints().FirstOrDefault(cell => cell.CharacterOnCell == null);
 		if (spawnPoint == null) return;
 
-		Spawner.Instance.TrySpawning(spawnPoint, c);
+		Spawner.Instance.Spawn(spawnPoint, c);
 	}
 }

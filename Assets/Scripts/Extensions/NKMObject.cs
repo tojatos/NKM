@@ -11,41 +11,6 @@ namespace Extensions
 {
 	public static class NKMObject
 	{
-//		private static Game Game => GameStarter.Instance.Game;
-//		private static Active Active => Game.Active;
-
-		public static IEnumerable<string> GetClassNames<T>(this List<T> list)
-		{
-			List<string> classNames = new List<string>();
-			list.ForEach(l => classNames.Add(l.GetType().Name));
-			return classNames;
-		}
-
-		/// <summary>
-		/// Leaves only cells with enemy characters
-		/// </summary>
-//		public static void RemoveNonEnemies(this List<HexCell> cellRange)
-//		{
-//			cellRange.RemoveAll(cell => cell.CharacterOnCell == null || cell.CharacterOnCell.Owner == GameStarter.Instance.Game.Active.GamePlayer);
-//		}
-		/// <summary>
-		/// Leaves only cells with friendly characters
-		/// </summary>
-//		public static void RemoveNonFriends(this List<HexCell> cellRange) //TODO:  there should be a Player parameter, to define who is a friend
-//		{
-//			cellRange.RemoveAll(cell => cell.CharacterOnCell == null || cell.CharacterOnCell.Owner != GameStarter.Instance.Game.Active.GamePlayer);
-//		}
-		/// <summary>
-		/// Leaves only cells with characters
-		/// </summary>
-//		public static void RemoveNonCharacters(this List<HexCell> cellRange)
-//		{
-//			//var unavailableRange = new List<HexCell>(cellRange);
-//			cellRange.RemoveAll(cell => cell.CharacterOnCell == null);
-//			//cellRange.ForEach(c => unavailableRange.Remove(c));
-//			//return;
-//		}
-
 		public static List<HexCell> WhereOnlyEnemiesOf(this List<HexCell> cells, GamePlayer player) => 
 			cells.FindAll(c => c.CharacterOnCell!= null && c.CharacterOnCell.Owner != player);
 		public static List<HexCell> WhereOnlyFriendsOf(this List<HexCell> cells, GamePlayer player) =>
@@ -63,32 +28,25 @@ namespace Extensions
 		}
 		public static Stat GetStat(this Character character, StatType type)
 		{
-			Stat stat;
 			switch (type)
 			{
 				case StatType.HealthPoints:
-					stat = character.HealthPoints;
-					break;
+					return character.HealthPoints;
 				case StatType.AttackPoints:
-					stat = character.AttackPoints;
-					break;
+					return character.AttackPoints;
 				case StatType.BasicAttackRange:
-					stat = character.BasicAttackRange;
-					break;
+					return character.BasicAttackRange;
 				case StatType.Speed:
-					stat = character.Speed;
-					break;
+					return character.Speed;
 				case StatType.PhysicalDefense:
-					stat = character.PhysicalDefense;
-					break;
+					return character.PhysicalDefense;
 				case StatType.MagicalDefense:
-					stat = character.MagicalDefense;
-					break;
+					return character.MagicalDefense;
+				case StatType.Shield:
+					return character.Shield;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);
 			}
-
-			return stat;
 		}
 		public static int GetIndex(this GamePlayer gamePlayer) => GameStarter.Instance.Game.Players.FindIndex(p => p == gamePlayer);
 		public static Color GetColor(this GamePlayer gamePlayer)

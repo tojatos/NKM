@@ -47,18 +47,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	{
 		return classNames.Select(className => Create(namespaceName, className)).ToList();
 	}
-	public void TrySpawning(HexCell cell, Character characterToSpawn)
-	{
-		HexTileType playerSpawnpointType = HexMapDrawer.Instance.HexMap.SpawnPoints[characterToSpawn.Owner.GetIndex()];
-		if (cell.Type != playerSpawnpointType)
-		{
-			throw new Exception("To nie twój spawn!");
-		}
-		if (cell.CharacterOnCell != null)
-		{
-			throw new Exception("Tu już stoi postać zwana " + cell.CharacterOnCell.Name + "!");
-		}
 
-		SpawnCharacterObject(cell, characterToSpawn);
-	}
+	public static bool CanSpawn(Character character, HexCell cell) => cell.IsFreeToStand && cell.IsSpawnFor(character.Owner);
+	public void Spawn(HexCell cell, Character characterToSpawn) => SpawnCharacterObject(cell, characterToSpawn);
 }

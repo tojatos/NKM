@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using Hex;
@@ -51,18 +50,11 @@ Czas odnowienia: {Cooldown}";
 
 		private void Use(HexCell cell)
 		{
-			try
-			{
-				Spawner.Instance.TrySpawning(cell, _characterToResurrect);
+				Spawner.Instance.Spawn(cell, _characterToResurrect);
 				_characterToResurrect.HealthPoints.Value = _characterToResurrect.HealthPoints.BaseValue / 2;
 
 				Finish();
-			}
-			catch (Exception e)
-			{
-				MessageLogger.DebugLog(e.Message);
-				throw;
-			}
+			
 		}
 		public void Use(List<HexCell> cells) => Use(cells[0]);
 	}
