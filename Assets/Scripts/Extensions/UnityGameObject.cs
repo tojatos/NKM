@@ -62,7 +62,7 @@ namespace Extensions
 			var dropdown = dropdownGroup.GetComponentInChildren<Dropdown>();
 			dropdown.name = dropdownSettings.Type;
 			if(dropdownSettings.Options != null) dropdown.options = dropdownSettings.Options.Select(o => new Dropdown.OptionData(o)).ToList();
-			dropdown.value = PlayerPrefs.GetInt(dropdownSettings.Type);
+			dropdown.value = SessionSettings.Instance.GetDropdownSetting(dropdownSettings.Type);
 			
 			return dropdown;
 		}
