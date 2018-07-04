@@ -1199,10 +1199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32101a04af6b4305b1e8891dc577199e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerName1: {fileID: 1067418084}
-  PlayerName2: {fileID: 487183868}
-  PlayerName3: {fileID: 612208865}
-  PlayerName4: {fileID: 15168911}
+  PlayerName1: {fileID: 1376372934}
+  PlayerName2: {fileID: 609224267}
+  PlayerName3: {fileID: 1922805230}
+  PlayerName4: {fileID: 1420262224}
 --- !u!114 &702765701
 MonoBehaviour:
   m_ObjectHideFlags: 0
