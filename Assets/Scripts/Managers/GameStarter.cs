@@ -47,14 +47,15 @@ namespace Managers
 //								new Character("Hecate"),
 //								new Character("Itsuka Kotori"),
 //								new Character("Llenn"),
-//								new Character("Yoshino"),
+								new Character("Yoshino"),
 //								new Character("Dekomori Sanae"),
 //								new Character("Rem"),
 //								new Character("Kirito"),
-								new Character("Nibutani Shinka"),
+//								new Character("Nibutani Shinka"),
 //								new Character("Kurogane Ikki"),
 //								new Character("Sakai Yuuji"),
 //								new Character("Carmel Wilhelmina"),
+//								new Character("Ryuko Matoi"),
 							}
 						},
 						new GamePlayer
@@ -62,7 +63,7 @@ namespace Managers
 							Name = "Maciej",
 							Characters = new List<Character>
 							{
-								new Character("Monkey D. Luffy"),
+//								new Character("Monkey D. Luffy"),
 //								new Character("Hanekawa Tsubasa"),
 //								new Character("Bezimienni"),
 //								new Character("Shana"),

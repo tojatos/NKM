@@ -160,6 +160,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Roronoa Zoro\HyakuHachiPoundHou.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Roronoa Zoro\LackOfOrientation.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Roronoa Zoro\OniGiri.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ryuko Matoi\FiberDecapitation.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ryuko Matoi\KamuiSenketsu.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ryuko Matoi\ScissorBlade.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sakai Yuuji\DragonTail.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sakai Yuuji\Grammatica.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sakai Yuuji\ReijiMaigo.cs" />

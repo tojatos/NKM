@@ -36,12 +36,22 @@ namespace NKMObjects.Abilities.Yoshino
             };
         }
 
-        public override string GetDescription() => 
+        public override string GetDescription()
+        {
+            string desc =
 $@"{ParentCharacter.Name} osłania się swoim aniołem tworząc zbroję pochłaniającą podstawowe ataki przeciwników.
 Każdy wróg, który zaatakuje {ParentCharacter.Name} zostanie ogłuszony na {StunDuration} turę.
 Zbroja niszczy się po otrzymaniu {HitDurability} ciosów bądź po {TimeDurability} fazach.
 Wraz ze zniszczeniem zbroi, uaktywnia się umiejętność bierna {ParentCharacter.Name}.
 Czas odnowienia: {Cooldown} (po zakończeniu efektu)";
+
+            if (IsEnabled) desc +=
+$@"
+Uderzeń do zniszczenia: {_currentHitRemains}
+Pozostały czas trwania: {_currentTimeDurability}";
+            return desc;
+
+        }
 
         public void Click()
         {

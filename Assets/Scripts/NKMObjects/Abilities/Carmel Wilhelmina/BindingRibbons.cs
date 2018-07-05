@@ -8,9 +8,9 @@ namespace NKMObjects.Abilities.Carmel_Wilhelmina
 {
     public class BindingRibbons : Ability, IClickable, IUseable
     {
-        private const int Range = 6;
+        private const int Range = 4;
         private const int Radius = 3;
-        private const int Damage = 16;
+        private const int Damage = 12;
         private const int EnemiesToHitToActivateStun = 3;
         private const int RootDuration = 1;
         private const int SilentDuration = 2;

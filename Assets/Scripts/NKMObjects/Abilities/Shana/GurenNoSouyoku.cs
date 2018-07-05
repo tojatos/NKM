@@ -25,7 +25,7 @@ namespace NKMObjects.Abilities.Shana
 		}
 		public bool IsEnabled => ParentCharacter.Effects.ContainsType(typeof(Effects.Flying));
 		public override string GetDescription() =>
-$@"Po otrzymaniu obrażeń rozwija skrzydła dzięki którym może poruszyć się o 3 pola więcej, ponadto może przelatywać przez ściany
+$@"Po otrzymaniu obrażeń rozwija skrzydła dzięki którym może poruszyć się o {SpeedBonus} pola więcej, ponadto może przelatywać przez ściany
 Czas trwania efektu: {Duration} fazy.";
 
 		private List<HexCell> GetBasicMoveCellsOverride()

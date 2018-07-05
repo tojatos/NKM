@@ -5,13 +5,13 @@ namespace NKMObjects.Effects
 {
 	public class StatModifier : Effect
 	{
-		private readonly int _value;
+		public int Value;
 		private readonly StatType _statType;
 		public StatModifier(int cooldown, int value, Character parentCharacter, StatType statType, string name = null) : base(cooldown, parentCharacter, name)
 		{
 			_statType = statType;
 			Name = name ?? "Stat Modifier";
-			_value = value;
+			Value = value;
 			Type = value >= 0 ? EffectType.Positive : EffectType.Negative;
 		}
 		public override string GetDescription()
@@ -19,11 +19,11 @@ namespace NKMObjects.Effects
 			return string.Format(
 @"{0} {3} o {1}
 Czas do zakończenia efektu: {2}",
-				_value >= 0 ? "Zwiększa" : "Zmniejsza", Math.Abs(_value), CurrentCooldown, _statType);
+				Value >= 0 ? "Zwiększa" : "Zmniejsza", Math.Abs(Value), CurrentCooldown, _statType);
 		}
 		public override int Modifier(StatType statType)
 		{
-			return statType == _statType ? _value : 0;
+			return statType == _statType ? Value : 0;
 		}
 
 	}
