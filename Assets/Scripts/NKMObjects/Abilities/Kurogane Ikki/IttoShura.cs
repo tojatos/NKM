@@ -18,10 +18,10 @@ Po użyciu tej umiejętności {ParentCharacter.Name} może użyć podstawowego a
         public void Click()
         {
             Active.MakeAction();
-            ParentCharacter.AttackPoints.Value = ParentCharacter.AttackPoints.BaseValue * 2;
-            ParentCharacter.BasicAttackRange.Value = ParentCharacter.BasicAttackRange.BaseValue * 2;
-            ParentCharacter.Speed.Value = ParentCharacter.Speed.Value * 2;
-            if(ParentCharacter.HealthPoints.Value > 1) ParentCharacter.HealthPoints.Value /= 2;
+            ParentCharacter.AttackPoints.Value = ParentCharacter.AttackPoints.RealValue * 2;
+            ParentCharacter.BasicAttackRange.Value = ParentCharacter.BasicAttackRange.RealValue * 2;
+            ParentCharacter.Speed.Value = ParentCharacter.Speed.RealValue * 2;
+            if(ParentCharacter.HealthPoints.Value > 1) ParentCharacter.HealthPoints.Value = ParentCharacter.HealthPoints.RealValue / 2;
             ParentCharacter.Effects.RemoveAll(e => e.IsCC);
             ParentCharacter.HasFreeAttack = true;
             IsEnabled = true;
