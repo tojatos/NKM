@@ -45,9 +45,9 @@ namespace Managers
 //								new Character("Sinon"),
 //								new Character("Roronoa Zoro"),
 //								new Character("Hecate"),
-//								new Character("Itsuka Kotori"),
+								new Character("Itsuka Kotori"),
 //								new Character("Llenn"),
-								new Character("Yoshino"),
+//								new Character("Yoshino"),
 //								new Character("Dekomori Sanae"),
 //								new Character("Rem"),
 //								new Character("Kirito"),
@@ -63,7 +63,7 @@ namespace Managers
 							Name = "Maciej",
 							Characters = new List<Character>
 							{
-//								new Character("Monkey D. Luffy"),
+								new Character("Monkey D. Luffy"),
 //								new Character("Hanekawa Tsubasa"),
 //								new Character("Bezimienni"),
 //								new Character("Shana"),

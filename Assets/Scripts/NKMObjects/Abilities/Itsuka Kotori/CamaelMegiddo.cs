@@ -11,7 +11,9 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
 	{
 		private const int Damage = 35;
 
-		public CamaelMegiddo() : base(AbilityType.Ultimatum, "Camael - Megiddo", 6){}
+		public CamaelMegiddo() : base(AbilityType.Ultimatum, "Camael - Megiddo", 6)
+		{
+		}
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} wystrzeliwuje falę płomieni w wybranym kierunku zadając {Damage} obrażeń wszystkim trafionym wrogom.
 Jeżeli ta umiejętność uderzy w obszar Conflagration, zada ona obrażenia na całym tym obszarze, ale nie poleci dalej.
@@ -50,7 +52,9 @@ Czas odnowienia: {Cooldown}";
 
 		private void SendFlamewave(HexCell targetCell)
 		{
-			List<HexCell> cells = new List<HexCell>();
+			List<HexCell> lineCells = new List<HexCell>();
+			List<HexCell> conflargationCells = new List<HexCell>();
+			IEnumerable<HexCell> cells = lineCells.Union(conflargationCells);
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCell);
 			bool hitConflargation = false;
 			HexCell lastCell = ParentCharacter.ParentCell;
@@ -63,11 +67,12 @@ Czas odnowienia: {Cooldown}";
 						hitConflargation = true;
 						break;
 					}
-					cells.Add(neighbor);
+					lineCells.Add(neighbor);
 					lastCell = neighbor;
 				} while (true);
 			
-				if(hitConflargation) cells.AddRange(HexMapDrawer.Instance.Cells.Where(c => c.Effects.ContainsType(typeof(HexCellEffects.Conflagration))));
+				if(hitConflargation) conflargationCells.AddRange(HexMapDrawer.Instance.Cells.Where(c => c.Effects.ContainsType(typeof(HexCellEffects.Conflagration))));
+            AnimationPlayer.Add(new Animations.CamaelMegiddo(lineCells.Select(c => c.transform).ToList(), conflargationCells.Select(c => c.transform).ToList()));
 			foreach (HexCell c in cells)
 			{
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
@@ -75,6 +80,7 @@ Czas odnowienia: {Cooldown}";
 				var damage = new Damage(Damage, DamageType.Magical);
 				ParentCharacter.Attack(this, c.CharacterOnCell, damage);
 			}
+
 		}
 
 		public void Use(List<HexCell> cells)

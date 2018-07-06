@@ -63,7 +63,7 @@ Po użyciu tej umiejętności {ParentCharacter.Name} może się poruszyć.";
 
 	    private List<HexCell> GetBasicMoveCellsOverride()
 		{
-			bool isAbilityActive = ParentCharacter.Effects.ContainsType(typeof(Effects.Flying));
+			bool isAbilityActive = ParentCharacter.Effects.ContainsType(typeof(Flying));
 			if (!isAbilityActive) return ParentCharacter.DefaultGetBasicMoveCells();
 
 			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters);

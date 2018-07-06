@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Animations;
+using UnityEngine;
 
 public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
 {
@@ -8,7 +10,14 @@ public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
 	private static bool _canPlayNext = true;
 	public static void Add(NkmAnimation animation)
 	{
-		AnimationsToPlay.Enqueue(animation);
+		try
+		{
+            AnimationsToPlay.Enqueue(animation);
+		}
+		catch (Exception e)
+		{
+			Debug.LogError(e.Message);
+		}
 	}
 //	public IEnumerator SharpenedForkEnumerator(Transform parentTransform, Transform targetTransform)
 //	{
