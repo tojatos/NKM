@@ -10,13 +10,13 @@ namespace UI.CharacterUI
 	{
 		private static Game Game => GameStarter.Instance.Game;
 		public GameObject EffectButtonPrefab;
-		private List<GameObject> Buttons { get; set; }
+		private List<GameObject> Buttons { get; } = new List<GameObject>();
 
-		private void Awake()
-		{
+//		private void Awake()
+//		{
 //			Game = GameStarter.Instance.Game;
-			Buttons = new List<GameObject>();
-		}
+//			Buttons = new List<GameObject>();
+//		}
 
 		public void UpdateButtons()
 		{
