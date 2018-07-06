@@ -7,7 +7,7 @@ namespace NKMObjects.Abilities.Crona
 {
     public class Infection : Ability, IClickable, IUseable
     {
-        private const int Range = 4;
+        private const int Range = 6;
         private const int EffectCooldown = 3;
 
 	    public Infection() : base(AbilityType.Ultimatum, "Infection", 5)

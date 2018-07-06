@@ -11,7 +11,7 @@ namespace NKMObjects.Abilities.Hecate
 	{
 		private const int Damage = 12;
 		private const int Range = 10;
-		private const int Radius = 7;
+		private const int Radius = 6;
 		
 		public AsterYo() : base(AbilityType.Normal, "Aster Yo", 3){}
 		

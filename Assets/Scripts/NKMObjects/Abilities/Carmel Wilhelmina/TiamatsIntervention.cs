@@ -8,7 +8,7 @@ namespace NKMObjects.Abilities.Carmel_Wilhelmina
 {
     public class TiamatsIntervention : Ability, IClickable, IUseable
     {
-        private const int Range = 10;
+        private const int Range = 8;
         private const int MoveTargetRange = 3;
         private const int Shield = 15;
         private const int StunDuration = 1;

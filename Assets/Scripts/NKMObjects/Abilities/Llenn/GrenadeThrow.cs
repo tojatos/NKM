@@ -7,7 +7,7 @@ namespace NKMObjects.Abilities.Llenn
 {
     public class GrenadeThrow : Ability, IClickable, IUseable
     {
-        private const int Damage = 13;
+        private const int Damage = 16;
         private const int Range = 7;
         private const int Radius = 2;
         public GrenadeThrow() : base(AbilityType.Normal, "Grenade Throw", 3){}
