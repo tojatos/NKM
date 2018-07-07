@@ -28,7 +28,7 @@ namespace NKMObjects.Abilities.Kirito
 	    public override string GetDescription() =>
 $@"{ParentCharacter.Name} zamienia się miejscami z wybranym sojusznikiem,
 jeśli któryś z nich znajduje się w zasięgu podstawowego ataku wrogiej postaci.
-{ParentCharacter.Name} może użyć podstawowego ataku lub super umiejętności po użyciu tej umiejętności.
+{ParentCharacter.Name} może użyć podstawowego ataku albo super umiejętności zaraz po użyciu tej umiejętności.
 
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
@@ -38,8 +38,38 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 	    private void Use(Character character)
         {
 	        Swap(ParentCharacter, character);
-	        ParentCharacter.HasFreeAttack = true;
-	        ParentCharacter.HasFreeUltimatumAbilityUse = true; // TODO
+	        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
+	        ParentCharacter.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = true; // TODO
+	        Character.CharacterDamageDelegate onAttack = null;
+	        onAttack = (c, d) =>
+	        {
+		        ParentCharacter.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;
+		        ParentCharacter.AfterBasicAttack -= onAttack;
+	        };
+	        ParentCharacter.AfterBasicAttack += onAttack;
+	        Character.AbilityDelegate onAbilityUse = null;
+	        onAbilityUse += ability =>
+	        {
+		        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = false;
+		        ParentCharacter.AfterAbilityUse -= onAbilityUse;
+	        };
+	        ParentCharacter.AfterAbilityUse += onAbilityUse;
+	        Character.VoidDelegate onMove = null;
+	        onMove += () =>
+	        {
+		        ParentCharacter.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;
+		        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = false;
+		        ParentCharacter.AfterBasicMove -= onMove;
+	        };
+	        ParentCharacter.AfterMove += onMove;
+		       
+	        Active.Turn.TurnFinished += character1 =>
+	        {
+		        if (character1 != ParentCharacter) return;
+		        ParentCharacter.AfterBasicAttack -= onAttack;
+		        ParentCharacter.AfterAbilityUse -= onAbilityUse;
+		        ParentCharacter.AfterBasicMove -= onMove;
+	        };
 	        Finish();
         }
         

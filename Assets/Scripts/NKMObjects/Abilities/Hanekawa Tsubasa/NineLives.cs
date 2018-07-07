@@ -12,6 +12,7 @@ namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 			{
 				ParentCharacter.AfterAttack += (character, damage) =>
 				{
+					if(!ParentCharacter.IsAlive) return;
 					int modifier = (character.Effects.ContainsType(typeof(BloodKiss))) ? 2 : 1;
 					int amountToHeal = damage.Value * HealthRegainedPercent / 100 * modifier;
 					ParentCharacter.Heal(ParentCharacter, amountToHeal);

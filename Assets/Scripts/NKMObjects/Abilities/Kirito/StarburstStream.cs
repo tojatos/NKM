@@ -19,7 +19,7 @@ namespace NKMObjects.Abilities.Kirito
                 {
                     if(!IsEnabled) return;
                     if (_gotFreeAttackThisTurn) return;
-                    ParentCharacter.HasFreeAttack = true;
+                    ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
                     _gotFreeAttackThisTurn = true;
                 };
                 Active.Turn.TurnStarted += player => _gotFreeAttackThisTurn = false;

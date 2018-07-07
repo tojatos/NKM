@@ -23,7 +23,7 @@ Po użyciu tej umiejętności {ParentCharacter.Name} może użyć podstawowego a
             ParentCharacter.Speed.Value = ParentCharacter.Speed.RealValue * 2;
             if(ParentCharacter.HealthPoints.Value > 1) ParentCharacter.HealthPoints.Value = ParentCharacter.HealthPoints.RealValue / 2;
             ParentCharacter.Effects.RemoveAll(e => e.IsCC);
-            ParentCharacter.HasFreeAttack = true;
+            ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
             IsEnabled = true;
             Finish();
         }

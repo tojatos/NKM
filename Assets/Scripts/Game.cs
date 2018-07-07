@@ -23,7 +23,7 @@ public class Game
 	public bool IsInitialized;
 	public Game()
 	{
-		Active = new Active(this);
+		Active = new Active();
 	}
 
 	public void Init(GameOptions gameOptions)
@@ -87,10 +87,7 @@ public class Game
 		// ReSharper disable once FunctionNeverReturns
 	}
 
-	private void FinishGame()
-	{
-		Victory.Instance.Show();
-	}
+	private static void FinishGame() => Victory.Instance.Show();
 
 	private bool NoCharacterOnMapCanTakeAction => Players.All(p => p.Characters.Where(c => c.IsOnMap).All(c => !c.CanTakeAction));
 	private bool IsEveryCharacterPlacedInTheFirstPhase => !(Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap)));

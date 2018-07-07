@@ -19,6 +19,7 @@
         <e p="AnimationPlayer.cs" t="Include" />
         <e p="Animations" t="Include">
           <e p="AsterYo.cs" t="Include" />
+          <e p="CamaelMegiddo.cs" t="Include" />
           <e p="Destroy.cs" t="Include" />
           <e p="ItadakiNoKura.cs" t="Include" />
           <e p="MoveTo.cs" t="Include" />
@@ -27,7 +28,9 @@
           <e p="Parts" t="Include">
             <e p="AsterYoFinish.cs" t="Include" />
             <e p="AsterYoStart.cs" t="Include" />
+            <e p="CamaelMegiddoStart.cs" t="Include" />
             <e p="Destroy.cs" t="Include" />
+            <e p="DestroyParticles.cs" t="Include" />
             <e p="FloatingInfoFinish.cs" t="Include" />
             <e p="FloatingInfoStart.cs" t="Include" />
             <e p="ItadakiNoKuraFinish.cs" t="Include" />
@@ -260,7 +263,9 @@
       <e p="Assets/VertexColors.shader" t="Include" />
       <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp/bin" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>

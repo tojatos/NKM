@@ -1,17 +1,17 @@
 ﻿using System.Linq;
+using Managers;
 using NKMObjects.Templates;
 using UI;
 
 public class Turn
 {
-	private readonly Game Game;
+	private static Game Game => GameStarter.Instance.Game;
 	public bool IsDone { get; private set; }
 	public bool WasCharacterPlaced { get; set; }
 	public Character CharacterThatTookActionInTurn { get; set; }
 
-	public Turn(Game game)
+	public Turn()
 	{
-		Game = game;
 		IsDone = false;
 		WasCharacterPlaced = false;
 		CharacterThatTookActionInTurn = null;

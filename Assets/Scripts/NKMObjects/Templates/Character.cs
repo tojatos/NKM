@@ -38,17 +38,17 @@ namespace NKMObjects.Templates
 
 		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }
 		public bool HasUsedBasicAttackInPhaseBefore { private get; set; }
-		public bool HasUsedNormalAbilityInPhaseBefore { private get; set; }
+		public bool HasUsedNormalAbilityInPhaseBefore { get; set; }
 		public bool HasUsedUltimatumAbilityInPhaseBefore { private get; set; }
 
-		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore || HasFreeMove;
-		private bool CanUseBasicAttack => !HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect || HasFreeAttack;
+		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore || HasFreeMoveUntilEndOfTheTurn;
+		private bool CanUseBasicAttack => !HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect || HasFreeAttackUntilEndOfTheTurn;
 		public bool CanUseNormalAbility => !HasUsedNormalAbilityInPhaseBefore && !HasUsedBasicAttackInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore;
-		public bool CanUseUltimatumAbility => !(HasUsedUltimatumAbilityInPhaseBefore || HasUsedBasicMoveInPhaseBefore || HasUsedBasicAttackInPhaseBefore || HasUsedNormalAbilityInPhaseBefore || TookActionInPhaseBefore) || HasFreeUltimatumAbilityUse;//Active.Turn.CharacterThatTookActionInTurn == this);
+		public bool CanUseUltimatumAbility => !(HasUsedUltimatumAbilityInPhaseBefore || HasUsedBasicMoveInPhaseBefore || HasUsedBasicAttackInPhaseBefore || HasUsedNormalAbilityInPhaseBefore || TookActionInPhaseBefore) || HasFreeUltimatumAbilityUseUntilEndOfTheTurn;//Active.Turn.CharacterThatTookActionInTurn == this);
 
-		public bool HasFreeAttack { get; set; }
-		public bool HasFreeUltimatumAbilityUse { get; set; }
-		public bool HasFreeMove { get; set; }
+		public bool HasFreeAttackUntilEndOfTheTurn { get; set; }
+		public bool HasFreeUltimatumAbilityUseUntilEndOfTheTurn { get; set; }
+		public bool HasFreeMoveUntilEndOfTheTurn { get; set; }
 		public bool TookActionInPhaseBefore { get; set; }
 		public bool IsAlive => HealthPoints.Value > 0;
 		public bool IsEnemyFor(GamePlayer player) => Owner != player;
@@ -82,6 +82,7 @@ namespace NKMObjects.Templates
 		public event VoidDelegate AfterMove;
 		public event VoidDelegate AfterBasicMove;
 		public event AbilityDelegate AfterBeingHitByAbility;
+		public event AbilityDelegate AfterAbilityUse;
 		public event DamageDelegate BeforeBeingDamaged;
 		public event DamageDelegate AfterBeingDamaged;
 		public event CharacterDamageDelegate BeforeBeingBasicAttacked;
@@ -89,6 +90,7 @@ namespace NKMObjects.Templates
 		public event CharacterDamageDelegate AfterBasicAttack;
 		public event CharacterDamageDelegate BeforeAttack;
 		public void InvokeAfterBasicMove() => AfterBasicMove?.Invoke();
+		public void InvokeAfterAbilityUse(Ability a) => AfterAbilityUse?.Invoke(a);
 		
 		/// <summary>
 		/// Triggers after calculating all modifiers and defenses,
@@ -138,6 +140,13 @@ namespace NKMObjects.Templates
 			
 			AddTriggersToEvents();
 			CreateAndInitiateAbilities(name);
+			Active.Turn.TurnFinished += character =>
+			{
+				if (character != this) return;
+				HasFreeAttackUntilEndOfTheTurn = false;
+				HasFreeMoveUntilEndOfTheTurn = false;
+				HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;
+			};
 		}
 		private void AddTriggersToEvents()
 		{
@@ -156,8 +165,8 @@ namespace NKMObjects.Templates
 			HealthPoints.StatChanged += () =>
 			{
 				if(Active.CharacterOnMap == this) MainHPBar.Instance.UpdateHPAmount(this);
-					
 			};
+			OnDeath += () => Effects.Clear();
 		}
 		private void CreateAndInitiateAbilities(string name)
 		{
@@ -180,7 +189,7 @@ namespace NKMObjects.Templates
 		public void DefaultBasicMove(List<HexCell> cellPath)
 		{
 			HasUsedBasicMoveInPhaseBefore = true;
-			if (HasFreeMove) HasFreeMove = false;
+			if (HasFreeMoveUntilEndOfTheTurn) HasFreeMoveUntilEndOfTheTurn = false;
 			Move(cellPath);
 		}
 		private void Move(IList<HexCell> cellPath)
@@ -194,7 +203,7 @@ namespace NKMObjects.Templates
 		}
 		public void DefaultBasicAttack(Character attackedCharacter)
 		{
-			if (HasFreeAttack) HasFreeAttack = false;
+			if (HasFreeAttackUntilEndOfTheTurn) HasFreeAttackUntilEndOfTheTurn = false;
 			
 			var damage = new Damage(AttackPoints.Value, DamageType.Physical);
 			BeforeBasicAttack?.Invoke(attackedCharacter, damage);
@@ -274,7 +283,6 @@ namespace NKMObjects.Templates
 			ParentCell.CharacterOnCell = null;
 			ParentCell = null;
 			IsOnMap = false;
-//			Object.Destroy(CharacterObject);//TODO: enqueue that as animation
 			AnimationPlayer.Add(new Destroy(CharacterObject));
 		}
 		private void PrepareAttackAndMove()

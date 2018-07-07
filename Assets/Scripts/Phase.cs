@@ -1,16 +1,16 @@
-﻿using UI;
+﻿using Managers;
+using UI;
 
 public class Phase
 {
-	private readonly Game Game;
+	private static Game Game => GameStarter.Instance.Game;
 
 	public int Number { get; set; }
 
-	public Phase(Game game)
-	{
-		Game = game;
-		Number = 0;
-	}
+//	public Phase(Game game)
+//	{
+//		Number = 0;
+//	}
 
 	public delegate void VoidDelegate();
 	public event VoidDelegate PhaseFinished;

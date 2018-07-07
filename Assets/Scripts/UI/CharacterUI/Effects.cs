@@ -12,12 +12,6 @@ namespace UI.CharacterUI
 		public GameObject EffectButtonPrefab;
 		private List<GameObject> Buttons { get; } = new List<GameObject>();
 
-//		private void Awake()
-//		{
-//			Game = GameStarter.Instance.Game;
-//			Buttons = new List<GameObject>();
-//		}
-
 		public void UpdateButtons()
 		{
 			if (Game.Active.CharacterOnMap == null) return;

@@ -2,7 +2,6 @@
 
 namespace NKMObjects.Effects
 {
-	// ReSharper disable once InconsistentNaming
 	public class HPDrain : Effect
 	{
 		private readonly Character _characterThatAttacks;
@@ -17,7 +16,7 @@ namespace NKMObjects.Effects
 			Character.VoidDelegate tryToActivateEffect = () =>
 			{
 				_characterThatAttacks.Attack(this, ParentCharacter, _damagePerTick);
-				if (ParentCharacter.IsAlive)
+				if (ParentCharacter.IsAlive && _characterThatAttacks.IsAlive)
 					ParentCharacter.Heal(_characterThatAttacks, _damagePerTick.Value);
 			};
 			ParentCharacter.JustBeforeFirstAction += tryToActivateEffect;

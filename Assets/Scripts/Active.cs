@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hex;
+using Managers;
 using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,13 +14,12 @@ using Object = UnityEngine.Object;
 /// </summary>
 public class Active
 {
-	private readonly Game Game;
-	public Active(Game game)
+	private static Game Game => GameStarter.Instance.Game;
+	public Active()
 	{
-		Game = game;
-		Phase = new Phase(game);
-		Turn = new Turn(game);
-		AirSelection = new AirSelection(game);
+		Phase = new Phase();
+		Turn = new Turn();
+		AirSelection = new AirSelection();
 		IsDebug = true;
 	}
 

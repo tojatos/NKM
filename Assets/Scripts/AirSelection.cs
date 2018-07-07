@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Hex;
+using Managers;
 
 public class AirSelection
 {
-	private readonly Game _game;
+	private static Game Game => GameStarter.Instance.Game;
 	public bool IsEnabled { get; private set; }
 	public enum SelectionShape
 	{
 		None,
 		Circle
 	}
-	public AirSelection(Game game)
+	public AirSelection()
 	{
-		_game = game;
 		IsEnabled = false;
 		_shape = SelectionShape.None;
 		_size = 0;
@@ -34,10 +34,10 @@ public class AirSelection
 					_hexCells.AddRange(value[0].GetNeighbors(_size));
 				}
 			}
-			_game.HexMapDrawer.RemoveHighlights();
-			if (_game.Active.HexCells != null && _hexCells != null)
+			Game.HexMapDrawer.RemoveHighlights();
+			if (Game.Active.HexCells != null && _hexCells != null)
 			{
-				_game.Active.HexCells.ForEach(c =>
+				Game.Active.HexCells.ForEach(c =>
 				{
 					if (_hexCells.All(ac => ac != c))
 					{
@@ -51,7 +51,7 @@ public class AirSelection
 
 	public void Enable(SelectionShape shape, int size)
 	{
-		_game.Active.HexCells.ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
+		Game.Active.HexCells.ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
 		IsEnabled = true;
 		_shape = shape;
 		_size = size;

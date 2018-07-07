@@ -15,12 +15,16 @@ namespace NKMObjects.Templates
 			Name = name;
 			Cooldown = cooldown;
 			CurrentCooldown = 0;
-			OnAwake += () => Validator = new AbilityUseValidator(this);
-			OnAwake += () => Active.Phase.PhaseFinished += () =>
+			OnAwake += () =>
 			{
-				if (CurrentCooldown > 0) CurrentCooldown--;
+				Validator = new AbilityUseValidator(this);
+                Active.Phase.PhaseFinished += () =>
+                {
+                    if (CurrentCooldown > 0) CurrentCooldown--;
+                };
+                Owner = ParentCharacter.Owner;
+				AfterUseFinish += () => ParentCharacter.InvokeAfterAbilityUse(this);
 			};
-			OnAwake += () => Owner = ParentCharacter.Owner;
 		}
 
 		protected AbilityUseValidator Validator;

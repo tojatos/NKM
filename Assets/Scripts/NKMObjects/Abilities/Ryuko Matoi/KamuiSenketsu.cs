@@ -47,7 +47,7 @@ Po użyciu tej umiejętności {ParentCharacter.Name} może się poruszyć.";
 		        IsEnabled = true;
                 ParentCharacter.Effects.Add(new Flying(-1, ParentCharacter, Name));
 		        ParentCharacter.Effects.Add(new StatModifier(-1, InitialADBonus, ParentCharacter, StatType.AttackPoints, Name));
-		        ParentCharacter.HasFreeMove = true;
+		        ParentCharacter.HasFreeMoveUntilEndOfTheTurn = true;
 		        Finish();
 	        }
 	        else

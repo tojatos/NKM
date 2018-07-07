@@ -14,9 +14,9 @@ namespace NKMObjects.Abilities.Llenn
                 {
                     if (!IsEnabled) return;
                     _timesRun++;
-                    ParentCharacter.HasFreeAttack = true;
+                    ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
                     if (_timesRun >= TimesToRun) return;
-                    ParentCharacter.HasFreeMove = true;
+                    ParentCharacter.HasFreeMoveUntilEndOfTheTurn = true;
                 };
                 Active.Turn.TurnFinished += character =>
                 {
@@ -40,7 +40,7 @@ Czas odnowienia: {Cooldown}";
         {
             Active.MakeAction();
             IsEnabled = true;
-            ParentCharacter.HasFreeMove = true;
+            ParentCharacter.HasFreeMoveUntilEndOfTheTurn = true;
             Finish();
         }
 
