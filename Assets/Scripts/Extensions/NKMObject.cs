@@ -84,5 +84,6 @@ namespace Extensions
 		public static bool ContainsType(this IEnumerable<object> objects, Type type) => objects.Any(o => o.GetType() == type);
 		public static bool ContainsType<T>(this IEnumerable<object> objects) => objects.Any(o => o.GetType() == typeof(T));
 		public static string FormattedFirstName(this Character character) => string.Format("<color={0}><</color><b>{1}</b><color={0}>></color>", ((Color32)character.Owner.GetColor()).ToHex(), character.Name.Split(' ').Last());
+		public static string FirstName(this Character character) => character.Name.Split(' ').Last();
 	}
 }

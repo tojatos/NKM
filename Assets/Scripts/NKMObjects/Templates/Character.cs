@@ -73,6 +73,7 @@ namespace NKMObjects.Templates
 		public delegate void DamageDelegate(Damage damage);
 		public delegate void CharacterDamageDelegate(Character character, Damage damage);
 		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
+		public delegate void CharacterRefIntDelegate(Character targetCharacter, ref int value);
 		#endregion
 		#region Events
 		public event VoidDelegate JustBeforeFirstAction;
@@ -98,7 +99,8 @@ namespace NKMObjects.Templates
 		/// </summary>
 //		public event CharacterDamageDelegate JustBeforeAttack;
 		public event CharacterDamageDelegate AfterAttack;
-		public event CharacterIntDelegate OnHeal;
+		public event CharacterIntDelegate AfterHeal;
+		public event CharacterRefIntDelegate BeforeHeal;
 		#endregion
 		public Character(string name)
 		{
@@ -159,7 +161,7 @@ namespace NKMObjects.Templates
 				AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
 			AfterAttack += (targetCharacter, damage) =>
 				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damage.Value.ToString(), Color.red));
-			OnHeal += (targetCharacter, valueHealed) =>
+			AfterHeal += (targetCharacter, valueHealed) =>
 				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(),
 					Color.blue));
 			HealthPoints.StatChanged += () =>
@@ -167,6 +169,10 @@ namespace NKMObjects.Templates
 				if(Active.CharacterOnMap == this) MainHPBar.Instance.UpdateHPAmount(this);
 			};
 			OnDeath += () => Effects.Clear();
+			AfterHeal += (targetCharacter, value) => 
+                MessageLogger.Log(targetCharacter != this
+				? $"{this.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
+				: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
 		}
 		private void CreateAndInitiateAbilities(string name)
 		{
@@ -356,14 +362,13 @@ namespace NKMObjects.Templates
 
 		public void Heal(Character targetCharacter, int amount)
 		{
-			var hpBeforeHeal = targetCharacter.HealthPoints.Value;
+			if(!targetCharacter.IsAlive) return;
+			BeforeHeal?.Invoke(targetCharacter, ref amount);
+			int hpBeforeHeal = targetCharacter.HealthPoints.Value;
 			targetCharacter.HealthPoints.Value += amount;
-			var hpAfterHeal = targetCharacter.HealthPoints.Value;
-			var diff = hpAfterHeal - hpBeforeHeal;
-			MessageLogger.Log(targetCharacter != this
-				? $"{this.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{diff}</b></color> punktów życia!"
-				: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{diff}</b></color> punktów życia!");
-			OnHeal?.Invoke(targetCharacter, diff);
+			int hpAfterHeal = targetCharacter.HealthPoints.Value;
+			int diff = hpAfterHeal - hpBeforeHeal;
+			AfterHeal?.Invoke(targetCharacter, diff);
 		}
 		public void OnPhaseFinish()//TODO: move this to event
 		{

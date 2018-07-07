@@ -128,6 +128,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Dekomori Sanae\MjolnirHammer.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Dekomori Sanae\WickedEyesServant.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ditto\Transform.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Elizabeth Liones\ImmenseHealingPowers.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Elizabeth Liones\Invigorate.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Elizabeth Liones\PowerOfTheGoddess.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Empty.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Gilgamesh\Enkidu.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Gilgamesh\GateOfBabylon.cs" />
@@ -186,6 +189,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Effects\DamageOverTime.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Empty.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Flying.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Effects\HealOverTime.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\HPDrain.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\MovementDisability.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\PassiveBuff.cs" />

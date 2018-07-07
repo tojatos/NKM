@@ -51,11 +51,12 @@ namespace Managers
 //								new Character("Dekomori Sanae"),
 //								new Character("Rem"),
 								new Character("Kirito"),
-								new Character("Nibutani Shinka"),
+//								new Character("Nibutani Shinka"),
 //								new Character("Kurogane Ikki"),
 //								new Character("Sakai Yuuji"),
 //								new Character("Carmel Wilhelmina"),
 //								new Character("Ryuko Matoi"),
+								new Character("Elizabeth Liones"),
 							}
 						},
 						new GamePlayer

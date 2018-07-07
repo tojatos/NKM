@@ -214,6 +214,7 @@
             <e p="StatModifier.cs" t="Include" />
             <e p="Stun.cs" t="Include" />
           </e>
+          <e p="ElizabethLiones.cs" t="Include" />
           <e p="HexCellEffects" t="Include">
             <e p="Conflagration.cs" t="Include" />
             <e p="HowlingBlizzard.cs" t="Include" />
