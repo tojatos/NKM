@@ -10,10 +10,8 @@ public class Console : SingletonMonoBehaviour<Console>
 	private readonly List<ConsoleLine> _loggedLines = new List<ConsoleLine>();
 	private List<ConsoleLine> NonDebugTexts => _loggedLines.FindAll(t => t.IsDebug == false);
 	public Text LogText;
-//	public Scrollbar Scrollbar;
 	public InputField InputField;
 	private static Game Game => GameStarter.Instance.Game;
-//	private int _linesCount = 4;
 	private const int TextsDisplayed = 8;
 	
 	private int _startingIndex;
@@ -29,6 +27,7 @@ public class Console : SingletonMonoBehaviour<Console>
 	{
 		UpdateLogText();
 		gameObject.Show();
+		InputField.ActivateInputField();
 	}
 
 	private void UpdateLogText(bool updateIndex = true)
@@ -74,49 +73,6 @@ public class Console : SingletonMonoBehaviour<Console>
 //		FinishLogging();
 	}
 
-//	private int CountLines()
-//	{
-//		return LogText.text.Count(c => c == '\n');
-//	}
-//	private void ResizeIfNotEnoughSpace()
-//	{
-//		var trueLinesCount = CountLines();
-//		if (trueLinesCount > 4 && _linesCount != trueLinesCount)
-//		{
-//			var diff = trueLinesCount - _linesCount;
-//			LogText.rectTransform.offsetMin = new Vector2(LogText.rectTransform.offsetMin.x, LogText.rectTransform.offsetMin.y + diff * -14);
-//			_linesCount = trueLinesCount;
-//		}
-//	}
-//	private IEnumerator SetScrollbarToDown()
-//	{
-//		yield return null; // Waiting just one frame is probably good enough, yield return null does that
-//
-//		Scrollbar.value = 0;
-//	}
-//	private void FinishLogging()
-//	{
-//		ResizeIfNotEnoughSpace();
-//		//ScrollDown();
-//		if(gameObject.activeSelf)
-//            StartCoroutine(SetScrollbarToDown());
-//	}
-
-//	private void Update()
-//	{
-//		if (InputField.isFocused || !Input.GetKeyDown(KeyCode.Slash)) return;
-//		InputField.ActivateInputField();
-//		InputField.text += "/";
-//		StartCoroutine(MoveTextEnd_NextFrame());
-
-//	}
-
-//	private IEnumerator MoveTextEnd_NextFrame()
-//	{
-//		yield return 0; // Skip the first frame in which this is called.
-
-//		InputField.MoveTextEnd(false); // Do this during the next frame.
-//	}
 	private void OnGUI()
 	{
 		if (!InputField.isFocused || InputField.text == "" || !Input.GetKey(KeyCode.Return)) return;
@@ -174,7 +130,8 @@ public class Console : SingletonMonoBehaviour<Console>
 //		}
 //		else
 //		{
-			Log("<b><</b>" + Game.Active.GamePlayer.Name + "<b>></b>: " + text);
+//			Log("<b><</b>" + Game.Active.GamePlayer.Name + "<b>></b>: " + text);
+		Log(text);
 //		}
 		InputField.text = "";
 		InputField.ActivateInputField();
