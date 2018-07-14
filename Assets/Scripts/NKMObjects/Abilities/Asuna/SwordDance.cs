@@ -22,7 +22,7 @@ namespace NKMObjects.Abilities.Asuna
 				{
 					if (!IsEnabled) return;
 
-					MessageLogger.Log(
+					Console.Log(
 						$"{ParentCharacter.FormattedFirstName()} blokuje atak {attackingCharacter.FormattedFirstName()}!");
 					_attacksToBlock--;
 					damage.Value = 0;

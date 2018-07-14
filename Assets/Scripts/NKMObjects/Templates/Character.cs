@@ -155,7 +155,7 @@ namespace NKMObjects.Templates
 			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
 			AfterBeingDamaged += damage => RemoveIfDead();
 			AfterAttack += (targetCharacter, damage) =>
-				MessageLogger.Log(
+				Console.Log(
 					$"{this.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
 			AfterAttack += (targetCharacter, damage) =>
 				AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
@@ -170,7 +170,7 @@ namespace NKMObjects.Templates
 			};
 			OnDeath += () => Effects.Clear();
 			AfterHeal += (targetCharacter, value) => 
-                MessageLogger.Log(targetCharacter != this
+                Console.Log(targetCharacter != this
 				? $"{this.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
 				: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
 		}
@@ -276,7 +276,7 @@ namespace NKMObjects.Templates
 			if (IsAlive) return;
 			OnDeath?.Invoke();
 
-			MessageLogger.Log($"{this.FormattedFirstName()} umiera!");
+			Console.Log($"{this.FormattedFirstName()} umiera!");
 			RemoveFromMap();
 			DeathTimer = 0;
 			if (Active.CharacterOnMap == this) Deselect();
@@ -295,14 +295,14 @@ namespace NKMObjects.Templates
 		{
 			if (Active.GamePlayer != Owner)
 			{
-				MessageLogger.DebugLog("Nie jesteś właścicielem! Wara!");
+				Console.DebugLog("Nie jesteś właścicielem! Wara!");
 				return;
 			}
 
 			bool isPreparationSuccessful;
 			if (!CanTakeAction || !CanUseBasicMove && !CanUseBasicAttack)
 			{
-				MessageLogger.DebugLog("Ta postać nie może się ruszać ani atakować!");
+				Console.DebugLog("Ta postać nie może się ruszać ani atakować!");
 				return;
 			}
 
@@ -334,7 +334,7 @@ namespace NKMObjects.Templates
 		private List<HexCell> GetPrepareBasicMoveCells()
 		{
 			if (CanMove) return GetBasicMoveCells();
-			MessageLogger.DebugLog("Postać posiada efekt uniemożliwiający ruch!");
+			Console.DebugLog("Postać posiada efekt uniemożliwiający ruch!");
 			return Enumerable.Empty<HexCell>().ToList();
 		}
 		private List<HexCell> GetPrepareBasicAttackCells() => CanAttackAllies

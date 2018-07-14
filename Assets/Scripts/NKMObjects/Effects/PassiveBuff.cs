@@ -19,7 +19,7 @@ namespace NKMObjects.Effects
 			}
 			catch (Exception e)
 			{
-				MessageLogger.DebugLog(e.Message);
+				Console.DebugLog(e.Message);
 			}
 		}
 

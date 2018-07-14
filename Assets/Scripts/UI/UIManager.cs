@@ -16,6 +16,7 @@ namespace UI
 	{
 		private static Game Game => GameStarter.Instance.Game;
 		private static Active Active => Game.Active;
+		private static Console Console => Console.Instance;
 
 		private SpriteSelect _spriteSelect;
 
@@ -26,6 +27,7 @@ namespace UI
 
 		public GameObject EndTurnImage;
 		public GameObject HourglassImage;
+		
 
 		public Text ActivePlayerText;
 		public Text ActivePhaseText;
@@ -72,6 +74,9 @@ namespace UI
 
 		private void Update()
 		{
+			if (Input.GetKeyDown(KeyCode.F2))
+				Console.Toggle();
+
 			if (Game==null) return;
 
 			if (Game.Active.Phase.Number == 0)

@@ -50,7 +50,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			}
 			catch (Exception e)
 			{
-				MessageLogger.DebugLog(e.Message);
+				Console.DebugLog(e.Message);
 				OnFailedUseFinish();
 			}
 		}
