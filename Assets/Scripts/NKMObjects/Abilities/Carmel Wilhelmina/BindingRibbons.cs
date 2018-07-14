@@ -10,16 +10,15 @@ namespace NKMObjects.Abilities.Carmel_Wilhelmina
     {
         private const int Range = 4;
         private const int Radius = 3;
-        private const int Damage = 8;
-        private const int EnemiesToHitToActivateStun = 3;
+        private const int EnemiesToHitToActivateSnare = 3;
         private const int RootDuration = 1;
-        private const int SilentDuration = 2;
+        private const int SilentDuration = 1;
         public BindingRibbons() : base(AbilityType.Normal, "Binding Ribbons", 4){}
 
         public override string GetDescription() =>
 $@"{ParentCharacter.Name} rzuca zaklęcie w obszar o promieniu {Radius},
-uciszając wszystkich wrogów na {SilentDuration} fazy i zadając im {Damage} obrażeń magicznych.
-Gdy trafi co najmniej {EnemiesToHitToActivateStun} wrogów unieruchamia ich dodatkowo na {RootDuration} fazę.";
+uciszając wszystkich wrogów na {SilentDuration} fazę.
+Gdy trafi co najmniej {EnemiesToHitToActivateSnare} wrogów unieruchamia ich dodatkowo na {RootDuration} fazę.";
 
         public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
 
@@ -36,8 +35,7 @@ Gdy trafi co najmniej {EnemiesToHitToActivateStun} wrogów unieruchamia ich doda
             enemiesInRange.ForEach(c =>
             {
                 c.Effects.Add(new Silent(SilentDuration, c, Name));
-                ParentCharacter.Attack(this, c, new Damage(Damage, DamageType.Magical));
-                if(enemiesInRange.Count >= EnemiesToHitToActivateStun) 
+                if(enemiesInRange.Count >= EnemiesToHitToActivateSnare) 
                     c.Effects.Add(new MovementDisability(RootDuration, c, Name));
                 
             });

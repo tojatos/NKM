@@ -11,11 +11,12 @@ namespace NKMObjects.Abilities.Monkey_D._Luffy
         private const int BazookaRange = 3;
         private const int BazookaDamage = 17;
         private const int BazookaKnockback = 8;
+        private const int BazookaCooldown = 3;
         private const int PistolDamage = 15;
         private const int JetBazookaKnockback = 14;
         private const int JetBazookaDamage = 23;
         private const int JetPistolDamage = 19;
-        public GomuGomuNoMi() : base(AbilityType.Normal, "Gomu Gomu no Mi", 3)
+        public GomuGomuNoMi() : base(AbilityType.Normal, "Gomu Gomu no Mi", 2)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
@@ -51,7 +52,7 @@ Odrzut: {JetBazookaKnockback}
 <b>Pistol</b>
 Obrażenia: {JetPistolDamage}
 
-Zasięg: {Range}    Cooldown: {Cooldown}";
+Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli użyje Bazooki)";
 
         public void Click()
         {
@@ -69,13 +70,13 @@ Zasięg: {Range}    Cooldown: {Cooldown}";
                 if (ParentCharacter.ParentCell.GetNeighbors(BazookaRange).Contains(cell)) Bazooka(enemy);
                 else Pistol(enemy);
             }
-            Finish();
         }
 
         private void Pistol(Character enemy)
         {
             ParentCharacter.Attack(this, enemy,new Damage(IsEnchanted ? JetPistolDamage : PistolDamage, DamageType.Physical));
             Active.PlayAudio("pistol");
+            Finish();
         }
 
         private void Bazooka(Character enemy)
@@ -84,6 +85,7 @@ Zasięg: {Range}    Cooldown: {Cooldown}";
             if(!enemy.IsAlive) return;
             HexDirection direction = ParentCharacter.ParentCell.GetDirection(enemy.ParentCell);
             ThrowCharacter(enemy, direction, IsEnchanted?JetBazookaKnockback:BazookaKnockback);
+            Finish(BazookaCooldown);
         }
         
         private void Rocket(HexCell cell)
@@ -93,6 +95,7 @@ Zasięg: {Range}    Cooldown: {Cooldown}";
             if(distance<=0) return;
             Active.PlayAudio("gomu gomu no rocket effect");
             ThrowCharacter(ParentCharacter, direction, distance*2);
+            Finish();
         }
 
         private static void ThrowCharacter(Character character, HexDirection direction, int distance)

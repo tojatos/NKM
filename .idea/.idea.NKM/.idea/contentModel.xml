@@ -113,6 +113,11 @@
             <e p="Ditto" t="Include">
               <e p="Transform.cs" t="Include" />
             </e>
+            <e p="Elizabeth Liones" t="Include">
+              <e p="ImmenseHealingPowers.cs" t="Include" />
+              <e p="Invigorate.cs" t="Include" />
+              <e p="PowerOfTheGoddess.cs" t="Include" />
+            </e>
             <e p="Empty.cs" t="Include" />
             <e p="Gilgamesh" t="Include">
               <e p="Enkidu.cs" t="Include" />
@@ -208,13 +213,13 @@
             <e p="Empty.cs" t="Include" />
             <e p="Flying.cs" t="Include" />
             <e p="HPDrain.cs" t="Include" />
+            <e p="HealOverTime.cs" t="Include" />
             <e p="MovementDisability.cs" t="Include" />
             <e p="PassiveBuff.cs" t="Include" />
             <e p="Silent.cs" t="Include" />
             <e p="StatModifier.cs" t="Include" />
             <e p="Stun.cs" t="Include" />
           </e>
-          <e p="ElizabethLiones.cs" t="Include" />
           <e p="HexCellEffects" t="Include">
             <e p="Conflagration.cs" t="Include" />
             <e p="HowlingBlizzard.cs" t="Include" />

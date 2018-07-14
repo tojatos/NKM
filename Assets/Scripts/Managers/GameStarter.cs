@@ -50,7 +50,7 @@ namespace Managers
 //								new Character("Yoshino"),
 //								new Character("Dekomori Sanae"),
 //								new Character("Rem"),
-								new Character("Kirito"),
+//								new Character("Kirito"),
 //								new Character("Nibutani Shinka"),
 //								new Character("Kurogane Ikki"),
 //								new Character("Sakai Yuuji"),
@@ -64,8 +64,8 @@ namespace Managers
 							Name = "Maciej",
 							Characters = new List<Character>
 							{
-//								new Character("Monkey D. Luffy"),
-								new Character("Hanekawa Tsubasa"),
+								new Character("Monkey D. Luffy"),
+//								new Character("Hanekawa Tsubasa"),
 //								new Character("Bezimienni"),
 //								new Character("Shana"),
 //								new Character("Yasaka Mahiro"),
