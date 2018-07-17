@@ -1,7 +1,7 @@
 ﻿using Extensions;
 using NKMObjects.Templates;
 
-namespace NKMObjects.Abilities.Elizabeth_Liones
+namespace NKMObjects.Abilities.Liones_Elizabeth
 {
     public class ImmenseHealingPowers : Ability
     {
