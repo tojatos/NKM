@@ -34,10 +34,6 @@ public class Game
 		_uiManager = _options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
 		_spawner = Spawner.Instance;
-//		Spawner.Init(this);
-
-//		Players.ForEach(p => Debug.Log(p.Characters.Count));
-//		Debug.Log("Game started!");
 		Players.ForEach(p => p.Characters.ForEach(c => c.Abilities.ForEach(a => a.Awake())));
 		IsInitialized = true;
 	}

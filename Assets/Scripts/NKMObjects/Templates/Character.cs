@@ -153,7 +153,7 @@ namespace NKMObjects.Templates
 		private void AddTriggersToEvents()
 		{
 			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
-			AfterBeingDamaged += damage => RemoveIfDead();
+			HealthPoints.StatChanged += RemoveIfDead;
 			AfterAttack += (targetCharacter, damage) =>
 				Console.Log(
 					$"{this.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");

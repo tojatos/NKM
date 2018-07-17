@@ -39,7 +39,7 @@ namespace NKMObjects.Templates
 		public int CurrentCooldown
 		{
 			get { return _currentCooldown; }
-			protected set
+			set
 			{
 				_currentCooldown = value;
 				UI.CharacterUI.Abilities.Instance.UpdateButtonData();
