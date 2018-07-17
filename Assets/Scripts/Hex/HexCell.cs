@@ -33,30 +33,22 @@ namespace Hex
 			}
 		}
 
-		public List<GameObject> Highlights;//{ get; set; }
-//		public GameObject HelpHighlight;// { get; set; }
-		public HexTileType Type;// { get; set; }
+		public List<GameObject> Highlights;
+		public HexTileType Type;
 		public Color Color;
 		public List<HexCellEffect> Effects = new List<HexCellEffect>();
 		public bool IsFreeToStand => CharacterOnCell == null && Type != HexTileType.Wall;
 
 		private readonly HexCell[] _neighbors = new HexCell[6];
 
-		private HexCell GetNeighbor(HexDirection direction)
-		{
-			return _neighbors[(int)direction];
-		}
-		public void SetNeighbor(HexDirection direction, HexCell cell)
+        private HexCell GetNeighbor(HexDirection direction) => _neighbors[(int)direction];
+        public void SetNeighbor(HexDirection direction, HexCell cell)
 		{
 			_neighbors[(int)direction] = cell;
 			cell._neighbors[(int)direction.Opposite()] = this;
 		}
 
 		public void AddHighlight(string color) => Spawner.SpawnHighlightCellObject(this, color);
-//		public void AddHighlight(HiglightColor color = HiglightColor.Black) => AddHighlight(ref Highlight, color);
-//		public void AddHighlight(HiglightColor color = HiglightColor.Black) => AddHighlight(ref HelpHighlight, color);
-		
-
 		public HexDirection GetDirection(HexCell targetCell)
 		{
 			if (Coordinates.X == targetCell.Coordinates.X && Coordinates.Y == targetCell.Coordinates.Y && Coordinates.Z == targetCell.Coordinates.Z)
@@ -132,7 +124,7 @@ namespace Hex
 
 			return visited;
 		}
-		public List<HexCell> GetNeighbors(int depth, SearchFlags searchFlags = SearchFlags.None)
+		public List<HexCell> GetNeighbors(int depth, SearchFlags searchFlags = SearchFlags.None, Func<HexCell, bool> StopAt = null)
 		{
 			bool stopAtWalls = searchFlags.HasFlag(SearchFlags.StopAtWalls);
 			bool stopAtEnemyCharacters = searchFlags.HasFlag(SearchFlags.StopAtEnemyCharacters);
@@ -151,6 +143,7 @@ namespace Hex
                         HexCell neighbor = lastCell.GetNeighbor(direction);
 						if(neighbor==null) continue;
 						
+						if(StopAt != null && StopAt(neighbor)) continue;
 						bool isBlocked = stopAtWalls && neighbor.Type == HexTileType.Wall ||
 						                 stopAtEnemyCharacters && neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != Active.GamePlayer ||
 						                 stopAtFriendlyCharacters && neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner == Active.GamePlayer;
@@ -174,6 +167,8 @@ namespace Hex
 					{
 						HexCell neighbor = cell.GetNeighbor(direction);
 						if(neighbor==null) continue;
+
+						if(StopAt != null && StopAt(neighbor)) continue;
 						
 						bool isBlocked = stopAtWalls && neighbor.Type == HexTileType.Wall ||
 						                 stopAtEnemyCharacters && neighbor.CharacterOnCell != null && neighbor.CharacterOnCell.Owner != Active.GamePlayer ||

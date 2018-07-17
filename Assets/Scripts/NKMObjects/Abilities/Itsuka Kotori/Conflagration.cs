@@ -8,12 +8,11 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
 {
     public class Conflagration : Ability, IClickable, IUseable
     {
-        private const int Range = 13;
-        private const int Radius = 6;
-        private const int EffectTime = 3;
+        private const int Range = 10;
+        private const int Radius = 3;
         private const int DamagePercent = 50;
 
-        public Conflagration() : base(AbilityType.Normal, "Conflagration", 6)
+        public Conflagration() : base(AbilityType.Normal, "Conflagration", 2)
         {
             OnAwake += () =>
             {
@@ -36,10 +35,11 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
         }
        
         public override string GetDescription() => string.Format(
-@"{0} wywołuje Pożar na wskazanym obszarze o promieniu 6.
+@"{0} wywołuje Pożar na wskazanym obszarze o promieniu {3}.
 {0} może atakować wrogów znajdujących się na terenie Pożaru podstawowymi atakami, zadając 50% zwykłych obrażeń, niezależnie od tego gdzie sama się znajduje.
-Zasięg: {1}	Czas trwania: {2} Czas odnowienia: {3}",
-            ParentCharacter.Name, Range, EffectTime, Cooldown);
+
+Zasięg: {1}	Czas odnowienia: {2}",
+            ParentCharacter.Name, Range, Cooldown, Radius);
 
         public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
 
@@ -52,7 +52,7 @@ Zasięg: {1}	Czas trwania: {2} Czas odnowienia: {3}",
 
         public void Use(List<HexCell> cells)
         {
-            cells.ForEach(c => c.Effects.Add(new HexCellEffects.Conflagration(EffectTime, c, ParentCharacter)));
+            cells.ForEach(c => c.Effects.Add(new HexCellEffects.Conflagration(-1, c, ParentCharacter)));
             Finish();
         }
     }

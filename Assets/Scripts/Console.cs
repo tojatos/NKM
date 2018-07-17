@@ -12,6 +12,7 @@ public class Console : SingletonMonoBehaviour<Console>
 	public Text LogText;
 	public InputField InputField;
 	private static Game Game => GameStarter.Instance.Game;
+	private static Active Active => Game.Active;
 	private const int TextsDisplayed = 8;
 	
 	private int _startingIndex;
@@ -131,6 +132,12 @@ public class Console : SingletonMonoBehaviour<Console>
 //		else
 //		{
 //			Log("<b><</b>" + Game.Active.GamePlayer.Name + "<b>></b>: " + text);
+		string[] arguments = text.Split(' ');
+		if(arguments[0]== "set")
+		{
+		  if(arguments[1]=="phase") Active.Phase.Number = int.Parse(arguments[2]);
+
+		}
 		Log(text);
 //		}
 		InputField.text = "";
