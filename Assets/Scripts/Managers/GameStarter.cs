@@ -45,7 +45,7 @@ namespace Managers
 //								new Character("Sinon"),
 //								new Character("Roronoa Zoro"),
 //								new Character("Hecate"),
-								new Character("Itsuka Kotori"),
+//								new Character("Itsuka Kotori"),
 //								new Character("Llenn"),
 //								new Character("Yoshino"),
 //								new Character("Dekomori Sanae"),
@@ -57,7 +57,8 @@ namespace Managers
 //								new Character("Carmel Wilhelmina"),
 //								new Character("Ryuko Matoi"),
 //								new Character("Liones Elizabeth"),
-								new Character("Satou Kazuma"),
+//								new Character("Satou Kazuma"),
+								new Character("Derieri"),
 								
 							}
 						},
