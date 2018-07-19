@@ -47,20 +47,18 @@ Czas odnowienia: {Cooldown}";
                     hitConflargation = true;
                     break;
                 }
+
                 cells.Add(neighbor);
                 lastCell = neighbor;
             }
 
             //then the conflargation cells
-            if (hitConflargation)
-            {
-                var conflargationCells = lastCell.GetNeighbors(500000, SearchFlags.None, (HexCell neighbor) =>
-                      ((!neighbor.Effects.ContainsType<HexCellEffects.Conflagration>()) ? true : false));
-                cells.AddRange(conflargationCells);
-                //TODO: find a better value than 500000
-            }
+            if (!hitConflargation) return cells;
+            List<HexCell> conflargationCells = lastCell.GetNeighbors(500000, SearchFlags.None, neighbor =>
+                !neighbor.Effects.ContainsType<HexCellEffects.Conflagration>());
+            cells.AddRange(conflargationCells);
+            //TODO: find a better value than 500000
             return cells;
-
         }
 
         public void Click()
@@ -72,11 +70,9 @@ Czas odnowienia: {Cooldown}";
         private void SendFlamewave(HexDirection direction)
         {
             List<HexCell> cells = GetDirectionRangeCells(direction);
-            List<HexCell> lineCells;
-            List<HexCell> conflargationCells;
             IEnumerable<IGrouping<bool, HexCell>> cellsByConflargation = cells.GroupBy(c => c.Effects.ContainsType<HexCellEffects.Conflagration>());
-			lineCells = cellsByConflargation.Where(k => k.Key == false).SelectMany(x => x).ToList();
-			conflargationCells = cellsByConflargation.Where(k => k.Key == true).SelectMany(x => x).ToList();
+			List<HexCell> lineCells = cellsByConflargation.Where(k => k.Key == false).SelectMany(x => x).ToList();
+			List<HexCell> conflargationCells = cellsByConflargation.Where(k => k.Key).SelectMany(x => x).ToList();
             AnimationPlayer.Add(new Animations.CamaelMegiddo(lineCells.Select(c => c.transform).ToList(), conflargationCells.Select(c => c.transform).ToList()));
 
 			//deal damages

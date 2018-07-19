@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -128,9 +129,6 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Dekomori Sanae\MjolnirHammer.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Dekomori Sanae\WickedEyesServant.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ditto\Transform.cs" />
-    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Elizabeth Liones\ImmenseHealingPowers.cs" />
-    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Elizabeth Liones\Invigorate.cs" />
-    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Elizabeth Liones\PowerOfTheGoddess.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Empty.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Gilgamesh\Enkidu.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Gilgamesh\GateOfBabylon.cs" />
@@ -172,6 +170,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sakai Yuuji\DragonTail.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sakai Yuuji\Grammatica.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sakai Yuuji\ReijiMaigo.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Satou Kazuma\DrainTouch.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Satou Kazuma\HighLuck.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Satou Kazuma\Steal.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Shana\GurenNoOodachi.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Shana\GurenNoSouyoku.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Shana\KessenOgi.cs" />

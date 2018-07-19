@@ -56,7 +56,9 @@ namespace Managers
 //								new Character("Sakai Yuuji"),
 //								new Character("Carmel Wilhelmina"),
 //								new Character("Ryuko Matoi"),
-								new Character("Liones Elizabeth"),
+//								new Character("Liones Elizabeth"),
+								new Character("Satou Kazuma"),
+								
 							}
 						},
 						new GamePlayer
