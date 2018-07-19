@@ -110,13 +110,13 @@
               <e p="MjolnirHammer.cs" t="Include" />
               <e p="WickedEyesServant.cs" t="Include" />
             </e>
+            <e p="Derieri" t="Include">
+              <e p="ComboBuilder.cs" t="Include" />
+              <e p="ComboStar.cs" t="Include" />
+              <e p="GapCloser.cs" t="Include" />
+            </e>
             <e p="Ditto" t="Include">
               <e p="Transform.cs" t="Include" />
-            </e>
-            <e p="Elizabeth Liones" t="Include">
-              <e p="ImmenseHealingPowers.cs" t="Include" />
-              <e p="Invigorate.cs" t="Include" />
-              <e p="PowerOfTheGoddess.cs" t="Include" />
             </e>
             <e p="Empty.cs" t="Include" />
             <e p="Gilgamesh" t="Include">
@@ -184,6 +184,11 @@
               <e p="DragonTail.cs" t="Include" />
               <e p="Grammatica.cs" t="Include" />
               <e p="ReijiMaigo.cs" t="Include" />
+            </e>
+            <e p="Satou Kazuma" t="Include">
+              <e p="DrainTouch.cs" t="Include" />
+              <e p="HighLuck.cs" t="Include" />
+              <e p="Steal.cs" t="Include" />
             </e>
             <e p="Shana" t="Include">
               <e p="GurenNoOodachi.cs" t="Include" />
