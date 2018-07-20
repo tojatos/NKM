@@ -14,7 +14,6 @@ namespace NKMObjects.Abilities.Shana
 		{
 			OnAwake += () =>
 			{
-				ParentCharacter.GetBasicMoveCells = GetBasicMoveCellsOverride;
 				ParentCharacter.AfterBeingDamaged += damage =>
 				{
 					ParentCharacter.Effects.Where(e => e.Name == Name).ToList().ForEach(e => e.RemoveFromParent());
@@ -27,14 +26,5 @@ namespace NKMObjects.Abilities.Shana
 		public override string GetDescription() =>
 $@"Po otrzymaniu obrażeń rozwija skrzydła dzięki którym może poruszyć się o {SpeedBonus} pola więcej, ponadto może przelatywać przez ściany
 Czas trwania efektu: {Duration} fazy.";
-
-		private List<HexCell> GetBasicMoveCellsOverride()
-		{
-			bool isAbilityActive = ParentCharacter.Effects.ContainsType(typeof(Effects.Flying));
-			if (!isAbilityActive) return ParentCharacter.DefaultGetBasicMoveCells();
-
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters);
-			return cellRange;
-		}
 	}
 }

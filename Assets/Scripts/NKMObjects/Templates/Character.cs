@@ -56,6 +56,7 @@ namespace NKMObjects.Templates
 		public bool IsStunned => Effects.ContainsType<Stun>();
 		public bool IsGrounded => Effects.ContainsType<Ground>();
 		public bool IsSnared => Effects.ContainsType<Snare>();
+		public bool IsFlying => Effects.ContainsType<Flying>();
 		private bool CanMove => !IsSnared && !IsGrounded;//Effects.All(e => e.GetType() != typeof(Snare));
 		private bool HasBasicAttackInabilityEffect => Effects.Any(e => e.GetType() == typeof(Disarm));
 
@@ -187,9 +188,9 @@ namespace NKMObjects.Templates
 		public void MoveTo(HexCell targetCell)
 		{
 			BeforeMove?.Invoke();
-			ParentCell.CharacterOnCell = null;
+			if(ParentCell.CharacterOnCell == this) ParentCell.CharacterOnCell = null; //checking in case of stepping over a friendly character
 			ParentCell = targetCell;
-			targetCell.CharacterOnCell = this;
+			if(targetCell.IsFreeToStand) targetCell.CharacterOnCell = this; //checking in case of stepping over a friendly character
 			CharacterObject.transform.parent = targetCell.transform;
 			AnimationPlayer.Add(new MoveTo(CharacterObject.transform, CharacterObject.transform.parent.transform.TransformPoint(0,10,0), 0.13f));
 			AfterMove?.Invoke();
@@ -328,7 +329,7 @@ namespace NKMObjects.Templates
 				return;
 			}
 
-			Active.HexCells.ForEach(c=>c.AddHighlight(c.CharacterOnCell!=null ? Highlights.RedTransparent: Highlights.GreenTransparent));
+			Active.HexCells.ForEach(c=>c.AddHighlight(c.CharacterOnCell!=null && c.CharacterOnCell.IsEnemyFor(Owner) ? Highlights.RedTransparent: Highlights.GreenTransparent));
 			Active.RemoveMoveCells();
 			Active.MoveCells.Add(ParentCell);
 
@@ -360,7 +361,10 @@ namespace NKMObjects.Templates
 
 			return cellRange;
 		}
-		public List<HexCell> DefaultGetBasicMoveCells() => ParentCell.GetNeighbors(Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters | SearchFlags.StopAtWalls);
+		public List<HexCell> DefaultGetBasicMoveCells() => 
+			IsFlying 
+				? ParentCell.GetNeighbors(Speed.Value, SearchFlags.StopAtEnemyCharacters)
+				: ParentCell.GetNeighbors(Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls);
 
 		public void Heal(Character targetCharacter, int amount)
 		{

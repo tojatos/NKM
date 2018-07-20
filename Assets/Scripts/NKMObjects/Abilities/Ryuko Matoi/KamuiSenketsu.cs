@@ -16,7 +16,6 @@ namespace NKMObjects.Abilities.Ryuko_Matoi
         {
 	        OnAwake += () =>
 	        {
-				ParentCharacter.GetBasicMoveCells = GetBasicMoveCellsOverride;
 		        Validator.ToCheck.Remove(Validator.IsNotOnCooldown);
 		        Validator.ToCheck.Remove(Validator.IsCharacterNotSilenced);
 		        Validator.ToCheck.Add(() => Validator.IsNotOnCooldown() || IsEnabled);
@@ -60,14 +59,5 @@ Po użyciu tej umiejętności {ParentCharacter.Name} może się poruszyć.";
         }
 
         public bool IsEnabled { get; private set; }
-
-	    private List<HexCell> GetBasicMoveCellsOverride()
-		{
-			bool isAbilityActive = ParentCharacter.Effects.ContainsType(typeof(Flying));
-			if (!isAbilityActive) return ParentCharacter.DefaultGetBasicMoveCells();
-
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters);
-			return cellRange;
-		}
     }
 }

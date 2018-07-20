@@ -173,7 +173,7 @@ namespace Hex
 						if (Game.Active.MoveCells.Contains(cellPointed))
 						{
 							//remove all cells to pointed
-							for (var i = Game.Active.MoveCells.Count - 1; i >= 0; i--)
+							for (int i = Game.Active.MoveCells.Count - 1; i >= 0; i--)
 							{
 								if (Game.Active.MoveCells[i] == cellPointed) break;
 
@@ -184,7 +184,7 @@ namespace Hex
 							}
 						}
 						else if (Game.Active.CharacterOnMap.Speed.Value >= Game.Active.MoveCells.Count &&
-						         lastMoveCell.GetNeighbors(1).Contains(cellPointed) && cellPointed.CharacterOnCell == null)
+						         lastMoveCell.GetNeighbors(1).Contains(cellPointed) && (cellPointed.CharacterOnCell == null||!cellPointed.CharacterOnCell.IsEnemyFor(Game.Active.CharacterOnMap.Owner)))
 						{
 							Game.Active.AddMoveCell(cellPointed);
 

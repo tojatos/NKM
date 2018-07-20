@@ -55,10 +55,10 @@ namespace Managers
 //								new Character("Kurogane Ikki"),
 //								new Character("Sakai Yuuji"),
 //								new Character("Carmel Wilhelmina"),
-//								new Character("Ryuko Matoi"),
+								new Character("Ryuko Matoi"),
 //								new Character("Liones Elizabeth"),
 //								new Character("Satou Kazuma"),
-//								new Character("Derieri"),
+								new Character("Derieri"),
 								new Character("Gilgamesh"),
 								
 							}

@@ -157,7 +157,7 @@ public class Active
 		//Check for component in case of Zoro's Lack of Orientation
 		LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null ? cell.gameObject.GetComponent<LineRenderer>() : cell.gameObject.AddComponent<LineRenderer>();
 		lRend.SetPositions(new[]
-			{MoveCells.Last().transform.position + Vector3.up, cell.transform.position + Vector3.up});
+			{MoveCells.Last().transform.position + Vector3.up * 20, cell.transform.position + Vector3.up * 20});
 		lRend.material = new Material(Shader.Find("Standard")) {color = Color.black};
 		lRend.startColor = Color.black;
 		lRend.endColor = Color.black;
@@ -207,19 +207,21 @@ public class Active
 			case Action.AttackAndMove:
 				Character character = CharacterOnMap;
 				if(character==null) throw new NullReferenceException();
-				if (cell.CharacterOnCell != null)
+				if (cell.CharacterOnCell != null && cell.CharacterOnCell.IsEnemyFor(character.Owner))
 				{
-                if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
+                    if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 					character.BasicAttack(cell.CharacterOnCell);
 				}
 				else
 				{
-					if(cell.Type == HexTileType.Wall) return;
-					if(MoveCells.Last() != cell) return;
-                if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
+//					if(cell.Type == HexTileType.Wall) return;
+					if (!cell.IsFreeToStand) return;
+					if (MoveCells.Last() != cell) return;
+					if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 					character.BasicMove(MoveCells);
 					character.InvokeAfterBasicMove();
 				}
+
 				HexCells = null;//TODO is this really needed?
 				Action = Action.None;
 				character.Select();

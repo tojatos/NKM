@@ -212,16 +212,17 @@
             </e>
           </e>
           <e p="Effects" t="Include">
-            <e p="BasicAttackInability.cs" t="Include" />
             <e p="BlackBlood.cs" t="Include" />
-            <e p="DamageOverTime.cs" t="Include" />
+            <e p="Disarm.cs" t="Include" />
             <e p="Empty.cs" t="Include" />
             <e p="Flying.cs" t="Include" />
+            <e p="Ground.cs" t="Include" />
             <e p="HPDrain.cs" t="Include" />
             <e p="HealOverTime.cs" t="Include" />
-            <e p="MovementDisability.cs" t="Include" />
             <e p="PassiveBuff.cs" t="Include" />
+            <e p="Poison.cs" t="Include" />
             <e p="Silent.cs" t="Include" />
+            <e p="Snare.cs" t="Include" />
             <e p="StatModifier.cs" t="Include" />
             <e p="Stun.cs" t="Include" />
           </e>
