@@ -11,6 +11,7 @@ namespace NKMObjects.Abilities.Sakai_Yuuji
         public Grammatica() : base(AbilityType.Ultimatum, "Grammatica", 5)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
+            CanUseOnGround = false;
         }
 
         public override string GetDescription() =>
