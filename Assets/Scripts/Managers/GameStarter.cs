@@ -43,7 +43,7 @@ namespace Managers
 							Characters = new List<Character>
 							{
 //								new Character("Sinon"),
-//								new Character("Roronoa Zoro"),
+								new Character("Roronoa Zoro"),
 //								new Character("Hecate"),
 //								new Character("Itsuka Kotori"),
 //								new Character("Llenn"),
@@ -55,11 +55,13 @@ namespace Managers
 //								new Character("Kurogane Ikki"),
 //								new Character("Sakai Yuuji"),
 //								new Character("Carmel Wilhelmina"),
-								new Character("Ryuko Matoi"),
+//								new Character("Ryuko Matoi"),
 //								new Character("Liones Elizabeth"),
 //								new Character("Satou Kazuma"),
-								new Character("Derieri"),
-								new Character("Gilgamesh"),
+//								new Character("Derieri"),
+//								new Character("Gilgamesh"),
+//								new Character("Asuna"),
+								new Character("Ochaco Uraraka"),
 								
 							}
 						},
@@ -68,13 +70,12 @@ namespace Managers
 							Name = "Maciej",
 							Characters = new List<Character>
 							{
-								new Character("Monkey D. Luffy"),
+//								new Character("Monkey D. Luffy"),
 //								new Character("Hanekawa Tsubasa"),
 //								new Character("Bezimienni"),
-//								new Character("Shana"),
-								new Character("Yasaka Mahiro"),
+								new Character("Shana"),
+//								new Character("Yasaka Mahiro"),
 //								new Character("Crona"),
-//								new Character("Asuna"),
 //								new Character("Aqua"),
 //								new Character("Hecate"),
 //								new Character("Yoshino"),

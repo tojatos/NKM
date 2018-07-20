@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Extensions;
 using Hex;
 using NKMObjects.Templates;
@@ -25,15 +26,16 @@ $"{ParentCharacter.Name} ma 50% szansy na pójście w losowe miejsce podczas wyk
 				var movementPoints = ParentCharacter.Speed.Value;
 				Active.MoveCells.Add(ParentCharacter.ParentCell);
 				HexCell lastCell = ParentCharacter.ParentCell;
-				while (movementPoints-- != 0)
+				List<HexCell> moveTargets = ParentCharacter.GetBasicMoveCells();
+				while (movementPoints-- > 0 || !lastCell.IsFreeToStand)
 				{
-					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(1,
-						SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters | SearchFlags.StopAtWalls);
-					var r = UnityEngine.Random.Range(0, neighborMoveCells.Count);
+//					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(1,
+//						SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters | SearchFlags.StopAtWalls);
+					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(1).Intersect(moveTargets).ToList();
+					int r = UnityEngine.Random.Range(0, neighborMoveCells.Count);
 					lastCell = neighborMoveCells[r];
 					Active.AddMoveCell(lastCell);
 				}
-
 				ParentCharacter.DefaultBasicMove(Active.MoveCells);
 				Console.Log($"{ParentCharacter.FormattedFirstName()}: Cholera, znowu się zgubili?");
 				int rand = UnityEngine.Random.Range(1, 4);

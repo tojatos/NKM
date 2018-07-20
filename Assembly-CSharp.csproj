@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -159,6 +160,8 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Nibutani Shinka\FairyOfLove.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Nibutani Shinka\Mabinogion.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Nibutani Shinka\SummerBreeze.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ochaco Uraraka\ReducedWeight.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ochaco Uraraka\SkillRelease.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\AlHuma.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\Confession.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\DemonicForm.cs" />
@@ -181,6 +184,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sinon\PreciseShot.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sinon\SnipersSight.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sinon\TacticalEscape.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ochaco Uraraka\ZeroGravity.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yasaka Mahiro\SharpenedForks.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yasaka Mahiro\TerrorOfTheUniverse.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yasaka Mahiro\WhenTheyCry.cs" />

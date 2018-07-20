@@ -25,7 +25,7 @@ namespace NKMObjects.Templates
 
 		public int DeathTimer { get; private set; }
 
-		public bool CanAttackAllies { private get; set; }
+		public bool CanAttackAllies { get; set; }
 		public List<Ability> Abilities{ get; private set; }
 		public List<Effect> Effects { get; }
 		public string Description { get; }
@@ -217,7 +217,7 @@ namespace NKMObjects.Templates
 			var damage = new Damage(AttackPoints.Value, DamageType.Physical);
 			BeforeBasicAttack?.Invoke(attackedCharacter, damage);
 			attackedCharacter.BeforeBeingBasicAttacked?.Invoke(this, damage);
-			Attack(attackedCharacter, damage);
+			Attack(attackedCharacter, damage); //TODO: Make this default basic attack, maybe other overload
 			AfterBasicAttack?.Invoke(attackedCharacter, damage);
 
 			HasUsedBasicAttackInPhaseBefore = true;
@@ -329,7 +329,7 @@ namespace NKMObjects.Templates
 				return;
 			}
 
-			Active.HexCells.ForEach(c=>c.AddHighlight(c.CharacterOnCell!=null && c.CharacterOnCell.IsEnemyFor(Owner) ? Highlights.RedTransparent: Highlights.GreenTransparent));
+			Active.HexCells.Distinct().ToList().ForEach(c=>c.AddHighlight(c.CharacterOnCell!=null && (c.CharacterOnCell.IsEnemyFor(Owner)||CanAttackAllies&&CanUseBasicAttack) ? Highlights.RedTransparent: Highlights.GreenTransparent));
 			Active.RemoveMoveCells();
 			Active.MoveCells.Add(ParentCell);
 

@@ -207,7 +207,7 @@ public class Active
 			case Action.AttackAndMove:
 				Character character = CharacterOnMap;
 				if(character==null) throw new NullReferenceException();
-				if (cell.CharacterOnCell != null && cell.CharacterOnCell.IsEnemyFor(character.Owner))
+				if (cell.CharacterOnCell != null && (cell.CharacterOnCell.IsEnemyFor(character.Owner)||character.CanAttackAllies))
 				{
                     if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 					character.BasicAttack(cell.CharacterOnCell);
