@@ -36,7 +36,7 @@ Gdy trafi co najmniej {EnemiesToHitToActivateSnare} wrogów unieruchamia ich dod
             {
                 c.Effects.Add(new Silent(SilentDuration, c, Name));
                 if(enemiesInRange.Count >= EnemiesToHitToActivateSnare) 
-                    c.Effects.Add(new MovementDisability(RootDuration, c, Name));
+                    c.Effects.Add(new Snare(RootDuration, c, Name));
                 
             });
             Finish();

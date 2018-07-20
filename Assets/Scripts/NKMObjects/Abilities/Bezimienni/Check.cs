@@ -30,7 +30,7 @@ namespace NKMObjects.Abilities.Bezimienni
 				Active.Turn.TurnStarted -= forceAction;
 			};
 			Active.Turn.TurnStarted += forceAction;
-              character.Effects.Add(new BasicAttackInability(1, character, Name));
+              character.Effects.Add(new Disarm(1, character, Name));
 			Finish();
 		}
 

@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -187,14 +188,15 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yoshino\HowlingBlizzard.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yoshino\TheHermit.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Yoshino\Zadkiel.cs" />
-    <Compile Include="Assets\Scripts\NKMObjects\Effects\BasicAttackInability.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Effects\Disarm.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\BlackBlood.cs" />
-    <Compile Include="Assets\Scripts\NKMObjects\Effects\DamageOverTime.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Effects\Ground.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Effects\Poison.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Empty.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Flying.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\HealOverTime.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\HPDrain.cs" />
-    <Compile Include="Assets\Scripts\NKMObjects\Effects\MovementDisability.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Effects\Snare.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\PassiveBuff.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Silent.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\StatModifier.cs" />

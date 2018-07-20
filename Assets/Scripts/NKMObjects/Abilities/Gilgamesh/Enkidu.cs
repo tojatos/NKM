@@ -20,7 +20,7 @@ namespace NKMObjects.Abilities.Gilgamesh
 		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 		
 		public override string GetDescription() =>
-$@"{ParentCharacter.Name} wypuszcza niebiańskie łańcuchy, unieruchamiając przeciwnika na {SnarDuration} fazy
+$@"{ParentCharacter.Name} wypuszcza niebiańskie łańcuchy, uziemiając przeciwnika na {SnarDuration} fazy
 i podwajając bonusy zdolności biernej na ten okres.
 Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 
@@ -30,7 +30,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		private void Use(Character targetCharacter)
 		{
 				ParentCharacter.Effects.Add(new PassiveBuff(SnarDuration, ParentCharacter, Name));
-				targetCharacter.Effects.Add(new MovementDisability(SnarDuration, targetCharacter, Name));
+				targetCharacter.Effects.Add(new Ground(SnarDuration, targetCharacter, Name));
 				Finish();
 		}
 

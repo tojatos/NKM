@@ -14,6 +14,7 @@ namespace NKMObjects.Abilities.Ryuko_Matoi
         public FiberDecapitation() : base(AbilityType.Normal, "Fiber Decapitation", 3)
         {
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
+			CanUseOnGround = false;
         }
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
 		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner).FindAll(c =>

@@ -24,7 +24,7 @@ namespace NKMObjects.Abilities.Monkey_D._Luffy
         public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
 
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c =>
-            c.CharacterOnCell != null && c.CharacterOnCell.IsEnemyFor(Owner) || c.Type == HexTileType.Wall);
+            c.CharacterOnCell != null && c.CharacterOnCell.IsEnemyFor(Owner) || !ParentCharacter.IsGrounded && c.Type == HexTileType.Wall);
 
         public override string GetDescription() =>
 $@"{ParentCharacter.Name} używa umiejętności Gumowego Owocu w zależności od celu:

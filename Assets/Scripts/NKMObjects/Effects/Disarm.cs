@@ -2,11 +2,11 @@
 
 namespace NKMObjects.Effects
 {
-	public class BasicAttackInability : Effect
+	public class Disarm : Effect
 	{
-		public BasicAttackInability(int cooldown, Character parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
+		public Disarm(int cooldown, Character parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
 		{
-			Name = name??"Basic Attack Inability";
+			Name = name??"Disarm";
 			Type = EffectType.Negative;
 		}
 		public override string GetDescription()

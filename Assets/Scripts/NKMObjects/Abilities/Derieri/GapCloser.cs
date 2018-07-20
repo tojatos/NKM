@@ -13,6 +13,7 @@ namespace NKMObjects.Abilities.Derieri
         public GapCloser() : base(AbilityType.Ultimatum, "Gap closer", 4)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
+            CanUseOnGround = false;
         }
 
         public override string GetDescription() =>

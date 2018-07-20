@@ -12,6 +12,7 @@ namespace NKMObjects.Abilities.Roronoa_Zoro
 		public OniGiri() : base(AbilityType.Normal, "Oni Giri", 4)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
+			CanUseOnGround = false;
 		}
 
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StopAtWalls | SearchFlags.StraightLine);

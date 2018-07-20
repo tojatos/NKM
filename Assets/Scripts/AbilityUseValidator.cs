@@ -22,6 +22,7 @@ public class AbilityUseValidator
 		ToCheck.Add(CanCharacterUseAbility);
 		ToCheck.Add(IsNotOnCooldown);
 		ToCheck.Add(IsCharacterNotSilenced);
+		ToCheck.Add(CharacterNotGroundedOrCanUseOnGround);
 		if(_abilityToValidate.Type == AbilityType.Ultimatum) ToCheck.Add(IsActivePhaseGreaterThanThree);
 	}
 
@@ -35,6 +36,9 @@ public class AbilityUseValidator
 	public Func<bool> IsActivePhaseGreaterThanThree => () => Active.Phase.Number > 3;
 	public Func<bool> AreAnyTargetsInRange => () => _abilityToValidate.GetTargetsInRange().Count > 0;
 	public Func<bool> IsNotOnCooldown => () => _abilityToValidate.CurrentCooldown <= 0 || IsAbilityFree;
+
+	public Func<bool> CharacterNotGroundedOrCanUseOnGround => () =>
+		_abilityToValidate.CanUseOnGround || !_abilityToValidate.ParentCharacter.IsGrounded;
 
 	private bool IsAbilityFree => _abilityToValidate.ParentCharacter.Abilities.ContainsType(typeof(AceInTheHole)) &&
 	                             _abilityToValidate.ParentCharacter.Abilities.OfType<AceInTheHole>().First().HasFreeAbility;

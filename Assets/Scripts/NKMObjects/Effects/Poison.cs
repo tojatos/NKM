@@ -2,13 +2,13 @@
 
 namespace NKMObjects.Effects
 {
-	public class DamageOverTime : Effect
+	public class Poison : Effect
 	{
 		private readonly Damage _damagePerTick;
 
-		public DamageOverTime(Character characterThatAttacks, Damage damagePerTick, int cooldown, Character parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
+		public Poison(Character characterThatAttacks, Damage damagePerTick, int cooldown, Character parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
 		{
-			Name = name ?? "Damage Over Time";
+			Name = name ?? "Poison";
 			_damagePerTick = damagePerTick;
 			Type = EffectType.Negative;
             Character.VoidDelegate tryToActivateEffect = () => characterThatAttacks.Attack(this, ParentCharacter, damagePerTick);

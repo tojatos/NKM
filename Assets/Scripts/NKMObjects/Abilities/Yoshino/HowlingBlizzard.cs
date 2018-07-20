@@ -68,8 +68,8 @@ Umiejętność jest włączona od {_currentDuration} faz.";
             IsEnabled = true;
             _currentDuration = 1;
             AddHexEffectsInRange();
-            ParentCharacter.Effects.Add(new MovementDisability(MaxDuration, ParentCharacter, Name));
-            ParentCharacter.Effects.Add(new BasicAttackInability(MaxDuration, ParentCharacter, Name));
+            ParentCharacter.Effects.Add(new Snare(MaxDuration, ParentCharacter, Name));
+            ParentCharacter.Effects.Add(new Disarm(MaxDuration, ParentCharacter, Name));
             ParentCharacter.Effects.Add(new Silent(MaxDuration, ParentCharacter, Name));
             Finish();
         }

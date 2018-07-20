@@ -19,6 +19,7 @@ namespace NKMObjects.Abilities.Asuna
 		{
 			OnAwake += () => Validator.ToCheck.Add(IsThereACellToMove);
 			AfterUseFinish += () => _hasDashed = false;
+			CanUseOnGround = false;
 		}
 		
 		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls | SearchFlags.StraightLine);

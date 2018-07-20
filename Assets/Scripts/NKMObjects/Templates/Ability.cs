@@ -27,6 +27,7 @@ namespace NKMObjects.Templates
 			};
 		}
 
+		public bool CanUseOnGround { get; protected set; } = true;
 		protected AbilityUseValidator Validator;
 		public AbilityType Type { get; }
 		public abstract string GetDescription();
@@ -50,18 +51,6 @@ namespace NKMObjects.Templates
 
 		public bool CanBeUsed => Validator.AbilityCanBeUsed;
 
-//		public virtual void Use(Character character)
-//		{
-//			throw new NotImplementedException();
-//		}
-//		public virtual void Use(HexCell cell)
-//		{
-//			throw new NotImplementedException();
-//		}
-//		public virtual void Use(List<HexCell> cells)
-//		{
-//			throw new NotImplementedException();
-//		}
 		protected void Finish() => Finish(Cooldown);
 
 		protected void Finish(int cooldown)

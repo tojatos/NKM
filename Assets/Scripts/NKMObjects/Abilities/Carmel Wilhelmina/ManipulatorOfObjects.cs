@@ -13,7 +13,7 @@ namespace NKMObjects.Abilities.Carmel_Wilhelmina
             OnAwake += () => ParentCharacter.BeforeBasicAttack += (character, damage) =>
             {
                 if (!character.IsEnemyFor(Owner) || character.Effects.Any(e => e.Name == Name)) return;
-                character.Effects.Add(new MovementDisability(Duration, character, Name));
+                character.Effects.Add(new Snare(Duration, character, Name));
                 character.Effects.Add(new Effects.Empty(EffectTimeout, character, Name,
                     $"{Name} nie może zostać nałożony na tą postać."));
             };

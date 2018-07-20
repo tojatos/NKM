@@ -30,7 +30,7 @@ Zasięg: {Range} Czas odnowienia: {Cooldown}";
 		private void Use(Character targetCharacter)
 		{
 			var damage = new Damage(DoTDamage, DamageType.True);
-			targetCharacter.Effects.Add(new DamageOverTime(ParentCharacter, damage, DoTTime, targetCharacter, Name));
+			targetCharacter.Effects.Add(new Poison(ParentCharacter, damage, DoTTime, targetCharacter, Name));
 			Finish();
 		}
 	}

@@ -14,6 +14,7 @@ namespace NKMObjects.Abilities.Kirito
 	    public Switch() : base(AbilityType.Normal, "Switch", 3)
 	    {
 		    OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
+		    CanUseOnGround = false;
 	    }
 
 	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);

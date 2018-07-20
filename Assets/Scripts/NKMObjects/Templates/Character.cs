@@ -52,10 +52,12 @@ namespace NKMObjects.Templates
 		public bool TookActionInPhaseBefore { get; set; }
 		public bool IsAlive => HealthPoints.Value > 0;
 		public bool IsEnemyFor(GamePlayer player) => Owner != player;
-		
-		private bool IsStunned => Effects.Any(e => e.GetType() == typeof(Stun));
-		private bool CanMove => Effects.All(e => e.GetType() != typeof(MovementDisability));
-		private bool HasBasicAttackInabilityEffect => Effects.Any(e => e.GetType() == typeof(BasicAttackInability));
+
+		public bool IsStunned => Effects.ContainsType<Stun>();
+		public bool IsGrounded => Effects.ContainsType<Ground>();
+		public bool IsSnared => Effects.ContainsType<Snare>();
+		private bool CanMove => !IsSnared && !IsGrounded;//Effects.All(e => e.GetType() != typeof(Snare));
+		private bool HasBasicAttackInabilityEffect => Effects.Any(e => e.GetType() == typeof(Disarm));
 
 		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive || Active.Turn.CharacterThatTookActionInTurn != null && Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
 		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore || Active.Turn.CharacterThatTookActionInTurn != null);
