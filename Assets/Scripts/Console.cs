@@ -98,6 +98,11 @@ public class Console : SingletonMonoBehaviour<Console>
             if ((new[] { "shield", "sh" }).Contains(arguments[1])) Active.CharacterOnMap.Shield.Value = int.Parse(arguments[2]);
 
         }
+        else if ((new[] {"get", "g"}).Contains(arguments[0]))
+        {
+            if ((new[] { "gamepads", "g" }).Contains(arguments[1])) Log(string.Join("\n", Input.GetJoystickNames()));
+            
+        }
         else Log("<i>Nieznana komenda:</i> " + text);
 
         UpdateLogText();
