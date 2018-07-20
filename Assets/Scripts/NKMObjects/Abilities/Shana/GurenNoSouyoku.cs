@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Extensions;
-using Hex;
 using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Shana

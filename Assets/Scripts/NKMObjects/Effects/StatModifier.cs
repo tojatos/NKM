@@ -32,7 +32,6 @@ Czas do zakończenia efektu: {2}",
 			{
 				case StatType.BasicAttackRange:
 					return Type == EffectType.Negative ? "Blind" : "BetterVision";
-					break;
 				case StatType.Speed:
 					return Type == EffectType.Negative ? "Slow" : "SpeedUp";
 				default:
