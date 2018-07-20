@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Extensions;
 using Managers;
 using NKMObjects.Templates;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.CharacterUI
 {
@@ -21,6 +23,11 @@ namespace UI.CharacterUI
 			character.Effects.ForEach(effect => CreateEffectButton(character, effect));
 		}
 
+		private static void SetButtonSprite(GameObject button, Effect effect)
+		{
+            Sprite effectSprite = Stuff.Sprites.Effects.SingleOrDefault(s => s.name == effect.ToString().Split('.').Last()) ?? Stuff.Sprites.Effects.Single(s => s.name == "Default Effect Sprite");
+            button.GetComponent<Image>().sprite = effectSprite;
+		}
 		private void RemoveButtons()
 		{
 			if(Buttons == null) return;
@@ -33,6 +40,7 @@ namespace UI.CharacterUI
 
 			button.name = character.Effects.IndexOf(effect).ToString();
 
+			SetButtonSprite(button, effect);
 			button.AddDefaultTooltip("<b>" + effect.Name + "</b>\n" + effect.GetDescription(), Tooltip.CharacterPosition);
 			Buttons.Add(button);
 		}
