@@ -16,11 +16,7 @@ namespace NKMObjects.Abilities.Derieri
             {
                 ParentCharacter.BeforeBasicAttack += (character, damage) =>
                 {
-                    if (character != ComboCharacter)
-                    {
-                        ComboCharacter = character;
-                        Combo = 0;
-                    }
+                    if (character != ComboCharacter) SetNewComboCharacter(character);
 
                     damage.Value += Combo * DamagePerCombo;
                 };
@@ -35,6 +31,12 @@ namespace NKMObjects.Abilities.Derieri
                     _wasCharacterAttackedThisPhase = false;
                 };
             };
+        }
+
+        public void SetNewComboCharacter(Character character)
+        {
+            ComboCharacter = character;
+            Combo = 0;
         }
 
         public override string GetDescription() =>

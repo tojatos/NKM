@@ -7,7 +7,7 @@ namespace NKMObjects.Abilities.Liones_Elizabeth
 {
     public class PowerOfTheGoddess : Ability, IClickable
     {
-        private const int Heal = 25;
+        private const int Heal = 20;
         public PowerOfTheGoddess() : base(AbilityType.Ultimatum, "Power of the goddess", 6)
         {
         }

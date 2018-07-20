@@ -22,19 +22,21 @@ Dodatkowo otrzymuje możliwość podstawowego ataku.
 Zasięg liniowy: {Range}    Czas odnowienia: {Cooldown}";
 
         public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
-        public override List<HexCell> GetTargetsInRange()
-        {
-			ComboStar passiveAbility = ParentCharacter.Abilities.OfType<ComboStar>().SingleOrDefault();
-            Character targetCharacter = passiveAbility?.ComboCharacter;
-            return targetCharacter==null ? new List<HexCell>() : GetRangeCells().FindAll(c => c.CharacterOnCell == targetCharacter);
-        }
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
         public void Use(List<HexCell> cells)
         {
+            Character target = cells[0].CharacterOnCell;
 			ComboStar passiveAbility = ParentCharacter.Abilities.OfType<ComboStar>().SingleOrDefault();
-            if (passiveAbility != null) passiveAbility.Combo += 3;
+            if (passiveAbility == null)
+            {
+                OnFailedUseFinish();
+                return;
+            }
+            if (target != passiveAbility.ComboCharacter) passiveAbility.SetNewComboCharacter(target);
+            passiveAbility.Combo += 3;
             ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
             Finish();
         }

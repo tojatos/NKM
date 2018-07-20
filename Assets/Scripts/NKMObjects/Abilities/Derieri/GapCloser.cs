@@ -25,7 +25,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         public override List<HexCell> GetTargetsInRange()
         {
 			ComboStar passiveAbility = ParentCharacter.Abilities.OfType<ComboStar>().SingleOrDefault();
-            Character targetCharacter = passiveAbility?.ComboCharacter;
+            Character targetCharacter = passiveAbility.ComboCharacter;
             return targetCharacter==null ? new List<HexCell>() : GetRangeCells().FindAll(c => c.CharacterOnCell == targetCharacter).FindAll(c => c.GetNeighbors(MaxDistanceFromTarget).Any(cc => cc.IsFreeToStand));
         }
 
