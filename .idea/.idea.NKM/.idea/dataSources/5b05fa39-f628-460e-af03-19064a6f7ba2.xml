@@ -14,244 +14,207 @@
     <table id="6" parent="2" name="Ability"/>
     <table id="7" parent="2" name="Author"/>
     <table id="8" parent="2" name="Character_Ability"/>
-    <table id="9" parent="2" name="FightType"/>
-    <table id="10" parent="2" name="character"/>
-    <table id="11" parent="2" name="sqlite_master">
+    <table id="9" parent="2" name="character"/>
+    <table id="10" parent="2" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="12" parent="2" name="sqlite_sequence">
+    <table id="11" parent="2" name="sqlite_sequence">
       <System>1</System>
     </table>
-    <column id="13" parent="6" name="ID">
+    <column id="12" parent="6" name="ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="14" parent="6" name="ClassName">
+    <column id="13" parent="6" name="ClassName">
       <Position>2</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="15" parent="6" name="sqlite_autoindex_Ability_1">
+    <index id="14" parent="6" name="sqlite_autoindex_Ability_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="16" parent="6" name="sqlite_autoindex_Ability_2">
+    <index id="15" parent="6" name="sqlite_autoindex_Ability_2">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ClassName</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="17" parent="6">
+    <key id="16" parent="6">
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_Ability_1</UnderlyingIndexName>
+    </key>
+    <key id="17" parent="6">
+      <ColNames>ID</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_Ability_1</UnderlyingIndexName>
     </key>
     <key id="18" parent="6">
-      <ColNames>ID</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_Ability_1</UnderlyingIndexName>
-    </key>
-    <key id="19" parent="6">
       <ColNames>ClassName</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_Ability_2</UnderlyingIndexName>
     </key>
-    <column id="20" parent="7" name="ID">
+    <column id="19" parent="7" name="ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="21" parent="7" name="Name">
+    <column id="20" parent="7" name="Name">
       <Position>2</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="22" parent="7" name="sqlite_autoindex_Author_1">
+    <index id="21" parent="7" name="sqlite_autoindex_Author_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="23" parent="7" name="sqlite_autoindex_Author_2">
+    <index id="22" parent="7" name="sqlite_autoindex_Author_2">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>Name</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="24" parent="7">
+    <key id="23" parent="7">
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_Author_1</UnderlyingIndexName>
     </key>
-    <key id="25" parent="7">
+    <key id="24" parent="7">
       <ColNames>ID</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_Author_1</UnderlyingIndexName>
     </key>
-    <key id="26" parent="7">
+    <key id="25" parent="7">
       <ColNames>Name</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_Author_2</UnderlyingIndexName>
     </key>
-    <column id="27" parent="8" name="ID">
+    <column id="26" parent="8" name="ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="28" parent="8" name="CharacterID">
+    <column id="27" parent="8" name="CharacterID">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="29" parent="8" name="AbilityID">
+    <column id="28" parent="8" name="AbilityID">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="30" parent="8" name="sqlite_autoindex_Character_Ability_1">
+    <index id="29" parent="8" name="sqlite_autoindex_Character_Ability_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="31" parent="8">
+    <key id="30" parent="8">
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_Character_Ability_1</UnderlyingIndexName>
     </key>
-    <key id="32" parent="8">
+    <key id="31" parent="8">
       <ColNames>ID</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_Character_Ability_1</UnderlyingIndexName>
     </key>
-    <foreign-key id="33" parent="8">
+    <foreign-key id="32" parent="8">
       <ColNames>CharacterID</ColNames>
       <RefTableName>character</RefTableName>
       <RefColNames>ID</RefColNames>
     </foreign-key>
-    <foreign-key id="34" parent="8">
+    <foreign-key id="33" parent="8">
       <ColNames>AbilityID</ColNames>
       <RefTableName>Ability</RefTableName>
       <RefColNames>ID</RefColNames>
     </foreign-key>
-    <column id="35" parent="9" name="ID">
-      <Position>1</Position>
-      <DataType>INTEGER|0s</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-    </column>
-    <column id="36" parent="9" name="Type">
-      <Position>2</Position>
-      <DataType>TEXT|0s</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <index id="37" parent="9" name="sqlite_autoindex_FightType_1">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>ID</ColNames>
-      <ColumnCollations></ColumnCollations>
-      <Unique>1</Unique>
-    </index>
-    <index id="38" parent="9" name="sqlite_autoindex_FightType_2">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>Type</ColNames>
-      <ColumnCollations></ColumnCollations>
-      <Unique>1</Unique>
-    </index>
-    <key id="39" parent="9">
-      <ColNames>ID</ColNames>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>sqlite_autoindex_FightType_1</UnderlyingIndexName>
-    </key>
-    <key id="40" parent="9">
-      <ColNames>ID</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_FightType_1</UnderlyingIndexName>
-    </key>
-    <key id="41" parent="9">
-      <ColNames>Type</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_FightType_2</UnderlyingIndexName>
-    </key>
-    <column id="42" parent="10" name="ID">
+    <column id="34" parent="9" name="ID">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="43" parent="10" name="Name">
+    <column id="35" parent="9" name="Name">
       <Position>2</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="44" parent="10" name="AttackPoints">
+    <column id="36" parent="9" name="AttackPoints">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="45" parent="10" name="HealthPoints">
+    <column id="37" parent="9" name="HealthPoints">
       <Position>4</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="46" parent="10" name="BasicAttackRange">
+    <column id="38" parent="9" name="BasicAttackRange">
       <Position>5</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="47" parent="10" name="Speed">
+    <column id="39" parent="9" name="Speed">
       <Position>6</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="48" parent="10" name="PhysicalDefense">
+    <column id="40" parent="9" name="PhysicalDefense">
       <Position>7</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="49" parent="10" name="MagicalDefense">
+    <column id="41" parent="9" name="MagicalDefense">
       <Position>8</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="50" parent="10" name="FightType">
+    <column id="42" parent="9" name="FightType">
       <Position>9</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="51" parent="10" name="Description">
+    <column id="43" parent="9" name="Description">
       <Position>10</Position>
       <DataType>TEXT|0s</DataType>
     </column>
-    <column id="52" parent="10" name="Quote">
+    <column id="44" parent="9" name="Quote">
       <Position>11</Position>
       <DataType>TEXT|0s</DataType>
     </column>
-    <column id="53" parent="10" name="AuthorID">
+    <column id="45" parent="9" name="AuthorID">
       <Position>12</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="54" parent="11" name="type">
+    <column id="46" parent="10" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="55" parent="11" name="name">
+    <column id="47" parent="10" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="56" parent="11" name="tbl_name">
+    <column id="48" parent="10" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="57" parent="11" name="rootpage">
+    <column id="49" parent="10" name="rootpage">
       <Position>4</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="58" parent="11" name="sql">
+    <column id="50" parent="10" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="59" parent="12" name="name">
+    <column id="51" parent="11" name="name">
       <Position>1</Position>
     </column>
-    <column id="60" parent="12" name="seq">
+    <column id="52" parent="11" name="seq">
       <Position>2</Position>
     </column>
   </database-model>
