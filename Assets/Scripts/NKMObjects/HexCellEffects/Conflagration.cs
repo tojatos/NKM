@@ -11,6 +11,8 @@ namespace NKMObjects.HexCellEffects
 		public Conflagration(int cooldown, HexCell parentCell, Character characterThatOwnsEffect) : base(cooldown, parentCell, "Conflagration")
 		{
 			_characterThatOwnsEffect = characterThatOwnsEffect;
+			parentCell.AddEffectHighlight(Name);
+			OnRemove += () => parentCell.RemoveEffectHighlight(Name);
 		}
 
 		public override string GetDescription() =>

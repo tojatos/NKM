@@ -78,7 +78,8 @@ Umiejętność jest włączona od {_currentDuration} faz.";
             c.Effects.Add(new HexCellEffects.HowlingBlizzard(1, c, ParentCharacter, SpeedDecrease, Name)));
 
         private void RemoveHexEffects() =>
-            HexMapDrawer.Instance.Cells.ForEach(c => c.Effects.RemoveAll(e => e.Name == Name));
+//            HexMapDrawer.Instance.Cells.ForEach(c => c.Effects.RemoveAll(e => e.Name == Name));
+            HexMapDrawer.Instance.Cells.ForEach(c => c.Effects.FindAll(e => e.Name == Name).ForEach(e => e.Remove()));//TODO: create a list of effects to iterate on in case of 2 or more Yoshinos playing
 
         private void Disable()
         {

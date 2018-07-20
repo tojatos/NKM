@@ -14,14 +14,18 @@ namespace NKMObjects.Templates
 			{
 				if (CurrentCooldown > 0) --CurrentCooldown;
 				if (CurrentCooldown != 0) return;
-				ParentCell.Effects.Remove(this);
-				OnRemove?.Invoke();
+				Remove();
                 if(Active.SelectedCell==ParentCell) UI.HexCellUI.Effects.Instance.UpdateButtons();
 			};
 		}
 		
 		public event Character.VoidDelegate OnRemove;
-		
+
+		public void Remove()
+		{
+            ParentCell.Effects.Remove(this);
+            OnRemove?.Invoke();
+		}
 		protected int CurrentCooldown { get; private set; }
 		protected HexCell ParentCell { get; }
 

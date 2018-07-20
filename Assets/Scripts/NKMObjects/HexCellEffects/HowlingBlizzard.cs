@@ -26,6 +26,9 @@ namespace NKMObjects.HexCellEffects
 				ParentCell.OnLeave -= RemoveEffect;
 			};
 			if(ParentCell.CharacterOnCell!=null) AddEffect(ParentCell.CharacterOnCell);
+			
+			parentCell.AddEffectHighlight(Name);
+			OnRemove += () => parentCell.RemoveEffectHighlight(Name);
 		}
 		private void AddEffect(Character character)
 		{

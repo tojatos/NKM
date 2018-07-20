@@ -80,7 +80,8 @@ Czas odnowienia: {Cooldown}";
 			conflargationCells.WhereOnlyEnemiesOf(Owner).GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(ConflargationDamage, DamageType.Magical)));
 
 			//remove conflargation effects
-			conflargationCells.ForEach(c => c.Effects.RemoveAll(e => e.GetType() == typeof(HexCellEffects.Conflagration)));
+//			conflargationCells.ForEach(c => c.Effects.RemoveAll(e => e.GetType() == typeof(HexCellEffects.Conflagration)));
+			conflargationCells.ForEach(c => c.Effects.FindAll(e => e.GetType() == typeof(HexCellEffects.Conflagration)).ForEach(e => e.Remove()));
 
         }
 

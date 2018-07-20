@@ -16,7 +16,7 @@ namespace NKMObjects.Abilities.Gilgamesh
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
+		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StraightLine);
 		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 		
 		public override string GetDescription() =>

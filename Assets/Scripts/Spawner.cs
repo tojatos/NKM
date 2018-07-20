@@ -31,6 +31,14 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		highlightObject.GetComponent<SpriteRenderer>().sprite = Stuff.Sprites.HighlightHexagons.Single(s => s.name == colorName); 
 		parentCell.Highlights.Add(highlightObject);
 	}
+	public void SpawnEffectHighlightCellObject(HexCell parentCell, string effectName)
+	{
+		GameObject highlightObject = Instantiate(HighlightPrefab, parentCell.transform);
+		highlightObject.transform.localPosition = new Vector3(0, 1, 0);
+		var sr = highlightObject.GetComponent<SpriteRenderer>();
+		sr.sprite = Stuff.Sprites.HighlightHexagons.Single(s => s.name == effectName); 
+		parentCell.EffectHighlights.Add(highlightObject);
+	}
 
 
 	private static NKMObject Create(string namespaceName, string className)

@@ -76,7 +76,8 @@ namespace Managers
 //								new Character("Crona"),
 //								new Character("Asuna"),
 //								new Character("Aqua"),
-								new Character("Hecate"),
+//								new Character("Hecate"),
+								new Character("Yoshino"),
 							}
 						},
 					},
