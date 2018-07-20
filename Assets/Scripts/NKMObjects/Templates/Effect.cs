@@ -1,4 +1,6 @@
-﻿namespace NKMObjects.Templates
+﻿using System;
+
+namespace NKMObjects.Templates
 {
 	public abstract class Effect : NKMObject
 	{
@@ -39,7 +41,21 @@
 			ParentCharacter.Effects.Remove(this);
 			OnRemove?.Invoke();
 		}
-		
+
+		public string GetEffectTypeName()
+		{
+			switch (Type)
+			{
+				case EffectType.Positive:
+					return "Positive Effect";
+				case EffectType.Negative:
+					return "Negative Effect";
+				case EffectType.Neutral:
+					return "Neutral Effect";
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
 	}
 
 	public enum EffectType

@@ -26,5 +26,18 @@ Czas do zakończenia efektu: {2}",
 			return statType == _statType ? Value : 0;
 		}
 
+		public override string ToString()
+		{
+			switch (_statType)
+			{
+				case StatType.BasicAttackRange:
+					return Type == EffectType.Negative ? "Blind" : "BetterVision";
+					break;
+				case StatType.Speed:
+					return Type == EffectType.Negative ? "Slow" : "SpeedUp";
+				default:
+					return base.ToString();
+			}
+		}
 	}
 }

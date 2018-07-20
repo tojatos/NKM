@@ -72,7 +72,7 @@ namespace Managers
 //								new Character("Hanekawa Tsubasa"),
 //								new Character("Bezimienni"),
 //								new Character("Shana"),
-//								new Character("Yasaka Mahiro"),
+								new Character("Yasaka Mahiro"),
 //								new Character("Crona"),
 //								new Character("Asuna"),
 //								new Character("Aqua"),

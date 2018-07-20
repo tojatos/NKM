@@ -25,7 +25,7 @@ namespace UI.CharacterUI
 
 		private static void SetButtonSprite(GameObject button, Effect effect)
 		{
-            Sprite effectSprite = Stuff.Sprites.Effects.SingleOrDefault(s => s.name == effect.ToString().Split('.').Last()) ?? Stuff.Sprites.Effects.Single(s => s.name == "Default Effect Sprite");
+            Sprite effectSprite = Stuff.Sprites.Effects.SingleOrDefault(s => s.name == effect.ToString().Split('.').Last()) ?? Stuff.Sprites.Effects.Single(s => s.name == effect.GetEffectTypeName());
             button.GetComponent<Image>().sprite = effectSprite;
 		}
 		private void RemoveButtons()
