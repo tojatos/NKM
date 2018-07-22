@@ -53,7 +53,7 @@ namespace Managers
 //								new Character("Kirito"),
 //								new Character("Nibutani Shinka"),
 								new Character("Kurogane Ikki"),
-//								new Character("Sakai Yuuji"),
+								new Character("Sakai Yuuji"),
 //								new Character("Carmel Wilhelmina"),
 //								new Character("Ryuko Matoi"),
 //								new Character("Liones Elizabeth"),
