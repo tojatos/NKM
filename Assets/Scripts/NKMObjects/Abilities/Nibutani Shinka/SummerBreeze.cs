@@ -10,14 +10,14 @@ namespace NKMObjects.Abilities.Nibutani_Shinka
     {
         private const int Range = 6;
         private const int Damage = 15;
-        private const int KnockbackAmount = 6;
+        private const int KnockbackAmount = 4;
         private const int StunDuration = 1;
-        public SummerBreeze() : base(AbilityType.Normal, "Summer Breeze", 2)
+        public SummerBreeze() : base(AbilityType.Normal, "Summer Breeze", 3)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
+        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine | SearchFlags.StopAtWalls);
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
 
         public override string GetDescription() =>
