@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Extensions;
 using Hex;
 using NKMObjects.Effects;
@@ -45,7 +46,11 @@ Dodatkowo, daje wszystkim sojusznikom w zasięgu {EnchantedSpeedAmount} szybkoś
             GetTargetsInRange().GetCharacters().ForEach(c => ParentCharacter.Heal(c, HealAmount));
             List<Character> friendsInRange = GetTargetsInRange().WhereOnlyFriendsOf(Owner).GetCharacters();
             friendsInRange.ForEach(TryAddingShield);
-            if(IsEnchanted) friendsInRange.ForEach(f => f.Effects.Add(new StatModifier(1, EnchantedSpeedAmount, f, StatType.Speed, Name)));
+            if(IsEnchanted) friendsInRange.ForEach(f =>
+            {
+               if(f.Effects.Any(e => e.Name == Name))  return; // prevent speed stacking
+                f.Effects.Add(new StatModifier(1, EnchantedSpeedAmount, f, StatType.Speed, Name));
+            });
         }
     }
 }
