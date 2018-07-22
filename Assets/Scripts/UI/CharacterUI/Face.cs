@@ -25,6 +25,7 @@ namespace UI.CharacterUI
 		{
 			Sprite characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterOnMap.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
 			_image.sprite = characterSprite;
+			if(characterOnMap.CharacterObject==null) return;
 			characterOnMap.CharacterObject.transform.Find("Character Sprite").GetComponent<SpriteRenderer>().sprite = characterSprite;
 		}
 	}
