@@ -329,7 +329,12 @@ namespace NKMObjects.Templates
 				return;
 			}
 
-			Active.HexCells.Distinct().ToList().ForEach(c=>c.AddHighlight(c.CharacterOnCell!=null && (c.CharacterOnCell.IsEnemyFor(Owner)||CanAttackAllies&&CanUseBasicAttack) ? Highlights.RedTransparent: Highlights.GreenTransparent));
+			Active.HexCells.Distinct().ToList().ForEach(c =>
+				c.AddHighlight(
+					c.CharacterOnCell != null &&
+					(c.CharacterOnCell.IsEnemyFor(Owner) || CanAttackAllies && CanUseBasicAttack && GetBasicAttackCells().Contains(c))
+						? Highlights.RedTransparent
+						: Highlights.GreenTransparent));
 			Active.RemoveMoveCells();
 			Active.MoveCells.Add(ParentCell);
 

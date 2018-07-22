@@ -209,6 +209,8 @@ public class Active
 				if(character==null) throw new NullReferenceException();
 				if (cell.CharacterOnCell != null && (cell.CharacterOnCell.IsEnemyFor(character.Owner)||character.CanAttackAllies))
 				{
+					if(!character.GetBasicAttackCells().Contains(cell)) return;
+					
                     if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
 					character.BasicAttack(cell.CharacterOnCell);
 				}

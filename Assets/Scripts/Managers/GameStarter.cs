@@ -51,8 +51,8 @@ namespace Managers
 //								new Character("Dekomori Sanae"),
 //								new Character("Rem"),
 //								new Character("Kirito"),
-								new Character("Nibutani Shinka"),
-//								new Character("Kurogane Ikki"),
+//								new Character("Nibutani Shinka"),
+								new Character("Kurogane Ikki"),
 //								new Character("Sakai Yuuji"),
 //								new Character("Carmel Wilhelmina"),
 //								new Character("Ryuko Matoi"),
@@ -62,6 +62,7 @@ namespace Managers
 //								new Character("Gilgamesh"),
 //								new Character("Asuna"),
 //								new Character("Ochaco Uraraka"),
+								new Character("Aqua"),
 								
 							}
 						},
@@ -76,7 +77,6 @@ namespace Managers
 								new Character("Shana"),
 //								new Character("Yasaka Mahiro"),
 //								new Character("Crona"),
-//								new Character("Aqua"),
 //								new Character("Hecate"),
 //								new Character("Yoshino"),
 							}
