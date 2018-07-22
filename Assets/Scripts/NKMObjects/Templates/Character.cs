@@ -351,14 +351,40 @@ namespace NKMObjects.Templates
 
 		public List<HexCell> DefaultGetBasicAttackCells()
 		{
-			List<HexCell> cellRange;
+			List<HexCell> cellRange = new List<HexCell>();
 			switch (Type)
 			{
 				case FightType.Ranged:
 					cellRange = ParentCell.GetNeighbors(BasicAttackRange.Value, SearchFlags.StraightLine);
 					break;
 				case FightType.Melee:
-					cellRange = ParentCell.GetNeighbors(BasicAttackRange.Value, SearchFlags.StraightLine | SearchFlags.StopAtWalls);
+//					cellRange = ParentCell.GetNeighbors(BasicAttackRange.Value, SearchFlags.StraightLine | SearchFlags.StopAtWalls);
+					foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
+					{
+                        List<HexCell> line = ParentCell.GetLine(direction, BasicAttackRange.Value);
+
+                        //Remove cells after first character hit
+                        int removeAfterIndex = line.Count;
+                        for (int index = 0; index < line.Count; index++)
+                        {
+                            HexCell cell = line[index];
+	                        if (cell.Type == HexTileType.Wall)
+	                        {
+                                removeAfterIndex = index;
+                                break;
+	                        }
+                            if (cell.CharacterOnCell != null && (CanAttackAllies || cell.CharacterOnCell.IsEnemyFor(Owner)))
+                            {
+                                removeAfterIndex = index + 1;
+                                break;
+                            }
+                        }
+
+                        line = line.GetRange(0, removeAfterIndex);
+                        cellRange.AddRange(line);
+					}
+					
+
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
