@@ -349,19 +349,20 @@ namespace NKMObjects.Templates
 			? GetBasicAttackCells().WhereOnlyCharacters()
 			: GetBasicAttackCells().WhereOnlyEnemiesOf(Owner);
 
-		public List<HexCell> DefaultGetBasicAttackCells()
+		public List<HexCell> DefaultGetBasicAttackCells() => DefaultGetBasicAttackCells(ParentCell);
+		public List<HexCell> DefaultGetBasicAttackCells(HexCell fromCell)
 		{
 			List<HexCell> cellRange = new List<HexCell>();
 			switch (Type)
 			{
 				case FightType.Ranged:
-					cellRange = ParentCell.GetNeighbors(BasicAttackRange.Value, SearchFlags.StraightLine);
+					cellRange = fromCell.GetNeighbors(BasicAttackRange.Value, SearchFlags.StraightLine);
 					break;
 				case FightType.Melee:
 //					cellRange = ParentCell.GetNeighbors(BasicAttackRange.Value, SearchFlags.StraightLine | SearchFlags.StopAtWalls);
 					foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
 					{
-                        List<HexCell> line = ParentCell.GetLine(direction, BasicAttackRange.Value);
+                        List<HexCell> line = fromCell.GetLine(direction, BasicAttackRange.Value);
 
                         //Remove cells after first character hit
                         int removeAfterIndex = line.Count;
