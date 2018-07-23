@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Animations;
 using Extensions;
 using Hex;
 using NKMObjects.Templates;
+using UnityEngine;
 
 namespace NKMObjects.Abilities.Levi
 {
@@ -27,12 +29,22 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
         public void Use(List<HexCell> cells)
         {
             HexCell cell = cells[0];
-            if (cell.Type == HexTileType.Wall) Active.Prepare(this, GetMoveTargets(cell));
+            if (cell.Type == HexTileType.Wall)
+            {
+                Active.Prepare(this, GetMoveTargets(cell));
+                AnimationPlayer.Add(new MoveTo(ParentCharacter.CharacterObject.transform, cell.transform.position, 0.13f));
+            }
             else
             {
                 ParentCharacter.MoveTo(cell);
                 Finish();
             }
+        }
+
+        public override void Cancel()
+        {
+            base.Cancel();
+            AnimationPlayer.Add(new MoveTo(ParentCharacter.CharacterObject.transform, ParentCharacter.ParentCell.transform.position, 0.13f));
         }
     }
 }
