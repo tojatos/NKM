@@ -20,7 +20,7 @@ Jeśli jest ona przeciwnikiem, to zadaje jej {HealthPercentDamage}% max. HP jako
 Następnie wraca z wybraną postacią w miejsce, na którym stał przed użyciem tej umiejętności, a wybrana postać pojawia się o jedno pole przed nim.
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
+        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
 
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c =>
             c.CharacterOnCell != null && ParentCharacter.ParentCell.GetCell(ParentCharacter.ParentCell.GetDirection(c), 1).IsFreeToStand);
