@@ -149,6 +149,11 @@
               <e p="RakudaiKishi.cs" t="Include" />
               <e p="SwordSteal.cs" t="Include" />
             </e>
+            <e p="Levi" t="Include">
+              <e p="AwakenedPower.cs" t="Include" />
+              <e p="SwordVieldingTechnique.cs" t="Include" />
+              <e p="VerticalManeuveringEquipment.cs" t="Include" />
+            </e>
             <e p="Llenn" t="Include">
               <e p="GrenadeThrow.cs" t="Include" />
               <e p="PChan.cs" t="Include" />
