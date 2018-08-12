@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Hex;
 using NKMObjects.Templates;
+using Extensions;
 
 namespace NKMObjects.Abilities.Sakai_Yuuji
 {
@@ -11,33 +12,46 @@ namespace NKMObjects.Abilities.Sakai_Yuuji
         public Grammatica() : base(AbilityType.Ultimatum, "Grammatica", 5)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
+            OnAwake += () => Validator.ToCheck.Add(() => GetMoveCells().Count > 0);
             CanUseOnGround = false;
         }
 
         public override string GetDescription() =>
             $@"{ParentCharacter.Name} teleportuje się do wybranej postaci.
 Jeśli jest ona przeciwnikiem, to zadaje jej {HealthPercentDamage}% max. HP jako obrażenia nieuchronne.
-Następnie wraca z wybraną postacią w miejsce, na którym stał przed użyciem tej umiejętności, a wybrana postać pojawia się o jedno pole przed nim.
+Następnie wraca z wybraną postacią w miejsce, na którym stał przed użyciem tej umiejętności, a wybrana postać pojawia się obok niego.
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
 
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c =>
-            c.CharacterOnCell != null && ParentCharacter.ParentCell.GetCell(ParentCharacter.ParentCell.GetDirection(c), 1).IsFreeToStand);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyCharacters();
+        //    c.CharacterOnCell != null && ParentCharacter.ParentCell.GetCell(ParentCharacter.ParentCell.GetDirection(c), 1).IsFreeToStand);
+        private List<HexCell> GetMoveCells() => ParentCharacter.ParentCell.GetNeighbors(1).FindAll(c => c.IsFreeToStand);
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+        public void Use(List<HexCell> cells)
+        {
+            if(cells[0].CharacterOnCell!=null) Use(cells[0].CharacterOnCell);
+            else Use(cells[0]);
+        }
 
+        private Character _target;
+        private void Use(HexCell targetCell)
+        {
+            if (_target.IsEnemyFor(Owner))
+            {
+                int dmg = (int)(_target.HealthPoints.BaseValue * HealthPercentDamage / 100f);
+                ParentCharacter.Attack(this, _target, new Damage(dmg, DamageType.True));
+            }
+            _target.MoveTo(targetCell);
+            Finish();
+
+        }
         private void Use(Character character)
         {
-            if (character.IsEnemyFor(Owner))
-            {
-                int dmg = (int)(character.HealthPoints.BaseValue * HealthPercentDamage / 100f);
-                ParentCharacter.Attack(this, character, new Damage(dmg, DamageType.True));
-            }
-            character.MoveTo(ParentCharacter.ParentCell.GetCell(ParentCharacter.ParentCell.GetDirection(character.ParentCell), 1));
-            Finish();
+            _target = character;
+            Active.Prepare(this, GetMoveCells());
         }
     }
 }
