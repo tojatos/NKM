@@ -35,7 +35,7 @@ namespace Hex
 			TriangulateCells();
 		}
 
-		private void TriangulateCells()
+		public void TriangulateCells()
 		{
 			_hexMesh.Triangulate(Cells);
 		}

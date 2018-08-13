@@ -65,6 +65,7 @@ namespace Managers
 //								new Character("Aqua"),
 								new Character("Shana"),
 //								new Character("Levi"),
+								new Character("Ononoki Yotsugi"),
 								
 							}
 						},

@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -164,6 +165,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Nibutani Shinka\SummerBreeze.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ochaco Uraraka\ReducedWeight.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ochaco Uraraka\SkillRelease.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ononoki Yotsugi\UnlimitedRulebook.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ononoki Yotsugi\UrbCrunch.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ononoki Yotsugi\UrbRefuge.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\AlHuma.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\Confession.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Rem\DemonicForm.cs" />
@@ -206,6 +210,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Silent.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\StatModifier.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Stun.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Effects\TakenDamageModifier.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\HexCellEffects\Conflagration.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\HexCellEffects\HowlingBlizzard.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\Ability.cs" />

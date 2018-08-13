@@ -35,6 +35,8 @@ public class Active
 	public HexCell SelectedCell;
 	public readonly List<HexCell> MoveCells = new List<HexCell>();
 
+//	public delegate void UseableDelegate(IUseable ability);
+//    public event UseableDelegate AfterAbilityUse;
 	
 	public List<HexCell> HexCells { get; set; }
 	//TODO: refactor this
@@ -203,6 +205,7 @@ public class Active
 
 //				throw new Exception("Cannot make Use action on single cell!");
 				AbilityToUse.Use(new List<HexCell> {cell});
+//				AfterAbilityUse?.Invoke(AbilityToUse);
 				break;
 			case Action.AttackAndMove:
 				Character character = CharacterOnMap;
@@ -241,6 +244,7 @@ public class Active
 				throw new Exception("Żadna akcja nie jest aktywna!");
 			case Action.UseAbility:
 				AbilityToUse.Use(cells);
+//				AfterAbilityUse?.Invoke(AbilityToUse);
 //				List<Character> characters = cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
 //				Ability.Use(characters);
 				//Turn.CharacterThatTookActionInTurn = CharacterOnMap;
