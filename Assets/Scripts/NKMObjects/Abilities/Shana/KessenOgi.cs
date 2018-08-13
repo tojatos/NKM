@@ -13,7 +13,7 @@ namespace NKMObjects.Abilities.Shana
 		private const int ShinkuKnockback = 2;
 		private const int ShinpanAndDanzaiDamage = 5;
 		private const int ShinpanAndDanzaiRange = 6;
-		private const int FlameWidth = 1;
+		private const int FlameWidth = 3;
 
 		public KessenOgi() : base(AbilityType.Ultimatum, "Kessen Ōgi", 4)
 		{
@@ -61,17 +61,9 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 		}
 		private void Hien(Character character)
 		{
-			List<HexCell> cells = new List<HexCell>();
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(character.ParentCell);
-			HexCell lastCell = ParentCharacter.ParentCell;
-			HexCell neighbor;
-			do
-			{
-				neighbor = lastCell.GetCell(direction, 1);
-				if(neighbor==null) break;
-				cells.Add(neighbor);
-				lastCell = neighbor;
-			} while (neighbor != character.ParentCell);
+			int range = ParentCharacter.ParentCell.GetDistance(character.ParentCell);
+			List<HexCell> cells = ParentCharacter.ParentCell.GetArea(direction, range, FlameWidth);
 			foreach (HexCell c in cells)
 			{
 				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;

@@ -53,7 +53,7 @@ namespace Managers
 //								new Character("Kirito"),
 //								new Character("Nibutani Shinka"),
 //								new Character("Kurogane Ikki"),
-								new Character("Sakai Yuuji"),
+//								new Character("Sakai Yuuji"),
 //								new Character("Carmel Wilhelmina"),
 //								new Character("Ryuko Matoi"),
 //								new Character("Liones Elizabeth"),
@@ -63,7 +63,8 @@ namespace Managers
 //								new Character("Asuna"),
 //								new Character("Ochaco Uraraka"),
 //								new Character("Aqua"),
-								new Character("Levi"),
+								new Character("Shana"),
+//								new Character("Levi"),
 								
 							}
 						},
@@ -75,7 +76,6 @@ namespace Managers
 								new Character("Monkey D. Luffy"),
 //								new Character("Hanekawa Tsubasa"),
 //								new Character("Bezimienni"),
-//								new Character("Shana"),
 //								new Character("Yasaka Mahiro"),
 //								new Character("Crona"),
 //								new Character("Hecate"),

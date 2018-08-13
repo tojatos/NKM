@@ -128,7 +128,7 @@ namespace Hex
 			for (int i = 0; i < depth; i++)
 			{
 				HexCell neighbor = lastCell.GetNeighbor(direction);
-				if(neighbor==null) continue; //TODO: why not break?
+				if(neighbor==null) continue;
 				
 				visited.Add(neighbor);
 				lastCell = neighbor;
@@ -198,6 +198,30 @@ namespace Hex
 			return visited;
 		}
 
+		public List<HexCell> GetArea(HexDirection direction, int height, int width)
+		{
+			if (height < 1 || width < 1 || width % 2 == 0) throw new ArgumentOutOfRangeException();
+			
+			List<HexCell> areaCells = new List<HexCell>();
+			
+			HexDirection[] nearbyDirections = direction.NearbyDirections();
+			List<HexCell> firstCells = new List<HexCell>();
+			firstCells.Add(GetNeighbor(direction));
+			foreach (HexDirection d in nearbyDirections)
+			{
+				HexCell lastCell = this;
+				for (int i = width; i > 1; i-=2)
+				{
+					lastCell = lastCell.GetNeighbor(d);
+					firstCells.Add(lastCell);
+				}
+			}
+			areaCells.AddRange(firstCells);
+			firstCells.ForEach(c => areaCells.AddRange(c.GetLine(direction, height - 1)));
+
+			return areaCells;
+
+		}
 		public delegate void CharacterDelegate(Character character);
 
 		public event CharacterDelegate OnEnter;

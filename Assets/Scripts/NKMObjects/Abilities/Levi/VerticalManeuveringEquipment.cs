@@ -3,7 +3,6 @@ using Animations;
 using Extensions;
 using Hex;
 using NKMObjects.Templates;
-using UnityEngine;
 
 namespace NKMObjects.Abilities.Levi
 {
