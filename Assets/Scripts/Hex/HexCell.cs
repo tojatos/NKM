@@ -213,6 +213,7 @@ namespace Hex
 				for (int i = width; i > 1; i-=2)
 				{
 					lastCell = lastCell.GetNeighbor(d);
+					if(lastCell==null) break;
 					firstCells.Add(lastCell);
 				}
 			}

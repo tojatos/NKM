@@ -131,6 +131,7 @@ public class Game
 				touchedCell.AddHighlight(Highlights.BlackTransparent);
 			}
 		}
+//		touchedCell.GetArea(HexDirection.Ne, 6, 7).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
 	}
 
 	private void UseMyGameObject(HexCell cell)
