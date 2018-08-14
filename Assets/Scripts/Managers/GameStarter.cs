@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Extensions;
 using Hex;
 using NKMObjects.Templates;
 using UI;
+using UnityEngine;
 using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace Managers
@@ -32,58 +34,19 @@ namespace Managers
 
 		private static GameOptions GetTestingGameOptions()
 		{
+            string testingCharactersFile = File.ReadAllText(Application.dataPath + Path.DirectorySeparatorChar + "testing_characters.txt").TrimEnd();
+			string[][] charactersGrouped = testingCharactersFile.Split(new[] {"\n\n"}, StringSplitOptions.None).Select(s => s.Split('\n')).ToArray();
+			string[] playerNames = {"Ryszard", "Maciej", "Zygfryd", "Bożydar"};
+			List<GamePlayer> testingGamePlayers = charactersGrouped.Select((t, i) => new GamePlayer
+				{
+					Name = playerNames[i % (playerNames.Length)],
+					Characters = t.Select(x => new Character(x.Trim())).ToList()
+				})
+				.ToList();
 			var gameOptions = new GameOptions
 			{
 				Map = Stuff.Maps.Single(m => m.Map.name == "TestMap"),
-				Players = new List<GamePlayer>
-					{
-						new GamePlayer
-						{
-							Name = "Ryszard",
-							Characters = new List<Character>
-							{
-//								new Character("Sinon"),
-//								new Character("Roronoa Zoro"),
-//								new Character("Hecate"),
-//								new Character("Itsuka Kotori"),
-//								new Character("Llenn"),
-//								new Character("Yoshino"),
-//								new Character("Dekomori Sanae"),
-//								new Character("Rem"),
-//								new Character("Kirito"),
-//								new Character("Nibutani Shinka"),
-//								new Character("Kurogane Ikki"),
-//								new Character("Sakai Yuuji"),
-//								new Character("Carmel Wilhelmina"),
-//								new Character("Ryuko Matoi"),
-//								new Character("Liones Elizabeth"),
-//								new Character("Satou Kazuma"),
-//								new Character("Derieri"),
-//								new Character("Gilgamesh"),
-//								new Character("Asuna"),
-//								new Character("Ochaco Uraraka"),
-//								new Character("Aqua"),
-								new Character("Shana"),
-//								new Character("Levi"),
-								new Character("Ononoki Yotsugi"),
-								
-							}
-						},
-						new GamePlayer
-						{
-							Name = "Maciej",
-							Characters = new List<Character>
-							{
-								new Character("Monkey D. Luffy"),
-//								new Character("Hanekawa Tsubasa"),
-//								new Character("Bezimienni"),
-//								new Character("Yasaka Mahiro"),
-//								new Character("Crona"),
-//								new Character("Hecate"),
-//								new Character("Yoshino"),
-							}
-						},
-					},
+				Players = testingGamePlayers,
 				UIManager = UIManager.Instance
 			};
 			gameOptions.Players.ForEach(p =>

@@ -2,8 +2,24 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="$USER_HOME$/.Rider2018.1/system/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_NKM.-330533029.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.3.1/build/netcoreapp1.0/xunit.runner.reporters.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.3.1/build/netcoreapp1.0/xunit.runner.utility.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.3.1/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.Tests" t="IncludeRecursive">
+        <e p="Assembly-CSharp.Tests.csproj" t="IncludeRecursive" />
+        <e p="HexDirectionTests.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.0" t="Include">
+              <e p="Assembly-CSharp.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="Assembly-CSharp.Tests.Program.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets/Editor" t="Include">
         <e p="BuildManagament.cs" t="Include" />
@@ -174,6 +190,11 @@
               <e p="SkillRelease.cs" t="Include" />
               <e p="ZeroGravity.cs" t="Include" />
             </e>
+            <e p="Ononoki Yotsugi" t="Include">
+              <e p="UnlimitedRulebook.cs" t="Include" />
+              <e p="UrbCrunch.cs" t="Include" />
+              <e p="UrbRefuge.cs" t="Include" />
+            </e>
             <e p="Rem" t="Include">
               <e p="AlHuma.cs" t="Include" />
               <e p="Confession.cs" t="Include" />
@@ -235,6 +256,7 @@
             <e p="Snare.cs" t="Include" />
             <e p="StatModifier.cs" t="Include" />
             <e p="Stun.cs" t="Include" />
+            <e p="TakenDamageModifier.cs" t="Include" />
           </e>
           <e p="HexCellEffects" t="Include">
             <e p="Conflagration.cs" t="Include" />
