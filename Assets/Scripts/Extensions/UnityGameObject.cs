@@ -66,6 +66,9 @@ namespace Extensions
 			
 			return dropdown;
 		}
+
+		public static Vector3 GetCharacterTransformPoint(this Transform transform) =>
+			transform.TransformPoint(0, 10, 0);
 	}
 
 	public class DropdownSettings

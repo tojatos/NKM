@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Animations;
 using Hex;
 using NKMObjects.Templates;
 using Extensions;
@@ -39,11 +40,13 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         private Character _target;
         private void Use(HexCell targetCell)
         {
+            AnimationPlayer.Add(new GrammaticaStart(ParentCharacter.CharacterObject.transform, _target));
             if (_target.IsEnemyFor(Owner))
             {
                 int dmg = (int)(_target.HealthPoints.BaseValue * HealthPercentDamage / 100f);
                 ParentCharacter.Attack(this, _target, new Damage(dmg, DamageType.True));
             }
+            AnimationPlayer.Add(new GrammaticaFinish(ParentCharacter.CharacterObject.transform, _target.CharacterObject.transform, targetCell.transform.TransformPoint(0,10,0)));
             _target.MoveTo(targetCell);
             Finish();
 
