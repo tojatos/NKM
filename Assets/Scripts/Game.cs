@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Extensions;
@@ -56,7 +55,7 @@ public class Game
 		MainCameraController.Instance.Init();
 		Abilities.Instance.Init();
 		_uiManager.UpdateActivePhaseText();
-		if (GameStarter.Instance.IsTesting) PlaceAllCharactersOnSpawns();
+		if (GameStarter.Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2) PlaceAllCharactersOnSpawns(); //testing or all random
 		TakeTurns();
 		return true;
 	}
@@ -101,6 +100,7 @@ public class Game
 
 	public void TouchCell(HexCell touchedCell)
 	{
+		Debug.Log(AllMyGameObjects.Characters.Find(c => c.Name == "Shana").HealthPoints.Value);
 		Active.SelectedCell = touchedCell;
 		if (Active.NkmObject != null)
 		{

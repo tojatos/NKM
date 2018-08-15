@@ -37,6 +37,8 @@
           <e p="AsterYo.cs" t="Include" />
           <e p="CamaelMegiddo.cs" t="Include" />
           <e p="Destroy.cs" t="Include" />
+          <e p="GrammaticaFinish.cs" t="Include" />
+          <e p="GrammaticaStart.cs" t="Include" />
           <e p="ItadakiNoKura.cs" t="Include" />
           <e p="MoveTo.cs" t="Include" />
           <e p="NkmAnimation.cs" t="Include" />
@@ -49,10 +51,13 @@
             <e p="DestroyParticles.cs" t="Include" />
             <e p="FloatingInfoFinish.cs" t="Include" />
             <e p="FloatingInfoStart.cs" t="Include" />
+            <e p="Hide.cs" t="Include" />
             <e p="ItadakiNoKuraFinish.cs" t="Include" />
             <e p="ItadakiNoKuraStart.cs" t="Include" />
             <e p="MoveToPosition.cs" t="Include" />
+            <e p="Show.cs" t="Include" />
             <e p="TeleportToPosition.cs" t="Include" />
+            <e p="Wait.cs" t="Include" />
           </e>
           <e p="ShowInfo.cs" t="Include" />
           <e p="Tilt.cs" t="Include" />

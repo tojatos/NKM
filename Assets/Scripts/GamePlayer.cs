@@ -16,16 +16,18 @@ public class GamePlayer
 		Characters.Add(character);
 	}
 
+	public void AddCharacter(string characterName) => AddCharacter(new Character(characterName));
+
 	private void AddCharacters(List<Character> characters)
 	{
 		characters.ForEach(c=> c.Owner = this);
 		Characters.AddRange(characters);
 	}
 
-	public void AddCharacters(IEnumerable<string> classNames)
+	public void AddCharacters(IEnumerable<string> characterNames)
 	{
 		List<Character> characters = new List<Character>();
-		classNames.ToList().ForEach(n => characters.Add(new Character(n)));
+		characterNames.ToList().ForEach(n => characters.Add(new Character(n)));
 		AddCharacters(characters);
 
 	}

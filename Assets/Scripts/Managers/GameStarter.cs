@@ -108,9 +108,12 @@ namespace Managers
 					await BlindPick(players);
 					break;
 				case 1:
-                    List<Character> charactersToPick = new List<Character>(AllMyGameObjects.Characters);
+                    List<Character> charactersToPick = new List<Character>(AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
 					if(S.GetDropdownSetting(SettingType.AreBansEnabled)==1) await Bans(players, charactersToPick);
 					await DraftPick(players, charactersToPick);
+					break;
+				case 2:
+					AllRandom(players);
 					break;
 			}
 		}
@@ -141,6 +144,26 @@ namespace Managers
 				bansNumber--;
 			}
 			players.ForEach(p=>p.HasSelectedCharacters=true);
+		}
+
+		private static void AllRandom(List<GamePlayer> players)
+		{
+			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
+
+			List<string> allCharacterNames = AllMyGameObjects.Characters.Select(c => c.Name).ToList();
+			
+			players.ForEach(p=>
+			{
+				while (p.Characters.Count != numberOfCharactersPerPlayer)
+				{
+                    string randomCharacterName = allCharacterNames.GetRandom();
+                    allCharacterNames.Remove(randomCharacterName);
+                    p.AddCharacter(randomCharacterName);
+				}
+				
+				p.HasSelectedCharacters = true;
+			});
+			
 		}
 
 		private static async Task SelectOneCharacter(ICollection<Character> charactersToPick, GamePlayer player)

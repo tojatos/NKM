@@ -27,7 +27,7 @@ namespace Managers
 			{
 				Type = SettingType.PickType,
 				Description = "Tryb wybierania postaci:",
-				Options = new [] {"Blind", "Draft"},
+				Options = new [] {"Blind", "Draft", "All random"},
 			};
 			var areBansEnabledSettings = new DropdownSettings
 			{

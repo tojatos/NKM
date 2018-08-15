@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Animations.Parts;
+﻿using Animations.Parts;
 using Extensions;
 using NKMObjects.Templates;
 using UnityEngine;

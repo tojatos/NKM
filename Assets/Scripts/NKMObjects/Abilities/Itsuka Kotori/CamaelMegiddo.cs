@@ -70,7 +70,7 @@ Czas odnowienia: {Cooldown}";
         private void SendFlamewave(HexDirection direction)
         {
             List<HexCell> cells = GetDirectionRangeCells(direction);
-            IEnumerable<IGrouping<bool, HexCell>> cellsByConflargation = cells.GroupBy(c => c.Effects.ContainsType<HexCellEffects.Conflagration>());
+            IGrouping<bool, HexCell>[] cellsByConflargation = cells.GroupBy(c => c.Effects.ContainsType<HexCellEffects.Conflagration>()).ToArray();
 			List<HexCell> lineCells = cellsByConflargation.Where(k => k.Key == false).SelectMany(x => x).ToList();
 			List<HexCell> conflargationCells = cellsByConflargation.Where(k => k.Key).SelectMany(x => x).ToList();
             AnimationPlayer.Add(new Animations.CamaelMegiddo(lineCells.Select(c => c.transform).ToList(), conflargationCells.Select(c => c.transform).ToList()));
