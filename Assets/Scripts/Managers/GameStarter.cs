@@ -15,6 +15,7 @@ namespace Managers
 	public class GameStarter : SingletonMonoBehaviour<GameStarter>
 	{
 		public bool IsTesting;
+		public string ReplayFilePath;
 		public Game Game = new Game();
 		private static SessionSettings S => SessionSettings.Instance;
 		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
@@ -48,7 +49,8 @@ namespace Managers
 				Map = Stuff.Maps.Single(m => m.Map.name == "TestMap"),
 				Players = testingGamePlayers,
 				UIManager = UIManager.Instance,
-				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt"
+				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
+				Type = GameType.Local
 			};
 			gameOptions.Players.ForEach(p =>
 			{
@@ -58,16 +60,41 @@ namespace Managers
 			return gameOptions;
 		}
 
+		private GameOptions GetReplayGameOptions()
+		{
+			string[][] logData = File.ReadAllLines(ReplayFilePath).Select(f => f.Split(new []{": "}, 2, StringSplitOptions.RemoveEmptyEntries)).ToArray();
+			string mapName = logData.First(x => x[0] == "MAP")[1];
+			string[] playerNames = logData.First(x => x[0] == "PLAYERS")[1].Split(new []{"; "}, StringSplitOptions.RemoveEmptyEntries).ToArray();
+			List<GamePlayer> gamePlayers = playerNames.Select(p => new GamePlayer
+			{
+				Name = p,
+				Characters = logData.First(x => x[0] == p)[1]
+					.Split(new[] {"; "}, StringSplitOptions.RemoveEmptyEntries)
+					.Select(characterName => new Character(characterName.Split(' ')[0])).ToList()
+
+			}).ToList();
+			return new GameOptions
+			{
+				Map = Stuff.Maps.Single(m => m.Map.name == mapName),
+				Players = gamePlayers,
+				UIManager = UIManager.Instance,
+				Type = GameType.Replay,
+				Actions = logData.SkipWhile(x => x[0] != "GAME STARTED").Skip(1).ToArray()
+			};
+		}
+
 		private async Task<GameOptions> GetGameOptions()
 		{
 			if (IsTesting) return GetTestingGameOptions();
+			if (ReplayFilePath != null) return GetReplayGameOptions();
 
 			return new GameOptions
 			{
 				Map = GetMap(),
 				Players = await GetPlayers(),
 				UIManager = UIManager.Instance,
-				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt"
+				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
+				Type = GameType.Local
 			};
 		}
 

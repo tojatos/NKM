@@ -63,11 +63,11 @@ public class Game
 	private void LogGameStart()
 	{//TODO: make ; and : character disallowed in player names
 		string logText =
-$@"GAME STARTED
-MAP: {Options.Map.Name}
+$@"MAP: {Options.Map.Name}
 PLAYERS: {string.Join("; ", Players.Select(p => p.Name))}
 CHARACTERS:
-{string.Join("\n", Players.Select(p => p.Name + ": " + string.Join("; ", p.Characters.Select(c => c))))}";
+{string.Join("\n", Players.Select(p => p.Name + ": " + string.Join("; ", p.Characters.Select(c => c))))}
+GAME STARTED: true";
         Console.Instance.GameLog(logText);
 	}
 	/// <summary>

@@ -7,6 +7,14 @@ public class GameOptions
 	public List<GamePlayer> Players { get; set; }
 	public HexMap Map { get; set; }
 	public UIManager UIManager { get; set; }
-	public string LogFilePath { get; set; }
+	public GameType Type { get; set; }
+	public string LogFilePath { get; set; } //optional
+	public string[][] Actions { get; set; } //optional
+}
+
+public enum GameType
+{
+	Local,
+	Replay
 }
 
