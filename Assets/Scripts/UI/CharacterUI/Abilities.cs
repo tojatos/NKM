@@ -76,7 +76,11 @@ namespace UI.CharacterUI
 			{
 				button.AddTrigger(EventTriggerType.PointerClick, e =>
 				{
-                    if(ability.CanBeUsed) ((IClickable) ability).Click();	
+					if (ability.CanBeUsed)
+					{
+						((IClickable) ability).Click();
+						Console.Instance.GameLog($"ABILITY CLICK: {ability.ID}");
+					}	
 				});
 //                button.GetComponent<Button>().onClick.AddListener(()=>
 //                {

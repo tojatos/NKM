@@ -15,6 +15,8 @@ namespace NKMObjects.Templates
 	public class Character : NKMObject
 	{
 		#region Properties
+
+		public readonly int ID;
 		public readonly Stat HealthPoints;
 		public readonly Stat AttackPoints;
 		public readonly Stat BasicAttackRange;
@@ -109,6 +111,8 @@ namespace NKMObjects.Templates
 		{
 			#region Property definitions
 			//Define basic properties
+			ID = NKMID.GetNext("Character");
+				
 			IsOnMap = false;
 			TookActionInPhaseBefore = true;
 			HasUsedBasicAttackInPhaseBefore = false;
@@ -156,6 +160,7 @@ namespace NKMObjects.Templates
 		private void AddTriggersToEvents()
 		{
 			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
+			JustBeforeFirstAction += () => Console.GameLog($"ACTION TAKEN: {this}");
 			HealthPoints.StatChanged += RemoveIfDead;
 			AfterAttack += (targetCharacter, damage) =>
 				Console.Log(
@@ -176,6 +181,7 @@ namespace NKMObjects.Templates
                 Console.Log(targetCharacter != this
 				? $"{this.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
 				: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
+			BeforeBasicAttack += (character, damage) => Console.GameLog($"BASIC ATTACK: {character}");
 		}
 		private void CreateAndInitiateAbilities(string name)
 		{
@@ -209,6 +215,7 @@ namespace NKMObjects.Templates
 				Object.Destroy(nextCell.gameObject.GetComponent<LineRenderer>());//Remove the line
 				MoveTo(nextCell);
 			}
+			Console.GameLog($"MOVE: {string.Join("; ", cellPath.Select(p => p.Coordinates))}");
 		}
 		public void DefaultBasicAttack(Character attackedCharacter)
 		{
@@ -472,6 +479,8 @@ namespace NKMObjects.Templates
 			Abilities.ForEach(a => a.ParentCharacter = this);
 //			Abilities.ForEach(a => a.Awake());
 		}
+
+		public override string ToString() => Name + $" ({ID})";
 	}
 	public enum FightType
 	{

@@ -12,7 +12,7 @@ using UnityEngine;
 
 public class Game
 {
-	private GameOptions _options;
+	public GameOptions Options { get; private set; }
 
 	public List<GamePlayer> Players;
 	public readonly Active Active;
@@ -28,10 +28,10 @@ public class Game
 
 	public void Init(GameOptions gameOptions)
 	{
-		_options = gameOptions;
+		Options = gameOptions;
 
 		Players = new List<GamePlayer>(gameOptions.Players);
-		_uiManager = _options.UIManager;
+		_uiManager = Options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
 		_spawner = Spawner.Instance;
 		Players.ForEach(p => p.Characters.ForEach(c => c.Abilities.ForEach(a => a.Awake())));
@@ -45,10 +45,9 @@ public class Game
 	/// <returns></returns>
 	public bool StartGame()
 	{
-
 		if (!IsInitialized) return false;
 
-		HexMapDrawer.CreateMap(_options.Map);
+		HexMapDrawer.CreateMap(Options.Map);
 		_uiManager.Init();
 //		UIManager.VisibleUI = UIManager.GameUI;
 //		Active.Buttons = UIManager.UseButtons;
@@ -57,9 +56,20 @@ public class Game
 		_uiManager.UpdateActivePhaseText();
 		if (GameStarter.Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2) PlaceAllCharactersOnSpawns(); //testing or all random
 		TakeTurns();
+		LogGameStart();
 		return true;
 	}
 
+	private void LogGameStart()
+	{//TODO: make ; and : character disallowed in player names
+		string logText =
+$@"GAME STARTED
+MAP: {Options.Map.Name}
+PLAYERS: {string.Join("; ", Players.Select(p => p.Name))}
+CHARACTERS:
+{string.Join("\n", Players.Select(p => p.Name + ": " + string.Join("; ", p.Characters.Select(c => c))))}";
+        Console.Instance.GameLog(logText);
+	}
 	/// <summary>
 	/// Infinite loop that manages Turns and Phases
 	/// </summary>
@@ -100,7 +110,6 @@ public class Game
 
 	public void TouchCell(HexCell touchedCell)
 	{
-		Debug.Log(AllMyGameObjects.Characters.Find(c => c.Name == "Shana").HealthPoints.Value);
 		Active.SelectedCell = touchedCell;
 		if (Active.NkmObject != null)
 		{

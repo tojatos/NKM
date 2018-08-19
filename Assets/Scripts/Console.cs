@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Extensions;
 using Hex;
@@ -73,6 +74,14 @@ public class Console : SingletonMonoBehaviour<Console>
         //		LogText.text += "<b><color=red>" + text + "</color></b>";
         //		LogText.text += endline ? "\n" : "";
         //		FinishLogging();
+    }
+
+    public void GameLog(string text)
+    {
+        string path = Game.Options.LogFilePath;
+        if (path == null) return;
+        Directory.CreateDirectory(Path.GetDirectoryName(path));
+        File.AppendAllText(path, text + '\n');
     }
 
     private void OnGUI()

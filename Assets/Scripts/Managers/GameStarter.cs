@@ -47,7 +47,8 @@ namespace Managers
 			{
 				Map = Stuff.Maps.Single(m => m.Map.name == "TestMap"),
 				Players = testingGamePlayers,
-				UIManager = UIManager.Instance
+				UIManager = UIManager.Instance,
+				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt"
 			};
 			gameOptions.Players.ForEach(p =>
 			{
@@ -66,6 +67,7 @@ namespace Managers
 				Map = GetMap(),
 				Players = await GetPlayers(),
 				UIManager = UIManager.Instance,
+				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt"
 			};
 		}
 

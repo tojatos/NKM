@@ -184,6 +184,7 @@ public class Active
         Clean();	
 		CharacterOnMap?.Select();
 	}
+	//TODO: Merge MakeActions
 	public void MakeAction(HexCell cell)
 	{
 		if (!HexCells.Contains(cell)) return;
@@ -194,18 +195,8 @@ public class Active
 				throw new Exception("Żadna akcja nie jest aktywna!");
 			case Action.UseAbility:
                 if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
-//				if (cell.CharacterOnCell != null)
-//				{
-//					Ability.Use(cell.CharacterOnCell);
-//				}
-//				else
-//				{
-//					Ability.Use(cell);
-//				}
-
-//				throw new Exception("Cannot make Use action on single cell!");
 				AbilityToUse.Use(new List<HexCell> {cell});
-//				AfterAbilityUse?.Invoke(AbilityToUse);
+				Console.Instance.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {cell.Coordinates}");
 				break;
 			case Action.AttackAndMove:
 				Character character = CharacterOnMap;
@@ -219,7 +210,6 @@ public class Active
 				}
 				else
 				{
-//					if(cell.Type == HexTileType.Wall) return;
 					if (!cell.IsFreeToStand) return;
 					if (MoveCells.Last() != cell) return;
 					if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
@@ -248,6 +238,7 @@ public class Active
 //				List<Character> characters = cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
 //				Ability.Use(characters);
 				//Turn.CharacterThatTookActionInTurn = CharacterOnMap;
+				Console.Instance.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {string.Join("; ", cells.Select(p => p.Coordinates))}");
 				break;
 			case Action.AttackAndMove:
 				throw new Exception();

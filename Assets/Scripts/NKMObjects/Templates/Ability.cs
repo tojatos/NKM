@@ -11,6 +11,7 @@ namespace NKMObjects.Templates
 	{
 		protected Ability(AbilityType type, string name, int cooldown = 0)
 		{
+			ID = NKMID.GetNext("Ability");
 			Type = type;
 			Name = name;
 			Cooldown = cooldown;
@@ -27,6 +28,7 @@ namespace NKMObjects.Templates
 			};
 		}
 
+		public readonly int ID;
 		public bool CanUseOnGround { get; protected set; } = true;
 		protected AbilityUseValidator Validator;
 		public AbilityType Type { get; }
@@ -87,8 +89,11 @@ namespace NKMObjects.Templates
 		public event Character.VoidDelegate AfterUseFinish;
 		public void Awake() => OnAwake?.Invoke();
 
-		public virtual void Cancel() => OnFailedUseFinish();
-
+		public virtual void Cancel()
+		{
+			OnFailedUseFinish();
+			Console.GameLog($"ABILITY CANCEL: {ID}");
+		}
 	}
 	public enum AbilityType
 	{
