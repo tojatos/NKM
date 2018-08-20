@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Nibutani_Shinka
 {
-    public class Mabinogion : Ability, IEnchantable, IRunable
+    public class Mabinogion : Ability, IEnchantable, IRunnable
     {
         private int HealAmount => IsEnchanted ? 12 : 4;
         private int ShieldAmount => IsEnchanted ? 3 : 1;

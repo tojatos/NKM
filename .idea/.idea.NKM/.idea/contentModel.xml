@@ -217,6 +217,11 @@
               <e p="KamuiSenketsu.cs" t="Include" />
               <e p="ScissorBlade.cs" t="Include" />
             </e>
+            <e p="Sabrac" t="Include">
+              <e p="AkaneiroNoDotou.cs" t="Include" />
+              <e p="Fuiuchi.cs" t="Include" />
+              <e p="Stigma.cs" t="Include" />
+            </e>
             <e p="Sakai Yuuji" t="Include">
               <e p="DragonTail.cs" t="Include" />
               <e p="Grammatica.cs" t="Include" />
@@ -256,6 +261,7 @@
             <e p="Ground.cs" t="Include" />
             <e p="HPDrain.cs" t="Include" />
             <e p="HealOverTime.cs" t="Include" />
+            <e p="IncreasablePoison.cs" t="Include" />
             <e p="PassiveBuff.cs" t="Include" />
             <e p="Poison.cs" t="Include" />
             <e p="Silent.cs" t="Include" />
@@ -277,7 +283,7 @@
             <e p="IClickable.cs" t="Include" />
             <e p="IEnableable.cs" t="Include" />
             <e p="IEnchantable.cs" t="Include" />
-            <e p="IRunable.cs" t="Include" />
+            <e p="IRunnable.cs" t="Include" />
             <e p="IUseable.cs" t="Include" />
             <e p="NKMObject.cs" t="Include" />
           </e>

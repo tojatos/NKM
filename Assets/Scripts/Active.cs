@@ -195,8 +195,8 @@ public class Active
 				throw new Exception("Żadna akcja nie jest aktywna!");
 			case Action.UseAbility:
                 if (Turn.CharacterThatTookActionInTurn == null) CharacterOnMap.InvokeJustBeforeFirstAction();
+				Console.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {cell.Coordinates}");
 				AbilityToUse.Use(new List<HexCell> {cell});
-				Console.Instance.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {cell.Coordinates}");
 				break;
 			case Action.AttackAndMove:
 				Character character = CharacterOnMap;
@@ -238,7 +238,7 @@ public class Active
 //				List<Character> characters = cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
 //				Ability.Use(characters);
 				//Turn.CharacterThatTookActionInTurn = CharacterOnMap;
-				Console.Instance.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {string.Join("; ", cells.Select(p => p.Coordinates))}");
+				Console.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {string.Join("; ", cells.Select(p => p.Coordinates))}");
 				break;
 			case Action.AttackAndMove:
 				throw new Exception();

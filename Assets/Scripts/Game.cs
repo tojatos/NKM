@@ -68,7 +68,7 @@ PLAYERS: {string.Join("; ", Players.Select(p => p.Name))}
 CHARACTERS:
 {string.Join("\n", Players.Select(p => p.Name + ": " + string.Join("; ", p.Characters.Select(c => c))))}
 GAME STARTED: true";
-        Console.Instance.GameLog(logText);
+        Console.GameLog(logText);
 	}
 	/// <summary>
 	/// Infinite loop that manages Turns and Phases

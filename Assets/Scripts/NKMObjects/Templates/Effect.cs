@@ -24,7 +24,7 @@ namespace NKMObjects.Templates
 		public delegate void OnRemoveHandler();
 		public event OnRemoveHandler OnRemove;
 
-		protected int CurrentCooldown { get; private set; }
+		public int CurrentCooldown { get; set; }
 		public Character ParentCharacter { get; }
 		public EffectType Type { get; protected set; }
 		public virtual bool IsCC => false;

@@ -15,7 +15,7 @@ namespace Managers
 	public class GameStarter : SingletonMonoBehaviour<GameStarter>
 	{
 		public bool IsTesting;
-		public string ReplayFilePath;
+		public string ReplayFilePath = null;
 		public Game Game = new Game();
 		private static SessionSettings S => SessionSettings.Instance;
 		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
@@ -86,7 +86,7 @@ namespace Managers
 		private async Task<GameOptions> GetGameOptions()
 		{
 			if (IsTesting) return GetTestingGameOptions();
-			if (ReplayFilePath != null) return GetReplayGameOptions();
+//			if (ReplayFilePath != null) return GetReplayGameOptions();
 
 			return new GameOptions
 			{

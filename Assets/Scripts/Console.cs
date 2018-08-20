@@ -80,8 +80,10 @@ public class Console : SingletonMonoBehaviour<Console>
     {
         string path = Game.Options.LogFilePath;
         if (path == null) return;
+        
+        //Make sure target directory exists
         string directoryName = Path.GetDirectoryName(path);
-        if(directoryName != null) Directory.CreateDirectory(directoryName); //Make sure target directory exists
+        if(directoryName != null) Directory.CreateDirectory(directoryName);
         
         File.AppendAllText(path, text + '\n');
     }

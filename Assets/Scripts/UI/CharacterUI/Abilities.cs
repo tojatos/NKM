@@ -79,7 +79,7 @@ namespace UI.CharacterUI
 					if (ability.CanBeUsed)
 					{
 						((IClickable) ability).Click();
-						Console.Instance.GameLog($"ABILITY CLICK: {ability.ID}");
+						Console.GameLog($"ABILITY CLICK: {ability.ID}");
 					}	
 				});
 //                button.GetComponent<Button>().onClick.AddListener(()=>

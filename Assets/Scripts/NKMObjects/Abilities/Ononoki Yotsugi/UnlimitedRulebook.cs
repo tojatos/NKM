@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Ononoki_Yotsugi
 {
-    public class UnlimitedRulebook : Ability, IRunable
+    public class UnlimitedRulebook : Ability, IRunnable
     {
         private const int TakenDamageDecreasePercent = 25;
         private const int Radius = 3;

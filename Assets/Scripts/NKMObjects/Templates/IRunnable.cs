@@ -4,7 +4,7 @@
     /// Abilities that implement this interface can be triggered
     /// by eg. other abilities
     /// </summary>
-    public interface IRunable
+    public interface IRunnable
     {
         void Run();
     }

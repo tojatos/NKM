@@ -184,6 +184,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ryuko Matoi\FiberDecapitation.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ryuko Matoi\KamuiSenketsu.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Ryuko Matoi\ScissorBlade.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sabrac\AkaneiroNoDotou.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sabrac\Fuiuchi.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sabrac\Stigma.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sakai Yuuji\DragonTail.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sakai Yuuji\Grammatica.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Sakai Yuuji\ReijiMaigo.cs" />
@@ -206,6 +209,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Disarm.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\BlackBlood.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Ground.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Effects\IncreasablePoison.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Poison.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Empty.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Effects\Flying.cs" />
@@ -227,7 +231,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IClickable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IEnableable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IEnchantable.cs" />
-    <Compile Include="Assets\Scripts\NKMObjects\Templates\IRunable.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Templates\IRunnable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IUseable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\NKMObject.cs" />
     <Compile Include="Assets\Scripts\Phase.cs" />

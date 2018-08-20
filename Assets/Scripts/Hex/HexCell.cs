@@ -198,6 +198,7 @@ namespace Hex
 			return visited;
 		}
 
+		public List<HexCell> GetArea(HexCell targetCell, int width) => GetArea(GetDirection(targetCell), GetDistance(targetCell), width);
 		public List<HexCell> GetArea(HexDirection direction, int height, int width)
 		{
 			if (height < 1 || width < 1 || width % 2 == 0) throw new ArgumentOutOfRangeException();

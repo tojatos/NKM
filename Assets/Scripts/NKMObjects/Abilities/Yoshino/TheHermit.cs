@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Yoshino
 {
-    public class TheHermit : Ability, IRunable
+    public class TheHermit : Ability, IRunnable
     {
 	    private const int Range = 2;
 	    private const int EffectDuration = 2;

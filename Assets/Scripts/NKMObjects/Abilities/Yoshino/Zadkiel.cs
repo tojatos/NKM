@@ -67,7 +67,7 @@ Pozostały czas trwania: {_currentTimeDurability}";
         {
             IsEnabled = false;
             
-            var runablePassive = ParentCharacter.Abilities.SingleOrDefault(a => a.Type == AbilityType.Passive && a is IRunable) as IRunable;
+            var runablePassive = ParentCharacter.Abilities.SingleOrDefault(a => a.Type == AbilityType.Passive && a is IRunnable) as IRunnable;
             runablePassive?.Run();
 
             CurrentCooldown = Cooldown;

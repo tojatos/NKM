@@ -77,6 +77,8 @@ namespace NKMObjects.Templates
         public delegate void AbilityDelegate(Ability ability);
 		public delegate void DamageDelegate(Damage damage);
 		public delegate void CharacterDamageDelegate(Character character, Damage damage);
+		public delegate void EffectCharacterDamageDelegate(Effect effect, Character character, Damage damage);
+		public delegate void AbilityCharacterDamageDelegate(Ability ability, Character character, Damage damage);
 		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
 		public delegate void CharacterRefIntDelegate(Character targetCharacter, ref int value);
 		#endregion
@@ -95,6 +97,8 @@ namespace NKMObjects.Templates
 		public event CharacterDamageDelegate BeforeBasicAttack;
 		public event CharacterDamageDelegate AfterBasicAttack;
 		public event CharacterDamageDelegate BeforeAttack;
+		public event AbilityCharacterDamageDelegate AfterAbilityAttack;
+		public event EffectCharacterDamageDelegate AfterEffectAttack;
 		public void InvokeAfterBasicMove() => AfterBasicMove?.Invoke();
 		public void InvokeAfterAbilityUse(Ability a) => AfterAbilityUse?.Invoke(a);
 		
@@ -241,8 +245,13 @@ namespace NKMObjects.Templates
 		{
 			Attack(character, damage);
 			character.AfterBeingHitByAbility?.Invoke(ability);
+			AfterAbilityAttack?.Invoke(ability, character, damage);
 		}
-		public void Attack(Effect effect, Character character, Damage damage) => Attack(character, damage);
+		public void Attack(Effect effect, Character character, Damage damage)
+		{
+			Attack(character, damage);
+			AfterEffectAttack?.Invoke(effect, character, damage);
+		}
 
 		private int GetDefense(DamageType damageType)
 		{
