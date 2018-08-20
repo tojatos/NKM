@@ -76,11 +76,13 @@ public class Console : SingletonMonoBehaviour<Console>
         //		FinishLogging();
     }
 
-    public void GameLog(string text)
+    public static void GameLog(string text)
     {
         string path = Game.Options.LogFilePath;
         if (path == null) return;
-        Directory.CreateDirectory(Path.GetDirectoryName(path));
+        string directoryName = Path.GetDirectoryName(path);
+        if(directoryName != null) Directory.CreateDirectory(directoryName); //Make sure target directory exists
+        
         File.AppendAllText(path, text + '\n');
     }
 

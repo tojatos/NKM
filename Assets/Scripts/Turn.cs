@@ -27,7 +27,7 @@ public class Turn
 			Game.Active.Reset();
 			Game.HexMapDrawer.RemoveHighlights();
 		};
-		TurnFinished += c => Console.Instance.GameLog("TURN FINISHED");
+		TurnFinished += c => Console.GameLog("TURN FINISHED");
 	}
 	public void Start(GamePlayer gamePlayer)
 	{
