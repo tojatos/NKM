@@ -149,9 +149,14 @@ GAME STARTED: true";
 		if (Active.NkmObject.GetType() != typeof(Character)) return;
 		if (Active.Turn.WasCharacterPlaced) return;
 		var activeCharacter = Active.NkmObject as Character;
-		if(!Spawner.CanSpawn(activeCharacter, cell)) return;
+		PlaceCharacter(activeCharacter, cell);
+	}
+
+	private void PlaceCharacter(Character characterToPlace, HexCell targetCell)
+	{
+		if(!Spawner.CanSpawn(characterToPlace, targetCell)) return;
 			
-		_spawner.Spawn(cell, activeCharacter);
+		_spawner.Spawn(targetCell, characterToPlace);
 
 		Active.Turn.WasCharacterPlaced = true;
 		if (Active.Phase.Number == 0)
@@ -163,8 +168,9 @@ GAME STARTED: true";
 		{
 			Active.NkmObject = null;
 			HexMapDrawer.RemoveHighlights();
-			activeCharacter?.Select();
+			characterToPlace?.Select();
 		}
+		
 	}
 
 	/// <summary>
@@ -176,13 +182,13 @@ GAME STARTED: true";
 	/// </summary>
 	private void PlaceAllCharactersOnSpawns()
 	{
-		Players.ForEach(p => p.Characters.ForEach(c => TrySpawning(p, c)));
+		Players.ForEach(p => p.Characters.ForEach(c => TrySpawningOnRandomCell(p, c)));
 		if(Active.Phase.Number==0) Active.Phase.Finish();
 	}
 
-	private static void TrySpawning(GamePlayer p, Character c)
+	private static void TrySpawningOnRandomCell(GamePlayer p, Character c)
 	{
-		HexCell spawnPoint = p.GetSpawnPoints().FirstOrDefault(cell => cell.CharacterOnCell == null);
+		HexCell spawnPoint = p.GetSpawnPoints().FindAll(cell => Spawner.CanSpawn(c, cell)).GetRandom();
 		if (spawnPoint == null) return;
 
 		Spawner.Instance.Spawn(spawnPoint, c);

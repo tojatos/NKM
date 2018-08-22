@@ -78,7 +78,7 @@ namespace Extensions
 			}
 		}
 		private static HexTileType GetSpawnPointType(this GamePlayer gamePlayer) => GameStarter.Instance.Game.HexMapDrawer.HexMap.SpawnPoints[gamePlayer.GetIndex()];
-		public static IEnumerable<HexCell> GetSpawnPoints(this GamePlayer gamePlayer) => GameStarter.Instance.Game.HexMapDrawer.Cells.FindAll(c => c.Type == gamePlayer.GetSpawnPointType());
+		public static List<HexCell> GetSpawnPoints(this GamePlayer gamePlayer) => GameStarter.Instance.Game.HexMapDrawer.Cells.FindAll(c => c.Type == gamePlayer.GetSpawnPointType());
 		public static List<Character> GetCharacters(this IEnumerable<HexCell> cells) => cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
 
 		public static bool ContainsType(this IEnumerable<object> objects, Type type) => objects.Any(o => o.GetType() == type);

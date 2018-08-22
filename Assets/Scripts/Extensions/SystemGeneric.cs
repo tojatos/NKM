@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Extensions
@@ -12,8 +13,9 @@ namespace Extensions
 
 		public static T GetRandom<T>(this List<T> list)
 		{
-			int random = UnityEngine.Random.Range(0, list.Count);
-			return list[random];
+			if (list.Count == 0) return default(T);
+			var r = new Random();
+			return list[r.Next(list.Count)];
 		}
 	}
 }
