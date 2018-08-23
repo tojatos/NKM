@@ -9,7 +9,7 @@ public class GameOptions
 	public UIManager UIManager { get; set; }
 	public GameType Type { get; set; }
 	public string LogFilePath { get; set; } //optional
-	public string[][] Actions { get; set; } //optional
+	public GameLog GameLog { get; set; } //optional
 }
 
 public enum GameType

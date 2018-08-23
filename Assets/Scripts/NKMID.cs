@@ -11,7 +11,7 @@ public static class NKMID
             IdsTaken[from]++;
             return IdsTaken[from];
         }
-        IdsTaken.Add(from, 0);
+        IdsTaken.Add(@from, 0);
         return 0;
     }
         

@@ -146,12 +146,13 @@ namespace NKMObjects.Templates
 
 		#endregion
 
-		public Character(string name)
+		public Character(string name) : this(name, NKMID.GetNext("Character")) { }
+		public Character(string name, int id)
 		{
 			#region Property definitions
 
 			//Define basic properties
-			ID = NKMID.GetNext("Character");
+			ID = id;
 
 			IsOnMap = false;
 			TookActionInPhaseBefore = true;

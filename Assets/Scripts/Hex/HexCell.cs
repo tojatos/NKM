@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Extensions;
+using JetBrains.Annotations;
 using Managers;
 using NKMObjects.Templates;
 using UnityEngine;
@@ -229,7 +230,9 @@ namespace Hex
 		public event CharacterDelegate OnEnter;
 		public event CharacterDelegate OnLeave;
 
-		public bool IsSpawnFor(GamePlayer player) => Type == HexMapDrawer.Instance.HexMap.SpawnPoints[player.GetIndex()];
+		public bool IsSpawnFor([NotNull] GamePlayer player) => Type == HexMapDrawer.Instance.HexMap.SpawnPoints[player.GetIndex()];
+
+		public override string ToString() => Coordinates.ToString();
 	}
 	public enum HexTileType
 	{

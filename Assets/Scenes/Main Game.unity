@@ -923,6 +923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsTesting: 0
+  ReplayFileName: "\x162018-08-23 20:09:19Z.txt"
 --- !u!1 &271775534
 GameObject:
   m_ObjectHideFlags: 0

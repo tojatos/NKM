@@ -9,6 +9,9 @@
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.Tests" t="IncludeRecursive">
         <e p="Assembly-CSharp.Tests.csproj" t="IncludeRecursive" />
+        <e p="Extensions" t="Include">
+          <e p="SystemGenericTests.cs" t="Include" />
+        </e>
         <e p="HexDirectionTests.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
@@ -69,6 +72,7 @@
         <e p="Damage.cs" t="Include" />
         <e p="Extensions" t="Include">
           <e p="Async.cs" t="Include" />
+          <e p="GameLog.cs" t="Include" />
           <e p="NKMObject.cs" t="Include" />
           <e p="Sqlite.cs" t="Include" />
           <e p="SystemGeneric.cs" t="Include" />
@@ -77,6 +81,7 @@
         </e>
         <e p="Game.cs" t="Include" />
         <e p="GameData.cs" t="Include" />
+        <e p="GameLog.cs" t="Include" />
         <e p="GameOptions.cs" t="Include" />
         <e p="GamePlayer.cs" t="Include" />
         <e p="Hex" t="Include">
@@ -319,9 +324,7 @@
       <e p="Assets/VertexColors.shader" t="Include" />
       <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp" t="ExcludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-      </e>
+      <e p="Temp/bin" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>

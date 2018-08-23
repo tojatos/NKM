@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -88,6 +89,7 @@
     <Compile Include="Assets\Scripts\CreatableSingletonMonoBehaviour.cs" />
     <Compile Include="Assets\Scripts\Damage.cs" />
     <Compile Include="Assets\Scripts\Extensions\Async.cs" />
+    <Compile Include="Assets\Scripts\Extensions\GameLog.cs" />
     <Compile Include="Assets\Scripts\Extensions\NKMObject.cs" />
     <Compile Include="Assets\Scripts\Extensions\Sqlite.cs" />
     <Compile Include="Assets\Scripts\Extensions\SystemGeneric.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="Assets\Scripts\Extensions\UnityGameObject.cs" />
     <Compile Include="Assets\Scripts\Game.cs" />
     <Compile Include="Assets\Scripts\GameData.cs" />
+    <Compile Include="Assets\Scripts\GameLog.cs" />
     <Compile Include="Assets\Scripts\GameOptions.cs" />
     <Compile Include="Assets\Scripts\GamePlayer.cs" />
     <Compile Include="Assets\Scripts\Hex\HexCell.cs" />

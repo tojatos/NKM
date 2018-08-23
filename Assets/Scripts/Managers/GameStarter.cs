@@ -15,7 +15,7 @@ namespace Managers
 	public class GameStarter : SingletonMonoBehaviour<GameStarter>
 	{
 		public bool IsTesting;
-		public string ReplayFilePath;
+		public bool PlayReplay;
 		public Game Game = new Game();
 		private static SessionSettings S => SessionSettings.Instance;
 		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
@@ -62,31 +62,35 @@ namespace Managers
 
 		private GameOptions GetReplayGameOptions()
 		{
-			string[][] logData = File.ReadAllLines(ReplayFilePath).Select(f => f.Split(new []{": "}, 2, StringSplitOptions.RemoveEmptyEntries)).ToArray();
-			string mapName = logData.First(x => x[0] == "MAP")[1];
-			string[] playerNames = logData.First(x => x[0] == "PLAYERS")[1].Split(new []{"; "}, StringSplitOptions.RemoveEmptyEntries).ToArray();
-			List<GamePlayer> gamePlayers = playerNames.Select(p => new GamePlayer
+			string replayFilePath = Directory.GetFiles(Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar)[0];
+			string[] replayFileLines = File.ReadAllLines(replayFilePath);
+			var gameLog = new GameLog(replayFileLines);
+			List<GamePlayer> gamePlayers = gameLog.GetPlayerNames().Select(p => new GamePlayer
 			{
 				Name = p,
-				Characters = logData.First(x => x[0] == p)[1]
-					.Split(new[] {"; "}, StringSplitOptions.RemoveEmptyEntries)
-					.Select(characterName => new Character(characterName.Split(' ')[0])).ToList()
+				Characters = gameLog.GetCharacterNames(p).Select(characterName => new Character(characterName)).ToList()
 
 			}).ToList();
-			return new GameOptions
+			var gameOptions =  new GameOptions
 			{
-				Map = Stuff.Maps.Single(m => m.Map.name == mapName),
+				Map = Stuff.Maps.Single(m => m.Map.name == gameLog.GetMapName()),
 				Players = gamePlayers,
 				UIManager = UIManager.Instance,
 				Type = GameType.Replay,
-				Actions = logData.SkipWhile(x => x[0] != "GAME STARTED").Skip(1).ToArray()
+				GameLog = gameLog
 			};
+			gameOptions.Players.ForEach(p =>
+			{
+				p.Characters.ForEach(c => c.Owner = p);
+				p.HasSelectedCharacters = true;
+			});
+			return gameOptions;
 		}
 
 		private async Task<GameOptions> GetGameOptions()
 		{
 			if (IsTesting) return GetTestingGameOptions();
-//			if (ReplayFilePath != null) return GetReplayGameOptions();
+			if (PlayReplay) return GetReplayGameOptions();
 
 			return new GameOptions
 			{

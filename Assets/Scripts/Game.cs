@@ -15,6 +15,7 @@ public class Game
 	public GameOptions Options { get; private set; }
 
 	public List<GamePlayer> Players;
+	public List<Character> Characters => Players.SelectMany(p => p.Characters).ToList();
 	public readonly Active Active;
 	private UIManager _uiManager;
 	private Spawner _spawner;
@@ -57,7 +58,38 @@ public class Game
 		if (GameStarter.Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2) PlaceAllCharactersOnSpawns(); //testing or all random
 		TakeTurns();
 		LogGameStart();
+		if (Options.GameLog != null) MakeGameLogActions();
 		return true;
+	}
+
+	private void MakeGameLogActions()
+	{
+		string[][] actions = Options.GameLog.Actions;
+		foreach (string[] action in actions)
+		{
+			switch (action[0])
+			{
+                case "CHARACTER PLACED":
+	                string[] data = action[1].SplitData();
+	                Character character = Characters.First(c => c.ToString() == data[0]);
+	                HexCell cell =  HexMapDrawer.Cells.First(c => c.ToString() == data[1]);
+	                PlaceCharacter(character, cell);
+	                break;
+                case "TURN FINISHED": Active.Turn.Finish(); break;
+                case "ACTION TAKEN": Characters.First(c => c.ToString() == action[1]).MakeActionEmpty(); break;
+                case "MOVE":
+	                List<HexCell> moveCells = action[1].SplitData().ConvertToHexCellList();
+	                Active.Turn.CharacterThatTookActionInTurn.MakeActionBasicMove(moveCells);
+	                break;
+                case "BASIC ATTACK":
+	                Character targetCharacter = Characters.First(c => c.ToString() == action[1]);
+	                Active.Turn.CharacterThatTookActionInTurn.MakeActionBasicAttack(targetCharacter);
+	                break;
+                default: 
+	                Console.Instance.DebugLog("Unknown action in GameLog!");
+	                break;
+			}
+		}
 	}
 
 	private void LogGameStart()
@@ -66,7 +98,7 @@ public class Game
 $@"MAP: {Options.Map.Name}
 PLAYERS: {string.Join("; ", Players.Select(p => p.Name))}
 CHARACTERS:
-{string.Join("\n", Players.Select(p => p.Name + ": " + string.Join("; ", p.Characters.Select(c => c))))}
+{string.Join("\n", Players.Select(p => p.Name + ": " + string.Join("; ", p.Characters)))}
 GAME STARTED: true";
         Console.GameLog(logText);
 	}
@@ -154,6 +186,7 @@ GAME STARTED: true";
 
 	private void PlaceCharacter(Character characterToPlace, HexCell targetCell)
 	{
+		Console.GameLog($"CHARACTER PLACED: {characterToPlace}; {targetCell}");
 		if(!Spawner.CanSpawn(characterToPlace, targetCell)) return;
 			
 		_spawner.Spawn(targetCell, characterToPlace);
