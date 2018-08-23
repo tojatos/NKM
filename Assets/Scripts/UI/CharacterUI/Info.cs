@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Extensions;
+﻿using Extensions;
 using JetBrains.Annotations;
 using Managers;
 using NKMObjects.Templates;
@@ -24,8 +23,9 @@ namespace UI.CharacterUI
 		[UsedImplicitly]
 		public void Open()
 		{
-			gameObject.Show();
-			UpdateInfo(AllMyGameObjects.Characters.Single(c => c.Name == Game.Active.CharacterOnMap.Name));
+			//TODO
+//			gameObject.Show();
+//			UpdateInfo(AllMyGameObjects.Characters.Single(c => c.Name == Game.Active.CharacterOnMap.Name));
 		}
 
 		private void Update()

@@ -7,7 +7,6 @@ using Hex;
 using Managers;
 using NKMObjects.Templates;
 using UI;
-using UI.CharacterUI;
 using UnityEngine;
 
 public class Game
@@ -15,7 +14,8 @@ public class Game
 	public GameOptions Options { get; private set; }
 
 	public List<GamePlayer> Players;
-	public List<Character> Characters => Players.SelectMany(p => p.Characters).ToList();
+	private List<Character> Characters => Players.SelectMany(p => p.Characters).ToList();
+	private List<Ability> Abilities => Characters.SelectMany(p => p.Abilities).ToList();
 	public readonly Active Active;
 	private UIManager _uiManager;
 	private Spawner _spawner;
@@ -53,7 +53,7 @@ public class Game
 //		UIManager.VisibleUI = UIManager.GameUI;
 //		Active.Buttons = UIManager.UseButtons;
 		MainCameraController.Instance.Init();
-		Abilities.Instance.Init();
+		UI.CharacterUI.Abilities.Instance.Init();
 		_uiManager.UpdateActivePhaseText();
 		if (GameStarter.Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2) PlaceAllCharactersOnSpawns(); //testing or all random
 		TakeTurns();
@@ -84,6 +84,15 @@ public class Game
                 case "BASIC ATTACK":
 	                Character targetCharacter = Characters.First(c => c.ToString() == action[1]);
 	                Active.Turn.CharacterThatTookActionInTurn.MakeActionBasicAttack(targetCharacter);
+	                break;
+                case "ABILITY CLICK":
+	                ((IClickable) Abilities.First(a => a is IClickable && a.ID == int.Parse(action[1]))).Click();
+	                break;
+                case "ABILITY USE":
+	                string[] abilityData = action[1].SplitData(": ");
+	                int abilityID = int.Parse(abilityData[0]);
+	                List<HexCell> targetCells = abilityData[1].SplitData().ConvertToHexCellList();
+	                ((IUseable) Abilities.First(a => a is IUseable && a.ID == abilityID)).Use(targetCells);
 	                break;
                 default: 
 	                Console.Instance.DebugLog("Unknown action in GameLog!");

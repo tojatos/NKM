@@ -9,9 +9,10 @@ namespace NKMObjects.Templates
 {
 	public abstract class Ability : NKMObject
 	{
-		protected Ability(AbilityType type, string name, int cooldown = 0)
+		protected Ability(AbilityType type, string name, int cooldown = 0) : this(type, name, cooldown, NKMID.GetNext("Ability")){}
+		protected Ability(AbilityType type, string name, int cooldown, int id)
 		{
-			ID = NKMID.GetNext("Ability");
+			ID = id;
 			Type = type;
 			Name = name;
 			Cooldown = cooldown;

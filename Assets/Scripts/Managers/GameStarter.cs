@@ -141,7 +141,8 @@ namespace Managers
 					await BlindPick(players);
 					break;
 				case 1:
-                    List<Character> charactersToPick = new List<Character>(AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
+					List<Character> charactersToPick =
+						new List<Character>(GameData.Conn.GetCharacterNames().Select(c => new Character(c)));//AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
 					if(S.GetDropdownSetting(SettingType.AreBansEnabled)==1) await Bans(players, charactersToPick);
 					await DraftPick(players, charactersToPick);
 					break;
@@ -183,7 +184,7 @@ namespace Managers
 		{
 			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
 
-			List<string> allCharacterNames = AllMyGameObjects.Characters.Select(c => c.Name).ToList();
+			List<string> allCharacterNames = GameData.Conn.GetCharacterNames();//AllMyGameObjects.Characters.Select(c => c.Name).ToList();
 			
 			players.ForEach(p=>
 			{
@@ -245,7 +246,7 @@ namespace Managers
 //			players.ForEach(p => Debug.Log(p.Name));
 			foreach (GamePlayer p in players)
 			{
-                List<NKMObject> allCharacters = new List<NKMObject>(AllMyGameObjects.Characters);
+                List<NKMObject> allCharacters = new List<NKMObject>(GameData.Conn.GetCharacterNames().Select(c => new Character(c, -1)));
                 SpriteSelect.Instance.Open(allCharacters, () => FinishSelectingCharacters(p), $"Wybór postaci - {p.Name}", "Zakończ wybieranie postaci");
                 Func<bool> hasSelectedCharecters = () => p.HasSelectedCharacters;
                 await hasSelectedCharecters.WaitToBeTrue();

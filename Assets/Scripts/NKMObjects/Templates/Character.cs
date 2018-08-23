@@ -192,7 +192,7 @@ namespace NKMObjects.Templates
 			#endregion
 
 			AddTriggersToEvents();
-			CreateAndInitiateAbilities(name);
+			if(id != -1) CreateAndInitiateAbilities(name);
 			Active.Turn.TurnFinished += character =>
 			{
 				if (character != this) return;

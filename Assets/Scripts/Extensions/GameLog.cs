@@ -8,7 +8,8 @@ namespace Extensions
 	public static class GameLog
 	{
         public static string GetFirst(this string[][] data, string key) => data.First(x => x[0] == key)[1];
-        public static string[] SplitData(this string toSplit) => toSplit.Split(new[] {"; "}, StringSplitOptions.RemoveEmptyEntries);
+		public static string[] SplitData(this string toSplit) => toSplit.SplitData("; ");
+        public static string[] SplitData(this string toSplit, string delimiter) => toSplit.Split(new[] {delimiter}, StringSplitOptions.RemoveEmptyEntries);
         public static List<HexCell> ConvertToHexCellList(this string[] coordinatesArray) => coordinatesArray.Select(coordinates => HexMapDrawer.Instance.Cells.First(c => c.Coordinates.ToString() == coordinates)).ToList();
         public static string ConvertToNameWithoutID(this string nameWithID)
 		{
