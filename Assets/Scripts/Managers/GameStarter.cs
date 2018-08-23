@@ -15,7 +15,7 @@ namespace Managers
 	public class GameStarter : SingletonMonoBehaviour<GameStarter>
 	{
 		public bool IsTesting;
-		public string ReplayFilePath = null;
+		public string ReplayFilePath;
 		public Game Game = new Game();
 		private static SessionSettings S => SessionSettings.Instance;
 		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
