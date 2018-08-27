@@ -93,7 +93,6 @@ namespace NKMObjects.Templates
 		public virtual void Cancel()
 		{
 			OnFailedUseFinish();
-			Console.GameLog($"ABILITY CANCEL: {ID}");
 		}
 	}
 	public enum AbilityType

@@ -22,6 +22,7 @@ public class Game
 	public HexMapDrawer HexMapDrawer;
 
 	public bool IsInitialized;
+	public bool IsReplay => Options.GameLog != null;
 	public Game()
 	{
 		Active = new Active();
@@ -58,17 +59,30 @@ public class Game
 		if (GameStarter.Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2) PlaceAllCharactersOnSpawns(); //testing or all random
 		TakeTurns();
 		LogGameStart();
-		if (Options.GameLog != null) MakeGameLogActions();
+		if (IsReplay)
+		{
+			MakeGameLogActions();
+		}
 		return true;
 	}
 
 	private void MakeGameLogActions()
 	{
-		string[][] actions = Options.GameLog.Actions;
-		foreach (string[] action in actions)
-		{
+//		string[][] actions = Options.GameLog.Actions;
+//		foreach (string[] action in actions)
+//		{
+//			MakeAction(action);
+//		}
+		Replay r = Replay.Instance;
+		r.Actions = new Queue<string[]>(Options.GameLog.Actions);
+		r.Show();
+	}
+
+	public void MakeAction(string[] action)
+	{
 			switch (action[0])
 			{
+				//TODO: Remove that all and work with clicks maybe, or not
                 case "CHARACTER PLACED":
 	                string[] data = action[1].SplitData();
 	                Character character = Characters.First(c => c.ToString() == data[0]);
@@ -76,7 +90,7 @@ public class Game
 	                PlaceCharacter(character, cell);
 	                break;
                 case "TURN FINISHED": Active.Turn.Finish(); break;
-                case "ACTION TAKEN": Characters.First(c => c.ToString() == action[1]).MakeActionEmpty(); break;
+                case "ACTION TAKEN": Characters.First(c => c.ToString() == action[1]).TryToInvokeJustBeforeFirstAction(); break;
                 case "MOVE":
 	                List<HexCell> moveCells = action[1].SplitData().ConvertToHexCellList();
 	                Active.Turn.CharacterThatTookActionInTurn.MakeActionBasicMove(moveCells);
@@ -89,16 +103,17 @@ public class Game
 	                ((IClickable) Abilities.First(a => a is IClickable && a.ID == int.Parse(action[1]))).Click();
 	                break;
                 case "ABILITY USE":
-	                string[] abilityData = action[1].SplitData(": ");
-	                int abilityID = int.Parse(abilityData[0]);
-	                List<HexCell> targetCells = abilityData[1].SplitData().ConvertToHexCellList();
-	                ((IUseable) Abilities.First(a => a is IUseable && a.ID == abilityID)).Use(targetCells);
+	                List<HexCell> targetCells = action[1].SplitData().ConvertToHexCellList();
+//	                ((IUseable) Abilities.First(a => a is IUseable && a.ID == abilityID)).Use(targetCells);
+	                Active.AbilityToUse.Use(targetCells);
+	                break;
+                case "ABILITY CANCEL":
+	                ((Ability)Active.AbilityToUse).Cancel();
 	                break;
                 default: 
 	                Console.Instance.DebugLog("Unknown action in GameLog!");
 	                break;
 			}
-		}
 	}
 
 	private void LogGameStart()

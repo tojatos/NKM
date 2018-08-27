@@ -262,6 +262,7 @@ namespace NKMObjects.Templates
 
 		private void Move(IList<HexCell> cellPath)
 		{
+			Console.GameLog($"MOVE: {string.Join("; ", cellPath.Select(p => p.Coordinates))}");
 			cellPath.RemoveAt(0); //Remove parent cell
 			foreach (HexCell nextCell in cellPath)
 			{
@@ -269,7 +270,6 @@ namespace NKMObjects.Templates
 				MoveTo(nextCell);
 			}
 
-			Console.GameLog($"MOVE: {string.Join("; ", cellPath.Select(p => p.Coordinates))}");
 		}
 
 		public void DefaultBasicAttack(Character attackedCharacter)
@@ -562,7 +562,7 @@ namespace NKMObjects.Templates
 			AfterBasicMove?.Invoke();
 		}
 
-		public void MakeActionEmpty() => TryToInvokeJustBeforeFirstAction();
+//		public void MakeActionEmpty() => TryToInvokeJustBeforeFirstAction();
 
 		public override string ToString() => Name + $" ({ID})";
 	}

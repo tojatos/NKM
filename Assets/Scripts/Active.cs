@@ -19,7 +19,6 @@ public class Active
 		Phase = new Phase();
 		Turn = new Turn();
 		AirSelection = new AirSelection();
-		IsDebug = true;
 	}
 
 	public Turn Turn { get; }
@@ -53,8 +52,6 @@ public class Active
 	private List<HexCell> _helpHexCells;
 	private List<GameObject> _buttons;
 
-	public bool IsDebug { get; set; }
-
 	public bool IsActiveUse => !(AbilityToUse == null && (Action == Action.None || Action == Action.AttackAndMove) && NkmObject == null);
 
 	public void Reset()
@@ -73,7 +70,11 @@ public class Active
 	}
 	public void Cancel()
 	{
-		if (AbilityToUse != null) ((Ability)AbilityToUse).Cancel();
+		if (AbilityToUse != null)
+		{
+			((Ability)AbilityToUse).Cancel();
+			Console.GameLog($"ABILITY CANCEL");
+		}
 		else if (NkmObject != null)
 		{
 			Game.HexMapDrawer.RemoveHighlights();
@@ -192,7 +193,8 @@ public class Active
 				return;
 			case Action.UseAbility:
                 CharacterOnMap.TryToInvokeJustBeforeFirstAction();
-				Console.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {string.Join("; ", cells.Select(p => p.Coordinates))}");
+//				Console.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {string.Join("; ", cells.Select(p => p.Coordinates))}");
+				Console.GameLog($"ABILITY USE: {string.Join("; ", cells.Select(p => p.Coordinates))}");
 				AbilityToUse.Use(cells);
 				break;
 			case Action.AttackAndMove:
@@ -234,9 +236,9 @@ public class Active
 	public void MakeAction(Character characterThatMakesAction, Action action, HexCell cell) =>
 		MakeAction(characterThatMakesAction, action, new List<HexCell>{cell});
 
-	public void MakeAction(List<HexCell> cells) => MakeAction(CharacterOnMap, Action, cells);
+	public void MakeAction(List<HexCell> cells) => MakeAction(!Game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn, Action, cells);
 	public void MakeAction(HexCell cell) => MakeAction(new List<HexCell> {cell});
-	public void MakeAction() => CharacterOnMap.MakeActionEmpty();
+	public void MakeAction() => (!Game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn).TryToInvokeJustBeforeFirstAction();
 
 	public static bool IsPointerOverUiObject()
 	{

@@ -39,7 +39,7 @@ public class Turn
 		
 		
 		if (Game.Active.Phase.Number != 0) return;
-		if (Game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap))
+		if (Game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap) && !Game.IsReplay)
 		{
 			UIManager.Instance.ForcePlacingChampions = true;
 		}

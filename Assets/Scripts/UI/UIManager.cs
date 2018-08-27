@@ -110,7 +110,7 @@ namespace UI
 		private static void HourglassImageClick()
 		{
             if(Active.CharacterOnMap.Owner != Active.GamePlayer) return;
-			Active.CharacterOnMap.MakeActionEmpty();
+			Active.CharacterOnMap.TryToInvokeJustBeforeFirstAction();
 			Active.Turn.Finish();
         }
 
