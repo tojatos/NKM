@@ -57,5 +57,9 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	}
 
 	public static bool CanSpawn(Character character, HexCell cell) => cell.IsFreeToStand && cell.IsSpawnFor(character.Owner);
-	public void Spawn(HexCell cell, Character characterToSpawn) => SpawnCharacterObject(cell, characterToSpawn);
+	public void Spawn(HexCell cell, Character characterToSpawn)
+	{
+		Console.GameLog($"CHARACTER PLACED: {characterToSpawn}; {cell}");
+		SpawnCharacterObject(cell, characterToSpawn);
+	}
 }

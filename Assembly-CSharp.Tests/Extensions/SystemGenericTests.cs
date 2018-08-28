@@ -17,7 +17,7 @@ namespace Assembly_CSharp.Tests
             List<object> elements = e.ToList();
             for (int i = 0; i < 100; i++)
             {
-                object randomElement = elements.GetRandom();
+                object randomElement = elements.GetRandomNoLog();
                 if(elements.Count>0) Assert.Contains(randomElement, elements);
                 else Assert.Equal(null, randomElement);
             }

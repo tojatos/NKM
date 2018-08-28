@@ -194,8 +194,8 @@ public class Active
 			case Action.UseAbility:
                 CharacterOnMap.TryToInvokeJustBeforeFirstAction();
 //				Console.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {string.Join("; ", cells.Select(p => p.Coordinates))}");
-				Console.GameLog($"ABILITY USE: {string.Join("; ", cells.Select(p => p.Coordinates))}");
 				AbilityToUse.Use(cells);
+				Console.GameLog($"ABILITY USE: {string.Join("; ", cells.Select(p => p.Coordinates))}");
 				break;
 			case Action.AttackAndMove:
 				if (cells.Count != 1)

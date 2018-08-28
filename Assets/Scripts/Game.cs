@@ -37,6 +37,7 @@ public class Game
 		HexMapDrawer = HexMapDrawer.Instance;
 		_spawner = Spawner.Instance;
 		Players.ForEach(p => p.Characters.ForEach(c => c.Abilities.ForEach(a => a.Awake())));
+		NKMRandom.OnValueGet += (name, value) => Console.GameLog($"RNG: {name}; {value}");
 		IsInitialized = true;
 	}
 
@@ -56,9 +57,9 @@ public class Game
 		MainCameraController.Instance.Init();
 		UI.CharacterUI.Abilities.Instance.Init();
 		_uiManager.UpdateActivePhaseText();
-		if (GameStarter.Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2) PlaceAllCharactersOnSpawns(); //testing or all random
 		TakeTurns();
 		LogGameStart();
+		if (GameStarter.Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2) PlaceAllCharactersOnSpawns(); //testing or all random
 		if (IsReplay)
 		{
 			MakeGameLogActions();
@@ -109,6 +110,10 @@ public class Game
 	                break;
                 case "ABILITY CANCEL":
 	                ((Ability)Active.AbilityToUse).Cancel();
+	                break;
+                case "RNG":
+	                string[] rngData = action[1].SplitData();
+	                NKMRandom.Set(rngData[0], int.Parse(rngData[1]));
 	                break;
                 default: 
 	                Console.Instance.DebugLog("Unknown action in GameLog!");
@@ -210,7 +215,6 @@ GAME STARTED: true";
 
 	private void PlaceCharacter(Character characterToPlace, HexCell targetCell)
 	{
-		Console.GameLog($"CHARACTER PLACED: {characterToPlace}; {targetCell}");
 		if(!Spawner.CanSpawn(characterToPlace, targetCell)) return;
 			
 		_spawner.Spawn(targetCell, characterToPlace);
@@ -245,7 +249,7 @@ GAME STARTED: true";
 
 	private static void TrySpawningOnRandomCell(GamePlayer p, Character c)
 	{
-		HexCell spawnPoint = p.GetSpawnPoints().FindAll(cell => Spawner.CanSpawn(c, cell)).GetRandom();
+		HexCell spawnPoint = p.GetSpawnPoints().FindAll(cell => Spawner.CanSpawn(c, cell)).GetRandomNoLog();
 		if (spawnPoint == null) return;
 
 		Spawner.Instance.Spawn(spawnPoint, c);

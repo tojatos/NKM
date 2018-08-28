@@ -18,12 +18,13 @@ $"{ParentCharacter.Name} ma 50% szansy na pójście w losowe miejsce podczas wyk
 		
 		private void MoveOverride(List<HexCell> moveCells)
 		{
-			bool isLost = UnityEngine.Random.Range(0, 2) == 0;
+//			bool isLost = UnityEngine.Random.Range(0, 2) == 0;
+			bool isLost = NKMRandom.Get(Name, 0, 2) == 0;
 			if (!isLost) ParentCharacter.DefaultBasicMove(moveCells);
 			else
 			{
 				Active.RemoveMoveCells();
-				var movementPoints = ParentCharacter.Speed.Value;
+				int movementPoints = ParentCharacter.Speed.Value;
 				Active.MoveCells.Add(ParentCharacter.ParentCell);
 				HexCell lastCell = ParentCharacter.ParentCell;
 				List<HexCell> moveTargets = ParentCharacter.GetBasicMoveCells();
@@ -32,14 +33,16 @@ $"{ParentCharacter.Name} ma 50% szansy na pójście w losowe miejsce podczas wyk
 //					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(1,
 //						SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtFriendlyCharacters | SearchFlags.StopAtWalls);
 					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(1).Intersect(moveTargets).ToList();
-					int r = UnityEngine.Random.Range(0, neighborMoveCells.Count);
-					lastCell = neighborMoveCells[r];
+//					int r = UnityEngine.Random.Range(0, neighborMoveCells.Count);
+//					lastCell = neighborMoveCells[r];
+					lastCell = neighborMoveCells.GetRandom();
 					Active.AddMoveCell(lastCell);
 				}
 				ParentCharacter.DefaultBasicMove(Active.MoveCells);
 				Console.Log($"{ParentCharacter.FormattedFirstName()}: Cholera, znowu się zgubili?");
-				int rand = UnityEngine.Random.Range(1, 4);
-				Active.PlayAudio("op wtf " + rand);
+//				int rand = UnityEngine.Random.Range(1, 4);
+				int soundID = NKMRandom.Get($"{Name} - ID", 1, 4);
+				Active.PlayAudio("op wtf " + soundID);
 			}
 		}
 	}

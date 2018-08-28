@@ -11,7 +11,7 @@ namespace UI
     {
         public GameObject PlayNextButton;
         public Queue<string[]> Actions;
-
+//TODO: Find a way to load RNG before action
         private void Awake() => PlayNextButton.AddTrigger(EventTriggerType.PointerClick, e =>
         {
             if(Actions.Count == 0) return;
@@ -25,7 +25,7 @@ namespace UI
             
             if(Actions.Count == 0) return;
             string nextActionName = Actions.Peek()[0];
-            if(new []{"ACTION TAKEN", "TURN FINISHED"}.Contains(nextActionName)) PlayNextAction();
+            if(new []{"ACTION TAKEN", "TURN FINISHED", "RNG"}.Contains(nextActionName)) PlayNextAction();
         }
 
         public void Show() => gameObject.Show();

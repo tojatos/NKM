@@ -73,7 +73,7 @@ namespace Managers
 			}).ToList();
 			var gameOptions =  new GameOptions
 			{
-				Map = Stuff.Maps.Single(m => m.Map.name == gameLog.GetMapName()),
+				Map = Stuff.Maps.Single(m => m.Name == gameLog.GetMapName()),
 				Players = gamePlayers,
 				UIManager = UIManager.Instance,
 				Type = GameType.Replay,
@@ -190,7 +190,7 @@ namespace Managers
 			{
 				while (p.Characters.Count != numberOfCharactersPerPlayer)
 				{
-                    string randomCharacterName = allCharacterNames.GetRandom();
+                    string randomCharacterName = allCharacterNames.GetRandomNoLog();
                     allCharacterNames.Remove(randomCharacterName);
                     p.AddCharacter(randomCharacterName);
 				}

@@ -923,7 +923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsTesting: 0
-  PlayReplay: 0
+  PlayReplay: 1
 --- !u!1 &271775534
 GameObject:
   m_ObjectHideFlags: 0

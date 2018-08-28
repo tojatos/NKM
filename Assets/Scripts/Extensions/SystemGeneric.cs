@@ -11,11 +11,16 @@ namespace Extensions
 			return list;
 		}
 
-		public static T GetRandom<T>(this List<T> list)
+		public static T GetRandomNoLog<T>(this List<T> list)
 		{
 			if (list.Count == 0) return default(T);
 			var r = new Random();
 			return list[r.Next(list.Count)];
+		}
+		public static T GetRandom<T>(this List<T> list)
+		{
+			if (list.Count == 0) return default(T);
+			return list[NKMRandom.Get("System Generic Random" + NKMID.GetNext("System Generic Random"), 0, list.Count)];
 		}
 	}
 }

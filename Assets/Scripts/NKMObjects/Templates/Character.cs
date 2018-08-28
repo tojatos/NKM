@@ -227,7 +227,6 @@ namespace NKMObjects.Templates
 				Console.Log(targetCharacter != this
 					? $"{this.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
 					: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
-			BeforeBasicAttack += (character, damage) => Console.GameLog($"BASIC ATTACK: {character}");
 		}
 
 		private void CreateAndInitiateAbilities(string name)
@@ -262,7 +261,6 @@ namespace NKMObjects.Templates
 
 		private void Move(IList<HexCell> cellPath)
 		{
-			Console.GameLog($"MOVE: {string.Join("; ", cellPath.Select(p => p.Coordinates))}");
 			cellPath.RemoveAt(0); //Remove parent cell
 			foreach (HexCell nextCell in cellPath)
 			{
@@ -554,11 +552,13 @@ namespace NKMObjects.Templates
 		{
 			TryToInvokeJustBeforeFirstAction();
             BasicAttack(target);
+			Console.GameLog($"BASIC ATTACK: {target}"); //logging after action to make reading rng work
 		}
 		public void MakeActionBasicMove([NotNull] List<HexCell> moveCells)
 		{
 			TryToInvokeJustBeforeFirstAction();
-			BasicMove(moveCells);
+			BasicMove(new List<HexCell>(moveCells)); //work on a new list to log unmodified list below
+			Console.GameLog($"MOVE: {string.Join("; ", moveCells.Select(p => p.Coordinates))}"); //logging after action to make reading rng work
 			AfterBasicMove?.Invoke();
 		}
 

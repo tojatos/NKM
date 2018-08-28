@@ -13,6 +13,7 @@
           <e p="SystemGenericTests.cs" t="Include" />
         </e>
         <e p="HexDirectionTests.cs" t="Include" />
+        <e p="NKMRandomTests.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -34,7 +35,6 @@
         <e p="Action.cs" t="Include" />
         <e p="Active.cs" t="Include" />
         <e p="AirSelection.cs" t="Include" />
-        <e p="AllMyGameObjects.cs" t="Include" />
         <e p="AnimationPlayer.cs" t="Include" />
         <e p="Animations" t="Include">
           <e p="AsterYo.cs" t="Include" />
@@ -293,6 +293,7 @@
             <e p="NKMObject.cs" t="Include" />
           </e>
         </e>
+        <e p="NKMRandom.cs" t="Include" />
         <e p="Phase.cs" t="Include" />
         <e p="PlayerPrefsX.cs" t="Include" />
         <e p="Scenes.cs" t="Include" />
@@ -317,6 +318,7 @@
             <e p="Effects.cs" t="Include" />
             <e p="HexImage.cs" t="Include" />
           </e>
+          <e p="Replay.cs" t="Include" />
           <e p="UIManager.cs" t="Include" />
           <e p="Victory.cs" t="Include" />
         </e>
@@ -324,7 +326,9 @@
       <e p="Assets/VertexColors.shader" t="Include" />
       <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp/bin" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>
