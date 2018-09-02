@@ -42,6 +42,17 @@ namespace Hex
 		public bool IsFreeToStand => CharacterOnCell == null && Type != HexTileType.Wall;
 
 		private readonly HexCell[] _neighbors = new HexCell[6];
+		public List<HexCell> ClosestFreeToStand(SearchFlags searchFlags = SearchFlags.None)
+		{
+			int i = 1;
+			while (i < 500) //TODO: Change 500 to a map's maximum value, good enough for now.
+			{
+                List<HexCell> neighboursFreeToStand = GetNeighbors(i, searchFlags).FindAll(c => c.IsFreeToStand);
+                if (neighboursFreeToStand.Count == 0) return neighboursFreeToStand;
+				i++;
+			}
+			return new List<HexCell>(); // There are no cells that are free to stand
+		}
 
         private HexCell GetNeighbor(HexDirection direction) => _neighbors[(int)direction];
         public void SetNeighbor(HexDirection direction, HexCell cell)
