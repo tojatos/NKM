@@ -28,11 +28,6 @@ public class SessionSettings : CreatableSingletonMonoBehaviour<SessionSettings>
 	private void AddDropdownSetting(string settingType, int defaultValue = 0) =>
 		_dropdownSettings.Add(settingType, PlayerPrefs.GetInt(settingType, defaultValue));
 
-//	public bool AreBansEnabled;
-//	public int PickType;
-//	public int SelectedMapIndex;
-//	public int NumberOfPlayers;
-//	public int NumberOfCharactersPerPlayer;
 	public bool IsMuted;
 	public string PlayerName1;
 	public string PlayerName2;
@@ -75,5 +70,5 @@ public static class SettingType
 	public static string NumberOfCharactersPerPlayer => "NumberOfCharactersPerPlayer";
 	public static string AreBansEnabled => "AreBansEnabled";
 	public static string BansNumber => "BansNumber";
-
+	public static string GameType => "GameType";
 }

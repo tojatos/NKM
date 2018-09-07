@@ -1,16 +1,32 @@
-﻿using JetBrains.Annotations;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Managers
 {
 	public class MainMenu : MonoBehaviour
 	{
-		[UsedImplicitly]
-		public void PlayButtonClick() => SceneManager.LoadScene(Scenes.PreGameOptions);
-		[UsedImplicitly]
-		public void OptionsButtonClick() => Options.Instance.Show();
-		[UsedImplicitly]
-		public void ExitButtonClick() => Application.Quit();
+		public Button SingleplayerButton;
+		public Button MultiplayerButton;
+		public Button OptionsButton;
+		public Button ExitButton;
+		private void Awake()
+		{
+			SingleplayerButton.onClick.AddListener(()=>
+			{
+				SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 0);
+				SceneManager.LoadScene(Scenes.PreGameOptions);
+			});
+			MultiplayerButton.onClick.AddListener(()=>
+			{
+				return; //TODO
+				SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 1);
+				SceneManager.LoadScene(Scenes.PreGameOptions);
+			});
+			OptionsButton.onClick.AddListener(Options.Instance.Show);
+			ExitButton.onClick.AddListener(Application.Quit);
+			
+			SingleplayerButton.Select();
+		}
 	}
 }
