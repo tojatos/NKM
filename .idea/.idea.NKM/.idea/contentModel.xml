@@ -103,6 +103,8 @@
           <e p="MusicManager.cs" t="Include" />
           <e p="Options.cs" t="Include" />
           <e p="PreGameOptions.cs" t="Include" />
+          <e p="ServerList.cs" t="Include" />
+          <e p="ShortcutManager.cs" t="Include" />
         </e>
         <e p="NKMID.cs" t="Include" />
         <e p="NKMObjects" t="Include">
