@@ -12,7 +12,7 @@ namespace Managers
 		{
 			AddServerButton.onClick.AddListener(()=> {
 				SaveServerInfo();
-				RefreshList();
+				RefreshList(); 
 			});
 		}
 
