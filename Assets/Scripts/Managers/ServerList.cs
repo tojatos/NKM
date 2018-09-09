@@ -24,8 +24,12 @@ namespace Managers
 				CreateServerInfo(AddServerName.text, AddServerIP.text);
 			});
 			JoinServerButton.onClick.AddListener(() => TryToJoinAServer(SelectedIP));
-			JoinServerButton.ToggleIf(SelectedIP != null);
 			RefreshList();
+		}
+
+		private void Update()
+		{
+			JoinServerButton.ToggleIf(SelectedIP == "");
 		}
 
 		private void TryToJoinAServer(string selectedIP)
