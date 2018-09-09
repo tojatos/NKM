@@ -63,6 +63,7 @@ namespace Managers
 		private GameOptions GetReplayGameOptions()
 		{
 			string replayFilePath = Directory.GetFiles(Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar)[0];
+			Directory.CreateDirectory(Path.GetDirectoryName(replayFilePath));	
 			string[] replayFileLines = File.ReadAllLines(replayFilePath);
 			var gameLog = new GameLog(replayFileLines);
 			List<GamePlayer> gamePlayers = gameLog.GetPlayerNames().Select(p => new GamePlayer

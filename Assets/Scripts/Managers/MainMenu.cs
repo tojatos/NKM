@@ -14,14 +14,13 @@ namespace Managers
 		{
 			SingleplayerButton.onClick.AddListener(()=>
 			{
-				SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 0);
+//				SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 0);
 				SceneManager.LoadScene(Scenes.PreGameOptions);
 			});
 			MultiplayerButton.onClick.AddListener(()=>
 			{
-				return; //TODO
-				SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 1);
-				SceneManager.LoadScene(Scenes.PreGameOptions);
+//				SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 1);
+				SceneManager.LoadScene(Scenes.ServerList);
 			});
 			OptionsButton.onClick.AddListener(Options.Instance.Show);
 			ExitButton.onClick.AddListener(Application.Quit);

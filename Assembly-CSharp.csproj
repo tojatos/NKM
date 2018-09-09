@@ -653,4 +653,7 @@
       <HintPath>/opt/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Scripts\UI\ServerList" />
+  </ItemGroup>
 </Project>

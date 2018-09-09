@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 222729956436014942}
   - component: {fileID: 114589473338205862}
   m_Layer: 5
-  m_Name: Server template
+  m_Name: Server Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

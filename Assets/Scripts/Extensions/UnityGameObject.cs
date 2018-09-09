@@ -45,7 +45,9 @@ namespace Extensions
 		{
 			gameObject.GetComponent<Image>().color = targetColor;
 		}
-		
+
+		public static void AddTrigger(this GameObject gameObject, EventTriggerType eventTriggerType, UnityAction onTrigger) =>
+			gameObject.AddTrigger(eventTriggerType, e => onTrigger());
 		public static void AddTrigger(this GameObject gameObject, EventTriggerType eventTriggerType, UnityAction<BaseEventData> onTrigger)
 		{
 			EventTrigger trigger = gameObject.GetComponent<EventTrigger>() ?? gameObject.AddComponent<EventTrigger>();
