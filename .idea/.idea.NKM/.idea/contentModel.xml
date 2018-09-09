@@ -68,6 +68,7 @@
         <e p="ColorToHighlight.cs" t="Include" />
         <e p="ColorToTileType.cs" t="Include" />
         <e p="Console.cs" t="Include" />
+        <e p="CreatableBackgroundCamera.cs" t="Include" />
         <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
         <e p="Damage.cs" t="Include" />
         <e p="Extensions" t="Include">
@@ -321,6 +322,7 @@
             <e p="HexImage.cs" t="Include" />
           </e>
           <e p="Replay.cs" t="Include" />
+          <e p="ServerList" t="Include" />
           <e p="UIManager.cs" t="Include" />
           <e p="Victory.cs" t="Include" />
         </e>
