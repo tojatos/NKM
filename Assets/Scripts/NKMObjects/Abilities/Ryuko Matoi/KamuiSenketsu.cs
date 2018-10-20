@@ -24,7 +24,7 @@ namespace NKMObjects.Abilities.Ryuko_Matoi
 			        ParentCharacter.Attack(this, ParentCharacter, new Damage(Damage, DamageType.True));
 			        var effect = ParentCharacter.Effects.SingleOrDefault(e => e.Name == Name && e.GetType() == typeof(StatModifier)) as StatModifier;
 			        if(effect==null) return;
-			        effect.Value += 2;
+			        effect.Modifier.Value += 2;
 		        };
 	        };
         }

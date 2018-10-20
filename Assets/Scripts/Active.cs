@@ -6,6 +6,7 @@ using Managers;
 using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using NKMObject = NKMObjects.Templates.NKMObject;
 using Object = UnityEngine.Object;
 /// <summary>
 /// Main utility class.

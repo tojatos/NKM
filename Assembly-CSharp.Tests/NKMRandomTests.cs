@@ -1,4 +1,3 @@
-using Hex;
 using Xunit;
 
 namespace Assembly_CSharp.Tests

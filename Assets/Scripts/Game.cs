@@ -14,8 +14,8 @@ public class Game
 	public GameOptions Options { get; private set; }
 
 	public List<GamePlayer> Players;
-	private List<Character> Characters => Players.SelectMany(p => p.Characters).ToList();
-	private List<Ability> Abilities => Characters.SelectMany(p => p.Abilities).ToList();
+	public List<Character> Characters => Players.SelectMany(p => p.Characters).ToList();
+	public List<Ability> Abilities => Characters.SelectMany(p => p.Abilities).ToList();
 	public readonly Active Active;
 	private UIManager _uiManager;
 	private Spawner _spawner;

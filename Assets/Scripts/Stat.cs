@@ -1,9 +1,10 @@
-﻿using NKMObjects.Templates;
+﻿using System.Collections.Generic;
 
 public class Stat
 {
 	private readonly StatType _type;
-	private readonly Character _parentCharacter;
+//	private readonly Character _parentCharacter;
+	public readonly List<Modifier> Modifiers = new List<Modifier>();
 	public readonly int BaseValue;
 
 	public delegate void OnStatChange();
@@ -16,7 +17,9 @@ public class Stat
 		get
 		{
 			int modifier = 0;
-			_parentCharacter.Effects.ForEach(e => modifier += e.Modifier(_type));
+//			_parentCharacter.Effects.ForEach(e => modifier += e.Modifier(_type));
+//			_effects.ForEach(e => modifier += e.Modifier(_type));
+			Modifiers.ForEach(m => modifier += modifier);
 			return RealValue + modifier;
 		}
 		set
@@ -29,9 +32,9 @@ public class Stat
 
 
 
-	public Stat(Character parentCharacter, StatType type, int baseValue)
+//	public Stat(Character parentCharacter, StatType type, int baseValue)
+	public Stat(StatType type, int baseValue)
 	{
-		_parentCharacter = parentCharacter;
 		_type = type;
 		BaseValue = baseValue;
 		Value = BaseValue;
@@ -42,6 +45,16 @@ public class Stat
 		return Value.ToString();
 	}
 }
+
+public class Modifier
+{
+	public int Value;
+	public Modifier(int value)
+	{
+		Value = value;
+	}
+}
+
 public enum StatType
 {
 	HealthPoints,

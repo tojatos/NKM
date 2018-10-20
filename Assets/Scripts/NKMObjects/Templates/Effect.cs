@@ -30,10 +30,10 @@ namespace NKMObjects.Templates
 		public virtual bool IsCC => false;
 
 		public abstract string GetDescription();
-		public virtual int Modifier(StatType statType)
-		{
-			return 0;
-		}
+//		public virtual int Modifier(StatType statType)
+//		{
+//			return 0;
+//		}
 
 		public void RemoveFromParent()
 		{

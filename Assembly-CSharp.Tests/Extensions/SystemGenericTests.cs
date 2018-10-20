@@ -7,21 +7,23 @@ namespace Assembly_CSharp.Tests
 {
     public class SystemGenericsTests
     {
-        [Theory]
-        [InlineData(9, 10, 234, 3, 342, 234)]
-        [InlineData("random string", "", "\tanother", "Lorem", "Ipsum")]
-        [InlineData(null)] // empty list case
-        public void RandomElementTest(params object[] e)
-        {
-            if (e == null) e = new object[] { };
-            List<object> elements = e.ToList();
-            for (int i = 0; i < 100; i++)
-            {
-                object randomElement = elements.GetRandomNoLog();
-                if(elements.Count>0) Assert.Contains(randomElement, elements);
-                else Assert.Equal(null, randomElement);
-            }
-        }
+        //Removed due to System.Security exception
+        
+//        [Theory]
+//        [InlineData(9, 10, 234, 3, 342, 234)]
+//        [InlineData("random string", "", "\tanother", "Lorem", "Ipsum")]
+//        [InlineData(null)] // empty list case
+//        public void RandomElementTest(params object[] e)
+//        {
+//            if (e == null) e = new object[] { };
+//            List<object> elements = e.ToList();
+//            for (int i = 0; i < 100; i++)
+//            {
+//                object randomElement = elements.GetRandomNoLog();
+//                if(elements.Count>0) Assert.Contains(randomElement, elements);
+//                else Assert.Equal(null, randomElement);
+//            }
+//        }
 
         [Theory]
         [InlineData(2, 1)]

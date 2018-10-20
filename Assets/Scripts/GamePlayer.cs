@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NKMObjects;
 using NKMObjects.Templates;
 
 public class GamePlayer
@@ -16,7 +17,8 @@ public class GamePlayer
 		Characters.Add(character);
 	}
 
-	public void AddCharacter(string characterName) => AddCharacter(new Character(characterName));
+//	public void AddCharacter(string characterName) => AddCharacter(new Character(characterName));
+	public void AddCharacter(string characterName) => AddCharacter(CharacterFactory.Create(characterName));
 
 	private void AddCharacters(List<Character> characters)
 	{
@@ -27,7 +29,8 @@ public class GamePlayer
 	public void AddCharacters(IEnumerable<string> characterNames)
 	{
 		List<Character> characters = new List<Character>();
-		characterNames.ToList().ForEach(n => characters.Add(new Character(n)));
+//		characterNames.ToList().ForEach(n => characters.Add(new Character(n)));
+		characterNames.ToList().ForEach(n => characters.Add(CharacterFactory.Create(n)));
 		AddCharacters(characters);
 
 	}

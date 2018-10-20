@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -34,7 +33,7 @@ namespace Managers
 
 		private void TryToJoinAServer(string selectedIP)
 		{
-			Debug.Log("Not implemented");//TODO
+			Debug.Log("Not implemented - " + selectedIP);//TODO
 		}
 
 		private void RefreshList()
@@ -71,6 +70,7 @@ namespace Managers
 		{
 			string serverListFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Settings" +
 			                            Path.DirectorySeparatorChar + "server_list.txt";
+			// ReSharper disable once AssignNullToNotNullAttribute
 			Directory.CreateDirectory(Path.GetDirectoryName(serverListFilePath));	
 			File.AppendAllLines(serverListFilePath, new []{ip, serverName, ""});
 		}

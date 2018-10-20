@@ -11,6 +11,8 @@ namespace Extensions
 {
 	public static class NKMObject
 	{
+//		public static Character CharacterOnCell(this HexCell cell) =>
+//			GameStarter.Instance.Game.Characters.SingleOrDefault(c => c.ParentCell == cell);
 		public static List<HexCell> WhereOnlyEnemiesOf(this List<HexCell> cells, GamePlayer player) => 
 			cells.FindAll(c => c.CharacterOnCell!= null && c.CharacterOnCell.Owner != player);
 		public static List<HexCell> WhereOnlyFriendsOf(this List<HexCell> cells, GamePlayer player) =>

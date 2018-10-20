@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Extensions;
 using Hex;
+using NKMObjects;
 using NKMObjects.Templates;
 using UI;
 using UnityEngine;
@@ -41,7 +42,7 @@ namespace Managers
 			List<GamePlayer> testingGamePlayers = charactersGrouped.Select((t, i) => new GamePlayer
 				{
 					Name = playerNames[i % (playerNames.Length)],
-					Characters = t.Select(x => new Character(x.Trim())).ToList()
+					Characters = t.Select(x => x.Trim()).Select(CharacterFactory.Create).ToList()
 				})
 				.ToList();
 			var gameOptions = new GameOptions
@@ -63,13 +64,14 @@ namespace Managers
 		private GameOptions GetReplayGameOptions()
 		{
 			string replayFilePath = Directory.GetFiles(Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar)[0];
+			// ReSharper disable once AssignNullToNotNullAttribute
 			Directory.CreateDirectory(Path.GetDirectoryName(replayFilePath));	
 			string[] replayFileLines = File.ReadAllLines(replayFilePath);
 			var gameLog = new GameLog(replayFileLines);
 			List<GamePlayer> gamePlayers = gameLog.GetPlayerNames().Select(p => new GamePlayer
 			{
 				Name = p,
-				Characters = gameLog.GetCharacterNames(p).Select(characterName => new Character(characterName)).ToList()
+				Characters = gameLog.GetCharacterNames(p).Select(CharacterFactory.Create).ToList()
 
 			}).ToList();
 			var gameOptions =  new GameOptions
@@ -143,7 +145,7 @@ namespace Managers
 					break;
 				case 1:
 					List<Character> charactersToPick =
-						new List<Character>(GameData.Conn.GetCharacterNames().Select(c => new Character(c)));//AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
+						new List<Character>(GameData.Conn.GetCharacterNames().Select(CharacterFactory.Create));//AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
 					if(S.GetDropdownSetting(SettingType.AreBansEnabled)==1) await Bans(players, charactersToPick);
 					await DraftPick(players, charactersToPick);
 					break;
@@ -247,7 +249,7 @@ namespace Managers
 //			players.ForEach(p => Debug.Log(p.Name));
 			foreach (GamePlayer p in players)
 			{
-                List<NKMObject> allCharacters = new List<NKMObject>(GameData.Conn.GetCharacterNames().Select(c => new Character(c, -1)));
+                List<NKMObject> allCharacters = new List<NKMObject>(GameData.Conn.GetCharacterNames().Select(CharacterFactory.CreateWithoutId));
                 SpriteSelect.Instance.Open(allCharacters, () => FinishSelectingCharacters(p), $"Wybór postaci - {p.Name}", "Zakończ wybieranie postaci");
                 Func<bool> hasSelectedCharecters = () => p.HasSelectedCharacters;
                 await hasSelectedCharecters.WaitToBeTrue();

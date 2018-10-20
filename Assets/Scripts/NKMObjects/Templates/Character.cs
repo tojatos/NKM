@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 using NKMObjects.Effects;
 using UI.CharacterUI;
 using UnityEngine;
-using Empty = NKMObjects.Abilities.Empty;
 using Object = UnityEngine.Object;
 
 namespace NKMObjects.Templates
@@ -26,11 +25,13 @@ namespace NKMObjects.Templates
 		public readonly Stat MagicalDefense;
 		public readonly Stat Shield;
 
+//		public readonly CharacterProperties Properties;
+
 		public int DeathTimer { get; private set; }
 
 		public bool CanAttackAllies { get; set; }
 		public List<Ability> Abilities { get; private set; }
-		public List<Effect> Effects { get; }
+		public List<Effect> Effects { get; } = new List<Effect>();
 		public string Description { get; }
 		public string Quote { get; }
 		public string Author { get; }
@@ -146,53 +147,39 @@ namespace NKMObjects.Templates
 
 		#endregion
 
-		public Character(string name) : this(name, NKMID.GetNext("Character")) { }
-		public Character(string name, int id)
+		internal Character (string name, int id, CharacterProperties properties)
 		{
-			#region Property definitions
-
-			//Define basic properties
 			ID = id;
-
-			IsOnMap = false;
-			TookActionInPhaseBefore = true;
-			HasUsedBasicAttackInPhaseBefore = false;
-			HasUsedBasicMoveInPhaseBefore = false;
-			HasUsedNormalAbilityInPhaseBefore = false;
-			HasUsedUltimatumAbilityInPhaseBefore = false;
-			CanAttackAllies = false;
-			Effects = new List<Effect>();
-
-			BasicAttack = DefaultBasicAttack;
-			BasicMove = DefaultBasicMove;
-			GetBasicAttackCells = DefaultGetBasicAttackCells;
-			GetBasicMoveCells = DefaultGetBasicMoveCells;
-
-			//Define database properties
-			SqliteRow characterData = GameData.Conn.GetCharacterData(name);
-
 			Name = name;
-			AttackPoints = new Stat(this, StatType.AttackPoints, int.Parse(characterData.GetValue("AttackPoints")));
-			HealthPoints = new Stat(this, StatType.HealthPoints, int.Parse(characterData.GetValue("HealthPoints")));
-			BasicAttackRange = new Stat(this, StatType.BasicAttackRange,
-				int.Parse(characterData.GetValue("BasicAttackRange")));
-			Speed = new Stat(this, StatType.Speed, int.Parse(characterData.GetValue("Speed")));
-			PhysicalDefense = new Stat(this, StatType.PhysicalDefense,
-				int.Parse(characterData.GetValue("PhysicalDefense")));
-			MagicalDefense = new Stat(this, StatType.MagicalDefense,
-				int.Parse(characterData.GetValue("MagicalDefense")));
-			Shield = new Stat(this, StatType.Shield, 0);
+			
+            IsOnMap                               =  false;
+            TookActionInPhaseBefore               =  true;
+            HasUsedBasicAttackInPhaseBefore       =  false;
+            HasUsedBasicMoveInPhaseBefore         =  false;
+            HasUsedNormalAbilityInPhaseBefore     =  false;
+            HasUsedUltimatumAbilityInPhaseBefore  =  false;
+            CanAttackAllies                       =  false;
 
-			Type = characterData.GetValue("FightType").ToFightType();
+            BasicAttack          =  DefaultBasicAttack;
+            BasicMove            =  DefaultBasicMove;
+            GetBasicAttackCells  =  DefaultGetBasicAttackCells;
+            GetBasicMoveCells    =  DefaultGetBasicMoveCells;
 
-			Description = characterData.GetValue("Description");
-			Quote = characterData.GetValue("Quote");
-			Author = characterData.GetValue("Author.Name");
+            AttackPoints      =  properties.AttackPoints;
+            HealthPoints      =  properties.HealthPoints;
+            BasicAttackRange  =  properties.BasicAttackRange;
+            Speed             =  properties.Speed;
+            PhysicalDefense   =  properties.PhysicalDefense;
+            MagicalDefense    =  properties.MagicalDefense;
+            Shield            =  properties.Shield;
+            Type              =  properties.Type;
+            Description       =  properties.Description;
+            Quote             =  properties.Quote;
+            Author            =  properties.Author;
 
-			#endregion
-
+			Abilities = new AbilityFactory(this).CreateAndInitiateAbilitiesFromDatabase();
+			
 			AddTriggersToEvents();
-			if(id != -1) CreateAndInitiateAbilities(name);
 			Active.Turn.TurnFinished += character =>
 			{
 				if (character != this) return;
@@ -229,14 +216,6 @@ namespace NKMObjects.Templates
 					: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
 		}
 
-		private void CreateAndInitiateAbilities(string name)
-		{
-			IEnumerable<string> abilityClassNames = GameData.Conn.GetAbilityClassNames(name);
-			var abilityNamespaceName = "Abilities." + name.Replace(' ', '_');
-			List<Ability> abilities =
-				Spawner.Create(abilityNamespaceName, abilityClassNames).ToList().ConvertAll(x => x as Ability);
-			InitiateAbilities(abilities);
-		}
 
 		public void MoveTo(HexCell targetCell)
 		{
@@ -524,29 +503,6 @@ namespace NKMObjects.Templates
 			Active.RemoveMoveCells();
 		}
 
-		private void InitiateAbilities(List<Ability> abilities)
-		{
-			Abilities = new List<Ability>();
-			foreach (AbilityType type in Enum.GetValues(typeof(AbilityType)))
-			{
-				var abilitiesOfType = abilities.Count(a => a.Type == type);
-				switch (abilitiesOfType)
-				{
-					case 0:
-						Abilities.Add(new Empty(type));
-						break;
-					case 1:
-						Abilities.Add(abilities.First(a=>a.Type == type));
-						break;
-					default:
-						Abilities.AddRange(abilities.FindAll(a=>a.Type==type));
-						break;
-				}
-			}
-
-			Abilities.ForEach(a => a.ParentCharacter = this);
-//			Abilities.ForEach(a => a.Awake());
-		}
 
 		public void MakeActionBasicAttack([NotNull] Character target)
 		{
@@ -578,4 +534,20 @@ namespace NKMObjects.Templates
 //		True
 //	}
 
+	public class CharacterProperties
+	{
+        public Stat HealthPoints;
+		public Stat AttackPoints;
+		public Stat BasicAttackRange;
+		public Stat Speed;
+		public Stat PhysicalDefense;
+		public Stat MagicalDefense;
+		public Stat Shield;
+		
+		public FightType Type;
+		
+		public string Description;
+		public string Quote;
+		public string Author;
+	}
 }
