@@ -147,7 +147,7 @@ namespace NKMObjects.Templates
 
 		#endregion
 
-		internal Character (string name, int id, CharacterProperties properties)
+		internal Character (string name, int id, CharacterProperties properties, List<Ability> abilities)
 		{
 			ID = id;
 			Name = name;
@@ -177,7 +177,8 @@ namespace NKMObjects.Templates
             Quote             =  properties.Quote;
             Author            =  properties.Author;
 
-			Abilities = new AbilityFactory(this).CreateAndInitiateAbilitiesFromDatabase();
+//			Abilities = new AbilityFactory(this).CreateAndInitiateAbilitiesFromDatabase();
+			Abilities = abilities;
 			
 			AddTriggersToEvents();
 			Active.Turn.TurnFinished += character =>

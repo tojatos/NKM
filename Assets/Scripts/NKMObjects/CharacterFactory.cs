@@ -1,4 +1,5 @@
-﻿using Extensions;
+﻿using System.Collections.Generic;
+using Extensions;
 using NKMObjects.Templates;
 
 namespace NKMObjects
@@ -12,7 +13,9 @@ namespace NKMObjects
 		{
 			SqliteRow characterData = GameData.Conn.GetCharacterData(name);
 			CharacterProperties properties = GetCharacterProperties(characterData);
-			return new Character(name, id, properties);
+			List<Ability> abilities = AbilityFactory.CreateAndInitiateAbilitiesFromDatabase(name);
+			
+			return new Character(name, id, properties, abilities);
 		}
 
 		private static CharacterProperties GetCharacterProperties(SqliteRow characterData)
@@ -47,9 +50,9 @@ namespace NKMObjects
 			return CreateCharacterFromDatabase(name, -1);
 		}
 
-	    public static Character CreateNonGame(string name, CharacterProperties properties)
+	    public static Character CreateNonGame(string name, CharacterProperties properties, List<Ability> abilities)
 	    {
-			return new Character(name, -1, properties);
+			return new Character(name, -1, properties, abilities);
 	    }
         
     }

@@ -50,7 +50,8 @@ namespace NKMObjects.Templates
 			}
 		}
 
-		public Character ParentCharacter { get; set; }
+//		public Character ParentCharacter { get; set; }
+		public Character ParentCharacter => Game.Characters.FirstOrDefault(c => c.Abilities.Contains(this));
 
 		public bool CanBeUsed => Validator.AbilityCanBeUsed;
 

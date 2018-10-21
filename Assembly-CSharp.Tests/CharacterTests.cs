@@ -1,4 +1,5 @@
-﻿using NKMObjects;
+﻿using System.Collections.Generic;
+using NKMObjects;
 using NKMObjects.Templates;
 using Xunit;
 
@@ -21,7 +22,8 @@ namespace Assembly_CSharp.Tests
                 Shield            =  new  Stat(StatType.Shield,            0),
                 Type              =  FightType.Melee,                                   
             };
-            Character character = CharacterFactory.CreateNonGame("My character", properties);
+            List<Ability> abilities = new List<Ability>();
+            Character character = CharacterFactory.CreateNonGame("My character", properties, abilities);
             Assert.Equal(true, character.IsAlive);
         }
         

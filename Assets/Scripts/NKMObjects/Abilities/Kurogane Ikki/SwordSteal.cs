@@ -19,7 +19,7 @@ namespace NKMObjects.Abilities.Kurogane_Ikki
                     if(!(ability is IClickable)) return; 
                     var a = Activator.CreateInstance(ability.GetType()) as Ability;
                     if(a==null) return;
-                    a.ParentCharacter = ParentCharacter;
+//                    a.ParentCharacter = ParentCharacter;
                     a.Awake();
                     a.AfterUseFinish += Finish;
                     
