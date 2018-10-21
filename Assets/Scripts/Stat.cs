@@ -10,7 +10,7 @@ public class Stat
 	public delegate void OnStatChange();
 	public event OnStatChange StatChanged;
 
-	public int Bonus => Value - BaseValue;
+//	public int Bonus => Value - BaseValue;
 	public int RealValue { get; private set; }
 	public int Value
 	{

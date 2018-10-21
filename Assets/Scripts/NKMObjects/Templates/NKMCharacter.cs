@@ -101,6 +101,7 @@ namespace NKMObjects.Templates
 		{
 			base.RemoveIfDead();
 
+			if(IsAlive) return;
 			Console.Log($"{this.FormattedFirstName()} umiera!");
 			RemoveFromMap();
 			DeathTimer = 0;
