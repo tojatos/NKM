@@ -1,9 +1,13 @@
 ﻿using System;
+using Managers;
 
 namespace NKMObjects.Templates
 {
 	public abstract class Effect : NKMObject
 	{
+		private static Game Game => GameStarter.Instance.Game;
+		protected static Active Active => Game.Active;
+		protected static Console Console => Console.Instance;
 		protected Effect(int cooldown, Character parentCharacter, string name = null)
 		{
 			CurrentCooldown = cooldown >= 0 ? cooldown : int.MaxValue; //effect is infinite

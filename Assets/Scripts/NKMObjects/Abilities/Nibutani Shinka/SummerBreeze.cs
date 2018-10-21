@@ -30,13 +30,13 @@ Czas odnowienia: {Cooldown}";
         public void Click() => Active.Prepare(this, GetTargetsInRange());
         public void Use(List<HexCell> cells)
         {
-            Character target = cells[0].CharacterOnCell;
+            NKMCharacter target = cells[0].CharacterOnCell;
             HexDirection direction = ParentCharacter.ParentCell.GetDirection(target.ParentCell);
             Knockback(target, direction);
             Finish();
         }
 
-        private void Knockback(Character character, HexDirection direction)
+        private void Knockback(NKMCharacter character, HexDirection direction)
         {
             List<HexCell> line = character.ParentCell.GetLine(direction, KnockbackAmount);
             HexCell lastCell = character.ParentCell;

@@ -25,7 +25,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
 	    public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    private void Use(Character character)
+	    private void Use(NKMCharacter character)
 		{
 			character.Effects.Add(new Effects.BlackBlood(ParentCharacter, character, EffectCooldown, BlackBlood.Damage, BlackBlood.Range));
 			Finish();

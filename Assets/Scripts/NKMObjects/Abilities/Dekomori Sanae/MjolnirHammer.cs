@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 		private const int Damage = 18;
 		private const int Range = 7;
 		private bool _wasUsedOnceThisTurn;
-		private Character _firstAbilityTarget;
+		private NKMCharacter _firstAbilityTarget;
 
 		public MjolnirHammer() : base(AbilityType.Normal, "Mjolnir Hammer", 4)
 		{
@@ -39,7 +39,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			else Active.Prepare(this, GetTargetsInRange());
 		}
 		
-		private void Use(Character targetCharacter)
+		private void Use(NKMCharacter targetCharacter)
 		{
 			int damageToDeal = Damage;
 			if (_firstAbilityTarget == targetCharacter)

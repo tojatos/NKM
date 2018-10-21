@@ -4,7 +4,7 @@ namespace NKMObjects.Effects
 {
 	public class Ground : Effect
 	{
-		public Ground(int cooldown, Character parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
+		public Ground(int cooldown, NKMCharacter parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
 		{
 			Name = name?? "Ground";
 			Type = EffectType.Negative;

@@ -42,7 +42,7 @@ Czas odnowienia: {Cooldown + 1} z atakiem, {Cooldown} bez ataku.";
 			if(cellRange.Count > 0) Active.Prepare(this, cellRange);
 			else Finish();
 		}
-		private void AfterDashAttack(Character targetCharacter)
+		private void AfterDashAttack(NKMCharacter targetCharacter)
 		{
 			int modifier = 1;
 			if (ParentCharacter.ParentCell.GetNeighbors(AbilityCriticalHitRange).Contains(targetCharacter.ParentCell)) modifier = AbilityCriticalHitModifier;

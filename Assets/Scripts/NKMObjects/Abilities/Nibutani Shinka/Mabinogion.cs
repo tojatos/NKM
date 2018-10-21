@@ -21,7 +21,7 @@ namespace NKMObjects.Abilities.Nibutani_Shinka
             };
         }
 
-        private void TryAddingShield(Character character)
+        private void TryAddingShield(NKMCharacter character)
         {
             if(character.Shield.Value >= ShieldAmount) return;
             character.Shield.Value = ShieldAmount;
@@ -44,7 +44,7 @@ Dodatkowo, daje wszystkim sojusznikom w zasięgu {EnchantedSpeedAmount} szybkoś
         public void Run()
         {
             GetTargetsInRange().GetCharacters().ForEach(c => ParentCharacter.Heal(c, HealAmount));
-            List<Character> friendsInRange = GetTargetsInRange().WhereOnlyFriendsOf(Owner).GetCharacters();
+            List<NKMCharacter> friendsInRange = GetTargetsInRange().WhereOnlyFriendsOf(Owner).GetCharacters();
             friendsInRange.ForEach(TryAddingShield);
             if(IsEnchanted) friendsInRange.ForEach(f =>
             {

@@ -18,7 +18,7 @@ namespace UI.CharacterUI
 		{
 			if (Game.Active.CharacterOnMap == null) return;
 
-			Character character = Game.Active.CharacterOnMap;
+			NKMCharacter character = Game.Active.CharacterOnMap;
 			RemoveButtons();
 			character.Effects.ForEach(effect => CreateEffectButton(character, effect));
 		}
@@ -34,7 +34,7 @@ namespace UI.CharacterUI
 			Buttons.ForEach(Destroy);
 			Buttons.Clear();
 		}
-		private void CreateEffectButton(Character character, Effect effect)
+		private void CreateEffectButton(NKMCharacter character, Effect effect)
 		{
 			GameObject button = Instantiate(EffectButtonPrefab, transform);
 

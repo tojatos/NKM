@@ -29,7 +29,7 @@ ogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną."
 		}
 		public void Use(List<HexCell> cells)
 		{
-			List<Character> characters = cells.GetCharacters();
+			List<NKMCharacter> characters = cells.GetCharacters();
 			characters.ForEach(c =>
 			{
 				c.Effects.Add(new Stun(1, c, Name)); 

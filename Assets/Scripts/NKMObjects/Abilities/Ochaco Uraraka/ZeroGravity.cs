@@ -23,7 +23,7 @@ namespace NKMObjects.Abilities.Ochaco_Uraraka
             };
         }
 
-        public static void AddEffect(Character character) => character.Effects.Add(new Flying(FlyingDuration, character, "Zero Gravity"));
+        public static void AddEffect(NKMCharacter character) => character.Effects.Add(new Flying(FlyingDuration, character, "Zero Gravity"));
         public override string GetDescription() =>
 $@"{ParentCharacter.FirstName()} może atakować sojuszników, ale nie wyrządza im szkód.
 Postacie zaatakowane przez nią potrafią latać przez {FlyingDuration} fazy.";

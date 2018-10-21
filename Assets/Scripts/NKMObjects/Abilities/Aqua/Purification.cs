@@ -24,7 +24,7 @@ Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 		public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
-		private void Use(Character character)
+		private void Use(NKMCharacter character)
 		{
 			character.Effects.Where(e => e.Type == EffectType.Negative).ToList().ForEach(e => e.RemoveFromParent());
 			Finish();

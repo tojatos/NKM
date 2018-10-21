@@ -21,7 +21,7 @@ namespace NKMObjects.Abilities.Kirito
         public override List<HexCell> GetTargetsInRange()
 	    {
 		    List<HexCell> targetCandidates =  GetRangeCells().WhereOnlyFriendsOf(Owner);
-            List<Character> enemiesOnMap = HexMapDrawer.Instance.Cells.WhereOnlyEnemiesOf(Owner).GetCharacters();
+            List<NKMCharacter> enemiesOnMap = HexMapDrawer.Instance.Cells.WhereOnlyEnemiesOf(Owner).GetCharacters();
 	        List<HexCell> enemyAttackRanges = enemiesOnMap.SelectMany(enemy => enemy.GetBasicAttackCells()).ToList();
 		    return enemyAttackRanges.Contains(ParentCharacter.ParentCell) ? targetCandidates : targetCandidates.Intersect(enemyAttackRanges).ToList();
 	    }
@@ -36,7 +36,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
-	    private void Use(Character character)
+	    private void Use(NKMCharacter character)
         {
 	        Swap(ParentCharacter, character);
 	        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
@@ -74,7 +74,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 	        Finish();
         }
         
-	    private static void Swap(Character firstCharacterToSwap, Character secondCharacterToSwap)
+	    private static void Swap(NKMCharacter firstCharacterToSwap, NKMCharacter secondCharacterToSwap)
 	    {
 		    HexCell c1 = firstCharacterToSwap.ParentCell;
 		    HexCell c2 = secondCharacterToSwap.ParentCell;

@@ -37,7 +37,7 @@ Następna aktywacja umiejętności po przekroczeniu <color=red>{_lastTreshold - 
 
 	    private void StunEnemiesInRange()
 	    {
-		    List<Character> enemiesInRange = GetRangeCells().GetCharacters().FindAll(c => c.IsEnemyFor(Owner));
+		    List<NKMCharacter> enemiesInRange = GetRangeCells().GetCharacters().FindAll(c => c.IsEnemyFor(Owner));
 		    enemiesInRange.ForEach(e => e.Effects.Add(new Stun(EffectDuration, e, Name)));
 	    }
 

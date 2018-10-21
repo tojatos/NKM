@@ -28,7 +28,7 @@ Zasięg liniowy: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Use(List<HexCell> cells)
         {
-            Character target = cells[0].CharacterOnCell;
+            NKMCharacter target = cells[0].CharacterOnCell;
 			ComboStar passiveAbility = ParentCharacter.Abilities.OfType<ComboStar>().SingleOrDefault();
             if (passiveAbility == null)
             {

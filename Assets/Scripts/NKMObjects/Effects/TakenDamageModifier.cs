@@ -7,7 +7,7 @@ namespace NKMObjects.Effects
 	{
 		public int Value;
 		//Increase taken damage by value
-		public TakenDamageModifier(int cooldown, int value, Character parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
+		public TakenDamageModifier(int cooldown, int value, NKMCharacter parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
 		{
 			Name = name ?? "Taken Damage Modifier";
 			Value = value;

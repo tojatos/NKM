@@ -17,8 +17,8 @@ namespace Hex
 		
 		public HexCoordinates Coordinates;
 
-		private Character _characterOnCell;
-		public Character CharacterOnCell
+		private NKMCharacter _characterOnCell;
+		public NKMCharacter CharacterOnCell
 		{
 			get { return _characterOnCell; }
 			set
@@ -236,7 +236,7 @@ namespace Hex
 			return areaCells;
 
 		}
-		public delegate void CharacterDelegate(Character character);
+		public delegate void CharacterDelegate(NKMCharacter character);
 
 		public event CharacterDelegate OnEnter;
 		public event CharacterDelegate OnLeave;

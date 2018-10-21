@@ -28,7 +28,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
-		private void Use(Character targetCharacter)
+		private void Use(NKMCharacter targetCharacter)
 		{
 			Active.PlayAudio(Name);
 			HexCell targetCell = targetCharacter.ParentCell;

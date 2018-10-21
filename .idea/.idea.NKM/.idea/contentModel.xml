@@ -302,6 +302,7 @@
             <e p="IEnchantable.cs" t="Include" />
             <e p="IRunnable.cs" t="Include" />
             <e p="IUseable.cs" t="Include" />
+            <e p="NKMCharacter.cs" t="Include" />
             <e p="NKMObject.cs" t="Include" />
           </e>
         </e>

@@ -6,9 +6,9 @@ namespace NKMObjects.HexCellEffects
 {
 	public class Conflagration : HexCellEffect
 	{
-		private readonly Character _characterThatOwnsEffect;
+		private readonly NKMCharacter _characterThatOwnsEffect;
 
-		public Conflagration(int cooldown, HexCell parentCell, Character characterThatOwnsEffect) : base(cooldown, parentCell, "Conflagration")
+		public Conflagration(int cooldown, HexCell parentCell, NKMCharacter characterThatOwnsEffect) : base(cooldown, parentCell, "Conflagration")
 		{
 			_characterThatOwnsEffect = characterThatOwnsEffect;
 			parentCell.AddEffectHighlight(Name);

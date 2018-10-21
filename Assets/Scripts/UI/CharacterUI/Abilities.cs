@@ -25,7 +25,7 @@ namespace UI.CharacterUI
 		{
 			if (Game.Active.CharacterOnMap == null) return;
 
-			Character character = Game.Active.CharacterOnMap;
+			NKMCharacter character = Game.Active.CharacterOnMap;
 			RemoveButtons();
 
 			//Create an ability button for each character ability
@@ -63,7 +63,7 @@ namespace UI.CharacterUI
 				Sprite abilitySprite = Stuff.Sprites.Abilities.SingleOrDefault(s => s.name == ability.Name) ?? Stuff.Sprites.Abilities.Single(s => s.name == "Default Ability Sprite");
 				button.GetComponent<Image>().sprite = abilitySprite;
 		}
-		private void CreateAbilityButton(Character character, Ability ability)
+		private void CreateAbilityButton(NKMCharacter character, Ability ability)
 		{
 			GameObject button = Instantiate(AbilityButtonPrefab, transform);
 			button.name = character.Abilities.IndexOf(ability).ToString(); //we do that to be able to UpdateButtonData
@@ -97,7 +97,7 @@ namespace UI.CharacterUI
 		{
 			if(Game?.Active.CharacterOnMap == null) return;
 
-			Character character = Game.Active.CharacterOnMap;
+			NKMCharacter character = Game.Active.CharacterOnMap;
 			Buttons.ForEach(button =>
 			{
 				Ability ability = character.Abilities[int.Parse(button.name)];

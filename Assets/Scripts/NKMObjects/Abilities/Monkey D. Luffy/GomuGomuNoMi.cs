@@ -66,20 +66,20 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
             if (cell.Type == HexTileType.Wall) Rocket(cell);
             else
             {
-                Character enemy = cell.CharacterOnCell;
+                NKMCharacter enemy = cell.CharacterOnCell;
                 if (ParentCharacter.ParentCell.GetNeighbors(BazookaRange).Contains(cell)) Bazooka(enemy);
                 else Pistol(enemy);
             }
         }
 
-        private void Pistol(Character enemy)
+        private void Pistol(NKMCharacter enemy)
         {
             ParentCharacter.Attack(this, enemy,new Damage(IsEnchanted ? JetPistolDamage : PistolDamage, DamageType.Physical));
             Active.PlayAudio("pistol");
             Finish();
         }
 
-        private void Bazooka(Character enemy)
+        private void Bazooka(NKMCharacter enemy)
         {
             ParentCharacter.Attack(this, enemy, new Damage(IsEnchanted?JetBazookaDamage:BazookaDamage, DamageType.Physical));
             if(!enemy.IsAlive) return;
@@ -98,7 +98,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
             Finish();
         }
 
-        private static void ThrowCharacter(Character character, HexDirection direction, int distance)
+        private static void ThrowCharacter(NKMCharacter character, HexDirection direction, int distance)
         {
             List<HexCell> line = character.ParentCell.GetLine(direction, distance);
             line.Reverse();

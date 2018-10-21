@@ -8,8 +8,8 @@ namespace NKMObjects.Abilities.Bezimienni
 {
     public class Castling : Ability, IClickable, IUseable
     {
-	    private Character _firstCharacterToSwap;
-	    private Character _secondCharacterToSwap;
+	    private NKMCharacter _firstCharacterToSwap;
+	    private NKMCharacter _secondCharacterToSwap;
         public Castling() : base(AbilityType.Ultimatum, "Castling", 6)
         {
 	        OnAwake += () => Validator.ToCheck.Add(() => GetRangeCells().GetCharacters().Count >= 2);
@@ -28,7 +28,7 @@ namespace NKMObjects.Abilities.Bezimienni
 		    Active.Prepare(this, cellRange);
 	    }
 
-	    private void Use(Character character)
+	    private void Use(NKMCharacter character)
 		{
 			if (_firstCharacterToSwap == null)
 			{

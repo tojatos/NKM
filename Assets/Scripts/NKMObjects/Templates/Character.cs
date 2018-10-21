@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Animations;
 using Extensions;
 using Hex;
-using JetBrains.Annotations;
 using NKMObjects.Effects;
-using UI.CharacterUI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -14,6 +11,7 @@ namespace NKMObjects.Templates
 {
 	public class Character : NKMObject
 	{
+		
 		#region Properties
 
 		public readonly int ID;
@@ -25,30 +23,43 @@ namespace NKMObjects.Templates
 		public readonly Stat MagicalDefense;
 		public readonly Stat Shield;
 
-//		public readonly CharacterProperties Properties;
-
-		public int DeathTimer { get; private set; }
-
-		public bool CanAttackAllies { get; set; }
 		public List<Ability> Abilities { get; private set; }
 		public List<Effect> Effects { get; } = new List<Effect>();
 		public string Description { get; }
 		public string Quote { get; }
 		public string Author { get; }
 		public readonly FightType Type;
-		public GameObject CharacterObject { get; set; }
+
+		public bool CanAttackAllies { get; set; }
 		public HexCell ParentCell { get; set; }
 		public bool IsOnMap { get; set; }
+		
+		public bool IsAlive => HealthPoints.Value > 0;
+		public Action<NKMCharacter> BasicAttack { protected get; set; }
+		public Action<List<HexCell>> BasicMove { protected get; set; }
+		public Func<List<HexCell>> GetBasicMoveCells { get; }
+		public Func<List<HexCell>> GetBasicAttackCells;
 
 		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }
 		public bool HasUsedBasicAttackInPhaseBefore { private get; set; }
 		public bool HasUsedNormalAbilityInPhaseBefore { get; set; }
 		public bool HasUsedUltimatumAbilityInPhaseBefore { private get; set; }
+		
+		
+        public  bool  IsStunned                      =>  Effects.ContainsType<Stun>();
+        public  bool  IsGrounded                     =>  Effects.ContainsType<Ground>();
+        public  bool  IsSnared                       =>  Effects.ContainsType<Snare>();
+        public  bool  IsFlying                       =>  Effects.ContainsType<Flying>();
+        public  bool  HasBasicAttackInabilityEffect  =>  Effects.ContainsType<Disarm>();
 
-		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore ||
+		protected bool CanMove => !IsSnared && !IsGrounded;
+
+		public bool IsLeaving { get; set; }
+
+		protected bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore ||
 		                                HasFreeMoveUntilEndOfTheTurn;
 
-		private bool CanUseBasicAttack =>
+		protected bool CanUseBasicAttack =>
 			!HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore &&
 			!HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect || HasFreeAttackUntilEndOfTheTurn;
 
@@ -64,35 +75,6 @@ namespace NKMObjects.Templates
 		public bool HasFreeUltimatumAbilityUseUntilEndOfTheTurn { get; set; }
 		public bool HasFreeMoveUntilEndOfTheTurn { get; set; }
 		public bool TookActionInPhaseBefore { get; set; }
-		public bool IsAlive => HealthPoints.Value > 0;
-		public bool IsEnemyFor(GamePlayer player) => Owner != player;
-		public bool IsEnemyFor(Character character) => IsEnemyFor(character.Owner);
-
-		public bool CanBasicAttack(Character targetCharacter) =>
-			(IsEnemyFor(targetCharacter) || CanAttackAllies) &&
-			GetBasicAttackCells().Contains(targetCharacter.ParentCell);
-
-		public bool IsStunned => Effects.ContainsType<Stun>();
-		public bool IsGrounded => Effects.ContainsType<Ground>();
-		public bool IsSnared => Effects.ContainsType<Snare>();
-		public bool IsFlying => Effects.ContainsType<Flying>();
-		private bool CanMove => !IsSnared && !IsGrounded; //Effects.All(e => e.GetType() != typeof(Snare));
-		private bool HasBasicAttackInabilityEffect => Effects.Any(e => e.GetType() == typeof(Disarm));
-
-		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive ||
-		                               Active.Turn.CharacterThatTookActionInTurn != null &&
-		                               Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
-
-		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore ||
-		                         Active.Turn.CharacterThatTookActionInTurn != null);
-
-		public bool IsLeaving { get; set; }
-
-		public Action<Character> BasicAttack { private get; set; }
-		public Action<List<HexCell>> BasicMove { private get; set; }
-		public Func<List<HexCell>> GetBasicMoveCells { get; }
-		public Func<List<HexCell>> GetBasicAttackCells;
-
 		#endregion
 
 		#region Delegates
@@ -134,6 +116,7 @@ namespace NKMObjects.Templates
 		public event AbilityCharacterDamageDelegate AfterAbilityAttack;
 		public event EffectCharacterDamageDelegate AfterEffectAttack;
 		public void InvokeAfterAbilityUse(Ability a) => AfterAbilityUse?.Invoke(a);
+		public void InvokeAfterBasicMove() => AfterBasicMove?.Invoke();
 
 		/// <summary>
 		/// Triggers after calculating all modifiers and defenses,
@@ -144,8 +127,12 @@ namespace NKMObjects.Templates
 
 		public event CharacterIntDelegate AfterHeal;
 		public event CharacterRefIntDelegate BeforeHeal;
+		public void InvokeBeforeHeal(Character targetCharacter, ref int value) => BeforeHeal?.Invoke(targetCharacter, ref value);
 
 		#endregion
+		
+		public bool IsEnemyFor(GamePlayer player) => Owner != player;
+		public bool IsEnemyFor(NKMCharacter character) => IsEnemyFor(character.Owner);
 
 		internal Character (string name, int id, CharacterProperties properties, List<Ability> abilities)
 		{
@@ -179,57 +166,27 @@ namespace NKMObjects.Templates
 
 //			Abilities = new AbilityFactory(this).CreateAndInitiateAbilitiesFromDatabase();
 			Abilities = abilities;
-			
-			AddTriggersToEvents();
-			Active.Turn.TurnFinished += character =>
-			{
-				if (character != this) return;
-				HasFreeAttackUntilEndOfTheTurn = false;
-				HasFreeMoveUntilEndOfTheTurn = false;
-				HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;
-			};
-		}
-
-		private void AddTriggersToEvents()
-		{
-			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
-			JustBeforeFirstAction += () => Console.GameLog($"ACTION TAKEN: {this}");
-			HealthPoints.StatChanged += RemoveIfDead;
-			AfterAttack += (targetCharacter, damage) =>
-				Console.Log(
-					$"{this.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
-			AfterAttack += (targetCharacter, damage) =>
-				AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
-			AfterAttack += (targetCharacter, damage) =>
-				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damage.Value.ToString(),
-					Color.red));
-			AfterHeal += (targetCharacter, valueHealed) =>
-				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(),
-					Color.blue));
-			HealthPoints.StatChanged += () =>
-			{
-				if (Active.CharacterOnMap == this) MainHPBar.Instance.UpdateHPAmount(this);
-			};
-			OnDeath += () => Effects.Clear();
-			AfterHeal += (targetCharacter, value) =>
-				Console.Log(targetCharacter != this
-					? $"{this.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
-					: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
 		}
 
 
-		public void MoveTo(HexCell targetCell)
+		protected void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
+
+		public virtual void MoveTo(HexCell targetCell)
 		{
 			BeforeMove?.Invoke();
 			if (ParentCell.CharacterOnCell == this)
 				ParentCell.CharacterOnCell = null; //checking in case of stepping over a friendly character
 			ParentCell = targetCell;
 			if (targetCell.IsFreeToStand)
-				targetCell.CharacterOnCell = this; //checking in case of stepping over a friendly character
-			CharacterObject.transform.parent = targetCell.transform;
-			AnimationPlayer.Add(new MoveTo(CharacterObject.transform,
-				CharacterObject.transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
+				targetCell.CharacterOnCell = (NKMCharacter)this; //checking in case of stepping over a friendly character TODO
 			AfterMove?.Invoke();
+		}
+
+
+		public virtual void RemoveIfDead()
+		{
+			if (IsAlive) return;
+			OnDeath?.Invoke();
 		}
 
 		public void DefaultBasicMove(List<HexCell> cellPath)
@@ -250,7 +207,7 @@ namespace NKMObjects.Templates
 
 		}
 
-		public void DefaultBasicAttack(Character attackedCharacter)
+		public void DefaultBasicAttack(NKMCharacter attackedCharacter)
 		{
 			if (!IsAlive) return; //Dead characters cannot use basic attacks!
 			if (HasFreeAttackUntilEndOfTheTurn) HasFreeAttackUntilEndOfTheTurn = false;
@@ -323,84 +280,22 @@ namespace NKMObjects.Templates
 
 			AfterBeingDamaged?.Invoke(damage);
 		}
-
-		public void RemoveIfDead()
+		
+		public void Heal(NKMCharacter targetCharacter, int amount)
 		{
-			if (IsAlive) return;
-			OnDeath?.Invoke();
-
-			Console.Log($"{this.FormattedFirstName()} umiera!");
-			RemoveFromMap();
-			DeathTimer = 0;
-			if (Active.CharacterOnMap == this) Deselect();
+			if(!targetCharacter.IsAlive) return;
+			BeforeHeal?.Invoke(targetCharacter, ref amount);
+			int hpBeforeHeal = targetCharacter.HealthPoints.Value;
+			targetCharacter.HealthPoints.Value += amount;
+			int hpAfterHeal = targetCharacter.HealthPoints.Value;
+			int diff = hpAfterHeal - hpBeforeHeal;
+			AfterHeal?.Invoke(targetCharacter, diff);
 		}
 
-//		public void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
-		public void TryToInvokeJustBeforeFirstAction()
-		{
-			if (Active.Turn.CharacterThatTookActionInTurn == null) JustBeforeFirstAction?.Invoke();
-		}
+		protected List<HexCell> GetPrepareBasicMoveCells()
+			=> CanMove ? GetBasicMoveCells() : Enumerable.Empty<HexCell>().ToList();
 
-		private void RemoveFromMap()
-		{
-			if(!IsOnMap) return;
-			ParentCell.CharacterOnCell = null;
-			ParentCell = null;
-			IsOnMap = false;
-			AnimationPlayer.Add(new Destroy(CharacterObject));
-		}
-		private void PrepareAttackAndMove()
-		{
-			if (Active.GamePlayer != Owner)
-			{
-				Console.DebugLog("Nie jesteś właścicielem! Wara!");
-				return;
-			}
-
-			bool isPreparationSuccessful;
-			if (!CanTakeAction || !CanUseBasicMove && !CanUseBasicAttack)
-			{
-				Console.DebugLog("Ta postać nie może się ruszać ani atakować!");
-				return;
-			}
-
-			if (!CanUseBasicMove && CanUseBasicAttack)
-			{
-				isPreparationSuccessful = Active.Prepare(Action.AttackAndMove, GetPrepareBasicAttackCells());
-			}
-			else if (CanUseBasicMove && !CanUseBasicAttack)
-			{
-				isPreparationSuccessful = Active.Prepare(Action.AttackAndMove, GetPrepareBasicMoveCells());
-			}
-			else
-			{
-				var p1 = Active.Prepare(Action.AttackAndMove, GetPrepareBasicMoveCells());
-				var p2 = Active.Prepare(Action.AttackAndMove, GetPrepareBasicAttackCells(), true);
-				isPreparationSuccessful = p1 || p2;
-			}
-			if (!isPreparationSuccessful)
-			{
-				//there are no cells to move or attack
-				return;
-			}
-
-			Active.HexCells.Distinct().ToList().ForEach(c =>
-				c.AddHighlight(
-					c.CharacterOnCell != null &&
-					(c.CharacterOnCell.IsEnemyFor(Owner) || CanAttackAllies && CanUseBasicAttack && GetBasicAttackCells().Contains(c))
-						? Highlights.RedTransparent
-						: Highlights.GreenTransparent));
-			Active.RemoveMoveCells();
-			Active.MoveCells.Add(ParentCell);
-
-		}
-		private List<HexCell> GetPrepareBasicMoveCells()
-		{
-			if (CanMove) return GetBasicMoveCells();
-			Console.DebugLog("Postać posiada efekt uniemożliwiający ruch!");
-			return Enumerable.Empty<HexCell>().ToList();
-		}
-		private List<HexCell> GetPrepareBasicAttackCells() => CanAttackAllies
+		protected List<HexCell> GetPrepareBasicAttackCells() => CanAttackAllies
 			? GetBasicAttackCells().WhereOnlyCharacters()
 			: GetBasicAttackCells().WhereOnlyEnemiesOf(Owner);
 
@@ -463,64 +358,6 @@ namespace NKMObjects.Templates
 			int diff = hpAfterHeal - hpBeforeHeal;
 			AfterHeal?.Invoke(targetCharacter, diff);
 		}
-		public void OnPhaseFinish()//TODO: move this to event
-		{
-			if (IsOnMap)
-			{
-				HasUsedBasicAttackInPhaseBefore = false;
-				HasUsedBasicMoveInPhaseBefore = false;
-				HasUsedNormalAbilityInPhaseBefore = false;
-				HasUsedUltimatumAbilityInPhaseBefore = false;
-				TookActionInPhaseBefore = false;
-			}
-			if (!IsAlive)
-			{
-				DeathTimer++;
-			}
-		}
-
-		public void Select()
-		{
-			Active.Clean();
-			Stats.Instance.UpdateCharacterStats(this);
-			MainHPBar.Instance.UpdateHPAmount(this);
-			Active.CharacterOnMap = this;
-			UI.CharacterUI.Abilities.Instance.UpdateButtons();
-			UI.CharacterUI.Effects.Instance.UpdateButtons();
-//			List<GameObject> characterButtons = new List<GameObject>(CharacterAbilities.Instance.Buttons);
-//			characterButtons.AddRange(new List<GameObject>(CharacterEffects.Instance.Buttons));
-//			Active.Buttons = characterButtons;
-			if (Active.GamePlayer != Owner) return;
-
-			PrepareAttackAndMove();
-		}
-		public void Deselect()
-		{
-			Stats.Instance.UpdateCharacterStats(null);
-			Active.CharacterOnMap = null;
-			Active.Action = Action.None;
-			Active.HexCells = null;
-			Game.HexMapDrawer.RemoveHighlights();
-			Active.RemoveMoveCells();
-		}
-
-
-		public void MakeActionBasicAttack([NotNull] Character target)
-		{
-			TryToInvokeJustBeforeFirstAction();
-            BasicAttack(target);
-			Console.GameLog($"BASIC ATTACK: {target}"); //logging after action to make reading rng work
-		}
-		public void MakeActionBasicMove([NotNull] List<HexCell> moveCells)
-		{
-			TryToInvokeJustBeforeFirstAction();
-			BasicMove(new List<HexCell>(moveCells)); //work on a new list to log unmodified list below
-			Console.GameLog($"MOVE: {string.Join("; ", moveCells.Select(p => p.Coordinates))}"); //logging after action to make reading rng work
-			AfterBasicMove?.Invoke();
-		}
-
-//		public void MakeActionEmpty() => TryToInvokeJustBeforeFirstAction();
-
 		public override string ToString() => Name + $" ({ID})";
 	}
 	public enum FightType

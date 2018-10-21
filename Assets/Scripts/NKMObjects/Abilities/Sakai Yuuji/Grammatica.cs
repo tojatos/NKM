@@ -37,7 +37,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
             else Use(cells[0]);
         }
 
-        private Character _target;
+        private NKMCharacter _target;
         private void Use(HexCell targetCell)
         {
             AnimationPlayer.Add(new GrammaticaStart(ParentCharacter.CharacterObject.transform, _target));
@@ -51,7 +51,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
             Finish();
 
         }
-        private void Use(Character character)
+        private void Use(NKMCharacter character)
         {
             _target = character;
             Active.Prepare(this, GetMoveCells());

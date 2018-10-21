@@ -27,7 +27,7 @@ Zasięg: {Range} Czas odnowienia: {Cooldown}";
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
-		private void Use(Character targetCharacter)
+		private void Use(NKMCharacter targetCharacter)
 		{
 			var damage = new Damage(DoTDamage, DamageType.True);
 			targetCharacter.Effects.Add(new Poison(ParentCharacter, damage, DoTTime, targetCharacter, Name));

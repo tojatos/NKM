@@ -41,10 +41,10 @@ Umiejętność jest włączona od {_currentDuration} faz.";
         public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
 
-        private Character _lastTargetCharacter;
+        private NKMCharacter _lastTargetCharacter;
         private int _currentDuration;
         
-        private void Use(Character character)
+        private void Use(NKMCharacter character)
         {
             _lastTargetCharacter = character;
             _currentDuration = 1;

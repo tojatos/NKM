@@ -14,7 +14,7 @@ public class Game
 	public GameOptions Options { get; private set; }
 
 	public List<GamePlayer> Players;
-	public List<Character> Characters => Players.SelectMany(p => p.Characters).ToList();
+	public List<NKMCharacter> Characters => Players.SelectMany(p => p.Characters).ToList();
 	public List<Ability> Abilities => Characters.SelectMany(p => p.Abilities).ToList();
 	public readonly Active Active;
 	private UIManager _uiManager;
@@ -86,7 +86,7 @@ public class Game
 				//TODO: Remove that all and work with clicks maybe, or not
                 case "CHARACTER PLACED":
 	                string[] data = action[1].SplitData();
-	                Character character = Characters.First(c => c.ToString() == data[0]);
+	                NKMCharacter character = Characters.First(c => c.ToString() == data[0]);
 	                HexCell cell =  HexMapDrawer.Cells.First(c => c.ToString() == data[1]);
 	                PlaceCharacter(character, cell);
 	                break;
@@ -97,7 +97,7 @@ public class Game
 	                Active.Turn.CharacterThatTookActionInTurn.MakeActionBasicMove(moveCells);
 	                break;
                 case "BASIC ATTACK":
-	                Character targetCharacter = Characters.First(c => c.ToString() == action[1]);
+	                NKMCharacter targetCharacter = Characters.First(c => c.ToString() == action[1]);
 	                Active.Turn.CharacterThatTookActionInTurn.MakeActionBasicAttack(targetCharacter);
 	                break;
                 case "ABILITY CLICK":
@@ -207,13 +207,13 @@ GAME STARTED: true";
 
 	private void UseMyGameObject(HexCell cell)
 	{
-		if (Active.NkmObject.GetType() != typeof(Character)) return;
+		if (Active.NkmObject.GetType() != typeof(NKMCharacter)) return;
 		if (Active.Turn.WasCharacterPlaced) return;
-		var activeCharacter = Active.NkmObject as Character;
+		var activeCharacter = Active.NkmObject as NKMCharacter;
 		PlaceCharacter(activeCharacter, cell);
 	}
 
-	private void PlaceCharacter(Character characterToPlace, HexCell targetCell)
+	private void PlaceCharacter(NKMCharacter characterToPlace, HexCell targetCell)
 	{
 		if(!Spawner.CanSpawn(characterToPlace, targetCell)) return;
 			
@@ -247,7 +247,7 @@ GAME STARTED: true";
 		if(Active.Phase.Number==0) Active.Phase.Finish();
 	}
 
-	private static void TrySpawningOnRandomCell(GamePlayer p, Character c)
+	private static void TrySpawningOnRandomCell(GamePlayer p, NKMCharacter c)
 	{
 		HexCell spawnPoint = p.GetSpawnPoints().FindAll(cell => Spawner.CanSpawn(c, cell)).GetRandomNoLog();
 		if (spawnPoint == null) return;

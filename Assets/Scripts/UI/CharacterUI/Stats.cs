@@ -57,7 +57,7 @@ namespace UI.CharacterUI
 			Range.text = "";
 			Speed.text = "";
 		}
-		public void UpdateCharacterStats(Character character)
+		public void UpdateCharacterStats(NKMCharacter character)
 		{
 			if (character != null)
 			{
@@ -74,7 +74,7 @@ namespace UI.CharacterUI
 		}
 
 
-		private static string GetStatText(Character character, StatType type)
+		private static string GetStatText(NKMCharacter character, StatType type)
 		{
 			Stat stat = character.GetStat(type);
 			int bonus = stat.Value - stat.BaseValue;

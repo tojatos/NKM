@@ -33,7 +33,7 @@ Czas odnowienia; {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        private Character _characterToTake;
+        private NKMCharacter _characterToTake;
         private HexCell _targetCell;
         public void Use(List<HexCell> cells)
         {

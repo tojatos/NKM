@@ -41,14 +41,14 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 
 	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
-		private void Use(Character character)
+		private void Use(NKMCharacter character)
 		{
 			Shinku(character);
 			Hien(character);
 			ShinpanAndDanzai(character);
 			Finish();
 		}
-		private void Shinku(Character character)
+		private void Shinku(NKMCharacter character)
 		{
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(character.ParentCell);
 			HexCell lastCell = character.ParentCell;
@@ -59,7 +59,7 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 			}
 			if(lastCell!=ParentCharacter.ParentCell) character.MoveTo(lastCell);
 		}
-		private void Hien(Character character)
+		private void Hien(NKMCharacter character)
 		{
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(character.ParentCell);
 			int range = ParentCharacter.ParentCell.GetDistance(character.ParentCell);
@@ -71,7 +71,7 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 				ParentCharacter.Attack(this, c.CharacterOnCell, damage);
 			}
 		}
-		private void ShinpanAndDanzai(Character character)
+		private void ShinpanAndDanzai(NKMCharacter character)
 		{
 			int charactersNearParent = ParentCharacter.ParentCell.GetNeighbors(ShinpanAndDanzaiRange).Count(c => c.CharacterOnCell != null);
 			var damageValue = ShinpanAndDanzaiDamage * charactersNearParent;

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Extensions;
-using NKMObjects.Abilities;
 using NKMObjects.Templates;
 
 namespace NKMObjects

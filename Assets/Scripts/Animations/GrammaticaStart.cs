@@ -7,7 +7,7 @@ namespace Animations
 {
     public class GrammaticaStart : NkmAnimation
     {
-        public GrammaticaStart(Transform ownerTransform, Character targetCharacter)
+        public GrammaticaStart(Transform ownerTransform, NKMCharacter targetCharacter)
         {
             //TODO: Check somewhere in case of no neighbors
             Vector3 targetPosition = targetCharacter.ParentCell.GetNeighbors(1).GetRandom().transform.GetCharacterTransformPoint();

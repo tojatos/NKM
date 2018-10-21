@@ -34,7 +34,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 		}
 		public void Use(List<HexCell> cells)
 		{
-			List<Character> characters = cells.GetCharacters();
+			List<NKMCharacter> characters = cells.GetCharacters();
 			bool killedSomeone = false;
 			characters.ForEach(targetCharacter =>
 			{

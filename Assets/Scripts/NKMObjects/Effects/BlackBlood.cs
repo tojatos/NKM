@@ -6,10 +6,10 @@ namespace NKMObjects.Effects
 {
     public class BlackBlood : Effect
     {
-        private readonly Character _characterThatAttacks;
+        private readonly NKMCharacter _characterThatAttacks;
         private bool _wasActivatedOnce;
 
-        public BlackBlood(Character characterThatAttacks, Character effectTarget, int cooldown, int damage, int range) : base(cooldown,
+        public BlackBlood(NKMCharacter characterThatAttacks, NKMCharacter effectTarget, int cooldown, int damage, int range) : base(cooldown,
             effectTarget, "Black Blood")
         {
             _characterThatAttacks = characterThatAttacks;
@@ -19,7 +19,7 @@ namespace NKMObjects.Effects
                 if(d.Value==0) return;
                 if(_wasActivatedOnce) return;//prevent infinite loop
                 _wasActivatedOnce = true; 
-                List<Character> enemiesInRange =
+                List<NKMCharacter> enemiesInRange =
                     ParentCharacter.ParentCell.GetNeighbors(range).Select(c => c.CharacterOnCell).Where(c => c != null && c.Owner != characterThatAttacks.Owner).ToList();
                 if(effectTarget.Owner != characterThatAttacks.Owner) enemiesInRange.Add(effectTarget);
                 enemiesInRange.ForEach(enemy =>

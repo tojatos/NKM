@@ -37,9 +37,9 @@ a jeśli przeciwnik, ogłusza go na {StunDuration} fazę.";
             else Use(cell);
         }
 
-        private Character _selectedCharacter;
+        private NKMCharacter _selectedCharacter;
 
-        private void Use(Character character)
+        private void Use(NKMCharacter character)
         {
             _selectedCharacter = character;
             Active.Prepare(this, GetMoveTargets());

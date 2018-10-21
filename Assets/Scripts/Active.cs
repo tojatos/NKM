@@ -30,7 +30,7 @@ public class Active
 	public Action Action;
 	public IUseable AbilityToUse;
 	public NKMObject NkmObject;
-	public Character CharacterOnMap;
+	public NKMCharacter CharacterOnMap;
 	public HexCell SelectedCell;
 	public readonly List<HexCell> MoveCells = new List<HexCell>();
 
@@ -185,7 +185,7 @@ public class Active
         Clean();	
 		CharacterOnMap?.Select();
 	}
-	private void MakeAction(Character characterThatMakesAction, Action action, List<HexCell> cells)
+	private void MakeAction(NKMCharacter characterThatMakesAction, Action action, List<HexCell> cells)
 	{
 		switch (action)
 		{
@@ -217,7 +217,7 @@ public class Active
 		}	
 	}
 
-	private bool MakeAttackAndMoveAction(Character character, HexCell cell, List<HexCell> moveCells)
+	private bool MakeAttackAndMoveAction(NKMCharacter character, HexCell cell, List<HexCell> moveCells)
 	{
         if (cell.CharacterOnCell != null && character.CanBasicAttack(cell.CharacterOnCell))
         {
@@ -234,7 +234,7 @@ public class Active
 		return true;
 	}
 
-	public void MakeAction(Character characterThatMakesAction, Action action, HexCell cell) =>
+	public void MakeAction(NKMCharacter characterThatMakesAction, Action action, HexCell cell) =>
 		MakeAction(characterThatMakesAction, action, new List<HexCell>{cell});
 
 	public void MakeAction(List<HexCell> cells) => MakeAction(!Game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn, Action, cells);

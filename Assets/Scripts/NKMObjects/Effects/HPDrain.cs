@@ -4,10 +4,10 @@ namespace NKMObjects.Effects
 {
 	public class HPDrain : Effect
 	{
-		private readonly Character _characterThatAttacks;
+		private readonly NKMCharacter _characterThatAttacks;
 		private readonly Damage _damagePerTick;
 
-		public HPDrain(Character characterThatAttacks, Damage damagePerTick, int cooldown, Character parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
+		public HPDrain(NKMCharacter characterThatAttacks, Damage damagePerTick, int cooldown, NKMCharacter parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
 		{
 			Name = name ?? "HP Drain";
 			_damagePerTick = damagePerTick;

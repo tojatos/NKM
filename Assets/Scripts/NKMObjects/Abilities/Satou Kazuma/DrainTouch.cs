@@ -27,7 +27,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         public void Click() => Active.Prepare(this, GetTargetsInRange());
         public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
-        private void Use(Character character)
+        private void Use(NKMCharacter character)
         {
             var dmg = new Damage(Damage, DamageType.Magical);
             ParentCharacter.Attack(this, character, dmg);

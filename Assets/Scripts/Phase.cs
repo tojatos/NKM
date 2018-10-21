@@ -1,9 +1,8 @@
-﻿using Managers;
-using UI;
+﻿using UI;
 
 public class Phase
 {
-    private static Game Game => GameStarter.Instance.Game;
+//    private static Game Game => GameStarter.Instance.Game;
 
     private int _number;
     public int Number
@@ -24,7 +23,7 @@ public class Phase
 
     public void Finish()
     {
-        Game.Players.ForEach(p => p.Characters.ForEach(c => c.OnPhaseFinish()));
+//        Game.Players.ForEach(p => p.Characters.ForEach(c => c.OnPhaseFinish()));
         Number++;
         PhaseFinished?.Invoke();
     }

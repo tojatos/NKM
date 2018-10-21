@@ -27,7 +27,7 @@ Czas odnowienia: {Cooldown}";
 
         public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
-        private void Use(Character character)
+        private void Use(NKMCharacter character)
         {
             ZeroGravity.AddEffect(character);
             character.Effects.Add(new StatModifier(1, character.Speed.RealValue, character, StatType.Speed, Name));

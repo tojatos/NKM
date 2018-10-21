@@ -4,7 +4,7 @@ namespace NKMObjects.Effects
 {
 	public class Silent : Effect
 	{
-		public Silent(int cooldown, Character parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
+		public Silent(int cooldown, NKMCharacter parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
 		{
 			Name = name?? "Silent";
 			//CurrentCooldown = cooldown;

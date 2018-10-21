@@ -1,9 +1,13 @@
 ﻿using Hex;
+using Managers;
 
 namespace NKMObjects.Templates
 {
 	public abstract class HexCellEffect : NKMObject
 	{
+		protected static Game Game => GameStarter.Instance.Game;
+		protected static Active Active => Game.Active;
+		protected static Console Console => Console.Instance;
 		protected HexCellEffect(int cooldown, HexCell parentCell, string name = null)
 		{
 			CurrentCooldown = cooldown >= 0 ? cooldown : int.MaxValue; //effect is infinite

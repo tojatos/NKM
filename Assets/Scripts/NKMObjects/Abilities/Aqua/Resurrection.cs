@@ -9,7 +9,7 @@ namespace NKMObjects.Abilities.Aqua
 {
 	public class Resurrection : Ability, IClickable, IUseable
 	{
-		private Character _characterToResurrect;
+		private NKMCharacter _characterToResurrect;
 		public override List<HexCell> GetRangeCells() => Active.GamePlayer.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList();
 
 		public Resurrection() : base(AbilityType.Ultimatum, "Resurrection", 8)
@@ -42,7 +42,7 @@ Czas odnowienia: {Cooldown}";
 			List<NKMObject> selectedObj = SpriteSelect.Instance.SelectedObjects;
 			if (selectedObj.Count != 1) return;
 
-			var character = (Character) selectedObj[0];
+			var character = (NKMCharacter) selectedObj[0];
 			_characterToResurrect = character;
 			Active.Prepare(this, GetRangeCells());
 			SpriteSelect.Instance.Close();

@@ -20,7 +20,7 @@ namespace NKMObjects.Abilities.Bezimienni
 	    public void Click() => Active.Prepare(this, GetTargetsInRange());
 	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
-	    private void Use(Character character)
+	    private void Use(NKMCharacter character)
 		{
 			Turn.PlayerDelegate forceAction = null;
 			forceAction = (player) =>

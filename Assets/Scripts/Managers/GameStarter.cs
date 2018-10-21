@@ -144,8 +144,8 @@ namespace Managers
 					await BlindPick(players);
 					break;
 				case 1:
-					List<Character> charactersToPick =
-						new List<Character>(GameData.Conn.GetCharacterNames().Select(CharacterFactory.Create));//AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
+					List<NKMCharacter> charactersToPick =
+						new List<NKMCharacter>(GameData.Conn.GetCharacterNames().Select(CharacterFactory.Create));//AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
 					if(S.GetDropdownSetting(SettingType.AreBansEnabled)==1) await Bans(players, charactersToPick);
 					await DraftPick(players, charactersToPick);
 					break;
@@ -155,7 +155,7 @@ namespace Managers
 			}
 		}
 
-		private static async Task DraftPick(List<GamePlayer> players, ICollection<Character> charactersToPick)
+		private static async Task DraftPick(List<GamePlayer> players, ICollection<NKMCharacter> charactersToPick)
 		{
 			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
 			while (players.Any(p => p.Characters.Count != numberOfCharactersPerPlayer))
@@ -167,7 +167,7 @@ namespace Managers
 			}
 			players.ForEach(p=>p.HasSelectedCharacters=true);
 		}
-		private static async Task Bans(List<GamePlayer> players, ICollection<Character> charactersToPick)
+		private static async Task Bans(List<GamePlayer> players, ICollection<NKMCharacter> charactersToPick)
 		{
 			int bansNumber = GetBansNumber();
 			while(bansNumber != 0)
@@ -203,7 +203,7 @@ namespace Managers
 			
 		}
 
-		private static async Task SelectOneCharacter(ICollection<Character> charactersToPick, GamePlayer player)
+		private static async Task SelectOneCharacter(ICollection<NKMCharacter> charactersToPick, GamePlayer player)
 		{
 			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
 			if(player.Characters.Count == numberOfCharactersPerPlayer) return;
@@ -214,7 +214,7 @@ namespace Managers
 				if (SpriteSelect.Instance.SelectedObjects.Count != 1) return;
 
 				IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o => o.Name);
-				Character picked = charactersToPick.Single(c => c.Name == names.First());
+				NKMCharacter picked = charactersToPick.Single(c => c.Name == names.First());
 				charactersToPick.Remove(picked);
 				p.AddCharacter(picked);
 				hasSelected = true;
@@ -225,7 +225,7 @@ namespace Managers
 				$"Wybór postaci - {player.Name}", "Zakończ wybieranie postaci");
 			await wait.WaitToBeTrue();
 		}
-        private static async Task BanOneCharacter(ICollection<Character> charactersToPick, GamePlayer player)
+        private static async Task BanOneCharacter(ICollection<NKMCharacter> charactersToPick, GamePlayer player)
 		{
 			bool hasSelected = false;
 			Func<bool> wait = () => hasSelected;
@@ -234,7 +234,7 @@ namespace Managers
 				if (SpriteSelect.Instance.SelectedObjects.Count != 1) return;
 
 				IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o => o.Name);
-				Character picked = charactersToPick.Single(c => c.Name == names.First());
+				NKMCharacter picked = charactersToPick.Single(c => c.Name == names.First());
 				charactersToPick.Remove(picked);
 				hasSelected = true;
 				SpriteSelect.Instance.Close();

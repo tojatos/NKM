@@ -42,7 +42,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 		}
 	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
 
-		private void Use(Character targetCharacter)
+		private void Use(NKMCharacter targetCharacter)
 		{
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCharacter.ParentCell);
 			HexCell moveCell = targetCharacter.ParentCell.GetCell(direction, TargetCellOffset);

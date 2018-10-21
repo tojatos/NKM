@@ -21,7 +21,7 @@ namespace UI.CharacterUI
 			}
 		}
 
-		private void UpdateFace(Character characterOnMap)
+		private void UpdateFace(NKMCharacter characterOnMap)
 		{
 			Sprite characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterOnMap.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
 			_image.sprite = characterSprite;

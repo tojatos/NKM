@@ -47,7 +47,7 @@ W trakcie przemieszczenia się zadaje podstawowe obrażenia osobom w zasięgu at
                 ParentCharacter.MoveTo(cell);
                 List<HexCell> realMoveCells = _theWall.GetLine(_theWall.GetDirection(cell), _theWall.GetDistance(cell));
                 
-                List<Character> targets = realMoveCells.SelectMany(c => ParentCharacter.DefaultGetBasicAttackCells(c))
+                List<NKMCharacter> targets = realMoveCells.SelectMany(c => ParentCharacter.DefaultGetBasicAttackCells(c))
                     .ToList().WhereOnlyEnemiesOf(Owner).GetCharacters().Distinct().ToList();
                 targets.ForEach(t => ParentCharacter.Attack(this, t, new Damage(ParentCharacter.AttackPoints.Value, DamageType.Physical)));
                 Finish();

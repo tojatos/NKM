@@ -26,7 +26,7 @@ a przeciwnicy, którzy stracili ten efekt zostają ogłuszeni na {Duration} fazy
         public void Click()
         {
             Active.MakeAction();
-            List<Character> targets = GetTargetsInRange().GetCharacters();
+            List<NKMCharacter> targets = GetTargetsInRange().GetCharacters();
             targets.ForEach(c => c.Effects.FindAll(e => e.Name == "Zero Gravity").ForEach(ef => ef.RemoveFromParent()));
             targets.FindAll(t => t.Owner != Owner).Distinct().ToList().ForEach(c => c.Effects.Add(new Stun(Duration, c, Name)));
             

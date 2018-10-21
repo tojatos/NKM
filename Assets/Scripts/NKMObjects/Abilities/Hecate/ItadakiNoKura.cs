@@ -28,7 +28,7 @@ Aktualna wartość zebranej energii: {CollectedEnergy}";
 			if (CollectedEnergyCharacters.Contains(targetCharacter)) return;
 			
 			CollectedEnergyCharacters.Add(targetCharacter);
-			AnimationPlayer.Add(new Animations.ItadakiNoKura(ParentCharacter.CharacterObject.transform, targetCharacter.CharacterObject.transform));
+//			AnimationPlayer.Add(new Animations.ItadakiNoKura(ParentCharacter.CharacterObject.transform, targetCharacter.CharacterObject.transform));TODO
 		}
 	}
 }

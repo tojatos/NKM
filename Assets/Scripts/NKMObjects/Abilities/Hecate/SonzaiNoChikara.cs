@@ -30,7 +30,7 @@ Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdziela
             if (passiveAbility != null)
             {
 //                    List<Character> enemyCharactersOnMap = Game.Players.Where(p => p != Active.GamePlayer).SelectMany(p => p.Characters).Where(c => c.IsOnMap).ToList();
-                List<Character> enemyCharactersOnMap = GetTargetsInRange().GetCharacters();
+                List<NKMCharacter> enemyCharactersOnMap = GetTargetsInRange().GetCharacters();
                 int damageValue = passiveAbility.CollectedEnergy / enemyCharactersOnMap.Count;
                 enemyCharactersOnMap.ForEach(c =>
                 {

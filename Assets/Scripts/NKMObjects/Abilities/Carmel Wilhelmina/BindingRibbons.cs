@@ -31,7 +31,7 @@ Gdy trafi co najmniej {EnemiesToHitToActivateSnare} wrogów unieruchamia ich dod
         public void Use(List<HexCell> cells)
         {
             Active.MakeAction();
-            List<Character> enemiesInRange = cells.WhereOnlyEnemiesOf(Owner).GetCharacters();
+            List<NKMCharacter> enemiesInRange = cells.WhereOnlyEnemiesOf(Owner).GetCharacters();
             enemiesInRange.ForEach(c =>
             {
                 c.Effects.Add(new Silent(SilentDuration, c, Name));

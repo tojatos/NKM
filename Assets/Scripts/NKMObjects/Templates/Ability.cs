@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using Hex;
+using Managers;
 using NKMObjects.Abilities.Bezimienni;
 
 namespace NKMObjects.Templates
 {
 	public abstract class Ability : NKMObject
 	{
+		
+		protected static Game Game => GameStarter.Instance.Game;
+		protected static Active Active => Game.Active;
+		protected static Console Console => Console.Instance;
 		protected Ability(AbilityType type, string name, int cooldown = 0) : this(type, name, cooldown, NKMID.GetNext("Ability")){}
 		protected Ability(AbilityType type, string name, int cooldown, int id)
 		{
@@ -51,7 +56,7 @@ namespace NKMObjects.Templates
 		}
 
 //		public Character ParentCharacter { get; set; }
-		public Character ParentCharacter => Game.Characters.FirstOrDefault(c => c.Abilities.Contains(this));
+		public NKMCharacter ParentCharacter => Game.Characters.FirstOrDefault(c => c.Abilities.Contains(this));
 
 		public bool CanBeUsed => Validator.AbilityCanBeUsed;
 
