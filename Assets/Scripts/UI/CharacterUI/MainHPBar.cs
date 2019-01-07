@@ -7,7 +7,7 @@ namespace UI.CharacterUI
 	{
 		public Image HPamount;
 
-		public void UpdateHPAmount(NKMCharacter character) => 
+		public void UpdateHPAmount(Character character) => 
 			HPamount.fillAmount = character.HealthPoints.Value / (float) character.HealthPoints.BaseValue;
 	}
 }

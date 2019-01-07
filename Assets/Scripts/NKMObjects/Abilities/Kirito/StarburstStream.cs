@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Kirito
         private const int Range = 3;
         private const int AttackTimes = 16;
         private const int Damage = 2;
-        public StarburstStream() : base(AbilityType.Ultimatum, "Starburst Stream", 6)
+        public StarburstStream(Game game) : base(game, AbilityType.Ultimatum, "Starburst Stream", 6)
         {
             OnAwake += () =>
             {
@@ -26,9 +26,8 @@ namespace NKMObjects.Abilities.Kirito
             };
         }
 
-        public override List<HexCell> GetRangeCells() =>
-            ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
         public override string GetDescription() =>
 $@"{ParentCharacter.Name} atakuje przeciwnika {AttackTimes} razy.
@@ -40,9 +39,9 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         private bool _gotFreeAttackThisTurn;
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-        private void Use(NKMCharacter character)
+        private void Use(Character character)
         {
             Active.MakeAction();
             for (int i = 0; i < AttackTimes; i++) 

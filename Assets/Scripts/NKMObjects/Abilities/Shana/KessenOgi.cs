@@ -15,13 +15,13 @@ namespace NKMObjects.Abilities.Shana
 		private const int ShinpanAndDanzaiRange = 6;
 		private const int FlameWidth = 3;
 
-		public KessenOgi() : base(AbilityType.Ultimatum, "Kessen Ōgi", 4)
+		public KessenOgi(Game game) : base(game, AbilityType.Ultimatum, "Kessen Ōgi", 4)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
 			
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StopAtWalls | SearchFlags.StraightLine);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} używa kolejno po sobie występujących umiejętności:
@@ -40,41 +40,41 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
-		private void Use(NKMCharacter character)
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
+		private void Use(Character character)
 		{
 			Shinku(character);
 			Hien(character);
 			ShinpanAndDanzai(character);
 			Finish();
 		}
-		private void Shinku(NKMCharacter character)
+		private void Shinku(Character character)
 		{
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(character.ParentCell);
 			HexCell lastCell = character.ParentCell;
 			for (int i = ShinkuKnockback; i > 0; i--) {
 				HexCell cell = lastCell.GetCell(direction, 1);
-				if(cell==null || cell.CharacterOnCell != null || cell.Type == HexTileType.Wall) break;
+				if(cell==null || !cell.IsFreeToStand) break;
 				lastCell = cell;
 			}
 			if(lastCell!=ParentCharacter.ParentCell) character.MoveTo(lastCell);
 		}
-		private void Hien(NKMCharacter character)
+		private void Hien(Character character)
 		{
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(character.ParentCell);
 			int range = ParentCharacter.ParentCell.GetDistance(character.ParentCell);
 			List<HexCell> cells = ParentCharacter.ParentCell.GetArea(direction, range, FlameWidth);
 			foreach (HexCell c in cells)
 			{
-				if (c.CharacterOnCell == null || c.CharacterOnCell.Owner == ParentCharacter.Owner) continue;
+				if (c.IsEmpty || !c.CharactersOnCell[0].IsEnemyFor(Owner)) continue;
 				var damage = new Damage(FlameDamage, DamageType.Magical);
-				ParentCharacter.Attack(this, c.CharacterOnCell, damage);
+				ParentCharacter.Attack(this, c.CharactersOnCell[0], damage);
 			}
 		}
-		private void ShinpanAndDanzai(NKMCharacter character)
+		private void ShinpanAndDanzai(Character character)
 		{
-			int charactersNearParent = ParentCharacter.ParentCell.GetNeighbors(ShinpanAndDanzaiRange).Count(c => c.CharacterOnCell != null);
-			var damageValue = ShinpanAndDanzaiDamage * charactersNearParent;
+			int charactersNearParent = GetNeighboursOfOwner(ShinpanAndDanzaiRange).SelectMany(c => c.CharactersOnCell).Count();
+			int damageValue = ShinpanAndDanzaiDamage * charactersNearParent;
 			var damage = new Damage(damageValue, DamageType.True);
 			ParentCharacter.Attack(this, character, damage);
 

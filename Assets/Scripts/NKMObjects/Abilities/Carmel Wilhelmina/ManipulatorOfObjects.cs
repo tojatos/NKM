@@ -8,13 +8,13 @@ namespace NKMObjects.Abilities.Carmel_Wilhelmina
     {
         private const int EffectTimeout = 2;
         private const int Duration = 1;
-        public ManipulatorOfObjects() : base(AbilityType.Passive, "Manipulator of Objects")
+        public ManipulatorOfObjects(Game game) : base(game, AbilityType.Passive, "Manipulator of Objects")
         {
             OnAwake += () => ParentCharacter.BeforeBasicAttack += (character, damage) =>
             {
                 if (!character.IsEnemyFor(Owner) || character.Effects.Any(e => e.Name == Name)) return;
-                character.Effects.Add(new Snare(Duration, character, Name));
-                character.Effects.Add(new Effects.Empty(EffectTimeout, character, Name,
+                character.Effects.Add(new Snare(Game, Duration, character, Name));
+                character.Effects.Add(new Effects.Empty(Game, EffectTimeout, character, Name,
                     $"{Name} nie może zostać nałożony na tą postać."));
             };
         }

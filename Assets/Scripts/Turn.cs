@@ -8,7 +8,7 @@ public class Turn
 	private static Game Game => GameStarter.Instance.Game;
 	public bool IsDone { get; private set; }
 	public bool WasCharacterPlaced { get; set; }
-	public NKMCharacter CharacterThatTookActionInTurn { get; set; }
+	public Character CharacterThatTookActionInTurn { get; set; }
 
 	public Turn()
 	{
@@ -45,7 +45,7 @@ public class Turn
 		}
 	}
 
-	public delegate void CharacterDelegate(NKMCharacter character);
+	public delegate void CharacterDelegate(Character character);
 	public delegate void PlayerDelegate(GamePlayer player);
 	public event CharacterDelegate TurnFinished;
 	public event PlayerDelegate TurnStarted;

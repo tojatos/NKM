@@ -8,14 +8,12 @@ namespace Hex
 {
 	public class HexMapDrawer : SingletonMonoBehaviour<HexMapDrawer>
 	{
-		private static Game Game => GameStarter.Instance.Game;
-
-		public HexMapScriptable HexMapScriptable { get; set; }
-		public HexCell CellPrefab;
-		public int Width { get; private set; }
-		public int Height { get; private set;}
-		public List<HexCell> Cells;
+		private Game _game;
+		private HexMap HexMap => _game.HexMap;
+		public DrawnHexCell CellPrefab;
+		public List<DrawnHexCell> Cells;
 		private HexMesh _hexMesh;
+		public void Init(Game game) => _game = game;
 
 		public void CreateMap(HexMap hexMap)
 		{
@@ -25,46 +23,26 @@ namespace Hex
 			
 			TriangulateCells();
 		}
-//		public void CreateMap(HexMapScriptable hexMapScriptable)
-//		{
-//			HexMapScriptable = hexMapScriptable;
-//			Width = HexMapScriptable.Map.width;
-//			Height = HexMapScriptable.Map.height;
-//			_hexMesh = GetComponentInChildren<HexMesh>();
-//			_hexMesh.Init();
-//			Cells = new List<HexCell>();
-//			for (int z = 0, i = 0; z < Height; z++)
-//			{
-//				for (var x = 0; x < Width; x++)
-//				{
-//					CreateCell(x, z, i++);
-//				}
-//			}
-//
-//			TriangulateCells();
-//		}
 
 		public void TriangulateCells()
 		{
 			_hexMesh.Triangulate(Cells);
 		}
 
-		private void CreateCell(BetterHexCell hexCell)
+		private void CreateCell(HexCell hexCell)
 		{
 			Vector3 position;
 			position.x = (hexCell.Coordinates.X + hexCell.Coordinates.Z * 0.5f) * (HexMetrics.InnerRadius * 2f);
 			position.y = 0f;
 			position.z = hexCell.Coordinates.Z * (HexMetrics.OuterRadius * 1.5f);
 			
-			HexCell cell = Instantiate(CellPrefab);
+			DrawnHexCell cell = Instantiate(CellPrefab);
 			Cells.Add(cell);
-			cell.BetterHexCell = hexCell;
+			cell.HexCell = hexCell;
 			cell.transform.SetParent(transform, false);
-			//cell.Type = hexCell.Type;
 			cell.transform.localPosition = position;
-			//TODO: neighbors not set
 
-			switch (cell.Type)
+			switch (hexCell.Type)
 			{
 				case HexTileType.Normal:
                     cell.Color = Color.white;
@@ -82,84 +60,10 @@ namespace Hex
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-//		private void CreateCell(int x, int z, int i)
-//		{
-//			Color pixelColor = HexMapScriptable.Map.GetPixel(x, z);
-//			if (Math.Abs(pixelColor.a) < 0.001) //transparent pixel
-//			{
-//				return;
-//			}
-//
-//			Vector3 position;
-//			// ReSharper disable once PossibleLossOfFraction
-//			position.x = (x + z * 0.5f - z / 2) * (HexMetrics.InnerRadius * 2f);
-//			position.y = 0f;
-//			position.z = z * (HexMetrics.OuterRadius * 1.5f);
-//
-//			HexCell cell = Instantiate(CellPrefab);
-//			Cells.Add(cell);
-//			cell.transform.SetParent(transform, false);
-//			cell.transform.localPosition = position;
-//			cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-//			cell.Color = new Color(255, 255, 255);
-//			if (x > 0)
-//			{
-//				cell.SetNeighbor(HexDirection.W, Cells[i - 1]);
-//			}
-//			if (z > 0)
-//			{
-//				if ((z & 1) == 0)
-//				{
-//					cell.SetNeighbor(HexDirection.Se, Cells[i - Width]);
-//					if (x > 0)
-//					{
-//						cell.SetNeighbor(HexDirection.Sw, Cells[i - Width - 1]);
-//					}
-//				}
-//				else
-//				{
-//					cell.SetNeighbor(HexDirection.Sw, Cells[i - Width]);
-//					if (x < Width - 1)
-//					{
-//						cell.SetNeighbor(HexDirection.Se, Cells[i - Width + 1]);
-//					}
-//				}
-//
-//			}
-//
-//			foreach (ColorToTileType colorMapping in HexMapScriptable.ColorMappings)
-//			{
-//				if (colorMapping.Color.Equals(pixelColor))
-//				{
-//					cell.Type = colorMapping.HexTileType;
-//					if(HexMapScriptable.SpawnPoints.Contains( cell.Type ))
-//					{
-//						cell.Color = Color.green;
-//					}
-//					else if (cell.Type == HexTileType.Normal)
-//					{
-//						cell.Color = Color.white;
-//					}
-//					else if (cell.Type == HexTileType.Wall)
-//					{
-//						cell.Color = Color.black;
-//					}
-//					else
-//					{
-//						Debug.Log(cell.Type);
-//						cell.Color = pixelColor;
-//					}
-//					return;
-//				}
-//			}
-//
-//			Debug.LogError(cell.Coordinates + " nie ma zmapowanego typu!");// + '\n' + "Red: " + ((Math.Abs(pixelColor.r - HexMap.ColorMappings[3].Color.r) < 0.001f) ? "Match" : "Nay") + " Green: " + ((Math.Abs(pixelColor.g - HexMap.ColorMappings[3].Color.g) < 0.001f) ? "Match" : "Nay") + " Blue: " + ((Math.Abs(pixelColor.b - HexMap.ColorMappings[3].Color.b) < 0.001f) ? "Match" : "Nay"));
-//
-//		}
 
 		public void RemoveHighlights(Predicate<GameObject> predicate = null)
 		{
-			foreach (HexCell hexCell in Cells)
+			foreach (DrawnHexCell hexCell in Cells)
 			{
 				if (predicate == null)
 				{
@@ -184,49 +88,50 @@ namespace Hex
 		{
 			position = transform.InverseTransformPoint(position);
 			HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-			return Cells.First(c => c.Coordinates == coordinates);
+			return _game.HexMap.Cells.First(c => c.Coordinates == coordinates);
 		}
 
 		public void Update()
 		{
-			if(!Game.IsInitialized) return;
+			if(_game == null || !_game.IsInitialized) return;
 //			if (Game.UIManager.VisibleUI != Game.UIManager.GameUI) return;
 
-			if (Game.Active.AirSelection.IsEnabled)
+			if (_game.Active.AirSelection.IsEnabled)
 			{
 				HexCell cellPointed = CellPointed();
-				if (cellPointed != null && Game.Active.HexCells.Contains(cellPointed))
+				if (cellPointed != null && _game.Active.HexCells.Contains(cellPointed))
 				{
-					Game.Active.AirSelection.HexCells = new List<HexCell> { cellPointed };
+					_game.Active.AirSelection.HexCells = new List<HexCell> { cellPointed };
 				}
 			}
 
-			if (Game.Active.Action == Action.AttackAndMove)
+			if (_game.Active.Action == Action.AttackAndMove)
 			{
 				HexCell cellPointed = CellPointed();
-				if (cellPointed != null && (Game.Active.HexCells.Contains(cellPointed)||cellPointed==Game.Active.CharacterOnMap.ParentCell))
+				if (cellPointed != null && (_game.Active.HexCells.Contains(cellPointed)||cellPointed==_game.Active.CharacterOnMap.ParentCell))
 				{
-					HexCell lastMoveCell = Game.Active.MoveCells.LastOrDefault();
+					HexCell lastMoveCell = _game.Active.MoveCells.LastOrDefault();
 					if(lastMoveCell==null) throw new Exception("Move cell is null!");
 					if (cellPointed != lastMoveCell)
 					{
-						if (Game.Active.MoveCells.Contains(cellPointed))
+						if (_game.Active.MoveCells.Contains(cellPointed))
 						{
 							//remove all cells to pointed
-							for (int i = Game.Active.MoveCells.Count - 1; i >= 0; i--)
+							for (int i = _game.Active.MoveCells.Count - 1; i >= 0; i--)
 							{
-								if (Game.Active.MoveCells[i] == cellPointed) break;
+								if (_game.Active.MoveCells[i] == cellPointed) break;
 
 								//Remove the line
-								Destroy(Game.Active.MoveCells[i].gameObject.GetComponent<LineRenderer>());
+								Destroy(Active.SelectDrawnCell(_game.Active.MoveCells[i]).gameObject
+									.GetComponent<LineRenderer>());
 
-								Game.Active.MoveCells.RemoveAt(i);
+								_game.Active.MoveCells.RemoveAt(i);
 							}
 						}
-						else if (Game.Active.CharacterOnMap.Speed.Value >= Game.Active.MoveCells.Count &&
-						         lastMoveCell.GetNeighbors(1).Contains(cellPointed) && (cellPointed.CharacterOnCell == null||!cellPointed.CharacterOnCell.IsEnemyFor(Game.Active.CharacterOnMap.Owner)))
+						else if (_game.Active.CharacterOnMap.Speed.Value >= _game.Active.MoveCells.Count &&
+						         lastMoveCell.GetNeighbors(_game.Active.GamePlayer, 1).Contains(cellPointed) && (cellPointed.CharactersOnCell.Count == 0||!cellPointed.CharactersOnCell.Any(c => c.IsEnemyFor(_game.Active.CharacterOnMap.Owner))))
 						{
-							Game.Active.AddMoveCell(cellPointed);
+							_game.Active.AddMoveCell(cellPointed);
 
 						}
 					}
@@ -239,20 +144,20 @@ namespace Hex
 				HexCell cellPointed = CellPointed();
 				if (cellPointed != null)
 				{
-					if (Game.Active.AirSelection.IsEnabled && Game.Active.HexCells.Contains(cellPointed))
+					if (_game.Active.AirSelection.IsEnabled && _game.Active.HexCells.Contains(cellPointed))
 					{
-						Game.Active.MakeAction(Game.Active.AirSelection.HexCells);
+						_game.Active.MakeAction(_game.Active.AirSelection.HexCells);
 					}
 					else
 					{
-						Game.TouchCell(cellPointed);
+						_game.TouchCell(cellPointed);
 					}
 				}
 			}
 
 			if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
 			{
-				Game.Active.Cancel();
+				_game.Active.Cancel();
 			}
 		}
 		private static HexCell CellPointed()

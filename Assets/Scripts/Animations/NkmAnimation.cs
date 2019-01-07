@@ -10,7 +10,7 @@ namespace Animations
     ///
     /// To create an animation, enqueue parts to AnimationParts queue.
     /// </summary>
-    public abstract class NkmAnimation  
+    public abstract class NkmAnimation 
     {
         protected readonly Queue<NkmAnimationPart> AnimationParts = new Queue<NkmAnimationPart>();
         public bool AllowPlayingOtherAnimations { get; protected set; }

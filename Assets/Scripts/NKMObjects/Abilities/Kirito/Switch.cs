@@ -11,17 +11,17 @@ namespace NKMObjects.Abilities.Kirito
     {
         private const int Range = 7;
 
-	    public Switch() : base(AbilityType.Normal, "Switch", 3)
+	    public Switch(Game game) : base(game, AbilityType.Normal, "Switch", 3)
 	    {
 		    OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		    CanUseOnGround = false;
 	    }
 
-	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+	    public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
         public override List<HexCell> GetTargetsInRange()
 	    {
-		    List<HexCell> targetCandidates =  GetRangeCells().WhereOnlyFriendsOf(Owner);
-            List<NKMCharacter> enemiesOnMap = HexMapDrawer.Instance.Cells.WhereOnlyEnemiesOf(Owner).GetCharacters();
+		    List<HexCell> targetCandidates =  GetRangeCells().WhereFriendsOf(Owner);
+            List<Character> enemiesOnMap = HexMap.Cells.WhereEnemiesOf(Owner).GetCharacters();
 	        List<HexCell> enemyAttackRanges = enemiesOnMap.SelectMany(enemy => enemy.GetBasicAttackCells()).ToList();
 		    return enemyAttackRanges.Contains(ParentCharacter.ParentCell) ? targetCandidates : targetCandidates.Intersect(enemyAttackRanges).ToList();
 	    }
@@ -34,9 +34,9 @@ jeśli któryś z nich znajduje się w zasięgu podstawowego ataku wrogiej posta
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-	    private void Use(NKMCharacter character)
+	    private void Use(Character character)
         {
 	        Swap(ParentCharacter, character);
 	        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
@@ -74,16 +74,18 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 	        Finish();
         }
         
-	    private static void Swap(NKMCharacter firstCharacterToSwap, NKMCharacter secondCharacterToSwap)
+	    private void Swap(Character firstCharacterToSwap, Character secondCharacterToSwap)
 	    {
 		    HexCell c1 = firstCharacterToSwap.ParentCell;
 		    HexCell c2 = secondCharacterToSwap.ParentCell;
-		    firstCharacterToSwap.ParentCell = c2;
-		    secondCharacterToSwap.ParentCell = c1;
-		    c1.CharacterOnCell = secondCharacterToSwap;
-		    c2.CharacterOnCell = firstCharacterToSwap;
-		    AnimationPlayer.Add(new MoveTo(firstCharacterToSwap.CharacterObject.transform, c2.transform.position, 0.4f));
-		    AnimationPlayer.Add(new MoveTo(secondCharacterToSwap.CharacterObject.transform, c1.transform.position, 0.4f));
+		    //firstCharacterToSwap.ParentCell = c2;
+		    //secondCharacterToSwap.ParentCell = c1;
+		    //c1.CharactersOnCell[0] = secondCharacterToSwap;
+		    //c2.CharactersOnCell[0] = firstCharacterToSwap;
+		    HexMap.Move(firstCharacterToSwap, c2);
+		    HexMap.Move(secondCharacterToSwap, c1);
+		    AnimationPlayer.Add(new MoveTo(firstCharacterToSwap.CharacterObject.transform, Active.SelectDrawnCell(c2).transform.position, 0.4f));
+		    AnimationPlayer.Add(new MoveTo(secondCharacterToSwap.CharacterObject.transform, Active.SelectDrawnCell(c1).transform.position, 0.4f));
 	    }
     }
 }

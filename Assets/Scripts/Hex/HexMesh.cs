@@ -23,7 +23,7 @@ namespace Hex
 			_colors = new List<Color>();
 
 		}
-		public void Triangulate(List<HexCell> cells)
+		public void Triangulate(List<DrawnHexCell> cells)
 		{
 			_hexMesh.Clear();
 			_vertices.Clear();
@@ -41,7 +41,7 @@ namespace Hex
 			_meshCollider.sharedMesh = _hexMesh;
 		}
 
-		private void Triangulate(HexCell cell)
+		private void Triangulate(DrawnHexCell cell)
 		{
 			Vector3 center = cell.transform.localPosition;
 			for (var i = 0; i < 6; i++)

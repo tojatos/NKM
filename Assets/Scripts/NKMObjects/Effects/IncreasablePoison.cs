@@ -7,7 +7,7 @@ namespace NKMObjects.Effects
 		public readonly Damage Damage;
 		private readonly int _increase;
 
-		public IncreasablePoison(Character characterThatAttacks, Damage initialDamage, int increase, int cooldown, Character parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
+		public IncreasablePoison(Game game, Character characterThatAttacks, Damage initialDamage, int increase, int cooldown, Character parentCharacter, string name = null) : base(game, cooldown, parentCharacter, name)
 		{
 			Name = name ?? "Increasable Poison";
 			Damage = initialDamage;

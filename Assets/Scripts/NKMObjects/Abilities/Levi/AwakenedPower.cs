@@ -8,7 +8,7 @@ namespace NKMObjects.Abilities.Levi
         private const int AttackBonus = 7;
         private const int SpeedBonus = 2;
         private const int HealthTresholdPercent = 25;
-        public AwakenedPower() : base(AbilityType.Passive, "Awakened Power")
+        public AwakenedPower(Game game) : base(game, AbilityType.Passive, "Awakened Power")
         {
             OnAwake += () =>
             {

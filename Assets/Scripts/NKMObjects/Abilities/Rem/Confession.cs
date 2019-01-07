@@ -9,13 +9,13 @@ namespace NKMObjects.Abilities.Rem
 	{
 		private const int Range = 6;
 
-		public Confession() : base(AbilityType.Ultimatum, "Confession", 4)
+		public Confession(Game game) : base(game, AbilityType.Ultimatum, "Confession", 4)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyFriendsOf(Owner).FindAll(c => c.CharacterOnCell.TookActionInPhaseBefore);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner).FindAll(c => c.CharactersOnCell[0].TookActionInPhaseBefore);
 
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} wyznaje miłość wybranej postaci, umożliwiając jej ponowną akcję w tej fazie.
@@ -23,9 +23,9 @@ $@"{ParentCharacter.Name} wyznaje miłość wybranej postaci, umożliwiając jej
 Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(NKMCharacter character)
+		private void Use(Character character)
 		{
 			character.TookActionInPhaseBefore = false;
 			character.HasUsedBasicAttackInPhaseBefore = false;

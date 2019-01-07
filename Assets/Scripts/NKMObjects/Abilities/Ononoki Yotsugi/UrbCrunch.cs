@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Ononoki_Yotsugi
         private const int Damage = 20;
         private const int Range = 5;
         private const int Radius = 3;
-        public UrbCrunch() : base(AbilityType.Normal, "URB - Crunch", 3) { }
+        public UrbCrunch(Game game) : base(game, AbilityType.Normal, "URB - Crunch", 3) { }
 
         public override string GetDescription() =>
 $@"{ParentCharacter.FirstName()} uderza w wybrany obszar o promieniu {Radius},
@@ -21,7 +21,7 @@ Uderzenie trwale niszczy wszystkie przeszkody.
 
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
 
         public void Click()
         {
@@ -36,13 +36,13 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
             {
                 if (c.Type != HexTileType.Wall) return;
                 c.Type = HexTileType.Normal;
-                c.Color = Color.white;
+                Active.SelectDrawnCell(c).Color = Color.white;
             });
             HexMapDrawer.Instance.TriangulateCells();
-            cells.WhereOnlyEnemiesOf(Owner).GetCharacters().ForEach(e =>
+            cells.WhereEnemiesOf(Owner).GetCharacters().ForEach(e =>
             {
                 ParentCharacter.Attack(this, e, new Damage(Damage, DamageType.Physical));
-                e.Effects.Add(new Stun(1, e, Name));
+                e.Effects.Add(new Stun(Game, 1, e, Name));
             });
             Finish();
         }

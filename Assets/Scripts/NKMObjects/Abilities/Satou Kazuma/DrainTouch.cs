@@ -9,13 +9,13 @@ namespace NKMObjects.Abilities.Satou_Kazuma
     {
         private const int Damage = 18;
         private const int Range = 6;
-        public DrainTouch() : base(AbilityType.Normal, "Drain Touch", 3)
+        public DrainTouch(Game game) : base(game, AbilityType.Normal, "Drain Touch", 3)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
         public override string GetDescription() =>
 $@"{ParentCharacter.FirstName()} wysysa z przeciwnika {Damage} HP,
@@ -25,9 +25,9 @@ i przywracając sobie HP równe wartości zadanej przeciwnikowi.
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-        public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+        public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-        private void Use(NKMCharacter character)
+        private void Use(Character character)
         {
             var dmg = new Damage(Damage, DamageType.Magical);
             ParentCharacter.Attack(this, character, dmg);

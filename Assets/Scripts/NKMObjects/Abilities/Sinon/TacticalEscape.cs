@@ -8,7 +8,7 @@ namespace NKMObjects.Abilities.Sinon
 		private const int SpeedIncrease = 8;
 		private const int Duration = 1;
 
-		public TacticalEscape() : base(AbilityType.Normal, "Tactical Escape", 4)
+		public TacticalEscape(Game game) : base(game, AbilityType.Normal, "Tactical Escape", 4)
 		{
 //			Name = "Tactical Escape";
 //			Cooldown = 4;
@@ -22,7 +22,7 @@ Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
 		public void Click()
 		{
 			Active.MakeAction();
-			ParentCharacter.Effects.Add(new StatModifier(Duration, SpeedIncrease, ParentCharacter, StatType.Speed, Name));
+			ParentCharacter.Effects.Add(new StatModifier(Game, Duration, SpeedIncrease, ParentCharacter, StatType.Speed, Name));
 			//ParentCharacter.Effects.Add(new BasicAttackInability(Duration, ParentCharacter, Name));
 			Finish();
 

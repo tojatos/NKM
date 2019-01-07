@@ -6,7 +6,7 @@ namespace NKMObjects.Abilities.Kirito
     {
         private const int DodgeChancePercent = 25;
 
-        public Parry() : base(AbilityType.Passive, "Parry")
+        public Parry(Game game) : base(game, AbilityType.Passive, "Parry")
         {
             OnAwake += () => ParentCharacter.BeforeBeingBasicAttacked += (character, damage) =>
             {

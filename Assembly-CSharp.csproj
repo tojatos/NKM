@@ -102,8 +102,8 @@
     <Compile Include="Assets\Scripts\GameLog.cs" />
     <Compile Include="Assets\Scripts\GameOptions.cs" />
     <Compile Include="Assets\Scripts\GamePlayer.cs" />
-    <Compile Include="Assets\Scripts\Hex\BetterHexCell.cs" />
     <Compile Include="Assets\Scripts\Hex\HexCell.cs" />
+    <Compile Include="Assets\Scripts\Hex\DrawnHexCell.cs" />
     <Compile Include="Assets\Scripts\Hex\HexCoordinates.cs" />
     <Compile Include="Assets\Scripts\Hex\HexDirection.cs" />
     <Compile Include="Assets\Scripts\Hex\HexMap.cs" />

@@ -7,7 +7,7 @@ namespace NKMObjects.Abilities.Yasaka_Mahiro
 	{
 		private const int AdditionalDamagePercent = 25;
 		private readonly List<Character> _damagedCharacters = new List<Character>();
-		public WhenTheyCry() : base(AbilityType.Passive, "When They Cry")
+		public WhenTheyCry(Game game) : base(game, AbilityType.Passive, "When They Cry")
 		{
 			OnAwake += () =>
 			{

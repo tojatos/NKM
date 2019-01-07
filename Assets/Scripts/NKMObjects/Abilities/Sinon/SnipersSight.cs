@@ -8,7 +8,7 @@ namespace NKMObjects.Abilities.Sinon
 {
 	public class SnipersSight : Ability
 	{
-		public SnipersSight() : base(AbilityType.Passive, "Sniper's Sight")
+		public SnipersSight(Game game) : base(game, AbilityType.Passive, "Sniper's Sight")
 		{
 			OnAwake += () =>
 			{
@@ -18,16 +18,16 @@ namespace NKMObjects.Abilities.Sinon
 
 		public override string GetDescription() => "Zasięg ataków podstawowych tej postaci jest kulisty.";
 		public override List<HexCell> GetRangeCells() => ParentCharacter.GetBasicAttackCells();
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
 		private List<HexCell> GetBasicAttackCellsOverride()
 		{
 			switch (ParentCharacter.Type)
 			{
 				case FightType.Ranged:
-					return ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.BasicAttackRange.Value);
+					return GetNeighboursOfOwner(ParentCharacter.BasicAttackRange.Value);
 				case FightType.Melee:
-					return ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.BasicAttackRange.Value, SearchFlags.StopAtWalls);
+					return GetNeighboursOfOwner(ParentCharacter.BasicAttackRange.Value, SearchFlags.StopAtWalls);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

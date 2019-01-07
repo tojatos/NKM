@@ -11,13 +11,13 @@ namespace Extensions
 {
 	public static class NKMObject
 	{
-//		public static Character CharacterOnCell(this HexCell cell) =>
-//			GameStarter.Instance.Game.Characters.SingleOrDefault(c => c.ParentCell == cell);
-		public static List<HexCell> WhereOnlyEnemiesOf(this List<HexCell> cells, GamePlayer player) => 
-			cells.FindAll(c => c.CharacterOnCell!= null && c.CharacterOnCell.Owner != player);
-		public static List<HexCell> WhereOnlyFriendsOf(this List<HexCell> cells, GamePlayer player) =>
-			cells.FindAll(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner == player);
-		public static List<HexCell> WhereOnlyCharacters(this List<HexCell> cells) => cells.FindAll(c => c.CharacterOnCell != null);
+		public static List<HexCell> WhereEnemiesOf(this List<HexCell> cells, Character character) => cells.WhereEnemiesOf(character.Owner);
+		public static List<HexCell> WhereEnemiesOf(this List<HexCell> cells, GamePlayer player) => 
+			cells.FindAll(c => c.CharactersOnCell.Any(a => a.IsEnemyFor(player)));
+		public static List<HexCell> WhereFriendsOf(this List<HexCell> cells, Character character) => cells.WhereFriendsOf(character.Owner);
+		public static List<HexCell> WhereFriendsOf(this List<HexCell> cells, GamePlayer player) =>
+			cells.FindAll(c => c.CharactersOnCell.Any(a => !a.IsEnemyFor(player)));
+		public static List<HexCell> WhereCharacters(this List<HexCell> cells) => cells.FindAll(c => c.CharactersOnCell.Count > 0);
 
 		private static string ToHex(this Color32 color) => $"#{color.r:X2}{color.g:X2}{color.b:X2}";
 		public static void Clear(this Transform transform)
@@ -79,13 +79,13 @@ namespace Extensions
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		private static HexTileType GetSpawnPointType(this GamePlayer gamePlayer) => GameStarter.Instance.Game.HexMapDrawer.HexMapScriptable.SpawnPoints[gamePlayer.GetIndex()];
-		public static List<HexCell> GetSpawnPoints(this GamePlayer gamePlayer) => GameStarter.Instance.Game.HexMapDrawer.Cells.FindAll(c => c.Type == gamePlayer.GetSpawnPointType());
-		public static List<NKMCharacter> GetCharacters(this IEnumerable<HexCell> cells) => cells.Where(c => c.CharacterOnCell != null).Select(c => c.CharacterOnCell).ToList();
+		private static HexTileType GetSpawnPointType(this GamePlayer gamePlayer, HexMap map) => map.SpawnPoints[gamePlayer.GetIndex()];
+		public static List<HexCell> GetSpawnPoints(this GamePlayer gamePlayer, HexMap map) => map.Cells.FindAll(c => c.Type == gamePlayer.GetSpawnPointType(map));
+		public static List<Character> GetCharacters(this IEnumerable<HexCell> cells) => cells.SelectMany(c => c.CharactersOnCell).ToList();
 
 		public static bool ContainsType(this IEnumerable<object> objects, Type type) => objects.Any(o => o.GetType() == type);
 		public static bool ContainsType<T>(this IEnumerable<object> objects) => objects.Any(o => o.GetType() == typeof(T));
 		public static string FormattedFirstName(this Character character) => string.Format("<color={0}><</color><b>{1}</b><color={0}>></color>", ((Color32)character.Owner.GetColor()).ToHex(), character.Name.Split(' ').Last());
-		public static string FirstName(this NKMCharacter character) => character.Name.Split(' ').Last();
+		public static string FirstName(this Character character) => character.Name.Split(' ').Last();
 	}
 }

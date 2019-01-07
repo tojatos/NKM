@@ -12,7 +12,7 @@ namespace NKMObjects.HexCellEffects
 		private readonly int _speedDecrease;
 		private bool _isBeingRemoved;
 
-		public HowlingBlizzard(int cooldown, HexCell parentCell, Character characterThatOwnsEffect, int value, string name) : base(cooldown, parentCell, name)
+		public HowlingBlizzard(Game game, int cooldown, HexCell parentCell, Character characterThatOwnsEffect, int value, string name) : base(game, cooldown, parentCell, name)
 		{
 			_characterThatOwnsEffect = characterThatOwnsEffect;
 			_speedDecrease = value;
@@ -21,20 +21,20 @@ namespace NKMObjects.HexCellEffects
 			OnRemove += () =>
 			{
 				_isBeingRemoved = true;
-				if (ParentCell.CharacterOnCell != null) RemoveEffect(ParentCell.CharacterOnCell);
+//				if (ParentCell.CharacterOnCell != null) RemoveEffect(ParentCell.CharacterOnCell);//TODO
 //				ParentCell.OnEnter -= AddEffect;//TODO
 //				ParentCell.OnLeave -= RemoveEffect;//TODO
 			};
-			if(ParentCell.CharacterOnCell!=null) AddEffect(ParentCell.CharacterOnCell);
+//			if(ParentCell.CharacterOnCell!=null) AddEffect(ParentCell.CharacterOnCell);//TODO
 			
-			parentCell.AddEffectHighlight(Name);
-			OnRemove += () => parentCell.RemoveEffectHighlight(Name);
+//			parentCell.AddEffectHighlight(Name);//TODO
+//			OnRemove += () => parentCell.RemoveEffectHighlight(Name);//TODO
 		}
 		private void AddEffect(Character character)
 		{
 			if(!character.IsEnemyFor(_characterThatOwnsEffect.Owner)) return;
 			if (character.Effects.Any(e => e.Name == Name)) return;
-            var effect = new StatModifier(1, -_speedDecrease, character, StatType.Speed, Name);
+            var effect = new StatModifier(Game, 1, -_speedDecrease, character, StatType.Speed, Name);
 			effect.OnRemove += () =>
 			{
 				if (effect.ParentCharacter.ParentCell.Effects.ContainsType(typeof(HowlingBlizzard))&&!effect.ParentCharacter.IsLeaving&&!_isBeingRemoved)

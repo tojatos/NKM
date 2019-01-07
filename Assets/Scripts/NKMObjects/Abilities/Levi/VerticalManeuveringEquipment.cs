@@ -10,15 +10,15 @@ namespace NKMObjects.Abilities.Levi
     {
         private const int Range = 7;
         private const int MoveTargetRange = 7;
-        public VerticalManeuveringEquipment() : base(AbilityType.Normal, "Vertical Maneuvering Equipment", 2)
+        public VerticalManeuveringEquipment(Game game) : base(game, AbilityType.Normal, "Vertical Maneuvering Equipment", 2)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine);
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.Type == HexTileType.Wall);
         private List<HexCell> GetMoveTargets(HexCell cell) =>
-            cell.GetNeighbors(MoveTargetRange, SearchFlags.StraightLine).FindAll(e => e.IsFreeToStand);
+            cell.GetNeighbors(Owner.Owner, MoveTargetRange, SearchFlags.StraightLine).FindAll(e => e.IsFreeToStand);
 
         public override string GetDescription() =>
 $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i przemieszcza się o max. {MoveTargetRange} pól.";
@@ -31,7 +31,7 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
             if (cell.Type == HexTileType.Wall)
             {
                 Active.Prepare(this, GetMoveTargets(cell));
-                AnimationPlayer.Add(new MoveTo(ParentCharacter.CharacterObject.transform, cell.transform.position, 0.13f));
+                AnimationPlayer.Add(new MoveTo(ParentCharacter.CharacterObject.transform, Active.SelectDrawnCell(cell).transform.position, 0.13f));
             }
             else
             {
@@ -43,7 +43,7 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
         public override void Cancel()
         {
             base.Cancel();
-            AnimationPlayer.Add(new MoveTo(ParentCharacter.CharacterObject.transform, ParentCharacter.ParentCell.transform.position, 0.13f));
+            AnimationPlayer.Add(new MoveTo(ParentCharacter.CharacterObject.transform, Active.SelectDrawnCell(ParentCharacter.ParentCell).transform.position, 0.13f));
         }
     }
 }

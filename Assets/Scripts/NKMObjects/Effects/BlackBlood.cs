@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Extensions;
 using NKMObjects.Templates;
 
 namespace NKMObjects.Effects
 {
     public class BlackBlood : Effect
     {
-        private readonly NKMCharacter _characterThatAttacks;
+        private readonly Character _characterThatAttacks;
         private bool _wasActivatedOnce;
 
-        public BlackBlood(NKMCharacter characterThatAttacks, NKMCharacter effectTarget, int cooldown, int damage, int range) : base(cooldown,
+        public BlackBlood(Game game, Character characterThatAttacks, Character effectTarget, int cooldown, int damage, int range) : base(game, cooldown,
             effectTarget, "Black Blood")
         {
             _characterThatAttacks = characterThatAttacks;
@@ -19,8 +20,8 @@ namespace NKMObjects.Effects
                 if(d.Value==0) return;
                 if(_wasActivatedOnce) return;//prevent infinite loop
                 _wasActivatedOnce = true; 
-                List<NKMCharacter> enemiesInRange =
-                    ParentCharacter.ParentCell.GetNeighbors(range).Select(c => c.CharacterOnCell).Where(c => c != null && c.Owner != characterThatAttacks.Owner).ToList();
+                List<Character> enemiesInRange =
+                    GetNeighboursOfOwner(range).SelectMany(c => c.CharactersOnCell).Where(c => c.IsEnemyFor(Owner)).ToList();
                 if(effectTarget.Owner != characterThatAttacks.Owner) enemiesInRange.Add(effectTarget);
                 enemiesInRange.ForEach(enemy =>
                 {

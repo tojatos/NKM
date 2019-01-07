@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using Hex;
 using Managers;
 
 namespace NKMObjects.Templates
 {
-	public abstract class Effect : NKMObject
+	public abstract class Effect// : NKMObject
 	{
-		private static Game Game => GameStarter.Instance.Game;
-		protected static Active Active => Game.Active;
-		protected static Console Console => Console.Instance;
-		protected Effect(int cooldown, Character parentCharacter, string name = null)
+		private Game Game;
+		public string Name;
+		protected Active Active => Game.Active;
+		protected Console Console => Game.Console;
+		public Character Owner => ParentCharacter;
+		protected Effect(Game game, int cooldown, Character parentCharacter, string name = null)
 		{
+			Game = game;
 			CurrentCooldown = cooldown >= 0 ? cooldown : int.MaxValue; //effect is infinite
 			ParentCharacter = parentCharacter;
 			if (name != null) Name = name;
@@ -34,6 +39,9 @@ namespace NKMObjects.Templates
 		public virtual bool IsCC => false;
 
 		public abstract string GetDescription();
+		
+		protected List<HexCell> GetNeighboursOfOwner(int depth, SearchFlags searchFlags = SearchFlags.None, Predicate<HexCell> stopAt = null) =>
+			ParentCharacter.ParentCell.GetNeighbors(Owner.Owner, depth, searchFlags, stopAt);
 //		public virtual int Modifier(StatType statType)
 //		{
 //			return 0;

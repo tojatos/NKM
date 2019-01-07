@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Gilgamesh
 		private const int Damage = 25;
 		private const int Range = 6;
 		private const int Radius = 6;
-		public GateOfBabylon() : base(AbilityType.Ultimatum, "Gate Of Babylon", 5) {}
+		public GateOfBabylon(Game game) : base(game, AbilityType.Ultimatum, "Gate Of Babylon", 5) {}
 		
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} otwiera wrota Babilonu, zsyłając deszcz mieczy na wskazanym obszarze w promieniu {Radius},
@@ -20,7 +20,7 @@ a w przeciwnym razie - fizyczne.
 
 Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
 
 		public void Click()
 		{

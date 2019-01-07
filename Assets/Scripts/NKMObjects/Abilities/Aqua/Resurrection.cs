@@ -3,16 +3,16 @@ using System.Linq;
 using Extensions;
 using Hex;
 using NKMObjects.Templates;
-using NKMObject = NKMObjects.Templates.NKMObject;
+//using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace NKMObjects.Abilities.Aqua
 {
 	public class Resurrection : Ability, IClickable, IUseable
 	{
-		private NKMCharacter _characterToResurrect;
-		public override List<HexCell> GetRangeCells() => Active.GamePlayer.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList();
+		private Character _characterToResurrect;
+		public override List<HexCell> GetRangeCells() => Active.GamePlayer.GetSpawnPoints(HexMap).Where(sp => sp.IsFreeToStand).ToList();
 
-		public Resurrection() : base(AbilityType.Ultimatum, "Resurrection", 8)
+		public Resurrection(Game game) : base(game, AbilityType.Ultimatum, "Resurrection", 8)
 		{
 			OnAwake += () =>
 			{
@@ -39,10 +39,10 @@ Czas odnowienia: {Cooldown}";
 
 		private void FinishSelectingButtonClick()
 		{
-			List<NKMObject> selectedObj = SpriteSelect.Instance.SelectedObjects;
+			List<Character> selectedObj = SpriteSelect.Instance.SelectedObjects;
 			if (selectedObj.Count != 1) return;
 
-			var character = (NKMCharacter) selectedObj[0];
+			Character character = selectedObj[0];
 			_characterToResurrect = character;
 			Active.Prepare(this, GetRangeCells());
 			SpriteSelect.Instance.Close();

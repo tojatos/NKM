@@ -94,7 +94,7 @@
         <e p="GameOptions.cs" t="Include" />
         <e p="GamePlayer.cs" t="Include" />
         <e p="Hex" t="Include">
-          <e p="BetterHexCell.cs" t="Include" />
+          <e p="DrawnHexCell.cs" t="Include" />
           <e p="HexCell.cs" t="Include" />
           <e p="HexCoordinates.cs" t="Include" />
           <e p="HexDirection.cs" t="Include" />

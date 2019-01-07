@@ -6,7 +6,7 @@ namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 	public class NineLives : Ability
 	{
 		private const int HealthRegainedPercent = 25;
-		public NineLives() : base(AbilityType.Passive, "Nine Lives")
+		public NineLives(Game game) : base(game, AbilityType.Passive, "Nine Lives")
 		{
 			OnAwake += () =>
 			{

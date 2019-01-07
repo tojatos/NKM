@@ -6,7 +6,7 @@ namespace NKMObjects.Effects
 	{
 		private readonly int _healPerTick;
 
-		public HealOverTime(Character characterThatHeals, int healPerTick, int cooldown, Character parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
+		public HealOverTime(Game game, Character characterThatHeals, int healPerTick, int cooldown, Character parentCharacter, string name = null) : base(game, cooldown, parentCharacter, name)
 		{
 			Name = name ?? "Heal Over Time";
 			_healPerTick = healPerTick;

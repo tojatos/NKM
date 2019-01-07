@@ -76,7 +76,7 @@ public class Console : SingletonMonoBehaviour<Console>
         //		FinishLogging();
     }
 
-    public static void GameLog(string text)
+    public void GameLog(string text)
     {
         string path = Game.Options.LogFilePath;
         if (path == null) return;
@@ -100,7 +100,7 @@ public class Console : SingletonMonoBehaviour<Console>
             if ((new[] { "debug", "d" }).Contains(arguments[1])) bool.TryParse(arguments[2], out _isDebug);
             if ((new[] { "abilities", "ab" }).Contains(arguments[1]))
             {
-                if ((new[] { "free", "f" }).Contains(arguments[2])) HexMapDrawer.Instance.Cells.GetCharacters()
+                if ((new[] { "free", "f" }).Contains(arguments[2])) Game.Characters.FindAll(c => c.IsOnMap)
                   .ForEach(c => c.Abilities.ForEach(a => a.CurrentCooldown = 0));
             }
             if (Active.CharacterOnMap == null) return;

@@ -13,7 +13,7 @@ namespace NKMObjects.Abilities.Yoshino
         private int _currentHitRemains;
         private int _currentTimeDurability;
         
-        public Zadkiel() : base(AbilityType.Normal, "Zadkiel", 3)
+        public Zadkiel(Game game) : base(game, AbilityType.Normal, "Zadkiel", 3)
         {
             OnAwake += () =>
             {
@@ -22,7 +22,7 @@ namespace NKMObjects.Abilities.Yoshino
                     if(!IsEnabled) return;
                     if (!character.IsEnemyFor(Owner)) return;
                     damage.Value = 0;
-                    character.Effects.Add(new Stun(StunDuration, character, Name));
+                    character.Effects.Add(new Stun(Game, StunDuration, character, Name));
                     _currentHitRemains--;
                     if (_currentHitRemains <= 0) Disable();
                 };

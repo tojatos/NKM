@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Carmel_Wilhelmina
         private const int MoveTargetRange = 3;
         private const int Shield = 10;
         private const int StunDuration = 1;
-        public TiamatsIntervention() : base(AbilityType.Ultimatum, "Tiamat's Intervention", 6)
+        public TiamatsIntervention(Game game) : base(game, AbilityType.Ultimatum, "Tiamat's Intervention", 6)
         {
             OnAwake += () => Validator.ToCheck.Add(()=>GetMoveTargets().Count > 0);
         }
@@ -22,24 +22,24 @@ $@"{ParentCharacter.Name} przyciąga do siebie jednostkę znajdującą się w pr
 Dodatkowo, jeśli jest to sojusznik, to daje mu {Shield} tarczy,
 a jeśli przeciwnik, ogłusza go na {StunDuration} fazę.";
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyCharacters();
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereCharacters();
 
         private List<HexCell> GetMoveTargets() =>
-            ParentCharacter.ParentCell.GetNeighbors(MoveTargetRange).FindAll(e => e.IsFreeToStand);
+            GetNeighboursOfOwner(MoveTargetRange).FindAll(e => e.IsFreeToStand);
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
         public void Use(List<HexCell> cells)
         {
             HexCell cell = cells[0];
-            if(cell.CharacterOnCell!=null) Use(cell.CharacterOnCell);
+            if(!cell.IsEmpty) Use(cell.CharactersOnCell[0]);
             else Use(cell);
         }
 
-        private NKMCharacter _selectedCharacter;
+        private Character _selectedCharacter;
 
-        private void Use(NKMCharacter character)
+        private void Use(Character character)
         {
             _selectedCharacter = character;
             Active.Prepare(this, GetMoveTargets());
@@ -48,7 +48,7 @@ a jeśli przeciwnik, ogłusza go na {StunDuration} fazę.";
         private void Use(HexCell cell)
         {
             _selectedCharacter.MoveTo(cell);
-            if (_selectedCharacter.IsEnemyFor(Owner)) _selectedCharacter.Effects.Add(new Stun(StunDuration, _selectedCharacter, Name));
+            if (_selectedCharacter.IsEnemyFor(Owner)) _selectedCharacter.Effects.Add(new Stun(Game, StunDuration, _selectedCharacter, Name));
             else _selectedCharacter.Shield.Value += Shield;
 
             Finish(); 

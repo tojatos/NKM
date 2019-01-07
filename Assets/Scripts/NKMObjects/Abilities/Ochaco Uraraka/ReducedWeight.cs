@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Extensions;
 using Hex;
 using NKMObjects.Effects;
@@ -8,13 +9,13 @@ namespace NKMObjects.Abilities.Ochaco_Uraraka
 {
     public class ReducedWeight : Ability, IClickable, IUseable
     {
-        public ReducedWeight() : base(AbilityType.Normal, "Reduced Weight", 3)
+        public ReducedWeight(Game game) : base(game, AbilityType.Normal, "Reduced Weight", 3)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
 
         public override List<HexCell> GetRangeCells() => ParentCharacter.GetBasicAttackCells();
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyFriendsOf(Owner);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner);
 
         public override string GetDescription() =>
 $@"{ParentCharacter.FirstName()} nakłada na sojusznika efekt Zero Gravity,
@@ -25,12 +26,12 @@ Czas odnowienia: {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+        public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-        private void Use(NKMCharacter character)
+        private void Use(Character character)
         {
-            ZeroGravity.AddEffect(character);
-            character.Effects.Add(new StatModifier(1, character.Speed.RealValue, character, StatType.Speed, Name));
+            ParentCharacter.Abilities.OfType<ZeroGravity>().First().AddEffect(character);
+            character.Effects.Add(new StatModifier(Game, 1, character.Speed.RealValue, character, StatType.Speed, Name));
             Finish();
         }
     }

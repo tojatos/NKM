@@ -10,13 +10,13 @@ namespace NKMObjects.Abilities.Rem
 		private const int AbilityDamage = 15;
 		private const int AbilityRange = 4;
 
-		public MorgensternHit() : base(AbilityType.Normal, "Morgenstern Hit", 4)
+		public MorgensternHit(Game game) : base(game, AbilityType.Normal, "Morgenstern Hit", 4)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(AbilityRange);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} wymachuje morgenszternem wokół własnej osi,

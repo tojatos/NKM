@@ -13,13 +13,13 @@ namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 		private const int DoTTime = 5;
 		private const int AdditionalDamagePercent = 25;
 
-		public CurseOfTheBlackCat() : base(AbilityType.Ultimatum, "Curse of The Black Cat", 7)
+		public CurseOfTheBlackCat(Game game) : base(game, AbilityType.Ultimatum, "Curse of The Black Cat", 7)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(AbilityRange);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
 		public override string GetDescription() => string.Format(
 @"{0} rzuca klątwę na wroga wysysając z niego {1} HP co fazę przez {2} fazy (zadaje obrażenia nieuchronne).
@@ -28,12 +28,12 @@ Zasięg: {4} Czas odnowienia: {5}",
 			ParentCharacter.Name, DoTDamage, DoTTime, AdditionalDamagePercent, AbilityRange, Cooldown);
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(NKMCharacter targetCharacter)
+		private void Use(Character targetCharacter)
 		{
 			var damage = new Damage(DoTDamage, DamageType.True);
-            targetCharacter.Effects.Add(new HPDrain(ParentCharacter, damage, DoTTime, targetCharacter, Name));
+            targetCharacter.Effects.Add(new HPDrain(Game, ParentCharacter, damage, DoTTime, targetCharacter, Name));
             Finish();
 		}
 	}

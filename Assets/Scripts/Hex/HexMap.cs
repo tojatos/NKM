@@ -6,22 +6,24 @@ namespace Hex
 {
     public class HexMap
     {
-	    public readonly List<BetterHexCell> Cells;
-	    private readonly Dictionary<NKMCharacter, BetterHexCell> _charactersOnCells = new Dictionary<NKMCharacter, BetterHexCell>();
+	    public List<HexCell> Cells;
+		public readonly List<HexTileType> SpawnPoints;
+	    private readonly Dictionary<Character, HexCell> _charactersOnCells = new Dictionary<Character, HexCell>();
 	    
 	    /// <summary>
 	    /// Moves or places character on a cell
 	    /// </summary>
-	    public void Move(NKMCharacter character, BetterHexCell hexCell) => _charactersOnCells[character] = hexCell;
-	    public void RemoveFromMap(NKMCharacter character) => _charactersOnCells[character] = null;
+	    public void Move(Character character, HexCell hexCell) => _charactersOnCells[character] = hexCell;
+	    public void RemoveFromMap(Character character) => _charactersOnCells[character] = null;
 	    
-	    public BetterHexCell GetCell(NKMCharacter character) => _charactersOnCells[character];
-	    public List<NKMCharacter> GetCharacters(BetterHexCell hexCell) =>
+	    public HexCell GetCell(Character character) => _charactersOnCells[character];
+	    public List<Character> GetCharacters(HexCell hexCell) =>
 		    _charactersOnCells.Where(pair => pair.Value == hexCell).Select(pair => pair.Key).ToList();
 	    
-		public HexMap (List<BetterHexCell> cells)
+		public HexMap (List<HexCell> cells, List<HexTileType> spawnPoints)
 		{
 			Cells = cells;
+			SpawnPoints = spawnPoints;
 		}
     }
 }

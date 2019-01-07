@@ -6,7 +6,7 @@ namespace NKMObjects.Effects
 	{
 		private readonly Damage _damagePerTick;
 
-		public Poison(NKMCharacter characterThatAttacks, Damage damagePerTick, int cooldown, NKMCharacter parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
+		public Poison(Game game, Character characterThatAttacks, Damage damagePerTick, int cooldown, Character parentCharacter, string name = null) : base(game, cooldown, parentCharacter, name)
 		{
 			Name = name ?? "Poison";
 			_damagePerTick = damagePerTick;

@@ -15,19 +15,21 @@ public class Game
 	public GameOptions Options { get; private set; }
 
 	public List<GamePlayer> Players;
-	public List<NKMCharacter> Characters => Players.SelectMany(p => p.Characters).ToList();
+	public List<Character> Characters => Players.SelectMany(p => p.Characters).ToList();
 	public List<Ability> Abilities => Characters.SelectMany(p => p.Abilities).ToList();
 	public readonly Active Active;
 	private UIManager _uiManager;
 	private Spawner _spawner;
 	public HexMapDrawer HexMapDrawer;
 	public HexMap HexMap;
+	public Console Console;
 
 	public bool IsInitialized;
 	public bool IsReplay => Options.GameLog != null;
 	public Game()
 	{
-		Active = new Active();
+		Active = new Active(this);
+		Console = Console.Instance; //TODO
 	}
 
 	public void Init(GameOptions gameOptions)
@@ -37,6 +39,7 @@ public class Game
 		Players = new List<GamePlayer>(gameOptions.Players);
 		_uiManager = Options.UIManager;
 		HexMapDrawer = HexMapDrawer.Instance;
+		HexMapDrawer.Init(this);
 		_spawner = Spawner.Instance;
 		Players.ForEach(p => p.Characters.ForEach(c => c.Abilities.ForEach(a => a.Awake())));
 		NKMRandom.OnValueGet += (name, value) => Console.GameLog($"RNG: {name}; {value}");
@@ -53,7 +56,6 @@ public class Game
 		if (!IsInitialized) return false;
 
 		HexMap = HexMapFactory.FromScriptable(Options.MapScriptable);
-		HexMapDrawer.HexMapScriptable = Options.MapScriptable;
 		HexMapDrawer.CreateMap(HexMap);
 //		HexMapDrawer.CreateMap(Options.MapScriptable);
 		_uiManager.Init();
@@ -91,25 +93,25 @@ public class Game
 				//TODO: Remove that all and work with clicks maybe, or not
                 case "CHARACTER PLACED":
 	                string[] data = action[1].SplitData();
-	                NKMCharacter character = Characters.First(c => c.ToString() == data[0]);
-	                HexCell cell =  HexMapDrawer.Cells.First(c => c.ToString() == data[1]);
+	                Character character = Characters.First(c => c.ToString() == data[0]);
+	                HexCell cell =  HexMap.Cells.First(c => c.ToString() == data[1]);
 	                PlaceCharacter(character, cell);
 	                break;
                 case "TURN FINISHED": Active.Turn.Finish(); break;
                 case "ACTION TAKEN": Characters.First(c => c.ToString() == action[1]).TryToInvokeJustBeforeFirstAction(); break;
                 case "MOVE":
-	                List<HexCell> moveCells = action[1].SplitData().ConvertToHexCellList();
+	                List<HexCell> moveCells = action[1].SplitData().ConvertToHexCellList(HexMap);
 	                Active.Turn.CharacterThatTookActionInTurn.MakeActionBasicMove(moveCells);
 	                break;
                 case "BASIC ATTACK":
-	                NKMCharacter targetCharacter = Characters.First(c => c.ToString() == action[1]);
+	                Character targetCharacter = Characters.First(c => c.ToString() == action[1]);
 	                Active.Turn.CharacterThatTookActionInTurn.MakeActionBasicAttack(targetCharacter);
 	                break;
                 case "ABILITY CLICK":
 	                ((IClickable) Abilities.First(a => a is IClickable && a.ID == int.Parse(action[1]))).Click();
 	                break;
                 case "ABILITY USE":
-	                List<HexCell> targetCells = action[1].SplitData().ConvertToHexCellList();
+	                List<HexCell> targetCells = action[1].SplitData().ConvertToHexCellList(HexMap);
 //	                ((IUseable) Abilities.First(a => a is IUseable && a.ID == abilityID)).Use(targetCells);
 	                Active.AbilityToUse.Use(targetCells);
 	                break;
@@ -177,7 +179,7 @@ GAME STARTED: true";
 	public void TouchCell(HexCell touchedCell)
 	{
 		Active.SelectedCell = touchedCell;
-		if (Active.NkmObject != null)
+		if (Active.SelectedCharacterToPlace != null)
 		{
 			UseMyGameObject(touchedCell);
 
@@ -198,14 +200,14 @@ GAME STARTED: true";
 				HexMapDrawer.RemoveHighlights();
 			}
 			
-			if (touchedCell.CharacterOnCell != null)
+			if (touchedCell.CharactersOnCell.Count > 0)
 			{
-				touchedCell.CharacterOnCell.Select();
+				touchedCell.CharactersOnCell[0].Select();
 			}
 			else
 			{
 				Active.CharacterOnMap?.Deselect();
-				touchedCell.AddHighlight(Highlights.BlackTransparent);
+				Active.SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
 			}
 		}
 //		touchedCell.GetArea(HexDirection.Ne, 6, 7).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
@@ -213,13 +215,12 @@ GAME STARTED: true";
 
 	private void UseMyGameObject(HexCell cell)
 	{
-		if (Active.NkmObject.GetType() != typeof(NKMCharacter)) return;
 		if (Active.Turn.WasCharacterPlaced) return;
-		var activeCharacter = Active.NkmObject as NKMCharacter;
+		var activeCharacter = Active.SelectedCharacterToPlace;
 		PlaceCharacter(activeCharacter, cell);
 	}
 
-	private void PlaceCharacter(NKMCharacter characterToPlace, HexCell targetCell)
+	private void PlaceCharacter(Character characterToPlace, HexCell targetCell)
 	{
 		if(!Spawner.CanSpawn(characterToPlace, targetCell)) return;
 			
@@ -233,7 +234,7 @@ GAME STARTED: true";
 		}
 		else
 		{
-			Active.NkmObject = null;
+			Active.SelectedCharacterToPlace = null;
 			HexMapDrawer.RemoveHighlights();
 			characterToPlace?.Select();
 		}
@@ -253,9 +254,9 @@ GAME STARTED: true";
 		if(Active.Phase.Number==0) Active.Phase.Finish();
 	}
 
-	private static void TrySpawningOnRandomCell(GamePlayer p, NKMCharacter c)
+	private void TrySpawningOnRandomCell(GamePlayer p, Character c)
 	{
-		HexCell spawnPoint = p.GetSpawnPoints().FindAll(cell => Spawner.CanSpawn(c, cell)).GetRandomNoLog();
+		HexCell spawnPoint = p.GetSpawnPoints(HexMap).FindAll(cell => Spawner.CanSpawn(c, cell)).GetRandomNoLog();
 		if (spawnPoint == null) return;
 
 		Spawner.Instance.Spawn(spawnPoint, c);

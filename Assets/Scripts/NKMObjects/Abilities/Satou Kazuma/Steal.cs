@@ -9,7 +9,7 @@ namespace NKMObjects.Abilities.Satou_Kazuma
     {
         private const int Duration = 4;
         private const int Range = 6;
-        public Steal() : base(AbilityType.Ultimatum, "Steal", 6)
+        public Steal(Game game) : base(game, AbilityType.Ultimatum, "Steal", 6)
         {
             OnAwake += () =>
             {
@@ -23,8 +23,8 @@ namespace NKMObjects.Abilities.Satou_Kazuma
             };
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
         
         public override string GetDescription()
         {
@@ -38,13 +38,13 @@ Umiejętność jest włączona od {_currentDuration} faz.";
         }
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-        public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+        public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
 
-        private NKMCharacter _lastTargetCharacter;
+        private Character _lastTargetCharacter;
         private int _currentDuration;
         
-        private void Use(NKMCharacter character)
+        private void Use(Character character)
         {
             _lastTargetCharacter = character;
             _currentDuration = 1;

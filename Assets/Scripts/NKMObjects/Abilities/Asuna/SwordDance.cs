@@ -13,7 +13,7 @@ namespace NKMObjects.Abilities.Asuna
 		private int _phasesRemain = 3;
 		private int _currentBonusAttack;
 
-		public SwordDance() : base(AbilityType.Ultimatum, "Sword Dance", 4)
+		public SwordDance(Game game) : base(game, AbilityType.Ultimatum, "Sword Dance", 4)
 		{
 			OnAwake += () =>
 			{

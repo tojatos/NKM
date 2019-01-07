@@ -4,7 +4,7 @@ namespace NKMObjects.Effects
 {
 	public class Snare : Effect
 	{
-		public Snare(int cooldown, Character parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
+		public Snare(Game game, int cooldown, Character parentCharacter, string name=null) : base(game, cooldown, parentCharacter, name)
 		{
 			Name = name?? "Snare";
 			Type = EffectType.Negative;

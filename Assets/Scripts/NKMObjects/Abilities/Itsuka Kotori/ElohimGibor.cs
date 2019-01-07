@@ -9,7 +9,7 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
 		private int _amountToHeal;
 		private bool _wasDamagedThisTurn;
 		
-		public ElohimGibor() : base(AbilityType.Passive, "Elohim Gibor")
+		public ElohimGibor(Game game) : base(game, AbilityType.Passive, "Elohim Gibor")
 		{
 			OnAwake += () =>
 			{

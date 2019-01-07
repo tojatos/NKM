@@ -13,7 +13,7 @@ namespace NKMObjects.Abilities.Yoshino
 	    private const int AfterLosingHP = 15;
 
 	    private int _lastTreshold;
-	    public TheHermit() : base(AbilityType.Passive, "The Hermit")
+	    public TheHermit(Game game) : base(game, AbilityType.Passive, "The Hermit")
 		{
 			OnAwake += () =>
 			{
@@ -30,15 +30,15 @@ namespace NKMObjects.Abilities.Yoshino
 			};
 		}
 
-	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+	    public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
 	    public override string GetDescription() => 
 $@"{ParentCharacter.Name} ogłusza wrogów w promieniu {Range} pól na {EffectDuration} tury co każde {AfterLosingHP} HP, które straci.
 Następna aktywacja umiejętności po przekroczeniu <color=red>{_lastTreshold - 15}</color> HP";
 
 	    private void StunEnemiesInRange()
 	    {
-		    List<NKMCharacter> enemiesInRange = GetRangeCells().GetCharacters().FindAll(c => c.IsEnemyFor(Owner));
-		    enemiesInRange.ForEach(e => e.Effects.Add(new Stun(EffectDuration, e, Name)));
+		    List<Character> enemiesInRange = GetRangeCells().GetCharacters().FindAll(c => c.IsEnemyFor(Owner));
+		    enemiesInRange.ForEach(e => e.Effects.Add(new Stun(Game, EffectDuration, e, Name)));
 	    }
 
 	    public void Run() => StunEnemiesInRange();

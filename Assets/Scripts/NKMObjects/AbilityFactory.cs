@@ -24,7 +24,7 @@ namespace NKMObjects
 	    {
 		    string abilityNamespaceName = "Abilities." + name.Replace(' ', '_');
 		    List<Ability> abilities =
-			    Spawner.Create(abilityNamespaceName, abilityClassNames).ToList().ConvertAll(x => x as Ability);
+			    Spawner.Create<Ability>(abilityNamespaceName, abilityClassNames).ToList();//.ConvertAll(x => x as Ability);
 		    return abilities;
 	    }
 

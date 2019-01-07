@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Derieri
     {
         private const int MaxDistanceFromTarget = 2;
         private const int Range = 9;
-        public GapCloser() : base(AbilityType.Ultimatum, "Gap closer", 4)
+        public GapCloser(Game game) : base(game, AbilityType.Ultimatum, "Gap closer", 4)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
             CanUseOnGround = false;
@@ -22,21 +22,21 @@ Dodatkowo otrzymuje możliwość podstawowego ataku.
 
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
         public override List<HexCell> GetTargetsInRange()
         {
 			ComboStar passiveAbility = ParentCharacter.Abilities.OfType<ComboStar>().SingleOrDefault();
             Character targetCharacter = passiveAbility?.ComboCharacter;
-            return targetCharacter==null ? new List<HexCell>() : GetRangeCells().FindAll(c => c.CharacterOnCell == targetCharacter).FindAll(c => c.GetNeighbors(MaxDistanceFromTarget).Any(cc => cc.IsFreeToStand));
+            return targetCharacter==null ? new List<HexCell>() : GetRangeCells().FindAll(c => c.CharactersOnCell[0] == targetCharacter).FindAll(c => c.GetNeighbors(Owner.Owner, MaxDistanceFromTarget).Any(cc => cc.IsFreeToStand));
         }
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
         public void Use(List<HexCell> cells)
         {
-            if (cells[0].CharacterOnCell != null)
+            if (cells[0].CharactersOnCell[0] != null)
             {
-                Active.Prepare(this, cells[0].GetNeighbors(MaxDistanceFromTarget).FindAll(c => c.IsFreeToStand));
+                Active.Prepare(this, cells[0].GetNeighbors(Owner.Owner, MaxDistanceFromTarget).FindAll(c => c.IsFreeToStand));
             }
             else
             {

@@ -8,15 +8,15 @@ namespace NKMObjects.Abilities.Shana
 	{
 		private const int Duration = 4;
 		private const int SpeedBonus = 3;
-		public GurenNoSouyoku() : base(AbilityType.Passive, "Guren no Souyoku")
+		public GurenNoSouyoku(Game game) : base(game, AbilityType.Passive, "Guren no Souyoku")
 		{
 			OnAwake += () =>
 			{
 				ParentCharacter.AfterBeingDamaged += damage =>
 				{
 					ParentCharacter.Effects.Where(e => e.Name == Name).ToList().ForEach(e => e.RemoveFromParent());
-					ParentCharacter.Effects.Add(new Effects.Flying(Duration, ParentCharacter, Name));
-					ParentCharacter.Effects.Add(new Effects.StatModifier(Duration, SpeedBonus, ParentCharacter, StatType.Speed, Name));
+					ParentCharacter.Effects.Add(new Effects.Flying(Game, Duration, ParentCharacter, Name));
+					ParentCharacter.Effects.Add(new Effects.StatModifier(Game, Duration, SpeedBonus, ParentCharacter, StatType.Speed, Name));
 				};
 			};
 		}

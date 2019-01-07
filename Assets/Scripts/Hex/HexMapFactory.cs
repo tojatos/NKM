@@ -12,7 +12,7 @@ namespace Hex
         {
 			int width = hexMapScriptable.Map.width;
 			int height = hexMapScriptable.Map.height;
-	        List<BetterHexCell> cells = new List<BetterHexCell>();
+	        HexMap map = new HexMap(new List<HexCell>(), hexMapScriptable.SpawnPoints);
 			for (int z = 0, i = 0; z < height; z++)
 			{
 				for (int x = 0; x < width; x++)
@@ -22,36 +22,37 @@ namespace Hex
 					
 					HexTileType type = hexMapScriptable.ColorMappings.ToList()
 						.First(c => c.Color.Equals(pixelColor)).HexTileType;
-					GetScriptableCell(ref cells, width, type, x, z, i++);
+					GetScriptableCell(ref map, width, type, x, z, i++);
 				}
 			}
-	        return new HexMap(cells);
+
+	        return map;
         }
 
-	    private static void GetScriptableCell(ref List<BetterHexCell> cells, int width, HexTileType type, int x, int z, int i)
+	    private static void GetScriptableCell(ref HexMap map, int width, HexTileType type, int x, int z, int i)
 	    {
-		    BetterHexCell cell = new BetterHexCell(HexCoordinates.FromOffsetCoordinates(x, z), type);
-		    cells.Add(cell);
+		    HexCell cell = new HexCell(map, HexCoordinates.FromOffsetCoordinates(x, z), type);
+		    map.Cells.Add(cell);
 			if (x > 0)
 			{
-				cell.SetNeighbor(HexDirection.W, cells[i - 1]);
+				cell.SetNeighbor(HexDirection.W, map.Cells[i - 1]);
 			}
 			if (z > 0)
 			{
 				if ((z & 1) == 0)
 				{
-					cell.SetNeighbor(HexDirection.Se, cells[i - width]);
+					cell.SetNeighbor(HexDirection.Se, map.Cells[i - width]);
 					if (x > 0)
 					{
-						cell.SetNeighbor(HexDirection.Sw, cells[i - width - 1]);
+						cell.SetNeighbor(HexDirection.Sw, map.Cells[i - width - 1]);
 					}
 				}
 				else
 				{
-					cell.SetNeighbor(HexDirection.Sw, cells[i - width]);
+					cell.SetNeighbor(HexDirection.Sw, map.Cells[i - width]);
 					if (x < width - 1)
 					{
-						cell.SetNeighbor(HexDirection.Se, cells[i - width + 1]);
+						cell.SetNeighbor(HexDirection.Se, map.Cells[i - width + 1]);
 					}
 				}
 

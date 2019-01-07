@@ -12,13 +12,13 @@ namespace NKMObjects.Abilities.Nibutani_Shinka
         private const int Damage = 15;
         private const int KnockbackAmount = 4;
         private const int StunDuration = 1;
-        public SummerBreeze() : base(AbilityType.Normal, "Summer Breeze", 3)
+        public SummerBreeze(Game game) : base(game, AbilityType.Normal, "Summer Breeze", 3)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine | SearchFlags.StopAtWalls);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine | SearchFlags.StopAtWalls);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
         public override string GetDescription() =>
 $@"Przywołuje Letnią Bryzę, która odrzuca wybranego wroga o {KnockbackAmount} pól w tył.
@@ -30,21 +30,21 @@ Czas odnowienia: {Cooldown}";
         public void Click() => Active.Prepare(this, GetTargetsInRange());
         public void Use(List<HexCell> cells)
         {
-            NKMCharacter target = cells[0].CharacterOnCell;
+            Character target = cells[0].CharactersOnCell[0];
             HexDirection direction = ParentCharacter.ParentCell.GetDirection(target.ParentCell);
             Knockback(target, direction);
             Finish();
         }
 
-        private void Knockback(NKMCharacter character, HexDirection direction)
+        private void Knockback(Character character, HexDirection direction)
         {
             List<HexCell> line = character.ParentCell.GetLine(direction, KnockbackAmount);
             HexCell lastCell = character.ParentCell;
             foreach (HexCell c in line)
             {
-                if (c.Type == HexTileType.Wall || c.CharacterOnCell != null)
+                if (c.Type == HexTileType.Wall || c.CharactersOnCell[0] != null)
                 {
-                    character.Effects.Add(new Stun(StunDuration, character, Name));
+                    character.Effects.Add(new Stun(Game, StunDuration, character, Name));
                     ParentCharacter.Attack(this, character, new Damage(Damage, DamageType.Magical));
                     break;
                 }

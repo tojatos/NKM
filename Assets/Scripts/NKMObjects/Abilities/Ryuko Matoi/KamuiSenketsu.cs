@@ -9,7 +9,7 @@ namespace NKMObjects.Abilities.Ryuko_Matoi
         private const int InitialADBonus = 5;
         private const int BonusADPerTurn = 2;
         private const int Damage = 5;
-        public KamuiSenketsu() : base(AbilityType.Ultimatum, "Kamui Senketsu", 5)
+        public KamuiSenketsu(Game game) : base(game, AbilityType.Ultimatum, "Kamui Senketsu", 5)
         {
 	        OnAwake += () =>
 	        {
@@ -41,8 +41,8 @@ Po użyciu tej umiejętności {ParentCharacter.Name} może się poruszyć.";
 	        {
 		        Active.MakeAction();
 		        IsEnabled = true;
-                ParentCharacter.Effects.Add(new Flying(-1, ParentCharacter, Name));
-		        ParentCharacter.Effects.Add(new StatModifier(-1, InitialADBonus, ParentCharacter, StatType.AttackPoints, Name));
+                ParentCharacter.Effects.Add(new Flying(Game, -1, ParentCharacter, Name));
+		        ParentCharacter.Effects.Add(new StatModifier(Game, -1, InitialADBonus, ParentCharacter, StatType.AttackPoints, Name));
 		        ParentCharacter.HasFreeMoveUntilEndOfTheTurn = true;
 		        Finish();
 	        }

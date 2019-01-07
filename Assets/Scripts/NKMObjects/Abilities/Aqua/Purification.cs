@@ -10,21 +10,21 @@ namespace NKMObjects.Abilities.Aqua
 	{
 		private const int AbilityRange = 5;
 
-		public Purification() : base(AbilityType.Normal, "Purification", 4)
+		public Purification(Game game) : base(game, AbilityType.Normal, "Purification", 4)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyFriendsOf(Owner);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(AbilityRange);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner.Owner);
 		
 		public override string GetDescription() => $@"{ParentCharacter.Name} rzuca oczyszczający czar na sojusznika, zdejmując z niego wszelkie negatywne efekty.
 Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
-		public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
-		private void Use(NKMCharacter character)
+		public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
+		private void Use(Character character)
 		{
 			character.Effects.Where(e => e.Type == EffectType.Negative).ToList().ForEach(e => e.RemoveFromParent());
 			Finish();

@@ -10,13 +10,13 @@ namespace NKMObjects.Abilities.Ononoki_Yotsugi
     {
         private const int TakenDamageDecreasePercent = 25;
         private const int Radius = 3;
-        public UnlimitedRulebook() : base(AbilityType.Passive, "Unlimited Rulebook")
+        public UnlimitedRulebook(Game game) : base(game, AbilityType.Passive, "Unlimited Rulebook")
         {
             OnAwake += () => ParentCharacter.Abilities.ForEach(a => a.AfterUseFinish += Run);
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Radius).AddOne(ParentCharacter.ParentCell);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyFriendsOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Radius).AddOne(ParentCharacter.ParentCell);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner);
 
         public override string GetDescription() => 
 $@"Po użyciu umiejętności przez {ParentCharacter.FirstName()},
@@ -25,6 +25,6 @@ ona i wszyscy sojusznicy dookoła niej będą otrzymywać obrażenia zmniejszone
 Promień: {Radius}";
 
         public void Run() => GetTargetsInRange().GetCharacters()
-            .ForEach(c => c.Effects.Add(new TakenDamageModifier(1, -TakenDamageDecreasePercent, c, Name)));
+            .ForEach(c => c.Effects.Add(new TakenDamageModifier(Game, 1, -TakenDamageDecreasePercent, c, Name)));
     }
 }

@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Hecate
 			CollectedEnergyCharacters.ForEach(c => energy += c.HealthPoints.BaseValue * ((float)HealthPercent /100));
 			return (int)energy;
 		} }
-		public ItadakiNoKura() : base(AbilityType.Passive, "Itadaki no Kura")
+		public ItadakiNoKura(Game game) : base(game, AbilityType.Passive, "Itadaki no Kura")
 		{
 			OnAwake += () => ParentCharacter.AfterAttack += (character, damage) => TryCollectingEnergy(character);
 		}

@@ -5,7 +5,7 @@ namespace NKMObjects.Abilities.Sakai_Yuuji
     public class ReijiMaigo : Ability
     {
         private int _toNextUse = 5;
-        public ReijiMaigo() : base(AbilityType.Passive, "Reiji Maigo")
+        public ReijiMaigo(Game game) : base(game, AbilityType.Passive, "Reiji Maigo")
         {
             OnAwake += () => Active.Phase.PhaseFinished += () =>
             {

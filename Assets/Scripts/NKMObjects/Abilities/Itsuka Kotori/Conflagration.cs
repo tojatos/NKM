@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
         private const int Radius = 3;
         private const int DamagePercent = 50;
 
-        public Conflagration() : base(AbilityType.Normal, "Conflagration", 2)
+        public Conflagration(Game game) : base(game, AbilityType.Normal, "Conflagration", 2)
         {
             OnAwake += () =>
             {
@@ -25,9 +25,9 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
                 ParentCharacter.GetBasicAttackCells = () =>
                 {
                     List<HexCell> cellRange = ParentCharacter.DefaultGetBasicAttackCells();
-                    IEnumerable<HexCell> cellsWithConflagrationAndEnemyCharacters = HexMapDrawer.Instance.Cells
+                    IEnumerable<HexCell> cellsWithConflagrationAndEnemyCharacters = HexMap.Cells
                         .Where(c => c.Effects.Any(e => e.GetType() == typeof(HexCellEffects.Conflagration)))
-                        .Where(c => c.CharacterOnCell != null && c.CharacterOnCell.Owner != ParentCharacter.Owner);
+                        .ToList().WhereEnemiesOf(Owner);
                     cellRange.AddRange(cellsWithConflagrationAndEnemyCharacters);
                     return cellRange.Distinct().ToList();
                 };
@@ -41,7 +41,7 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
 Zasięg: {1}	Czas odnowienia: {2}",
             ParentCharacter.Name, Range, Cooldown, Radius);
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
 
         public void Click()
         {
@@ -52,7 +52,7 @@ Zasięg: {1}	Czas odnowienia: {2}",
 
         public void Use(List<HexCell> cells)
         {
-            cells.ForEach(c => c.Effects.Add(new HexCellEffects.Conflagration(-1, c, ParentCharacter)));
+            cells.ForEach(c => c.Effects.Add(new HexCellEffects.Conflagration(Game, -1, c, ParentCharacter)));
             Finish();
         }
     }

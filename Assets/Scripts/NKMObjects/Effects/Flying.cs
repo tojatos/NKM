@@ -4,7 +4,7 @@ namespace NKMObjects.Effects
 {
 	public class Flying : Effect
 	{
-		public Flying(int cooldown, NKMCharacter parentCharacter, string name) : base(cooldown, parentCharacter, name)
+		public Flying(Game game, int cooldown, Character parentCharacter, string name) : base(game, cooldown, parentCharacter, name)
 		{
 			Name = name ?? "Flying";
 			Type = EffectType.Positive;

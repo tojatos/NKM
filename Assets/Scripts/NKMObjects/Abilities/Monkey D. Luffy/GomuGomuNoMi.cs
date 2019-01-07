@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Extensions;
 using Hex;
 using NKMObjects.Templates;
 
@@ -16,15 +17,15 @@ namespace NKMObjects.Abilities.Monkey_D._Luffy
         private const int JetBazookaKnockback = 14;
         private const int JetBazookaDamage = 23;
         private const int JetPistolDamage = 19;
-        public GomuGomuNoMi() : base(AbilityType.Normal, "Gomu Gomu no Mi", 2)
+        public GomuGomuNoMi(Game game) : base(game, AbilityType.Normal, "Gomu Gomu no Mi", 2)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine);
 
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c =>
-            c.CharacterOnCell != null && c.CharacterOnCell.IsEnemyFor(Owner) || !ParentCharacter.IsGrounded && c.Type == HexTileType.Wall);
+            c.CharactersOnCell.Any(ch => ch.IsEnemyFor(Owner))|| !ParentCharacter.IsGrounded && c.Type == HexTileType.Wall);
 
         public override string GetDescription() =>
 $@"{ParentCharacter.Name} używa umiejętności Gumowego Owocu w zależności od celu:
@@ -66,20 +67,20 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
             if (cell.Type == HexTileType.Wall) Rocket(cell);
             else
             {
-                NKMCharacter enemy = cell.CharacterOnCell;
-                if (ParentCharacter.ParentCell.GetNeighbors(BazookaRange).Contains(cell)) Bazooka(enemy);
+                Character enemy = cell.CharactersOnCell[0];
+                if (GetNeighboursOfOwner(BazookaRange).Contains(cell)) Bazooka(enemy);
                 else Pistol(enemy);
             }
         }
 
-        private void Pistol(NKMCharacter enemy)
+        private void Pistol(Character enemy)
         {
             ParentCharacter.Attack(this, enemy,new Damage(IsEnchanted ? JetPistolDamage : PistolDamage, DamageType.Physical));
             Active.PlayAudio("pistol");
             Finish();
         }
 
-        private void Bazooka(NKMCharacter enemy)
+        private void Bazooka(Character enemy)
         {
             ParentCharacter.Attack(this, enemy, new Damage(IsEnchanted?JetBazookaDamage:BazookaDamage, DamageType.Physical));
             if(!enemy.IsAlive) return;
@@ -98,11 +99,11 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
             Finish();
         }
 
-        private static void ThrowCharacter(NKMCharacter character, HexDirection direction, int distance)
+        private static void ThrowCharacter(Character character, HexDirection direction, int distance)
         {
             List<HexCell> line = character.ParentCell.GetLine(direction, distance);
             line.Reverse();
-            HexCell targetCell = line.FirstOrDefault(c => c.CharacterOnCell == null && c.Type != HexTileType.Wall);
+            HexCell targetCell = line.FirstOrDefault(c => c.CharactersOnCell[0] == null && c.Type != HexTileType.Wall);
             if(targetCell==null) return;
             character.MoveTo(targetCell);
         }

@@ -13,9 +13,9 @@ namespace NKMObjects.Abilities.Hecate
 		private const int Range = 10;
 		private const int Radius = 6;
 		
-		public AsterYo() : base(AbilityType.Normal, "Aster Yo", 3){}
+		public AsterYo(Game game) : base(game, AbilityType.Normal, "Aster Yo", 3){}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
 		
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} wystrzeliwuje promienie energii z Astera,
@@ -33,7 +33,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 		}
 		public void Use(List<HexCell> cells)
 		{
-			List<NKMCharacter> characters = cells.GetCharacters();
+			List<Character> characters = cells.GetCharacters();
 			try
 			{
 				ItadakiNoKura passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();

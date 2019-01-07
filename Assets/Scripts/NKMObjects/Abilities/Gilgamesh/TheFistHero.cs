@@ -8,7 +8,7 @@ namespace NKMObjects.Abilities.Gilgamesh
 	{
 		private const int DamageReductionPercent = 10;
 		private const int AdditionalDamagePercent = 10;
-		public TheFistHero() : base(AbilityType.Passive, "The Fist Hero")
+		public TheFistHero(Game game) : base(game, AbilityType.Passive, "The Fist Hero")
 		{
 			OnAwake += () =>
 			{

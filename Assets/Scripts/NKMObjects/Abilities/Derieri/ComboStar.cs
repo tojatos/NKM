@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Derieri
         public int Combo;
         public Character ComboCharacter { get; private set; }
         private bool _wasCharacterAttackedThisPhase;
-        public ComboStar() : base(AbilityType.Passive, "Combo star")
+        public ComboStar(Game game) : base(game, AbilityType.Passive, "Combo star")
         {
             OnAwake += () =>
             {

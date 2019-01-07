@@ -12,25 +12,25 @@ namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 		private const int DoTDamage = 8;
 		private const int DoTTime = 4;
 
-		public BloodKiss() : base(AbilityType.Normal, "Blood Kiss", 4)
+		public BloodKiss(Game game) : base(game, AbilityType.Normal, "Blood Kiss", 4)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 		}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 		
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} liże wroga, wywołując silne krwawienie, które zadaje {DoTDamage} nieuchronnych obrażeń przez {DoTTime} fazy.
 Zasięg: {Range} Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(NKMCharacter targetCharacter)
+		private void Use(Character targetCharacter)
 		{
 			var damage = new Damage(DoTDamage, DamageType.True);
-			targetCharacter.Effects.Add(new Poison(ParentCharacter, damage, DoTTime, targetCharacter, Name));
+			targetCharacter.Effects.Add(new Poison(Game, ParentCharacter, damage, DoTTime, targetCharacter, Name));
 			Finish();
 		}
 	}

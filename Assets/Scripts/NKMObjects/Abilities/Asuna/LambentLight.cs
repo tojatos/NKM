@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Asuna
 		private const int AaDamageModifier = 2;
 		private const int Range = 2;
 		
-		public LambentLight() : base(AbilityType.Passive, "Lambent Light")
+		public LambentLight(Game game) : base(game, AbilityType.Passive, "Lambent Light")
 		{
 			OnAwake += () =>
 			{
@@ -21,8 +21,8 @@ namespace NKMObjects.Abilities.Asuna
 			};
 		}
 
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
 		public override string GetDescription() => 
 $@"Jeżeli {ParentCharacter.Name} użyje ataku podstawowego na przeciwnika w zasięgu {Range},

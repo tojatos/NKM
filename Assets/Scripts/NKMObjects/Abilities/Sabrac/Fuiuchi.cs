@@ -12,13 +12,13 @@ namespace NKMObjects.Abilities.Sabrac
         private const int Damage = 15;
         private const int SlowDuration = 2;
         private const int SlowTo = 3;
-        public Fuiuchi() : base(AbilityType.Normal, "Fuiuchi", 3)
+        public Fuiuchi(Game game) : base(game, AbilityType.Normal, "Fuiuchi", 3)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
         public override string GetDescription() =>
 $@"{ParentCharacter.FirstName()} przywołuje słup płomieni, zadając {Damage} obrażeń magicznych
@@ -35,7 +35,7 @@ Czas odnowienia: {Cooldown}";
             GetTargetsInRange().GetCharacters().ForEach(c =>
             {
                 ParentCharacter.Attack(this, c, new Damage(Damage, DamageType.Magical));
-                c.Effects.Add(new StatModifier(SlowDuration, -c.Speed.Value+SlowTo, c, StatType.Speed, Name));
+                c.Effects.Add(new StatModifier(Game, SlowDuration, -c.Speed.Value+SlowTo, c, StatType.Speed, Name));
             });
             Finish();
         }

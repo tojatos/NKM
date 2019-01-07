@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Ononoki_Yotsugi
         private const int CharacterGrabRange = 5;
         private const int Range = 14;
         private const int Radius = 4;
-        public UrbRefuge() : base(AbilityType.Ultimatum, "URB - Refuge", 7)
+        public UrbRefuge(Game game) : base(game, AbilityType.Ultimatum, "URB - Refuge", 7)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
@@ -25,28 +25,28 @@ Zasięg zabrania sojusznika: {CharacterGrabRange}
 Zasięg skoku: {Range}
 Czas odnowienia; {Cooldown}";
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(CharacterGrabRange);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyFriendsOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(CharacterGrabRange);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner);
 
-        private List<HexCell> GetTargetCells() => ParentCharacter.ParentCell.GetNeighbors(Range)
-            .FindAll(c => c.IsFreeToStand && c.GetNeighbors(Radius).Any(ce => ce.IsFreeToStand));
+        private List<HexCell> GetTargetCells() => GetNeighboursOfOwner(Range)
+            .FindAll(c => c.IsFreeToStand && c.GetNeighbors(Owner.Owner, Radius).Any(ce => ce.IsFreeToStand));
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        private NKMCharacter _characterToTake;
+        private Character _characterToTake;
         private HexCell _targetCell;
         public void Use(List<HexCell> cells)
         {
             HexCell targetCell = cells[0];
-            if (targetCell.CharacterOnCell != null)
+            if (!targetCell.IsEmpty)
             {
-                _characterToTake = targetCell.CharacterOnCell;
+                _characterToTake = targetCell.CharactersOnCell[0];
                 Active.Prepare(this, GetTargetCells());
             }
             else if (_targetCell == null)
             {
                 _targetCell = targetCell;
-                Active.Prepare(this, _targetCell.GetNeighbors(Radius).FindAll(c => c.IsFreeToStand));
+                Active.Prepare(this, _targetCell.GetNeighbors(Owner.Owner, Radius).FindAll(c => c.IsFreeToStand));
             }
             else
             {
@@ -54,7 +54,7 @@ Czas odnowienia; {Cooldown}";
                 _characterToTake.MoveTo(targetCell);
 
                 ParentCharacter.Attack(this, _characterToTake, new Damage(Damage, DamageType.Physical));
-                _targetCell.GetNeighbors(Radius).WhereOnlyEnemiesOf(Owner).GetCharacters()
+                _targetCell.GetNeighbors(Owner.Owner, Radius).WhereEnemiesOf(Owner).GetCharacters()
                     .ForEach(c => ParentCharacter.Attack(this, c, new Damage(Damage, DamageType.Physical)));
 
                 _targetCell = null;

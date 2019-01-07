@@ -7,7 +7,7 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 	{
 		private int _additionalDamage = 3;
 		private bool _isBeingUsed;
-		public WickedEyesServant() : base(AbilityType.Passive, "Wicked Eye's Servant")
+		public WickedEyesServant(Game game) : base(game, AbilityType.Passive, "Wicked Eye's Servant")
 		{
 			OnAwake += () =>
 			{

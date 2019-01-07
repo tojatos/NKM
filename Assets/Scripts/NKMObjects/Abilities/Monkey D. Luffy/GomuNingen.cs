@@ -5,7 +5,7 @@ namespace NKMObjects.Abilities.Monkey_D._Luffy
     public class GomuNingen : Ability, IEnableable
     {
         private int _timesAttacked; 
-        public GomuNingen() : base(AbilityType.Passive, "Gomu Ningen")
+        public GomuNingen(Game game) : base(game, AbilityType.Passive, "Gomu Ningen")
         {
             OnAwake += () => ParentCharacter.BeforeBeingBasicAttacked += (character, damage) =>
             {

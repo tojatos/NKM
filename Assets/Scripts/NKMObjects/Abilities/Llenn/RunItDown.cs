@@ -6,7 +6,7 @@ namespace NKMObjects.Abilities.Llenn
     {
         private const int TimesToRun = 3;
         private int _timesRun;
-        public RunItDown() : base(AbilityType.Ultimatum, "Run It Down", 6)
+        public RunItDown(Game game) : base(game, AbilityType.Ultimatum, "Run It Down", 6)
         {
             OnAwake += () =>
             {

@@ -13,14 +13,14 @@ namespace NKMObjects.Abilities.Yasaka_Mahiro
 		
 		private int _numberOfUses;
 
-		public SharpenedForks() : base(AbilityType.Normal, "Sharpened Forks", 3)
+		public SharpenedForks(Game game) : base(game, AbilityType.Normal, "Sharpened Forks", 3)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 			AfterUseFinish += () => _numberOfUses = 0;
 		}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 		
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} rzuca 3 naostrzone widelce,
@@ -35,9 +35,9 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			if (!CanBeUsed)	Cancel();
 			else Active.Prepare(this, GetTargetsInRange());
 		}
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(NKMCharacter targetCharacter)
+		private void Use(Character targetCharacter)
 		{
 			var damageValue = (int) (Damage + MissingHealthPercentDamage / 100 *
 			                 (targetCharacter.HealthPoints.BaseValue - targetCharacter.HealthPoints.Value));

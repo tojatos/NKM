@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Itsuka_Kotori
         private const int LineDamage = 40;
         private const int ConflargationDamage = 20;
 
-        public CamaelMegiddo() : base(AbilityType.Ultimatum, "Camael - Megiddo", 6) { }
+        public CamaelMegiddo(Game game) : base(game, AbilityType.Ultimatum, "Camael - Megiddo", 6) { }
 
         public override string GetDescription() =>
 $@"{ParentCharacter.Name} wystrzeliwuje falę płomieni w wybranym kierunku zadając {LineDamage} obrażeń magicznych wszystkim trafionym wrogom.
@@ -29,7 +29,7 @@ Czas odnowienia: {Cooldown}";
             }
             return cells;
         }
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
         private List<HexCell> GetDirectionRangeCells(HexDirection direction)
         {
@@ -54,7 +54,7 @@ Czas odnowienia: {Cooldown}";
 
             //then the conflargation cells
             if (!hitConflargation) return cells;
-            List<HexCell> conflargationCells = lastCell.GetNeighbors(500000, SearchFlags.None, neighbor =>
+            List<HexCell> conflargationCells = lastCell.GetNeighbors(Owner.Owner, 500000, SearchFlags.None, neighbor => //TODO wtf
                 !neighbor.Effects.ContainsType<HexCellEffects.Conflagration>());
             cells.AddRange(conflargationCells);
             //TODO: find a better value than 500000
@@ -63,7 +63,7 @@ Czas odnowienia: {Cooldown}";
 
         public void Click()
         {
-            List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(1);
+            List<HexCell> cellRange = GetNeighboursOfOwner(1);
             Active.Prepare(this, cellRange); //TODO: Air selection magic? Or maybe new mechanism?
         }
 
@@ -73,11 +73,11 @@ Czas odnowienia: {Cooldown}";
             IGrouping<bool, HexCell>[] cellsByConflargation = cells.GroupBy(c => c.Effects.ContainsType<HexCellEffects.Conflagration>()).ToArray();
 			List<HexCell> lineCells = cellsByConflargation.Where(k => k.Key == false).SelectMany(x => x).ToList();
 			List<HexCell> conflargationCells = cellsByConflargation.Where(k => k.Key).SelectMany(x => x).ToList();
-            AnimationPlayer.Add(new Animations.CamaelMegiddo(lineCells.Select(c => c.transform).ToList(), conflargationCells.Select(c => c.transform).ToList()));
+            AnimationPlayer.Add(new Animations.CamaelMegiddo(lineCells.Select(c => Active.SelectDrawnCell(c).transform).ToList(), conflargationCells.Select(c => Active.SelectDrawnCell(c).transform).ToList()));
 
 			//deal damages
-			lineCells.WhereOnlyEnemiesOf(Owner).GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(LineDamage, DamageType.Magical)));
-			conflargationCells.WhereOnlyEnemiesOf(Owner).GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(ConflargationDamage, DamageType.Magical)));
+			lineCells.WhereEnemiesOf(Owner).GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(LineDamage, DamageType.Magical)));
+			conflargationCells.WhereEnemiesOf(Owner).GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(ConflargationDamage, DamageType.Magical)));
 
 			//remove conflargation effects
 //			conflargationCells.ForEach(c => c.Effects.RemoveAll(e => e.GetType() == typeof(HexCellEffects.Conflagration)));

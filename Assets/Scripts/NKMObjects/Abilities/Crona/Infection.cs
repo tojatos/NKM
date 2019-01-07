@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Crona
         private const int Range = 6;
         private const int EffectCooldown = 3;
 
-	    public Infection() : base(AbilityType.Ultimatum, "Infection", 5)
+	    public Infection(Game game) : base(game, AbilityType.Ultimatum, "Infection", 5)
 	    {
 		    OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 	    }
@@ -20,14 +20,14 @@ $@"{ParentCharacter.Name} infekuje cel Czarną Krwią (nakłada efekt Black Bloo
 Zainfekowany wróg również otrzymuje obrażenia przy zdetonowaniu Black Blood.
 Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 	    
-	    public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
 	    public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    private void Use(NKMCharacter character)
+	    private void Use(Character character)
 		{
-			character.Effects.Add(new Effects.BlackBlood(ParentCharacter, character, EffectCooldown, BlackBlood.Damage, BlackBlood.Range));
+			character.Effects.Add(new Effects.BlackBlood(Game, ParentCharacter, character, EffectCooldown, BlackBlood.Damage, BlackBlood.Range));
 			Finish();
 		}
     }

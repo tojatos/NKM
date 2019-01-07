@@ -7,7 +7,7 @@ namespace NKMObjects.Effects
 	public class PassiveBuff : Effect
 	{
 		private readonly Ability _passiveAbility;
-		public PassiveBuff(int cooldown, NKMCharacter parentCharacter, string name = null) : base(cooldown, parentCharacter, name)
+		public PassiveBuff(Game game, int cooldown, Character parentCharacter, string name = null) : base(game, cooldown, parentCharacter, name)
 		{
 			Name = name ?? "Passive Buff";
 			Type = EffectType.Positive;

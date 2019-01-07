@@ -6,13 +6,13 @@ namespace NKMObjects.HexCellEffects
 {
 	public class Conflagration : HexCellEffect
 	{
-		private readonly NKMCharacter _characterThatOwnsEffect;
+		private readonly Character _characterThatOwnsEffect;
 
-		public Conflagration(int cooldown, HexCell parentCell, NKMCharacter characterThatOwnsEffect) : base(cooldown, parentCell, "Conflagration")
+		public Conflagration(Game game, int cooldown, HexCell parentCell, Character characterThatOwnsEffect) : base(game, cooldown, parentCell, "Conflagration")
 		{
 			_characterThatOwnsEffect = characterThatOwnsEffect;
-			parentCell.AddEffectHighlight(Name);
-			OnRemove += () => parentCell.RemoveEffectHighlight(Name);
+			Active.SelectDrawnCell(parentCell).AddEffectHighlight(Name);
+			OnRemove += () => Active.SelectDrawnCell(parentCell).RemoveEffectHighlight(Name);
 		}
 
 		public override string GetDescription() =>

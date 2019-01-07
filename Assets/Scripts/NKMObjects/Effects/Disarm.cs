@@ -4,7 +4,7 @@ namespace NKMObjects.Effects
 {
 	public class Disarm : Effect
 	{
-		public Disarm(int cooldown, NKMCharacter parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
+		public Disarm(Game game, int cooldown, Character parentCharacter, string name=null) : base(game, cooldown, parentCharacter, name)
 		{
 			Name = name??"Disarm";
 			Type = EffectType.Negative;

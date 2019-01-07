@@ -12,7 +12,7 @@ namespace NKMObjects.Abilities.Sabrac
         private const int Damage = 30;
         private const int SilentDuration = 2;
         private const int Width = 3;
-        public AkaneiroNoDotou() : base(AbilityType.Ultimatum, "Akaneiro no Dotou", 5) { }
+        public AkaneiroNoDotou(Game game) : base(game, AbilityType.Ultimatum, "Akaneiro no Dotou", 5) { }
 
         public override string GetDescription() =>
 $@"{ParentCharacter.FirstName()} tworzy falę płomieni i mieczy, na której przemieszcza się w wybrany punkt.
@@ -22,7 +22,7 @@ Zasięg: {Range}
 Szerokość: {Width}
 Czas odnowienia: {Cooldown}";
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine);
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.IsFreeToStand);
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
@@ -33,10 +33,10 @@ Czas odnowienia: {Cooldown}";
         {
             List<HexCell> targetCells = ParentCharacter.ParentCell.GetArea(cell, Width);
             ParentCharacter.MoveTo(cell);
-            targetCells.WhereOnlyEnemiesOf(Owner).GetCharacters().ForEach(c =>
+            targetCells.WhereEnemiesOf(Owner).GetCharacters().ForEach(c =>
             {
                 ParentCharacter.Attack(this, c, new Damage(Damage, DamageType.Magical));
-                c.Effects.Add(new Silent(SilentDuration, c, Name));
+                c.Effects.Add(new Silent(Game, SilentDuration, c, Name));
             });
             Finish();
         }

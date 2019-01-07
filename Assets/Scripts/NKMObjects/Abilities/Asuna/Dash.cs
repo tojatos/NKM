@@ -15,15 +15,15 @@ namespace NKMObjects.Abilities.Asuna
 
 		private bool _hasDashed;
 
-		public Dash() : base(AbilityType.Normal, "Dash", 2)
+		public Dash(Game game) : base(game, AbilityType.Normal, "Dash", 2)
 		{
 			OnAwake += () => Validator.ToCheck.Add(IsThereACellToMove);
 			AfterUseFinish += () => _hasDashed = false;
 			CanUseOnGround = false;
 		}
 		
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(AbilityRange, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls | SearchFlags.StraightLine);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.CharacterOnCell == null);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(AbilityRange, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls | SearchFlags.StraightLine);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.IsFreeToStand);
 		
 		public override string GetDescription() => 
 $@"{ParentCharacter.Name} dashuje maksymalnie o {AbilityRange} pola w linii prostej.
@@ -31,21 +31,21 @@ Jeżeli będzie w zasięgu {AbilityHitRange} od przeciwnika w linii prostej, mo�
 a jeżeli będzie dodatkowo w zasięgu {AbilityCriticalHitRange} od przeciwnika, atak ten zada {AbilityCriticalHitModifier * 100}% obrażeń.
 Czas odnowienia: {Cooldown + 1} z atakiem, {Cooldown} bez ataku.";
 		
-		private bool IsThereACellToMove() => GetRangeCells().Any(c => c.CharacterOnCell == null);
+		private bool IsThereACellToMove() => GetRangeCells().Any(c => c.IsFreeToStand);
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 		private void DashTo(HexCell cell)
 		{
 			ParentCharacter.MoveTo(cell);
 			_hasDashed = true;
-			List<HexCell> cellRange = ParentCharacter.ParentCell.GetNeighbors(AbilityHitRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine).WhereOnlyEnemiesOf(Owner);
+			List<HexCell> cellRange = GetNeighboursOfOwner(AbilityHitRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine).WhereEnemiesOf(Owner);
 			if(cellRange.Count > 0) Active.Prepare(this, cellRange);
 			else Finish();
 		}
-		private void AfterDashAttack(NKMCharacter targetCharacter)
+		private void AfterDashAttack(Character targetCharacter)
 		{
 			int modifier = 1;
-			if (ParentCharacter.ParentCell.GetNeighbors(AbilityCriticalHitRange).Contains(targetCharacter.ParentCell)) modifier = AbilityCriticalHitModifier;
+			if (GetNeighboursOfOwner(AbilityCriticalHitRange).Contains(targetCharacter.ParentCell)) modifier = AbilityCriticalHitModifier;
 			int damageValue = ParentCharacter.AttackPoints.Value * modifier;
 			var damage = new Damage(damageValue, DamageType.Physical);
 			
@@ -63,7 +63,7 @@ Czas odnowienia: {Cooldown + 1} z atakiem, {Cooldown} bez ataku.";
 		public void Use(List<HexCell> cells)
 		{
 			if(!_hasDashed) DashTo(cells[0]);
-			else AfterDashAttack(cells[0].CharacterOnCell);
+			else AfterDashAttack(cells[0].CharactersOnCell[0]);
 		}
 	}
 }

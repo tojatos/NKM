@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 		private const int Damage = 25;
 		private const int Range = 8;
 		private bool _wasUsedOnceThisTurn;
-		public MjolnirDestinyImpulse() : base(AbilityType.Ultimatum, "Mjolnir Destiny Impulse", 6)
+		public MjolnirDestinyImpulse(Game game) : base(game, AbilityType.Ultimatum, "Mjolnir Destiny Impulse", 6)
 		{
 			AfterUseFinish += () => _wasUsedOnceThisTurn = false;
 		}
@@ -22,7 +22,7 @@ może ona użyć tej umiejętności ponownie, w tej samej turze.
 
 Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
 
 		public void Click() => PrepareImpulse();
 		private void PrepareImpulse()
@@ -34,7 +34,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 		}
 		public void Use(List<HexCell> cells)
 		{
-			List<NKMCharacter> characters = cells.GetCharacters();
+			List<Character> characters = cells.GetCharacters();
 			bool killedSomeone = false;
 			characters.ForEach(targetCharacter =>
 			{

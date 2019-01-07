@@ -7,10 +7,10 @@ namespace NKMObjects.Abilities.Ryuko_Matoi
     {
         private const int PhysicalDefenseDecrease = 5;
         private const int Duration = 2;
-        public ScissorBlade() : base(AbilityType.Passive, "Scissor Blade")
+        public ScissorBlade(Game game) : base(game, AbilityType.Passive, "Scissor Blade")
         {
             OnAwake += () => ParentCharacter.BeforeBasicAttack += (character, damage) =>
-                character.Effects.Add(new StatModifier(Duration, -PhysicalDefenseDecrease, character,StatType.PhysicalDefense, Name));
+                character.Effects.Add(new StatModifier(Game, Duration, -PhysicalDefenseDecrease, character,StatType.PhysicalDefense, Name));
         }
 
         public override string GetDescription() =>

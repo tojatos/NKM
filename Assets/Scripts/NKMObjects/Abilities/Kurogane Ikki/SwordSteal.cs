@@ -9,7 +9,7 @@ namespace NKMObjects.Abilities.Kurogane_Ikki
     {
         private Ability _copiedAbility;
         
-        public SwordSteal() : base(AbilityType.Normal, "Sword Steal", 3)
+        public SwordSteal(Game game) : base(game, AbilityType.Normal, "Sword Steal", 3)
         {
             OnAwake += () =>
             {

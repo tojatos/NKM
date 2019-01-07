@@ -15,7 +15,7 @@ namespace NKMObjects.Abilities.Yoshino
 
         private int _currentDuration;
         
-        public HowlingBlizzard() : base(AbilityType.Ultimatum, "Howling Blizzard", 6)
+        public HowlingBlizzard(Game game) : base(game, AbilityType.Ultimatum, "Howling Blizzard", 6)
         {
             OnAwake += () =>
             {
@@ -39,8 +39,8 @@ namespace NKMObjects.Abilities.Yoshino
             };
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
         public override string GetDescription()
         {
@@ -68,18 +68,18 @@ Umiejętność jest włączona od {_currentDuration} faz.";
             IsEnabled = true;
             _currentDuration = 1;
             AddHexEffectsInRange();
-            ParentCharacter.Effects.Add(new Snare(MaxDuration, ParentCharacter, Name));
-            ParentCharacter.Effects.Add(new Disarm(MaxDuration, ParentCharacter, Name));
-            ParentCharacter.Effects.Add(new Silent(MaxDuration, ParentCharacter, Name));
+            ParentCharacter.Effects.Add(new Snare(Game, MaxDuration, ParentCharacter, Name));
+            ParentCharacter.Effects.Add(new Disarm(Game, MaxDuration, ParentCharacter, Name));
+            ParentCharacter.Effects.Add(new Silent(Game, MaxDuration, ParentCharacter, Name));
             Finish();
         }
 
         private void AddHexEffectsInRange() => GetRangeCells().ForEach(c =>
-            c.Effects.Add(new HexCellEffects.HowlingBlizzard(1, c, ParentCharacter, SpeedDecrease, Name)));
+            c.Effects.Add(new HexCellEffects.HowlingBlizzard(Game, 1, c, ParentCharacter, SpeedDecrease, Name)));
 
         private void RemoveHexEffects() =>
 //            HexMapDrawer.Instance.Cells.ForEach(c => c.Effects.RemoveAll(e => e.Name == Name));
-            HexMapDrawer.Instance.Cells.ForEach(c => c.Effects.FindAll(e => e.Name == Name).ForEach(e => e.Remove()));//TODO: create a list of effects to iterate on in case of 2 or more Yoshinos playing
+            HexMap.Cells.ForEach(c => c.Effects.FindAll(e => e.Name == Name).ForEach(e => e.Remove()));//TODO: create a list of effects to iterate on in case of 2 or more Yoshinos playing
 
         private void Disable()
         {

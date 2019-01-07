@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Rem
 		private const int AdditionalAttack = 9;
 		private const int AdditionalSpeed = 4;
 
-		public DemonicForm() : base(AbilityType.Passive, "Demonic Form")
+		public DemonicForm(Game game) : base(game, AbilityType.Passive, "Demonic Form")
 		{
 			OnAwake += () => ParentCharacter.HealthPoints.StatChanged += TryToActivateDemonicForm;			
 		}
@@ -38,14 +38,14 @@ zyskuje ona {AdditionalAttack} ataku i {AdditionalSpeed} szybkości.";
 			if (ParentCharacter.Name != "Demonic Rem") ParentCharacter.Name = "Demonic Rem";
 			if (ParentCharacter.Effects.All(e => e.Name != "Demonic Form Speed Boost"))
 			{
-				var speedBoost = new StatModifier(-1, AdditionalSpeed, ParentCharacter, StatType.Speed, "Demonic Form Speed Boost");
+				var speedBoost = new StatModifier(Game, -1, AdditionalSpeed, ParentCharacter, StatType.Speed, "Demonic Form Speed Boost");
 				speedBoost.OnRemove += TryToActivateDemonicForm;
 				ParentCharacter.Effects.Add(speedBoost);
 
 			}
 			if (ParentCharacter.Effects.All(e => e.Name != "Demonic Form Attack Boost"))
 			{
-				var attackBoost = new StatModifier(-1, AdditionalAttack, ParentCharacter, StatType.AttackPoints, "Demonic Form Attack Boost");
+				var attackBoost = new StatModifier(Game, -1, AdditionalAttack, ParentCharacter, StatType.AttackPoints, "Demonic Form Attack Boost");
 				attackBoost.OnRemove += TryToActivateDemonicForm;
 				ParentCharacter.Effects.Add(attackBoost);
 			}

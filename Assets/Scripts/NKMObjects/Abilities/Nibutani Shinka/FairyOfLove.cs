@@ -6,7 +6,7 @@ namespace NKMObjects.Abilities.Nibutani_Shinka
     {
         private const int Duration = 3;
         private int _currentDuration;
-        public FairyOfLove() : base(AbilityType.Ultimatum, "Fairy of Love", 6)
+        public FairyOfLove(Game game) : base(game, AbilityType.Ultimatum, "Fairy of Love", 6)
         {
             OnAwake += () => Active.Phase.PhaseFinished += () =>
             {

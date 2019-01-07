@@ -8,15 +8,18 @@ using NKMObjects.Abilities.Bezimienni;
 
 namespace NKMObjects.Templates
 {
-	public abstract class Ability : NKMObject
+	public abstract class Ability// : NKMObject
 	{
 		
-		protected static Game Game => GameStarter.Instance.Game;
-		protected static Active Active => Game.Active;
-		protected static Console Console => Console.Instance;
-		protected Ability(AbilityType type, string name, int cooldown = 0) : this(type, name, cooldown, NKMID.GetNext("Ability")){}
-		protected Ability(AbilityType type, string name, int cooldown, int id)
+		protected readonly Game Game;
+		protected Active Active => Game.Active;
+		protected HexMap HexMap => Game.HexMap;
+		protected Console Console => Game.Console;
+		public Character Owner => Game.Characters.First(c => c.Abilities.Contains(this));
+		protected Ability(Game game, AbilityType type, string name, int cooldown = 0) : this(game, type, name, cooldown, NKMID.GetNext("Ability")){}
+		protected Ability(Game game, AbilityType type, string name, int cooldown, int id)
 		{
+			Game = game;
 			ID = id;
 			Type = type;
 			Name = name;
@@ -29,11 +32,14 @@ namespace NKMObjects.Templates
                 {
                     if (CurrentCooldown > 0) CurrentCooldown--;
                 };
-                Owner = ParentCharacter.Owner;
+                //Owner = ParentCharacter.Owner;
 				AfterUseFinish += () => ParentCharacter.InvokeAfterAbilityUse(this);
 			};
 		}
 
+		protected List<HexCell> GetNeighboursOfOwner(int depth, SearchFlags searchFlags = SearchFlags.None, Predicate<HexCell> stopAt = null) =>
+			ParentCharacter.ParentCell.GetNeighbors(Owner.Owner, depth, searchFlags, stopAt);
+		public readonly string Name;
 		public readonly int ID;
 		public bool CanUseOnGround { get; protected set; } = true;
 		protected AbilityUseValidator Validator;
@@ -56,7 +62,7 @@ namespace NKMObjects.Templates
 		}
 
 //		public Character ParentCharacter { get; set; }
-		public NKMCharacter ParentCharacter => Game.Characters.FirstOrDefault(c => c.Abilities.Contains(this));
+		public Character ParentCharacter => Game.Characters.FirstOrDefault(c => c.Abilities.Contains(this));
 
 		public bool CanBeUsed => Validator.AbilityCanBeUsed;
 

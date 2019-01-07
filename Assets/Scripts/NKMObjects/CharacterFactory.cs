@@ -6,16 +6,16 @@ namespace NKMObjects
 {
     public static class CharacterFactory
     {
-		public static NKMCharacter Create(string name) => 
-			CreateCharacterFromDatabase(name, NKMID.GetNext("Character"));
+		public static Character Create(Game game, string name) => 
+			CreateCharacterFromDatabase(game, name, NKMID.GetNext("Character"));
 
-		private static NKMCharacter CreateCharacterFromDatabase(string name, int id)
+		private static Character CreateCharacterFromDatabase(Game game, string name, int id)
 		{
 			SqliteRow characterData = GameData.Conn.GetCharacterData(name);
 			CharacterProperties properties = GetCharacterProperties(characterData);
 			List<Ability> abilities = AbilityFactory.CreateAndInitiateAbilitiesFromDatabase(name);
 			
-			return new NKMCharacter(name, id, properties, abilities);
+			return new Character(game, name, id, properties, abilities);
 		}
 
 		private static CharacterProperties GetCharacterProperties(SqliteRow characterData)
@@ -45,14 +45,14 @@ namespace NKMObjects
 			};
 		}
 
-		public static NKMCharacter CreateWithoutId(string name)
+		public static Character CreateWithoutId(Game game, string name)
 		{
-			return CreateCharacterFromDatabase(name, -1);
+			return CreateCharacterFromDatabase(game, name, -1);
 		}
 
 	    public static Character CreateNonGame(string name, CharacterProperties properties, List<Ability> abilities)
 	    {
-			return new Character(name, -1, properties, abilities);
+			return new Character(null, name, -1, properties, abilities);
 	    }
         
     }

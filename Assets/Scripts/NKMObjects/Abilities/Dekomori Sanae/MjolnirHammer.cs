@@ -10,9 +10,9 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 		private const int Damage = 18;
 		private const int Range = 7;
 		private bool _wasUsedOnceThisTurn;
-		private NKMCharacter _firstAbilityTarget;
+		private Character _firstAbilityTarget;
 
-		public MjolnirHammer() : base(AbilityType.Normal, "Mjolnir Hammer", 4)
+		public MjolnirHammer(Game game) : base(game, AbilityType.Normal, "Mjolnir Hammer", 4)
 		{
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 			AfterUseFinish += () =>
@@ -22,8 +22,8 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 			};
 		}
 
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} uderza dwukrotnie, zadając {Damage} obrażeń fizycznych przy każdym ciosie.
@@ -31,7 +31,7 @@ Jeżeli obydwa ataki wymierzone są w ten sam cel, otrzymuje on połowę obraże
 Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public void Click() => PrepareHammerHit();
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
 		private void PrepareHammerHit()
 		{
@@ -39,7 +39,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			else Active.Prepare(this, GetTargetsInRange());
 		}
 		
-		private void Use(NKMCharacter targetCharacter)
+		private void Use(Character targetCharacter)
 		{
 			int damageToDeal = Damage;
 			if (_firstAbilityTarget == targetCharacter)

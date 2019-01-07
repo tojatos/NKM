@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using Animations;
 using Extensions;
 using Hex;
@@ -8,15 +9,15 @@ namespace NKMObjects.Abilities.Bezimienni
 {
     public class Castling : Ability, IClickable, IUseable
     {
-	    private NKMCharacter _firstCharacterToSwap;
-	    private NKMCharacter _secondCharacterToSwap;
-        public Castling() : base(AbilityType.Ultimatum, "Castling", 6)
+	    private Character _firstCharacterToSwap;
+	    private Character _secondCharacterToSwap;
+        public Castling(Game game) : base(game, AbilityType.Ultimatum, "Castling", 6)
         {
 	        OnAwake += () => Validator.ToCheck.Add(() => GetRangeCells().GetCharacters().Count >= 2);
 	        AfterUseFinish += Cleanup;
         }
-	    public override List<HexCell> GetRangeCells() => new List<HexCell>(HexMapDrawer.Instance.Cells);
-	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyCharacters();
+	    public override List<HexCell> GetRangeCells() => new List<HexCell>(HexMap.Cells);
+	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereCharacters();
         public override string GetDescription() => "Bezimienni zamieniają pozycjami na mapie 2 jednostki.";
 
 	    public void Click() => PrepareCharacterSelection();
@@ -24,11 +25,11 @@ namespace NKMObjects.Abilities.Bezimienni
 	    private void PrepareCharacterSelection()
 	    {
 		    List<HexCell> cellRange = GetTargetsInRange();
-		    if (_firstCharacterToSwap != null) cellRange.RemoveAll(c => c.CharacterOnCell == _firstCharacterToSwap);
+		    if (_firstCharacterToSwap != null) cellRange.RemoveAll(c => c.CharactersOnCell[0] == _firstCharacterToSwap);
 		    Active.Prepare(this, cellRange);
 	    }
 
-	    private void Use(NKMCharacter character)
+	    private void Use(Character character)
 		{
 			if (_firstCharacterToSwap == null)
 			{
@@ -59,14 +60,17 @@ namespace NKMObjects.Abilities.Bezimienni
 	    {
 		    HexCell c1 = _firstCharacterToSwap.ParentCell;
 		    HexCell c2 = _secondCharacterToSwap.ParentCell;
-		    _firstCharacterToSwap.ParentCell = c2;
-		    _secondCharacterToSwap.ParentCell = c1;
-		    c1.CharacterOnCell = _secondCharacterToSwap;
-		    c2.CharacterOnCell = _firstCharacterToSwap;
-		    AnimationPlayer.Add(new MoveTo(_firstCharacterToSwap.CharacterObject.transform, c2.transform.position, 1f));
-		    AnimationPlayer.Add(new MoveTo(_secondCharacterToSwap.CharacterObject.transform, c1.transform.position, 1f));
+		    //_firstCharacterToSwap.ParentCell = c2;
+		    //_secondCharacterToSwap.ParentCell = c1;
+		    //c1.CharactersOnCell[0] = _secondCharacterToSwap;
+		    //c2.CharactersOnCell[0] = _firstCharacterToSwap;
+		    HexMap.Move(_firstCharacterToSwap, c2);
+		    HexMap.Move(_secondCharacterToSwap, c1);
+		    
+		    AnimationPlayer.Add(new MoveTo(_firstCharacterToSwap.CharacterObject.transform, Active.SelectDrawnCell(c2).transform.position, 1f));
+		    AnimationPlayer.Add(new MoveTo(_secondCharacterToSwap.CharacterObject.transform, Active.SelectDrawnCell(c1).transform.position, 1f));
 	    }
 
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
     }
 }

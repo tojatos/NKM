@@ -8,7 +8,7 @@ namespace NKMObjects.Abilities.Bezimienni
         private int _damageThisTurn;
         public bool HasFreeAbility { get; set; }
         
-        public AceInTheHole() : base(AbilityType.Passive, "Ace in the hole")
+        public AceInTheHole(Game game) : base(game, AbilityType.Passive, "Ace in the hole")
         {
             OnAwake += () =>
             {

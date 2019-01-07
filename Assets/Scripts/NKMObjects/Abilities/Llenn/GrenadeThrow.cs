@@ -10,8 +10,8 @@ namespace NKMObjects.Abilities.Llenn
         private const int Damage = 16;
         private const int Range = 7;
         private const int Radius = 2;
-        public GrenadeThrow() : base(AbilityType.Normal, "Grenade Throw", 3){}
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
+        public GrenadeThrow(Game game) : base(game, AbilityType.Normal, "Grenade Throw", 3){}
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
 
         public override string GetDescription() => 
 $@"{ParentCharacter.Name} rzuca granatem,

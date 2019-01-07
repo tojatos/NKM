@@ -6,7 +6,7 @@ using Managers;
 using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using NKMObject = NKMObjects.Templates.NKMObject;
+//using NKMObject = NKMObjects.Templates.NKMObject;
 using Object = UnityEngine.Object;
 /// <summary>
 /// Main utility class.
@@ -14,12 +14,16 @@ using Object = UnityEngine.Object;
 /// </summary>
 public class Active
 {
-	private static Game Game => GameStarter.Instance.Game;
-	public Active()
+	//private static Game Game => GameStarter.Instance.Game;
+	private readonly Game _game;
+	private HexMap HexMap => _game.HexMap;
+	private Console Console => _game.Console;
+	public Active(Game game)
 	{
+		_game = game;
 		Phase = new Phase();
 		Turn = new Turn();
-		AirSelection = new AirSelection();
+		AirSelection = new AirSelection(game);
 	}
 
 	public Turn Turn { get; }
@@ -29,8 +33,9 @@ public class Active
 	public GamePlayer GamePlayer;
 	public Action Action;
 	public IUseable AbilityToUse;
-	public NKMObject NkmObject;
-	public NKMCharacter CharacterOnMap;
+	//public NKMObject NkmObject;
+	public Character SelectedCharacterToPlace;
+	public Character CharacterOnMap;
 	public HexCell SelectedCell;
 	public readonly List<HexCell> MoveCells = new List<HexCell>();
 
@@ -45,15 +50,15 @@ public class Active
 		set
 		{
 			_helpHexCells = value;
-			if (value == null) Game.HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
-			else HelpHexCells.ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
+			if (value == null) _game.HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
+			else SelectDrawnCells(HelpHexCells).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
 		}
 	}
 
 	private List<HexCell> _helpHexCells;
 	private List<GameObject> _buttons;
 
-	public bool IsActiveUse => !(AbilityToUse == null && (Action == Action.None || Action == Action.AttackAndMove) && NkmObject == null);
+	public bool IsActiveUse => !(AbilityToUse == null && (Action == Action.None || Action == Action.AttackAndMove) && SelectedCharacterToPlace == null);
 
 	public void Reset()
 	{
@@ -64,7 +69,8 @@ public class Active
 		}
 		AbilityToUse = null;
 		HexCells = null;
-		NkmObject = null;
+		//NkmObject = null;
+		SelectedCharacterToPlace = null;
 		SelectedCell = null;
 		Action = Action.None;
 		if (AirSelection.IsEnabled) AirSelection.Disable();
@@ -76,10 +82,10 @@ public class Active
 			((Ability)AbilityToUse).Cancel();
 			Console.GameLog($"ABILITY CANCEL");
 		}
-		else if (NkmObject != null)
+		else if (SelectedCharacterToPlace != null)
 		{
-			Game.HexMapDrawer.RemoveHighlights();
-			NkmObject = null;
+			_game.HexMapDrawer.RemoveHighlights();
+			SelectedCharacterToPlace = null;
 		}
 		else
 		{
@@ -114,16 +120,16 @@ public class Active
 	}
 	public void Prepare(IUseable abilityToPrepare, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
 	{
-//		var isPrepared = Prepare(Action.UseAbility, cellRange, addToRange);
 		Prepare(Action.UseAbility, cellRange, addToRange);
-//		if (!isPrepared) return false;
 
 		AbilityToUse = abilityToPrepare;
 		if (!toggleToRed) return;
-		Game.HexMapDrawer.RemoveHighlights();
-		HexCells.ForEach(c => c.AddHighlight(Highlights.RedTransparent));
-//		return true;
+		_game.HexMapDrawer.RemoveHighlights();
+		SelectDrawnCells(HexCells).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
 	}
+	public static List<DrawnHexCell> SelectDrawnCells(IEnumerable<HexCell> cells) => cells.Select(SelectDrawnCell).ToList();
+	public static DrawnHexCell SelectDrawnCell(HexCell cell) =>
+		HexMapDrawer.Instance.Cells.FirstOrDefault(g => g.HexCell == cell);
 
 	public static void PlayAudio(string path, float volume = 0.8f)
 	{
@@ -143,30 +149,31 @@ public class Active
 	{
 		if(MoveCells==null || MoveCells.Count==0) return;
 		
-		for (var i = MoveCells.Count - 1; i >= 0; i--)
+		for (int i = MoveCells.Count - 1; i >= 0; i--)
 		{
 			//Remove the line
-			Object.Destroy(MoveCells[i].gameObject.GetComponent<LineRenderer>());
+			Object.Destroy(SelectDrawnCells(MoveCells)[i].gameObject.GetComponent<LineRenderer>());
 			
 			MoveCells.RemoveAt(i);
 		}
 	}
 
-	public void AddMoveCell(HexCell cell)
+	public void AddMoveCell(HexCell c)
 	{
 		if(MoveCells==null||MoveCells.Count<1) throw new Exception("Unable to add move cell!");
 		//Draw a line between two hexcell centres
 		
 		//Check for component in case of Zoro's Lack of Orientation
+		DrawnHexCell cell = SelectDrawnCell(c);
 		LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null ? cell.gameObject.GetComponent<LineRenderer>() : cell.gameObject.AddComponent<LineRenderer>();
 		lRend.SetPositions(new[]
-			{MoveCells.Last().transform.position + Vector3.up * 20, cell.transform.position + Vector3.up * 20});
+			{SelectDrawnCell(MoveCells.Last()).transform.position + Vector3.up * 20, cell.transform.position + Vector3.up * 20});
 		lRend.material = new Material(Shader.Find("Standard")) {color = Color.black};
 		lRend.startColor = Color.black;
 		lRend.endColor = Color.black;
 		lRend.widthMultiplier = 2;
 		
-		Game.Active.MoveCells.Add(cell);
+		_game.Active.MoveCells.Add(c);
 		
 	}
 	
@@ -177,15 +184,15 @@ public class Active
 		AbilityToUse = null;
 		Action = Action.None;
 		HexCells = null;
-		Game.HexMapDrawer.RemoveHighlights();
-		Game.HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
+		_game.HexMapDrawer.RemoveHighlights();
+		_game.HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
 	}
 	public void CleanAndTrySelecting()
 	{
         Clean();	
 		CharacterOnMap?.Select();
 	}
-	private void MakeAction(NKMCharacter characterThatMakesAction, Action action, List<HexCell> cells)
+	private void MakeAction(Character characterThatMakesAction, Action action, List<HexCell> cells)
 	{
 		switch (action)
 		{
@@ -217,11 +224,11 @@ public class Active
 		}	
 	}
 
-	private bool MakeAttackAndMoveAction(NKMCharacter character, HexCell cell, List<HexCell> moveCells)
+	private bool MakeAttackAndMoveAction(Character character, HexCell cell, List<HexCell> moveCells)
 	{
-        if (cell.CharacterOnCell != null && character.CanBasicAttack(cell.CharacterOnCell))
+        if (cell.CharactersOnCell.Count > 0 && character.CanBasicAttack(cell.CharactersOnCell[0]))
         {
-            character.MakeActionBasicAttack(cell.CharacterOnCell);
+            character.MakeActionBasicAttack(cell.CharactersOnCell[0]);
         }
         else
         {
@@ -234,12 +241,12 @@ public class Active
 		return true;
 	}
 
-	public void MakeAction(NKMCharacter characterThatMakesAction, Action action, HexCell cell) =>
+	public void MakeAction(Character characterThatMakesAction, Action action, HexCell cell) =>
 		MakeAction(characterThatMakesAction, action, new List<HexCell>{cell});
 
-	public void MakeAction(List<HexCell> cells) => MakeAction(!Game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn, Action, cells);
+	public void MakeAction(List<HexCell> cells) => MakeAction(!_game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn, Action, cells);
 	public void MakeAction(HexCell cell) => MakeAction(new List<HexCell> {cell});
-	public void MakeAction() => (!Game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn).TryToInvokeJustBeforeFirstAction();
+	public void MakeAction() => (!_game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn).TryToInvokeJustBeforeFirstAction();
 
 	public static bool IsPointerOverUiObject()
 	{

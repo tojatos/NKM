@@ -4,7 +4,7 @@ namespace NKMObjects.Effects
 {
 	public class Stun : Effect
 	{
-		public Stun(int cooldown, Character parentCharacter, string name=null) : base(cooldown, parentCharacter, name)
+		public Stun(Game game, int cooldown, Character parentCharacter, string name=null) : base(game, cooldown, parentCharacter, name)
 		{
 			Name = name?? "Stun";
 			Type = EffectType.Negative;

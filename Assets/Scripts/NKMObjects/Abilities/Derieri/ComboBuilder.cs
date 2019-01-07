@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Derieri
     {
         private const int ComboIncrease = 3;
         private const int Range = 2;
-        public ComboBuilder() : base(AbilityType.Normal, "Combo builder", 2)
+        public ComboBuilder(Game game) : base(game, AbilityType.Normal, "Combo builder", 2)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
@@ -21,14 +21,14 @@ Dodatkowo otrzymuje możliwość podstawowego ataku.
 
 Zasięg liniowy: {Range}    Czas odnowienia: {Cooldown}";
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
         public void Use(List<HexCell> cells)
         {
-            NKMCharacter target = cells[0].CharacterOnCell;
+            Character target = cells[0].CharactersOnCell[0];
 			ComboStar passiveAbility = ParentCharacter.Abilities.OfType<ComboStar>().SingleOrDefault();
             if (passiveAbility == null)
             {

@@ -9,7 +9,7 @@ using NKMObjects;
 using NKMObjects.Templates;
 using UI;
 using UnityEngine;
-using NKMObject = NKMObjects.Templates.NKMObject;
+//using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace Managers
 {
@@ -34,15 +34,15 @@ namespace Managers
 			if(!isGameStarted) throw new Exception("Game has not started!");
 		}
 
-		private static GameOptions GetTestingGameOptions()
+		private GameOptions GetTestingGameOptions()
 		{
             string testingCharactersFile = File.ReadAllText(Application.dataPath + Path.DirectorySeparatorChar + "testing_characters.txt").TrimEnd();
 			string[][] charactersGrouped = testingCharactersFile.Split(new[] {"\n\n"}, StringSplitOptions.None).Select(s => s.Split('\n')).ToArray();
 			string[] playerNames = {"Ryszard", "Maciej", "Zygfryd", "Bożydar"};
-			List<GamePlayer> testingGamePlayers = charactersGrouped.Select((t, i) => new GamePlayer
+			List<GamePlayer> testingGamePlayers = charactersGrouped.Select((t, i) => new GamePlayer(Game)
 				{
 					Name = playerNames[i % (playerNames.Length)],
-					Characters = t.Select(x => x.Trim()).Select(CharacterFactory.Create).ToList()
+					Characters = t.Select(x => x.Trim()).Select(c => CharacterFactory.Create(Game, c)).ToList()
 				})
 				.ToList();
 			var gameOptions = new GameOptions
@@ -55,7 +55,7 @@ namespace Managers
 			};
 			gameOptions.Players.ForEach(p =>
 			{
-				p.Characters.ForEach(c => c.Owner = p);
+//				p.Characters.ForEach(c => c.Owner = p);
 				p.HasSelectedCharacters = true;
 			});
 			return gameOptions;
@@ -68,10 +68,10 @@ namespace Managers
 			Directory.CreateDirectory(Path.GetDirectoryName(replayFilePath));	
 			string[] replayFileLines = File.ReadAllLines(replayFilePath);
 			var gameLog = new GameLog(replayFileLines);
-			List<GamePlayer> gamePlayers = gameLog.GetPlayerNames().Select(p => new GamePlayer
+			List<GamePlayer> gamePlayers = gameLog.GetPlayerNames().Select(p => new GamePlayer(Game)
 			{
 				Name = p,
-				Characters = gameLog.GetCharacterNames(p).Select(CharacterFactory.Create).ToList()
+				Characters = gameLog.GetCharacterNames(p).Select(c => CharacterFactory.Create(Game, c)).ToList()
 
 			}).ToList();
 			var gameOptions =  new GameOptions
@@ -84,7 +84,7 @@ namespace Managers
 			};
 			gameOptions.Players.ForEach(p =>
 			{
-				p.Characters.ForEach(c => c.Owner = p);
+//				p.Characters.ForEach(c => c.Owner = p);
 				p.HasSelectedCharacters = true;
 			});
 			return gameOptions;
@@ -113,13 +113,13 @@ namespace Managers
             return mapScriptable;
 		}
 		
-		private static async Task<List<GamePlayer>> GetPlayers()
+		private async Task<List<GamePlayer>> GetPlayers()
 		{
 //			var numberOfPlayers = SessionSettings.Instance.NumberOfPlayers;
 			int numberOfPlayers = GetPlayersNumber();
 			List<GamePlayer> players = new List<GamePlayer>();
 			for (int i = 0; i < numberOfPlayers; i++)
-				players.Add(new GamePlayer {Name = GetPlayerName(i)});
+				players.Add(new GamePlayer(Game) {Name = GetPlayerName(i)});
 			await GetCharacters(players);
 			return players;
 		}
@@ -136,7 +136,7 @@ namespace Managers
 			}
 		}
 
-		private static async Task GetCharacters(List<GamePlayer> players)
+		private async Task GetCharacters(List<GamePlayer> players)
 		{
 			switch (S.GetDropdownSetting(SettingType.PickType))
 			{
@@ -144,8 +144,8 @@ namespace Managers
 					await BlindPick(players);
 					break;
 				case 1:
-					List<NKMCharacter> charactersToPick =
-						new List<NKMCharacter>(GameData.Conn.GetCharacterNames().Select(CharacterFactory.Create));//AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
+					List<Character> charactersToPick =
+						new List<Character>(GameData.Conn.GetCharacterNames().Select(c => CharacterFactory.Create(Game, c)));//AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
 					if(S.GetDropdownSetting(SettingType.AreBansEnabled)==1) await Bans(players, charactersToPick);
 					await DraftPick(players, charactersToPick);
 					break;
@@ -155,7 +155,7 @@ namespace Managers
 			}
 		}
 
-		private static async Task DraftPick(List<GamePlayer> players, ICollection<NKMCharacter> charactersToPick)
+		private static async Task DraftPick(List<GamePlayer> players, ICollection<Character> charactersToPick)
 		{
 			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
 			while (players.Any(p => p.Characters.Count != numberOfCharactersPerPlayer))
@@ -167,7 +167,7 @@ namespace Managers
 			}
 			players.ForEach(p=>p.HasSelectedCharacters=true);
 		}
-		private static async Task Bans(List<GamePlayer> players, ICollection<NKMCharacter> charactersToPick)
+		private static async Task Bans(List<GamePlayer> players, ICollection<Character> charactersToPick)
 		{
 			int bansNumber = GetBansNumber();
 			while(bansNumber != 0)
@@ -183,7 +183,7 @@ namespace Managers
 			players.ForEach(p=>p.HasSelectedCharacters=true);
 		}
 
-		private static void AllRandom(List<GamePlayer> players)
+		private void AllRandom(List<GamePlayer> players)
 		{
 			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
 
@@ -195,7 +195,7 @@ namespace Managers
 				{
                     string randomCharacterName = allCharacterNames.GetRandomNoLog();
                     allCharacterNames.Remove(randomCharacterName);
-                    p.AddCharacter(randomCharacterName);
+                    p.AddCharacter(Game, randomCharacterName);
 				}
 				
 				p.HasSelectedCharacters = true;
@@ -203,7 +203,7 @@ namespace Managers
 			
 		}
 
-		private static async Task SelectOneCharacter(ICollection<NKMCharacter> charactersToPick, GamePlayer player)
+		private static async Task SelectOneCharacter(ICollection<Character> charactersToPick, GamePlayer player)
 		{
 			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
 			if(player.Characters.Count == numberOfCharactersPerPlayer) return;
@@ -214,7 +214,7 @@ namespace Managers
 				if (SpriteSelect.Instance.SelectedObjects.Count != 1) return;
 
 				IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o => o.Name);
-				NKMCharacter picked = charactersToPick.Single(c => c.Name == names.First());
+				Character picked = charactersToPick.Single(c => c.Name == names.First());
 				charactersToPick.Remove(picked);
 				p.AddCharacter(picked);
 				hasSelected = true;
@@ -225,7 +225,7 @@ namespace Managers
 				$"Wybór postaci - {player.Name}", "Zakończ wybieranie postaci");
 			await wait.WaitToBeTrue();
 		}
-        private static async Task BanOneCharacter(ICollection<NKMCharacter> charactersToPick, GamePlayer player)
+        private static async Task BanOneCharacter(ICollection<Character> charactersToPick, GamePlayer player)
 		{
 			bool hasSelected = false;
 			Func<bool> wait = () => hasSelected;
@@ -234,7 +234,7 @@ namespace Managers
 				if (SpriteSelect.Instance.SelectedObjects.Count != 1) return;
 
 				IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o => o.Name);
-				NKMCharacter picked = charactersToPick.Single(c => c.Name == names.First());
+				Character picked = charactersToPick.Single(c => c.Name == names.First());
 				charactersToPick.Remove(picked);
 				hasSelected = true;
 				SpriteSelect.Instance.Close();
@@ -244,12 +244,12 @@ namespace Managers
 				$"Banowanie postaci - {player.Name}", "Zakończ banowanie postaci");
 			await wait.WaitToBeTrue();
 		}
-		private static async Task BlindPick(IEnumerable<GamePlayer> players)
+		private async Task BlindPick(IEnumerable<GamePlayer> players)
 		{
 //			players.ForEach(p => Debug.Log(p.Name));
 			foreach (GamePlayer p in players)
 			{
-                List<NKMObject> allCharacters = new List<NKMObject>(GameData.Conn.GetCharacterNames().Select(CharacterFactory.CreateWithoutId));
+                List<Character> allCharacters = new List<Character>(GameData.Conn.GetCharacterNames().Select(c => CharacterFactory.CreateWithoutId(Game, c)));
                 SpriteSelect.Instance.Open(allCharacters, () => FinishSelectingCharacters(p), $"Wybór postaci - {p.Name}", "Zakończ wybieranie postaci");
                 Func<bool> hasSelectedCharecters = () => p.HasSelectedCharacters;
                 await hasSelectedCharecters.WaitToBeTrue();

@@ -11,18 +11,18 @@ namespace NKMObjects.Abilities.Ryuko_Matoi
         private const int TargetCellOffset = 3;
         private const int Range = 6;
         private const int Damage = 20;
-        public FiberDecapitation() : base(AbilityType.Normal, "Fiber Decapitation", 3)
+        public FiberDecapitation(Game game) : base(game, AbilityType.Normal, "Fiber Decapitation", 3)
         {
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
 			CanUseOnGround = false;
         }
-		public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range, SearchFlags.StraightLine);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyEnemiesOf(Owner).FindAll(c =>
+		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner).FindAll(c =>
 		{
 			//check if target move cell is free
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);
             HexCell moveCell = c.GetCell(direction, TargetCellOffset);
-            return moveCell != null && moveCell.Type != HexTileType.Wall && moveCell.CharacterOnCell == null;
+            return moveCell != null && moveCell.IsFreeToStand;
 		});
         public override string GetDescription() =>
 $@"{ParentCharacter.Name} przecina się przez przeciwnika, zmniejszając mu obronę fizyczną na stałe o {PhysicalDefenseDecrease},
@@ -37,12 +37,12 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 			{
 				HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);
                 HexCell moveCell = c.GetCell(direction, TargetCellOffset);
-                moveCell.AddHighlight(Highlights.BlueTransparent);
+				Active.SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
 			});
 		}
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharacterOnCell);
+	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(NKMCharacter targetCharacter)
+		private void Use(Character targetCharacter)
 		{
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCharacter.ParentCell);
 			HexCell moveCell = targetCharacter.ParentCell.GetCell(direction, TargetCellOffset);

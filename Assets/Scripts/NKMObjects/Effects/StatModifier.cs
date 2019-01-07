@@ -8,7 +8,7 @@ namespace NKMObjects.Effects
 	{
 		private readonly StatType _statType;
 		public readonly Modifier Modifier;
-		public StatModifier(int cooldown, int value, Character parentCharacter, StatType statType, string name = null) : base(cooldown, parentCharacter, name)
+		public StatModifier(Game game, int cooldown, int value, Character parentCharacter, StatType statType, string name = null) : base(game, cooldown, parentCharacter, name)
 		{
 			_statType = statType;
 			Name = name ?? "Stat Modifier";

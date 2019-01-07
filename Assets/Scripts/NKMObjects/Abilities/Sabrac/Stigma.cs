@@ -8,7 +8,7 @@ namespace NKMObjects.Abilities.Sabrac
 {
     public class Stigma : Ability
     {
-        public Stigma() : base(AbilityType.Passive, "Stigma")
+        public Stigma(Game game) : base(game, AbilityType.Passive, "Stigma")
         {
             OnAwake += () =>
             {
@@ -19,7 +19,7 @@ namespace NKMObjects.Abilities.Sabrac
                         e.Damage.Value = 1;
                         e.CurrentCooldown = 2;
                     });
-                    character.Effects.Add(new IncreasablePoison(ParentCharacter, new Damage(1, DamageType.True), 1, 2, character, Name));
+                    character.Effects.Add(new IncreasablePoison(Game, ParentCharacter, new Damage(1, DamageType.True), 1, 2, character, Name));
                 };
                 ParentCharacter.AfterBasicAttack += (character, damage) => applyEffect(character);
                 ParentCharacter.AfterAbilityAttack += (ability, character, damage) => applyEffect(character);

@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using Hex;
+using Managers;
 using NKMObjects.Templates;
 using UnityEngine;
-using NKMObject = NKMObjects.Templates.NKMObject;
+//using NKMObject = NKMObjects.Templates.NKMObject;
 
 public class Spawner : SingletonMonoBehaviour<Spawner>
 {
 	public GameObject CharacterPrefab;
 	public GameObject HighlightPrefab;
-	private void SpawnCharacterObject(HexCell parentCell, NKMCharacter characterToSpawn)
+	private Console Console => Console.Instance;
+	private void SpawnCharacterObject(DrawnHexCell parentCell, Character characterToSpawn)
 	{
 		Sprite characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterToSpawn.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
 		GameObject characterObject = Instantiate(CharacterPrefab, parentCell.transform);
@@ -19,19 +21,20 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		characterObject.transform.Find("Character Sprite").GetComponent<SpriteRenderer>().sprite = characterSprite;
 		characterObject.transform.Find("Border").GetComponent<SpriteRenderer>().color = characterToSpawn.Owner.GetColor();
 		characterObject.transform.localPosition = new Vector3(0, 10, 0);
-		parentCell.CharacterOnCell = characterToSpawn;
-		characterToSpawn.ParentCell = parentCell;
+//		parentCell.CharacterOnCell = characterToSpawn;
+		GameStarter.Instance.Game.HexMap.Move(characterToSpawn, parentCell.HexCell);
+		//characterToSpawn.ParentCell = parentCell.HexCell;
 		characterToSpawn.CharacterObject = characterObject;
 		characterToSpawn.IsOnMap = true;
 	}
-	public void SpawnHighlightCellObject(HexCell parentCell, string colorName)
+	public void SpawnHighlightCellObject(DrawnHexCell parentCell, string colorName)
 	{
 		GameObject highlightObject = Instantiate(HighlightPrefab, parentCell.transform);
 		highlightObject.transform.localPosition = new Vector3(0, 11, 0);
 		highlightObject.GetComponent<SpriteRenderer>().sprite = Stuff.Sprites.HighlightHexagons.Single(s => s.name == colorName); 
 		parentCell.Highlights.Add(highlightObject);
 	}
-	public void SpawnEffectHighlightCellObject(HexCell parentCell, string effectName)
+	public void SpawnEffectHighlightCellObject(DrawnHexCell parentCell, string effectName)
 	{
 		GameObject highlightObject = Instantiate(HighlightPrefab, parentCell.transform);
 		highlightObject.transform.localPosition = new Vector3(0, 1, 0);
@@ -41,23 +44,22 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	}
 
 
-	private static NKMObject Create(string namespaceName, string className)
+	private static T Create<T>(string namespaceName, string className) where T : class 
 	{
 		string typeName = "NKMObjects." + namespaceName + "." + className;
 		Type type = Type.GetType(typeName);
 		if (type == null) throw new NullReferenceException();
 
-		var createdMyGameObject = Activator.CreateInstance(type) as NKMObject;
-		return createdMyGameObject;
+		return Activator.CreateInstance(type) as T;
 	}
 
-	public static IEnumerable<NKMObject> Create(string namespaceName, IEnumerable<string> classNames)
+	public static IEnumerable<T> Create<T>(string namespaceName, IEnumerable<string> classNames) where T : class
 	{
-		return classNames.Select(className => Create(namespaceName, className)).ToList();
+		return classNames.Select(className => Create<T>(namespaceName, className)).ToList();
 	}
 
-	public static bool CanSpawn(NKMCharacter character, HexCell cell) => cell.IsFreeToStand && cell.IsSpawnFor(character.Owner);
-	public void Spawn(HexCell cell, NKMCharacter characterToSpawn)
+	public static bool CanSpawn(Character character, HexCell cell) => cell.IsFreeToStand && cell.IsSpawnFor(character.Owner);
+	public void Spawn(HexCell cell, Character characterToSpawn)
 	{
 		Console.GameLog($"CHARACTER PLACED: {characterToSpawn}; {cell}");
 		SpawnCharacterObject(cell, characterToSpawn);

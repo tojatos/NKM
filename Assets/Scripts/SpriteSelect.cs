@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Extensions;
+using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.UI;
-using NKMObject = NKMObjects.Templates.NKMObject;
+//using NKMObject = NKMObjects.Templates.NKMObject;
 
 public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 {
-	private List<NKMObject> _objectsToFill = new List<NKMObject>();
-	public List<NKMObject> SelectedObjects { get; } = new List<NKMObject>();
+	private List<Character> _objectsToFill = new List<Character>();
+	public List<Character> SelectedObjects { get; } = new List<Character>();
 	public Button FinishSelectingButton;
 	public Text Title;
 	public GameObject SpriteObjectPrefab;
@@ -16,7 +17,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 
 	public bool IsOpened => gameObject.transform.parent.gameObject.activeSelf;
 
-	public void Open(IEnumerable<NKMObject> objectsToFill, System.Action finishSelectingButtonClick, string title, string finishButtonText)
+	public void Open(IEnumerable<Character> objectsToFill, System.Action finishSelectingButtonClick, string title, string finishButtonText)
 	{
 		gameObject.transform.parent.gameObject.Show();
 		SelectedObjects.Clear();
@@ -33,7 +34,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 		Transform spritesTransform = Sprites.transform;
 		if (_objectsToFill.Count == 1) spritesTransform.GetComponentsInChildren<Button>()[spritesTransform.childCount-1].onClick.Invoke(); //get last button, because the others are not removed yet for some reason
 	}
-	private void SpawnSpriteObject(NKMObject o)
+	private void SpawnSpriteObject(Character o)
 	{
 		GameObject spriteObject = Instantiate(SpriteObjectPrefab, Sprites.transform);
 		var button = spriteObject.GetComponent<Button>();
@@ -51,7 +52,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 	/// </summary>
 	/// <param name="o">Object to toggle</param>
 	/// <returns>Is selected</returns>
-	private bool ToggleSelected(NKMObject o)
+	private bool ToggleSelected(Character o)
 	{
 		if (SelectedObjects.Contains(o))
 		{
