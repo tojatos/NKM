@@ -25,24 +25,24 @@ namespace Hex
 			
 			TriangulateCells();
 		}
-		public void CreateMap(HexMapScriptable hexMapScriptable)
-		{
-			HexMapScriptable = hexMapScriptable;
-			Width = HexMapScriptable.Map.width;
-			Height = HexMapScriptable.Map.height;
-			_hexMesh = GetComponentInChildren<HexMesh>();
-			_hexMesh.Init();
-			Cells = new List<HexCell>();
-			for (int z = 0, i = 0; z < Height; z++)
-			{
-				for (var x = 0; x < Width; x++)
-				{
-					CreateCell(x, z, i++);
-				}
-			}
-
-			TriangulateCells();
-		}
+//		public void CreateMap(HexMapScriptable hexMapScriptable)
+//		{
+//			HexMapScriptable = hexMapScriptable;
+//			Width = HexMapScriptable.Map.width;
+//			Height = HexMapScriptable.Map.height;
+//			_hexMesh = GetComponentInChildren<HexMesh>();
+//			_hexMesh.Init();
+//			Cells = new List<HexCell>();
+//			for (int z = 0, i = 0; z < Height; z++)
+//			{
+//				for (var x = 0; x < Width; x++)
+//				{
+//					CreateCell(x, z, i++);
+//				}
+//			}
+//
+//			TriangulateCells();
+//		}
 
 		public void TriangulateCells()
 		{
@@ -58,9 +58,9 @@ namespace Hex
 			
 			HexCell cell = Instantiate(CellPrefab);
 			Cells.Add(cell);
+			cell.BetterHexCell = hexCell;
 			cell.transform.SetParent(transform, false);
-			cell.Coordinates = hexCell.Coordinates;
-			cell.Type = hexCell.Type;
+			//cell.Type = hexCell.Type;
 			cell.transform.localPosition = position;
 			//TODO: neighbors not set
 
@@ -82,80 +82,80 @@ namespace Hex
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		private void CreateCell(int x, int z, int i)
-		{
-			Color pixelColor = HexMapScriptable.Map.GetPixel(x, z);
-			if (Math.Abs(pixelColor.a) < 0.001) //transparent pixel
-			{
-				return;
-			}
-
-			Vector3 position;
-			// ReSharper disable once PossibleLossOfFraction
-			position.x = (x + z * 0.5f - z / 2) * (HexMetrics.InnerRadius * 2f);
-			position.y = 0f;
-			position.z = z * (HexMetrics.OuterRadius * 1.5f);
-
-			HexCell cell = Instantiate(CellPrefab);
-			Cells.Add(cell);
-			cell.transform.SetParent(transform, false);
-			cell.transform.localPosition = position;
-			cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-			cell.Color = new Color(255, 255, 255);
-			if (x > 0)
-			{
-				cell.SetNeighbor(HexDirection.W, Cells[i - 1]);
-			}
-			if (z > 0)
-			{
-				if ((z & 1) == 0)
-				{
-					cell.SetNeighbor(HexDirection.Se, Cells[i - Width]);
-					if (x > 0)
-					{
-						cell.SetNeighbor(HexDirection.Sw, Cells[i - Width - 1]);
-					}
-				}
-				else
-				{
-					cell.SetNeighbor(HexDirection.Sw, Cells[i - Width]);
-					if (x < Width - 1)
-					{
-						cell.SetNeighbor(HexDirection.Se, Cells[i - Width + 1]);
-					}
-				}
-
-			}
-
-			foreach (ColorToTileType colorMapping in HexMapScriptable.ColorMappings)
-			{
-				if (colorMapping.Color.Equals(pixelColor))
-				{
-					cell.Type = colorMapping.HexTileType;
-					if(HexMapScriptable.SpawnPoints.Contains( cell.Type ))
-					{
-						cell.Color = Color.green;
-					}
-					else if (cell.Type == HexTileType.Normal)
-					{
-						cell.Color = Color.white;
-					}
-					else if (cell.Type == HexTileType.Wall)
-					{
-						cell.Color = Color.black;
-					}
-					else
-					{
-						Debug.Log(cell.Type);
-						cell.Color = pixelColor;
-					}
-					return;
-				}
-			}
-
-			Debug.LogError(cell.Coordinates + " nie ma zmapowanego typu!");// + '\n' + "Red: " + ((Math.Abs(pixelColor.r - HexMap.ColorMappings[3].Color.r) < 0.001f) ? "Match" : "Nay") + " Green: " + ((Math.Abs(pixelColor.g - HexMap.ColorMappings[3].Color.g) < 0.001f) ? "Match" : "Nay") + " Blue: " + ((Math.Abs(pixelColor.b - HexMap.ColorMappings[3].Color.b) < 0.001f) ? "Match" : "Nay"));
-
-		}
+//		private void CreateCell(int x, int z, int i)
+//		{
+//			Color pixelColor = HexMapScriptable.Map.GetPixel(x, z);
+//			if (Math.Abs(pixelColor.a) < 0.001) //transparent pixel
+//			{
+//				return;
+//			}
+//
+//			Vector3 position;
+//			// ReSharper disable once PossibleLossOfFraction
+//			position.x = (x + z * 0.5f - z / 2) * (HexMetrics.InnerRadius * 2f);
+//			position.y = 0f;
+//			position.z = z * (HexMetrics.OuterRadius * 1.5f);
+//
+//			HexCell cell = Instantiate(CellPrefab);
+//			Cells.Add(cell);
+//			cell.transform.SetParent(transform, false);
+//			cell.transform.localPosition = position;
+//			cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
+//			cell.Color = new Color(255, 255, 255);
+//			if (x > 0)
+//			{
+//				cell.SetNeighbor(HexDirection.W, Cells[i - 1]);
+//			}
+//			if (z > 0)
+//			{
+//				if ((z & 1) == 0)
+//				{
+//					cell.SetNeighbor(HexDirection.Se, Cells[i - Width]);
+//					if (x > 0)
+//					{
+//						cell.SetNeighbor(HexDirection.Sw, Cells[i - Width - 1]);
+//					}
+//				}
+//				else
+//				{
+//					cell.SetNeighbor(HexDirection.Sw, Cells[i - Width]);
+//					if (x < Width - 1)
+//					{
+//						cell.SetNeighbor(HexDirection.Se, Cells[i - Width + 1]);
+//					}
+//				}
+//
+//			}
+//
+//			foreach (ColorToTileType colorMapping in HexMapScriptable.ColorMappings)
+//			{
+//				if (colorMapping.Color.Equals(pixelColor))
+//				{
+//					cell.Type = colorMapping.HexTileType;
+//					if(HexMapScriptable.SpawnPoints.Contains( cell.Type ))
+//					{
+//						cell.Color = Color.green;
+//					}
+//					else if (cell.Type == HexTileType.Normal)
+//					{
+//						cell.Color = Color.white;
+//					}
+//					else if (cell.Type == HexTileType.Wall)
+//					{
+//						cell.Color = Color.black;
+//					}
+//					else
+//					{
+//						Debug.Log(cell.Type);
+//						cell.Color = pixelColor;
+//					}
+//					return;
+//				}
+//			}
+//
+//			Debug.LogError(cell.Coordinates + " nie ma zmapowanego typu!");// + '\n' + "Red: " + ((Math.Abs(pixelColor.r - HexMap.ColorMappings[3].Color.r) < 0.001f) ? "Match" : "Nay") + " Green: " + ((Math.Abs(pixelColor.g - HexMap.ColorMappings[3].Color.g) < 0.001f) ? "Match" : "Nay") + " Blue: " + ((Math.Abs(pixelColor.b - HexMap.ColorMappings[3].Color.b) < 0.001f) ? "Match" : "Nay"));
+//
+//		}
 
 		public void RemoveHighlights(Predicate<GameObject> predicate = null)
 		{

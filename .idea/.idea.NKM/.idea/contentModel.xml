@@ -82,6 +82,7 @@
           <e p="CharacterExtension.cs" t="Include" />
           <e p="GameLog.cs" t="Include" />
           <e p="NKMObject.cs" t="Include" />
+          <e p="Predicates.cs" t="Include" />
           <e p="Sqlite.cs" t="Include" />
           <e p="SystemGeneric.cs" t="Include" />
           <e p="Tooltip.cs" t="Include" />

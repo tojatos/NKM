@@ -92,6 +92,7 @@
     <Compile Include="Assets\Scripts\Extensions\CharacterExtension.cs" />
     <Compile Include="Assets\Scripts\Extensions\GameLog.cs" />
     <Compile Include="Assets\Scripts\Extensions\NKMObject.cs" />
+    <Compile Include="Assets\Scripts\Extensions\Predicates.cs" />
     <Compile Include="Assets\Scripts\Extensions\Sqlite.cs" />
     <Compile Include="Assets\Scripts\Extensions\SystemGeneric.cs" />
     <Compile Include="Assets\Scripts\Extensions\Tooltip.cs" />

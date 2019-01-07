@@ -16,14 +16,14 @@ namespace NKMObjects.HexCellEffects
 		{
 			_characterThatOwnsEffect = characterThatOwnsEffect;
 			_speedDecrease = value;
-			ParentCell.OnEnter += AddEffect;
-			ParentCell.OnLeave += RemoveEffect;
+//			ParentCell.OnEnter += AddEffect; //TODO
+//			ParentCell.OnLeave += RemoveEffect;//TODO
 			OnRemove += () =>
 			{
 				_isBeingRemoved = true;
 				if (ParentCell.CharacterOnCell != null) RemoveEffect(ParentCell.CharacterOnCell);
-				ParentCell.OnEnter -= AddEffect;
-				ParentCell.OnLeave -= RemoveEffect;
+//				ParentCell.OnEnter -= AddEffect;//TODO
+//				ParentCell.OnLeave -= RemoveEffect;//TODO
 			};
 			if(ParentCell.CharacterOnCell!=null) AddEffect(ParentCell.CharacterOnCell);
 			
