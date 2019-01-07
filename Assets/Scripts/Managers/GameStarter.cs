@@ -47,7 +47,7 @@ namespace Managers
 				.ToList();
 			var gameOptions = new GameOptions
 			{
-				Map = Stuff.Maps.Single(m => m.Map.name == "TestMap"),
+				MapScriptable = Stuff.Maps.Single(m => m.Map.name == "TestMap"),
 				Players = testingGamePlayers,
 				UIManager = UIManager.Instance,
 				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
@@ -76,7 +76,7 @@ namespace Managers
 			}).ToList();
 			var gameOptions =  new GameOptions
 			{
-				Map = Stuff.Maps.Single(m => m.Name == gameLog.GetMapName()),
+				MapScriptable = Stuff.Maps.Single(m => m.Name == gameLog.GetMapName()),
 				Players = gamePlayers,
 				UIManager = UIManager.Instance,
 				Type = GameType.Replay,
@@ -97,7 +97,7 @@ namespace Managers
 
 			return new GameOptions
 			{
-				Map = GetMap(),
+				MapScriptable = GetMap(),
 				Players = await GetPlayers(),
 				UIManager = UIManager.Instance,
 				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
@@ -105,12 +105,12 @@ namespace Managers
 			};
 		}
 
-		private static HexMap GetMap()
+		private static HexMapScriptable GetMap()
 		{
 //					var mapIndex = SessionSettings.Instance.SelectedMapIndex;
             int mapIndex = S.GetDropdownSetting(SettingType.SelectedMapIndex);
-            HexMap map = Stuff.Maps[mapIndex];
-            return map;
+            HexMapScriptable mapScriptable = Stuff.Maps[mapIndex];
+            return mapScriptable;
 		}
 		
 		private static async Task<List<GamePlayer>> GetPlayers()

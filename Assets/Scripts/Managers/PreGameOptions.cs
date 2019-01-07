@@ -41,18 +41,18 @@ namespace Managers
 				Description = "Wybierz mapę:",
 				Options = Stuff.Maps.Select(map => map.Name).ToArray()
 			};
-			HexMap selectedMap = Stuff.Maps[S.GetDropdownSetting(SettingType.SelectedMapIndex)];
+			HexMapScriptable selectedMapScriptable = Stuff.Maps[S.GetDropdownSetting(SettingType.SelectedMapIndex)];
 			var numberOfPlayersSettings = new DropdownSettings
 			{
 				Type = SettingType.NumberOfPlayers,
 				Description = "Liczba graczy:",
-				Options = GetNumberOfPlayerStrings(selectedMap.MaxPlayers)
+				Options = GetNumberOfPlayerStrings(selectedMapScriptable.MaxPlayers)
 			};
 			var numberOfCharacterPerPlayerSettings = new DropdownSettings
 			{
 				Type = SettingType.NumberOfCharactersPerPlayer,
 				Description = "Liczba postaci na gracza:",
-				Options = GetNumberOfCppStrings(selectedMap.MaxCharacters)
+				Options = GetNumberOfCppStrings(selectedMapScriptable.MaxCharacters)
 			};
 			var bansNumberSettings = new DropdownSettings
 			{

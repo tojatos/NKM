@@ -39,7 +39,7 @@ namespace UI
 			!(Game.Active.Phase.Number == 0 || Game.Active.Turn.CharacterThatTookActionInTurn == null &&
 			  Game.Active.GamePlayer.Characters.Any(c => (c.CanWait || c.CanTakeAction) && c.IsOnMap) || Active.AbilityToUse != null);
 
-		public void Init()
+		public void Init() //TODO
 		{
 			Stats.Instance.Init();
 			Tooltip.Instance.Init();

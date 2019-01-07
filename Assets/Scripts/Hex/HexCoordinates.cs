@@ -53,11 +53,8 @@ namespace Hex
 			return new HexCoordinates(iX, iZ);
 		}
 
-		public override string ToString()
-		{
-			return "(" +
-			       X + ", " + Y + ", " + Z + ")";
-		}
-
+		public override string ToString() => $"({X}, {Y}, {Z})";
+		public static bool operator ==(HexCoordinates c1, HexCoordinates c2) => c1._x == c2._x && c1._z == c2._z;
+		public static bool operator !=(HexCoordinates c1, HexCoordinates c2) => !(c1 == c2);
 	}
 }

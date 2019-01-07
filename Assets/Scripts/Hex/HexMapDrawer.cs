@@ -10,17 +10,26 @@ namespace Hex
 	{
 		private static Game Game => GameStarter.Instance.Game;
 
-		public HexMap HexMap { get; private set; }
+		public HexMapScriptable HexMapScriptable { get; set; }
 		public HexCell CellPrefab;
 		public int Width { get; private set; }
 		public int Height { get; private set;}
 		public List<HexCell> Cells;
 		private HexMesh _hexMesh;
+
 		public void CreateMap(HexMap hexMap)
 		{
-			HexMap = hexMap;
-			Width = HexMap.Map.width;
-			Height = HexMap.Map.height;
+			_hexMesh = GetComponentInChildren<HexMesh>();
+			_hexMesh.Init();
+			hexMap.Cells.ForEach(CreateCell);
+			
+			TriangulateCells();
+		}
+		public void CreateMap(HexMapScriptable hexMapScriptable)
+		{
+			HexMapScriptable = hexMapScriptable;
+			Width = HexMapScriptable.Map.width;
+			Height = HexMapScriptable.Map.height;
 			_hexMesh = GetComponentInChildren<HexMesh>();
 			_hexMesh.Init();
 			Cells = new List<HexCell>();
@@ -40,9 +49,42 @@ namespace Hex
 			_hexMesh.Triangulate(Cells);
 		}
 
+		private void CreateCell(BetterHexCell hexCell)
+		{
+			Vector3 position;
+			position.x = (hexCell.Coordinates.X + hexCell.Coordinates.Z * 0.5f) * (HexMetrics.InnerRadius * 2f);
+			position.y = 0f;
+			position.z = hexCell.Coordinates.Z * (HexMetrics.OuterRadius * 1.5f);
+			
+			HexCell cell = Instantiate(CellPrefab);
+			Cells.Add(cell);
+			cell.transform.SetParent(transform, false);
+			cell.Coordinates = hexCell.Coordinates;
+			cell.Type = hexCell.Type;
+			cell.transform.localPosition = position;
+			//TODO: neighbors not set
+
+			switch (cell.Type)
+			{
+				case HexTileType.Normal:
+                    cell.Color = Color.white;
+					break;
+				case HexTileType.Wall:
+                    cell.Color = Color.black;
+					break;
+				case HexTileType.SpawnPoint1:
+				case HexTileType.SpawnPoint2:
+				case HexTileType.SpawnPoint3:
+				case HexTileType.SpawnPoint4:
+                    cell.Color = Color.green;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
 		private void CreateCell(int x, int z, int i)
 		{
-			Color pixelColor = HexMap.Map.GetPixel(x, z);
+			Color pixelColor = HexMapScriptable.Map.GetPixel(x, z);
 			if (Math.Abs(pixelColor.a) < 0.001) //transparent pixel
 			{
 				return;
@@ -85,12 +127,12 @@ namespace Hex
 
 			}
 
-			foreach (ColorToTileType colorMapping in HexMap.ColorMappings)
+			foreach (ColorToTileType colorMapping in HexMapScriptable.ColorMappings)
 			{
 				if (colorMapping.Color.Equals(pixelColor))
 				{
 					cell.Type = colorMapping.HexTileType;
-					if(HexMap.SpawnPoints.Contains( cell.Type ))
+					if(HexMapScriptable.SpawnPoints.Contains( cell.Type ))
 					{
 						cell.Color = Color.green;
 					}
@@ -142,9 +184,7 @@ namespace Hex
 		{
 			position = transform.InverseTransformPoint(position);
 			HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-			var index = coordinates.X + coordinates.Z * Instance.Width + coordinates.Z / 2;
-			HexCell touchedCell = Game.HexMapDrawer.Cells[index];
-			return touchedCell;
+			return Cells.First(c => c.Coordinates == coordinates);
 		}
 
 		public void Update()

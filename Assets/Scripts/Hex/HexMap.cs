@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace Hex
 {
-	[CreateAssetMenu(fileName = "New map", menuName = "Map")]
-	public class HexMap : ScriptableObject
-	{
-		public string Name = "New map";
-		public Texture2D Map;
-		public int MaxCharacters;
-		public List<HexTileType> SpawnPoints;
-		public ColorToTileType[] ColorMappings;
-		public int MaxPlayers => SpawnPoints.Count;
-	}
+    public class HexMap
+    {
+	    public readonly List<BetterHexCell> Cells;
+	    
+		public HexMap (List<BetterHexCell> cells)
+		{
+			Cells = cells;
+		}
+    }
 }

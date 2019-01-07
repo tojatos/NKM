@@ -241,7 +241,7 @@ namespace Hex
 		public event CharacterDelegate OnEnter;
 		public event CharacterDelegate OnLeave;
 
-		public bool IsSpawnFor([NotNull] GamePlayer player) => Type == HexMapDrawer.Instance.HexMap.SpawnPoints[player.GetIndex()];
+		public bool IsSpawnFor([NotNull] GamePlayer player) => Type == HexMapDrawer.Instance.HexMapScriptable.SpawnPoints[player.GetIndex()];
 
 		public override string ToString() => Coordinates.ToString();
 	}

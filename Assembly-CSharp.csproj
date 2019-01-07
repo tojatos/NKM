@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -100,10 +101,13 @@
     <Compile Include="Assets\Scripts\GameLog.cs" />
     <Compile Include="Assets\Scripts\GameOptions.cs" />
     <Compile Include="Assets\Scripts\GamePlayer.cs" />
+    <Compile Include="Assets\Scripts\Hex\BetterHexCell.cs" />
     <Compile Include="Assets\Scripts\Hex\HexCell.cs" />
     <Compile Include="Assets\Scripts\Hex\HexCoordinates.cs" />
     <Compile Include="Assets\Scripts\Hex\HexDirection.cs" />
     <Compile Include="Assets\Scripts\Hex\HexMap.cs" />
+    <Compile Include="Assets\Scripts\Hex\HexMapFactory.cs" />
+    <Compile Include="Assets\Scripts\Hex\HexMapScriptable.cs" />
     <Compile Include="Assets\Scripts\Hex\HexMapDrawer.cs" />
     <Compile Include="Assets\Scripts\Hex\HexMesh.cs" />
     <Compile Include="Assets\Scripts\Hex\HexMetrics.cs" />

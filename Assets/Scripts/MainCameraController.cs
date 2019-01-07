@@ -18,12 +18,12 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 	private Vector3 _diference;
 	private bool _drag;
 
-	public void Init()
+	public void Init(int width, int height)
 	{
 		Game = GameStarter.Instance.Game;
 		_cam = GetComponent<Camera>();
-		var mapWidth = HexMapDrawer.Instance.Width * HexMetrics.OuterRadius * 2;
-		var mapHeight = HexMapDrawer.Instance.Height * HexMetrics.InnerRadius * 2;
+		var mapWidth = width * HexMetrics.OuterRadius * 2;
+		var mapHeight = height * HexMetrics.InnerRadius * 2;
 		var startingPosition = new Vector3(0 + mapWidth/2 - 30, 300, 0 + mapHeight/2 - 30); // some magic calculations
 		_cam.transform.position = startingPosition;
 		var startingZoom = Math.Max(mapWidth, mapHeight) / 2.3f;

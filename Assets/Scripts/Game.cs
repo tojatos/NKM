@@ -7,6 +7,7 @@ using Hex;
 using Managers;
 using NKMObjects.Templates;
 using UI;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Game
@@ -20,6 +21,7 @@ public class Game
 	private UIManager _uiManager;
 	private Spawner _spawner;
 	public HexMapDrawer HexMapDrawer;
+	public HexMap HexMap;
 
 	public bool IsInitialized;
 	public bool IsReplay => Options.GameLog != null;
@@ -50,11 +52,14 @@ public class Game
 	{
 		if (!IsInitialized) return false;
 
-		HexMapDrawer.CreateMap(Options.Map);
+		HexMap = HexMapFactory.FromScriptable(Options.MapScriptable);
+		HexMapDrawer.HexMapScriptable = Options.MapScriptable;
+		HexMapDrawer.CreateMap(HexMap);
+//		HexMapDrawer.CreateMap(Options.MapScriptable);
 		_uiManager.Init();
 //		UIManager.VisibleUI = UIManager.GameUI;
 //		Active.Buttons = UIManager.UseButtons;
-		MainCameraController.Instance.Init();
+		MainCameraController.Instance.Init(Options.MapScriptable.Map.width, Options.MapScriptable.Map.height);
 		UI.CharacterUI.Abilities.Instance.Init();
 		_uiManager.UpdateActivePhaseText();
 		TakeTurns();
@@ -124,7 +129,7 @@ public class Game
 	private void LogGameStart()
 	{//TODO: make ; and : character disallowed in player names
 		string logText =
-$@"MAP: {Options.Map.Name}
+$@"MAP: {Options.MapScriptable.Name}
 PLAYERS: {string.Join("; ", Players.Select(p => p.Name))}
 CHARACTERS:
 {string.Join("\n", Players.Select(p => p.Name + ": " + string.Join("; ", p.Characters)))}
@@ -192,6 +197,7 @@ GAME STARTED: true";
 			{
 				HexMapDrawer.RemoveHighlights();
 			}
+			
 			if (touchedCell.CharacterOnCell != null)
 			{
 				touchedCell.CharacterOnCell.Select();
