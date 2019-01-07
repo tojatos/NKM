@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using NKMObjects.Templates;
+using UnityEngine;
 
 namespace Hex
 {
@@ -95,8 +96,8 @@ namespace Hex
 	    public static Predicate<BetterHexCell> IsFriendStanding(HexMap map, GamePlayer friendlyPlayer) => cell =>
 		    cell.CharactersOnCell(map).Any(c => !c.IsEnemyFor(friendlyPlayer));
 	    public static Predicate<BetterHexCell> IsWall => cell => cell.Type == HexTileType.Wall;
-	    
-		public List<BetterHexCell> GetLine(HexDirection direction, int depth)
+
+	    public List<BetterHexCell> GetLine(HexDirection direction, int depth)
 		{
 			List<BetterHexCell> visited = new List<BetterHexCell>();
 			BetterHexCell lastCell = this;
