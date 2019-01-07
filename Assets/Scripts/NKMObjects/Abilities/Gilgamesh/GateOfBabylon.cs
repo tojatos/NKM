@@ -30,7 +30,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 		}
 		public void Use(List<HexCell> cells)
 		{
-			List<NKMCharacter> characters = cells.GetCharacters();
+			List<Character> characters = cells.GetCharacters();
 			characters.ForEach(targetCharacter =>
 			{
 				if (targetCharacter.Owner == Active.GamePlayer) return;

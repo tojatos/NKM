@@ -27,7 +27,7 @@ Zasięg: {AbilityRange}	Czas odnowienia: {Cooldown}";
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(NKMCharacter targetCharacter)
+		private void Use(Character targetCharacter)
 		{
 				ParentCharacter.Effects.Add(new PassiveBuff(Game, SnarDuration, ParentCharacter, Name));
 				targetCharacter.Effects.Add(new Ground(Game, SnarDuration, targetCharacter, Name));

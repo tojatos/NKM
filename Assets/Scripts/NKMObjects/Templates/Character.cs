@@ -497,9 +497,6 @@ namespace NKMObjects.Templates
 		                         Active.Turn.CharacterThatTookActionInTurn != null);
 
 		#endregion
-		internal Character (string name, int id, CharacterProperties properties, List<Ability> abilities) : base(name, id, properties, abilities)
-		{
-		}
 
 		private void AddTriggersToEvents()
 		{
