@@ -5,9 +5,9 @@ namespace UI.CharacterUI
 {
 	public class MainHPBar : SingletonMonoBehaviour<MainHPBar>
 	{
-		public Image HPamount;
+		public Image HpAmount;
 
 		public void UpdateHPAmount(Character character) => 
-			HPamount.fillAmount = character.HealthPoints.Value / (float) character.HealthPoints.BaseValue;
+			HpAmount.fillAmount = character.HealthPoints.Value / (float) character.HealthPoints.BaseValue;
 	}
 }

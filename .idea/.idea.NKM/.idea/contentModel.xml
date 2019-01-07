@@ -195,6 +195,14 @@
               <e p="SwordVieldingTechnique.cs" t="Include" />
               <e p="VerticalManeuveringEquipment.cs" t="Include" />
             </e>
+            <e p="Liones Elizabeth" t="Include">
+              <e p="ImmenseHealingPowers.cs" t="Include" />
+              <e p="ImmenseHealingPowers.cs.meta" t="Include" />
+              <e p="Invigorate.cs" t="Include" />
+              <e p="Invigorate.cs.meta" t="Include" />
+              <e p="PowerOfTheGoddess.cs" t="Include" />
+              <e p="PowerOfTheGoddess.cs.meta" t="Include" />
+            </e>
             <e p="Llenn" t="Include">
               <e p="GrenadeThrow.cs" t="Include" />
               <e p="PChan.cs" t="Include" />

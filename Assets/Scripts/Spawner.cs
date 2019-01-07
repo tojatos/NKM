@@ -13,6 +13,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	public GameObject CharacterPrefab;
 	public GameObject HighlightPrefab;
 	private Console Console => Console.Instance;
+	private static Game Game => GameStarter.Instance.Game;
 	private void SpawnCharacterObject(DrawnHexCell parentCell, Character characterToSpawn)
 	{
 		Sprite characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterToSpawn.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
@@ -50,7 +51,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		Type type = Type.GetType(typeName);
 		if (type == null) throw new NullReferenceException();
 
-		return Activator.CreateInstance(type) as T;
+		return Activator.CreateInstance(type, Game) as T;
 	}
 
 	public static IEnumerable<T> Create<T>(string namespaceName, IEnumerable<string> classNames) where T : class
@@ -59,7 +60,7 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	}
 
 	public static bool CanSpawn(Character character, HexCell cell) => cell.IsFreeToStand && cell.IsSpawnFor(character.Owner);
-	public void Spawn(HexCell cell, Character characterToSpawn)
+	public void Spawn(DrawnHexCell cell, Character characterToSpawn)
 	{
 		Console.GameLog($"CHARACTER PLACED: {characterToSpawn}; {cell}");
 		SpawnCharacterObject(cell, characterToSpawn);

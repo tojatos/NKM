@@ -11,13 +11,13 @@ namespace NKMObjects.Abilities.Liones_Elizabeth
         private const int Range = 5;
         private const int Heal = 6;
         private const int Duration = 3;
-        public Invigorate() : base(AbilityType.Normal, "Invigorate", 3)
+        public Invigorate(Game game) : base(game, AbilityType.Normal, "Invigorate", 3)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
         }
 
-        public override List<HexCell> GetRangeCells() => ParentCharacter.ParentCell.GetNeighbors(Range);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereOnlyFriendsOf(Owner);
+        public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner);
 
         public override string GetDescription() =>
 $@"{ParentCharacter.FirstName()} nakłada na sojusznika zaklęcie, które leczy go o {Heal} przez {Duration} fazy.
@@ -28,8 +28,8 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Use(List<HexCell> cells)
         {
-            cells[0].CharacterOnCell.Effects
-                .Add(new HealOverTime(ParentCharacter, Heal, Duration, cells[0].CharacterOnCell, Name));
+            cells[0].CharactersOnCell[0].Effects
+                .Add(new HealOverTime(Game, ParentCharacter, Heal, Duration, cells[0].CharactersOnCell[0], Name));
             Finish();
         }
     }

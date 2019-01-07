@@ -50,7 +50,7 @@ Czas odnowienia: {Cooldown}";
 
 		private void Use(HexCell cell)
 		{
-				Spawner.Instance.Spawn(cell, _characterToResurrect);
+				Spawner.Instance.Spawn(Active.SelectDrawnCell(cell), _characterToResurrect);
 				_characterToResurrect.HealthPoints.Value = _characterToResurrect.HealthPoints.BaseValue / 2;
 
 				Finish();

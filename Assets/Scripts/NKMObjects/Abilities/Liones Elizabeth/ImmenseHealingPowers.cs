@@ -5,7 +5,7 @@ namespace NKMObjects.Abilities.Liones_Elizabeth
 {
     public class ImmenseHealingPowers : Ability
     {
-        public ImmenseHealingPowers() : base(AbilityType.Passive, "Immense Healing Powers")
+        public ImmenseHealingPowers(Game game) : base(game, AbilityType.Passive, "Immense Healing Powers")
         {
 
             OnAwake += () => ParentCharacter.BeforeHeal += (Character character, ref int value) =>

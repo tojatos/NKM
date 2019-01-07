@@ -22,7 +22,7 @@ public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 		gameObject.transform.parent.gameObject.Show();
 		SelectedObjects.Clear();
 		Sprites.transform.Clear(); //Careful! Removes probably on the next frame
-		_objectsToFill = new List<NKMObject>(objectsToFill);
+		_objectsToFill = new List<Character>(objectsToFill);
 		_objectsToFill.ForEach(SpawnSpriteObject);
 		FinishSelectingButton.onClick.RemoveAllListeners();
 		FinishSelectingButton.onClick.AddListener(()=>finishSelectingButtonClick());

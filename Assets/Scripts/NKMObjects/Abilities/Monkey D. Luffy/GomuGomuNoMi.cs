@@ -103,7 +103,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
         {
             List<HexCell> line = character.ParentCell.GetLine(direction, distance);
             line.Reverse();
-            HexCell targetCell = line.FirstOrDefault(c => c.CharactersOnCell[0] == null && c.Type != HexTileType.Wall);
+            HexCell targetCell = line.FirstOrDefault(c => c.IsFreeToStand);
             if(targetCell==null) return;
             character.MoveTo(targetCell);
         }

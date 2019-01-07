@@ -819,7 +819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5205ab5777c0c8a4883b1497251e8bda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsTesting: 1
+  IsTesting: 0
   PlayReplay: 0
 --- !u!1 &271775534
 GameObject:
@@ -1284,7 +1284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e7a145559b4da8b9b07814b19ebfe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HPamount: {fileID: 363019367}
+  HpAmount: {fileID: 363019367}
 --- !u!1 &366732981
 GameObject:
   m_ObjectHideFlags: 0
@@ -4883,15 +4883,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ab2a25937e141909b94aa0d87013528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthPoints: {fileID: 1869358870}
-  AttackPoints: {fileID: 1329254843}
-  Range: {fileID: 1274441734}
-  PhysicalResistance: {fileID: 856330748}
-  MagicalResistance: {fileID: 458272186}
-  Speed: {fileID: 1717845652}
-  Description: {fileID: 113279171}
-  Quote: {fileID: 792550356}
-  Author: {fileID: 1382467015}
+  HealthPoints: {fileID: 0}
+  AttackPoints: {fileID: 0}
+  Range: {fileID: 0}
+  PhysicalResistance: {fileID: 0}
+  MagicalResistance: {fileID: 0}
+  Speed: {fileID: 0}
+  Description: {fileID: 0}
+  Quote: {fileID: 0}
+  Author: {fileID: 0}
 --- !u!114 &998473630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7467,7 +7467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7785184795a8417da6a2e9673af34cc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayNextButton: {fileID: 2040240667}
+  PlayNextButton: {fileID: 0}
 --- !u!1 &1363568671
 GameObject:
   m_ObjectHideFlags: 0

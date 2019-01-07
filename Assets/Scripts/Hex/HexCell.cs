@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Extensions;
+using JetBrains.Annotations;
 using NKMObjects.Templates;
 
 namespace Hex
@@ -30,6 +31,8 @@ namespace Hex
 	    public bool IsFreeToStand => IsEmpty && Type != HexTileType.Wall;
 	    public bool IsEmpty => CharactersOnCell.Count == 0;
 	    public List<Character> CharactersOnCell => Map.GetCharacters(this);
+	    
+		public bool IsSpawnFor([NotNull] GamePlayer player) => Type == Map.SpawnPoints[player.GetIndex()];
 
 	    public HexDirection GetDirection(HexCell hexCell) => GetDirection(hexCell.Coordinates);
 		public HexDirection GetDirection(HexCoordinates targetCoordinates)

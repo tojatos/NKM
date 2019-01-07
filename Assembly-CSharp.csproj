@@ -169,6 +169,9 @@
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Levi\AwakenedPower.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Levi\SwordVieldingTechnique.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Levi\VerticalManeuveringEquipment.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Liones Elizabeth\ImmenseHealingPowers.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Liones Elizabeth\Invigorate.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Abilities\Liones Elizabeth\PowerOfTheGoddess.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Llenn\GrenadeThrow.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Llenn\PChan.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Llenn\RunItDown.cs" />
@@ -661,5 +664,10 @@
     <Reference Include="UnityEngine">
       <HintPath>/opt/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Scripts\NKMObjects\Abilities\Liones Elizabeth\ImmenseHealingPowers.cs.meta" />
+    <Content Include="Assets\Scripts\NKMObjects\Abilities\Liones Elizabeth\Invigorate.cs.meta" />
+    <Content Include="Assets\Scripts\NKMObjects\Abilities\Liones Elizabeth\PowerOfTheGoddess.cs.meta" />
   </ItemGroup>
 </Project>

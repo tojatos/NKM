@@ -10,7 +10,7 @@ namespace UI.HexCellUI
 
 		private void Awake() => _image = GetComponent<Image>();
 
-	    private void UpdateImage(HexCell hexCell) => _image.color = hexCell.Color;
+	    private void UpdateImage(HexCell hexCell) => _image.color = Active.SelectDrawnCell(hexCell).Color;
 	    public void UpdateImage() => UpdateImage(GameStarter.Instance.Game.Active.SelectedCell);
     }
 }

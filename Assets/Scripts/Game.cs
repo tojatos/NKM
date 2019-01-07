@@ -22,14 +22,13 @@ public class Game
 	private Spawner _spawner;
 	public HexMapDrawer HexMapDrawer;
 	public HexMap HexMap;
-	public Console Console;
+	public Console Console => Console.Instance;
 
 	public bool IsInitialized;
 	public bool IsReplay => Options.GameLog != null;
 	public Game()
 	{
 		Active = new Active(this);
-		Console = Console.Instance; //TODO
 	}
 
 	public void Init(GameOptions gameOptions)
@@ -224,7 +223,7 @@ GAME STARTED: true";
 	{
 		if(!Spawner.CanSpawn(characterToPlace, targetCell)) return;
 			
-		_spawner.Spawn(targetCell, characterToPlace);
+		_spawner.Spawn(Active.SelectDrawnCell(targetCell), characterToPlace);
 
 		Active.Turn.WasCharacterPlaced = true;
 		if (Active.Phase.Number == 0)
@@ -259,6 +258,6 @@ GAME STARTED: true";
 		HexCell spawnPoint = p.GetSpawnPoints(HexMap).FindAll(cell => Spawner.CanSpawn(c, cell)).GetRandomNoLog();
 		if (spawnPoint == null) return;
 
-		Spawner.Instance.Spawn(spawnPoint, c);
+		Spawner.Instance.Spawn(Active.SelectDrawnCell(spawnPoint), c);
 	}
 }

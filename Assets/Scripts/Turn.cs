@@ -5,13 +5,15 @@ using UI;
 
 public class Turn
 {
-	private static Game Game => GameStarter.Instance.Game;
+	private Game Game;
+	private Console Console => Game.Console;
 	public bool IsDone { get; private set; }
 	public bool WasCharacterPlaced { get; set; }
 	public Character CharacterThatTookActionInTurn { get; set; }
 
-	public Turn()
+	public Turn(Game game)
 	{
+		Game = game;
 		IsDone = false;
 		WasCharacterPlaced = false;
 		CharacterThatTookActionInTurn = null;

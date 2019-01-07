@@ -22,7 +22,7 @@ public class Active
 	{
 		_game = game;
 		Phase = new Phase();
-		Turn = new Turn();
+		Turn = new Turn(game);
 		AirSelection = new AirSelection(game);
 	}
 

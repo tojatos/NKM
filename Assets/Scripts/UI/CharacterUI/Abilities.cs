@@ -16,6 +16,7 @@ namespace UI.CharacterUI
 	public class Abilities : SingletonMonoBehaviour<Abilities>
 	{
 		private static Game Game => GameStarter.Instance.Game;
+		private Console Console => Game.Console;
 
 		public GameObject AbilityButtonPrefab;
 		private List<GameObject> Buttons { get; set; }
@@ -50,7 +51,7 @@ namespace UI.CharacterUI
 			button.AddTrigger(EventTriggerType.PointerEnter, e =>
 			{
 				Game.Active.HelpHexCells = ability.GetRangeCells();
-				ability.GetTargetsInRange().ForEach(c => c.AddHighlight(Highlights.BlackTransparent));
+				ability.GetTargetsInRange().ForEach(c => Active.SelectDrawnCell(c).AddHighlight(Highlights.BlackTransparent));
 			});
 			button.AddTrigger(EventTriggerType.PointerExit, e =>
 			{

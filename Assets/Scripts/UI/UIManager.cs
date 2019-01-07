@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Extensions;
+using Hex;
 using JetBrains.Annotations;
 using Managers;
+using NKMObjects.Templates;
 using UI.CharacterUI;
 using UI.HexCellUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using NKMObject = NKMObjects.Templates.NKMObject;
+//using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace UI
 {
@@ -16,6 +18,7 @@ namespace UI
 	{
 		private static Game Game => GameStarter.Instance.Game;
 		private static Active Active => Game.Active;
+		private static HexMap HexMap => Game.HexMap;
 		private static Console Console => Console.Instance;
 
 		private SpriteSelect _spriteSelect;
@@ -59,7 +62,7 @@ namespace UI
 		[UsedImplicitly]
 		public void OpenUseCharacterSelect()
 		{
-			List<NKMObject> characters = new List<NKMObject>(Game.Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
+			List<Character> characters = new List<Character>(Game.Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
 			_spriteSelect.Open(characters, FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
 		}
 		private void FinishUseCharacter()
@@ -67,8 +70,8 @@ namespace UI
 			if (_spriteSelect.SelectedObjects.Count != 1) return;
 
 			Game.HexMapDrawer.RemoveHighlights();
-			Game.Active.GamePlayer.GetSpawnPoints().Where(sp => sp.CharacterOnCell == null).ToList().ForEach(c => c.AddHighlight(Highlights.RedTransparent));
-			Game.Active.NkmObject = Game.Active.GamePlayer.Characters.Single(c => c.Name == _spriteSelect.SelectedObjects[0].Name);
+			Active.GamePlayer.GetSpawnPoints(HexMap).FindAll(c => c.IsFreeToStand).ToList().ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+			Active.SelectedCharacterToPlace = Active.GamePlayer.Characters.Single(c => c.Name == _spriteSelect.SelectedObjects[0].Name);
 			_spriteSelect.Close();
 		}
 
@@ -81,9 +84,9 @@ namespace UI
 
 			if (Game.Active.Phase.Number == 0)
 			{
-				if (ForcePlacingChampions && !_spriteSelect.IsOpened && Game.Active.NkmObject == null && Game.Active.GamePlayer.HasFinishedSelecting)
+				if (ForcePlacingChampions && !_spriteSelect.IsOpened && Active.SelectedCharacterToPlace == null && Active.GamePlayer.HasFinishedSelecting)
 				{
-					List<NKMObject> characters = new List<NKMObject>(Game.Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
+					List<Character> characters = new List<Character>(Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
 					_spriteSelect.Open(characters, FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
 			}
 			}
