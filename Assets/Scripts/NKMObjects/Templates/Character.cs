@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 
 namespace NKMObjects.Templates
 {
-	public class Character// : NKMObject
+	public class Character
 	{
 
 		private Game Game;
@@ -191,7 +191,7 @@ namespace NKMObjects.Templates
 
 		protected void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
 
-		public virtual void MoveTo(HexCell targetCell)
+		public void MoveTo(HexCell targetCell)
 		{
 			BeforeMove?.Invoke();
 //			if (ParentCell.CharacterOnCell == this)
@@ -207,8 +207,7 @@ namespace NKMObjects.Templates
 			AfterMove?.Invoke();
 		}
 
-
-		public virtual void RemoveIfDead()
+		public void RemoveIfDead()
 		{
 			if (IsAlive) return;
 			OnDeath?.Invoke();
