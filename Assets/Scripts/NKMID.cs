@@ -2,9 +2,9 @@
 
 public static class NKMID
 {
-    private static readonly Dictionary<string, int> IdsTaken = new Dictionary<string, int>();
+    private static readonly Dictionary<string, uint> IdsTaken = new Dictionary<string, uint>();
 
-    public static int GetNext(string from)
+    public static uint GetNext(string from)
     {
         if (IdsTaken.ContainsKey(from))
         {

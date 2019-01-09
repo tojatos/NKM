@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Animations;
 using Extensions;
 using Hex;
 using Managers;
+using NKMObjects;
 using NKMObjects.Templates;
 using UI;
-using UnityEditor.Callbacks;
+using UI.CharacterUI;
 using UnityEngine;
 
 public class Game
@@ -43,23 +45,28 @@ public class Game
 		Players.ForEach(p => p.Characters.ForEach(c => c.Abilities.ForEach(a => a.Awake())));
 		NKMRandom.OnValueGet += (name, value) => Console.GameLog($"RNG: {name}; {value}");
 		IsInitialized = true;
+		
+	}
+	/// <summary>
+	/// Get a copy of every character in the game
+	/// </summary>
+	public static List<Character> GetMockCharacters()
+	{
+		var mockGame = new Game();
+		return GameData.Conn.GetCharacterNames().Select(n => CharacterFactory.Create(mockGame, n)).ToList();
 	}
 
 	/// <summary>
 	/// Returns true if game is successfully started,
 	/// otherwise returns false.
 	/// </summary>
-	/// <returns></returns>
 	public bool StartGame()
 	{
 		if (!IsInitialized) return false;
 
 		HexMap = HexMapFactory.FromScriptable(Options.MapScriptable);
 		HexMapDrawer.CreateMap(HexMap);
-//		HexMapDrawer.CreateMap(Options.MapScriptable);
 		_uiManager.Init();
-//		UIManager.VisibleUI = UIManager.GameUI;
-//		Active.Buttons = UIManager.UseButtons;
 		MainCameraController.Instance.Init(Options.MapScriptable.Map.width, Options.MapScriptable.Map.height);
 		UI.CharacterUI.Abilities.Instance.Init();
 		_uiManager.UpdateActivePhaseText();
@@ -259,5 +266,49 @@ GAME STARTED: true";
 		if (spawnPoint == null) return;
 
 		Spawner.Instance.Spawn(Active.SelectDrawnCell(spawnPoint), c);
+	}
+
+	public void AddTriggersToEvents(Character character)
+	{
+        character.JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = character;
+        character.JustBeforeFirstAction += () => Console.GameLog($"ACTION TAKEN: {character}");
+        character.HealthPoints.StatChanged += character.RemoveIfDead;
+        character.AfterAttack += (targetCharacter, damage) =>
+            Console.Log(
+                $"{character.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
+        character.AfterAttack += (targetCharacter, damage) =>
+            AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
+        character.AfterAttack += (targetCharacter, damage) =>
+            AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damage.Value.ToString(),
+                Color.red));
+        character.AfterHeal += (targetCharacter, valueHealed) =>
+            AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(),
+                Color.blue));
+        character.HealthPoints.StatChanged += () =>
+        {
+            if (Active.CharacterOnMap == character) MainHPBar.Instance.UpdateHPAmount(character);
+        };
+        character.OnDeath += () => character.Effects.Clear();
+        character.AfterHeal += (targetCharacter, value) =>
+            Console.Log(targetCharacter != character
+                ? $"{character.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
+                : $"{character.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
+
+        Active.Phase.PhaseFinished += () =>
+        {
+	        if (character.IsOnMap)
+	        {
+		        character.HasUsedBasicAttackInPhaseBefore = false;
+		        character.HasUsedBasicMoveInPhaseBefore = false;
+		        character.HasUsedNormalAbilityInPhaseBefore = false;
+		        character.HasUsedUltimatumAbilityInPhaseBefore = false;
+		        character.TookActionInPhaseBefore = false;
+	        }
+
+	        if (!character.IsAlive)
+	        {
+		        character.DeathTimer++;
+	        }
+        };
 	}
 }

@@ -1,4 +1,6 @@
-﻿namespace Extensions
+﻿using NKMObjects.Templates;
+
+namespace Extensions
 {
     public static class CharacterExtension
     {
@@ -12,6 +14,8 @@
 //        public static bool CanWait (this Character character) 
 //	        => !(character.Owner != Active.GamePlayer || character.TookActionInPhaseBefore ||
 //                Active.Turn.CharacterThatTookActionInTurn != null);
+		public static bool IsEnemyFor(this Character character, GamePlayer player) => character.Owner != player;
+		public static bool IsEnemyFor(this Character character, Character other) => character.IsEnemyFor(other.Owner);
         
     }
 }

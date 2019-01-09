@@ -249,7 +249,7 @@ namespace Managers
 //			players.ForEach(p => Debug.Log(p.Name));
 			foreach (GamePlayer p in players)
 			{
-                List<Character> allCharacters = new List<Character>(GameData.Conn.GetCharacterNames().Select(c => CharacterFactory.CreateWithoutId(Game, c)));
+				List<Character> allCharacters = Game.GetMockCharacters();//= new List<Character>(GameData.Conn.GetCharacterNames().Select(c => CharacterFactory.CreateWithoutId(Game, c)));
                 SpriteSelect.Instance.Open(allCharacters, () => FinishSelectingCharacters(p), $"Wybór postaci - {p.Name}", "Zakończ wybieranie postaci");
                 Func<bool> hasSelectedCharecters = () => p.HasSelectedCharacters;
                 await hasSelectedCharecters.WaitToBeTrue();

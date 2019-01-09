@@ -197,7 +197,7 @@ public class Active
 		switch (action)
 		{
 			case Action.None:
-				Console.Instance.DebugLog("Żadna akcja nie jest aktywna!");
+				Console.DebugLog("Żadna akcja nie jest aktywna!");
 				return;
 			case Action.UseAbility:
                 CharacterOnMap.TryToInvokeJustBeforeFirstAction();
@@ -208,7 +208,7 @@ public class Active
 			case Action.AttackAndMove:
 				if (cells.Count != 1)
 				{
-                    Console.Instance.DebugLog("Próbowano wykonać ruch lub atak na więcej niż jedno pole!");
+                    Console.DebugLog("Próbowano wykonać ruch lub atak na więcej niż jedno pole!");
 					return;
 				}
 

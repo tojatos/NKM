@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Managers;
+using Extensions;
 using UnityEngine;
 
 namespace Hex
@@ -9,7 +9,6 @@ namespace Hex
 	public class HexMapDrawer : SingletonMonoBehaviour<HexMapDrawer>
 	{
 		private Game _game;
-		private HexMap HexMap => _game.HexMap;
 		public DrawnHexCell CellPrefab;
 		public List<DrawnHexCell> Cells;
 		private HexMesh _hexMesh;

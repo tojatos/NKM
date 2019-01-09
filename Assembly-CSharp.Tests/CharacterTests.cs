@@ -11,7 +11,7 @@ namespace Assembly_CSharp.Tests
         public void CharacterCreatedSuccessfully()
         {
 //            Character character = new Character("Aqua");
-            CharacterProperties properties = new CharacterProperties
+            var properties = new Character.Properties
             {
                 HealthPoints      =  new  Stat(StatType.HealthPoints,      60),
                 AttackPoints      =  new  Stat(StatType.AttackPoints,      20),
@@ -23,7 +23,8 @@ namespace Assembly_CSharp.Tests
                 Type              =  FightType.Melee,                                   
             };
             List<Ability> abilities = new List<Ability>();
-            Character character = CharacterFactory.CreateNonGame("My character", properties, abilities);
+            Game game = new Game();
+            Character character = new Character(game, "My character", 1, properties, abilities);
             Assert.Equal(true, character.IsAlive);
         }
         

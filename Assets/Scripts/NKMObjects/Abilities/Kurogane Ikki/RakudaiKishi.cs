@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using Extensions;
 using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Kurogane_Ikki

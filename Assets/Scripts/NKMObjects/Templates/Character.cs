@@ -15,15 +15,22 @@ namespace NKMObjects.Templates
 	public class Character
 	{
 
-		private Game Game;
-		private Active Active => Game.Active;
-		private Console Console => Game.Console;
-		#region Properties
-
-		public GamePlayer Owner => Game.Players.First(p => p.Characters.Contains(this));
+		private readonly Game _game;
+		private Active Active => _game.Active;
+		private Console Console => _game.Console;
 		
 		public string Name;
-		public readonly int ID;
+		public override string ToString() => Name + $" ({ID})";
+		
+		
+		public Action<Character> BasicAttack { protected get; set; }
+		public Action<List<HexCell>> BasicMove { protected get; set; }
+		public Func<List<HexCell>> GetBasicMoveCells { get; }
+		public Func<List<HexCell>> GetBasicAttackCells;
+		
+		#region Readonly Properties
+		
+		public readonly uint ID;
 		public readonly Stat HealthPoints;
 		public readonly Stat AttackPoints;
 		public readonly Stat BasicAttackRange;
@@ -31,36 +38,37 @@ namespace NKMObjects.Templates
 		public readonly Stat PhysicalDefense;
 		public readonly Stat MagicalDefense;
 		public readonly Stat Shield;
-
-		public List<Ability> Abilities { get; private set; }
-		public List<Effect> Effects { get; } = new List<Effect>();
-		public string Description { get; }
-		public string Quote { get; }
-		public string Author { get; }
 		public readonly FightType Type;
 
+		public List<Ability> Abilities { get; }
+		public List<Effect> Effects { get; } = new List<Effect>();
+
 		public bool CanAttackAllies { get; set; }
-		public HexCell ParentCell => Game.HexMap.GetCell(this);// { get; set; }
 		public bool IsOnMap { get; set; }
 		
-		public bool IsAlive => HealthPoints.Value > 0;
-		public Action<Character> BasicAttack { protected get; set; }
-		public Action<List<HexCell>> BasicMove { protected get; set; }
-		public Func<List<HexCell>> GetBasicMoveCells { get; }
-		public Func<List<HexCell>> GetBasicAttackCells;
 
 		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }
 		public bool HasUsedBasicAttackInPhaseBefore { private get; set; }
 		public bool HasUsedNormalAbilityInPhaseBefore { get; set; }
 		public bool HasUsedUltimatumAbilityInPhaseBefore { private get; set; }
 		
+		public bool HasFreeAttackUntilEndOfTheTurn { get; set; }
+		public bool HasFreeUltimatumAbilityUseUntilEndOfTheTurn { get; set; }
+		public bool HasFreeMoveUntilEndOfTheTurn { get; set; }
+		public bool TookActionInPhaseBefore { get; set; }
+		
+		public int DeathTimer { get; set; }
+
+		public GamePlayer Owner => _game.Players.First(p => p.Characters.Contains(this));
+		public HexCell ParentCell => _game.HexMap.GetCell(this);
+		public bool IsAlive => HealthPoints.Value > 0;
 		
         public  bool  IsStunned                      =>  Effects.ContainsType<Stun>();
         public  bool  IsGrounded                     =>  Effects.ContainsType<Ground>();
         public  bool  IsSnared                       =>  Effects.ContainsType<Snare>();
         public  bool  IsFlying                       =>  Effects.ContainsType<Flying>();
         public  bool  HasBasicAttackInabilityEffect  =>  Effects.ContainsType<Disarm>();
-
+		
 		protected bool CanMove => !IsSnared && !IsGrounded;
 
 		public bool IsLeaving { get; set; }
@@ -78,12 +86,19 @@ namespace NKMObjects.Templates
 		public bool CanUseUltimatumAbility =>
 			!(HasUsedUltimatumAbilityInPhaseBefore || HasUsedBasicMoveInPhaseBefore ||
 			  HasUsedBasicAttackInPhaseBefore || HasUsedNormalAbilityInPhaseBefore || TookActionInPhaseBefore) ||
-			HasFreeUltimatumAbilityUseUntilEndOfTheTurn; //Active.Turn.CharacterThatTookActionInTurn == this);
+			HasFreeUltimatumAbilityUseUntilEndOfTheTurn;
 
-		public bool HasFreeAttackUntilEndOfTheTurn { get; set; }
-		public bool HasFreeUltimatumAbilityUseUntilEndOfTheTurn { get; set; }
-		public bool HasFreeMoveUntilEndOfTheTurn { get; set; }
-		public bool TookActionInPhaseBefore { get; set; }
+		public bool CanBasicAttack(Character targetCharacter) =>
+			(this.IsEnemyFor(targetCharacter) || CanAttackAllies) &&
+			GetBasicAttackCells().Contains(targetCharacter.ParentCell);
+
+
+		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive ||
+		                               Active.Turn.CharacterThatTookActionInTurn != null &&
+		                               Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
+
+		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore ||
+		                         Active.Turn.CharacterThatTookActionInTurn != null);
 		#endregion
 
 		#region Delegates
@@ -139,13 +154,11 @@ namespace NKMObjects.Templates
 		public void InvokeBeforeHeal(Character targetCharacter, ref int value) => BeforeHeal?.Invoke(targetCharacter, ref value);
 
 		#endregion
-		
-		public bool IsEnemyFor(GamePlayer player) => Owner != player;
-		public bool IsEnemyFor(Character character) => IsEnemyFor(character.Owner);
 
-		internal Character (Game game, string name, int id, CharacterProperties properties, List<Ability> abilities)
+
+		public Character (Game game, string name, uint id, Properties properties, List<Ability> abilities)
 		{
-			Game = game;
+			_game = game;
 				
 			ID = id;
 			Name = name;
@@ -171,14 +184,11 @@ namespace NKMObjects.Templates
             MagicalDefense    =  properties.MagicalDefense;
             Shield            =  properties.Shield;
             Type              =  properties.Type;
-            Description       =  properties.Description;
-            Quote             =  properties.Quote;
-            Author            =  properties.Author;
 
 //			Abilities = new AbilityFactory(this).CreateAndInitiateAbilitiesFromDatabase();
 			Abilities = abilities;
 			
-			AddTriggersToEvents();
+			_game.AddTriggersToEvents(this);
 			Active.Turn.TurnFinished += character =>
 			{
 				if (character != this) return;
@@ -187,8 +197,6 @@ namespace NKMObjects.Templates
 				HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;
 			};
 		}
-
-
 		protected void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
 
 		public void MoveTo(HexCell targetCell)
@@ -196,7 +204,7 @@ namespace NKMObjects.Templates
 			BeforeMove?.Invoke();
 //			if (ParentCell.CharacterOnCell == this)
 //				ParentCell.CharacterOnCell = null; //checking in case of stepping over a friendly character
-			Game.HexMap.Move(this, targetCell);
+			_game.HexMap.Move(this, targetCell);
 			//ParentCell = targetCell;
 			//if (targetCell.IsFreeToStand)
 //				targetCell.CharacterOnCell = (Character)this; //checking in case of stepping over a friendly character TODO
@@ -385,9 +393,6 @@ namespace NKMObjects.Templates
 			Active.CharacterOnMap = this;
 			UI.CharacterUI.Abilities.Instance.UpdateButtons();
 			UI.CharacterUI.Effects.Instance.UpdateButtons();
-//			List<GameObject> characterButtons = new List<GameObject>(CharacterAbilities.Instance.Buttons);
-//			characterButtons.AddRange(new List<GameObject>(CharacterEffects.Instance.Buttons));
-//			Active.Buttons = characterButtons;
 			if (Active.GamePlayer != Owner) return;
 
 			PrepareAttackAndMove();
@@ -398,7 +403,7 @@ namespace NKMObjects.Templates
 			Active.CharacterOnMap = null;
 			Active.Action = Action.None;
 			Active.HexCells = null;
-			Game.HexMapDrawer.RemoveHighlights();
+			_game.HexMapDrawer.RemoveHighlights();
 			Active.RemoveMoveCells();
 		}
 
@@ -409,7 +414,7 @@ namespace NKMObjects.Templates
 		private void RemoveFromMap()
 		{
 			if(!IsOnMap) return;
-			Game.HexMap.RemoveFromMap(this);
+			_game.HexMap.RemoveFromMap(this);
 //			ParentCell.CharacterOnCell = null;
 //			ParentCell = null;
 			IsOnMap = false;
@@ -462,8 +467,6 @@ namespace NKMObjects.Templates
 
 		}
 
-
-
 		public void MakeActionBasicAttack([NotNull] Character target)
 		{
 			TryToInvokeJustBeforeFirstAction();
@@ -481,19 +484,7 @@ namespace NKMObjects.Templates
 		
 		#region Properties
 
-		public int DeathTimer { get; private set; }
 		public GameObject CharacterObject { get; set; }
-		public bool CanBasicAttack(Character targetCharacter) =>
-			(IsEnemyFor(targetCharacter) || CanAttackAllies) &&
-			GetBasicAttackCells().Contains(targetCharacter.ParentCell);
-
-
-		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive ||
-		                               Active.Turn.CharacterThatTookActionInTurn != null &&
-		                               Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
-
-		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore ||
-		                         Active.Turn.CharacterThatTookActionInTurn != null);
 
 		#endregion
 
@@ -506,12 +497,12 @@ namespace NKMObjects.Templates
 				Console.Log(
 					$"{this.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
 			AfterAttack += (targetCharacter, damage) =>
-				AnimationPlayer.Add(new Tilt(((Character)targetCharacter).CharacterObject.transform));
+				AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
 			AfterAttack += (targetCharacter, damage) =>
-				AnimationPlayer.Add(new ShowInfo(((Character)targetCharacter).CharacterObject.transform, damage.Value.ToString(),
+				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damage.Value.ToString(),
 					Color.red));
 			AfterHeal += (targetCharacter, valueHealed) =>
-				AnimationPlayer.Add(new ShowInfo(((Character)targetCharacter).CharacterObject.transform, valueHealed.ToString(),
+				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(),
 					Color.blue));
 			HealthPoints.StatChanged += () =>
 			{
@@ -540,37 +531,24 @@ namespace NKMObjects.Templates
 				
 			};
 		}
-
-
 		
-		public override string ToString() => Name + $" ({ID})";
+        public class Properties
+        {
+            public Stat HealthPoints;
+            public Stat AttackPoints;
+            public Stat BasicAttackRange;
+            public Stat Speed;
+            public Stat PhysicalDefense;
+            public Stat MagicalDefense;
+            public Stat Shield;
+            
+            public FightType Type;
+        }
 	}
 	public enum FightType
 	{
 		Ranged,
 		Melee
 	}
-//	public enum AttackType
-//	{
-//		Physical,
-//		Magical,
-//		True
-//	}
 
-	public class CharacterProperties
-	{
-        public Stat HealthPoints;
-		public Stat AttackPoints;
-		public Stat BasicAttackRange;
-		public Stat Speed;
-		public Stat PhysicalDefense;
-		public Stat MagicalDefense;
-		public Stat Shield;
-		
-		public FightType Type;
-		
-		public string Description;
-		public string Quote;
-		public string Author;
-	}
 }
