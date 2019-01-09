@@ -77,6 +77,7 @@
         <e p="CreatableBackgroundCamera.cs" t="Include" />
         <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
         <e p="Damage.cs" t="Include" />
+        <e p="Delegates.cs" t="Include" />
         <e p="Extensions" t="Include">
           <e p="Async.cs" t="Include" />
           <e p="CharacterExtension.cs" t="Include" />

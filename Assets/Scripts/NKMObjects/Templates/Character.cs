@@ -6,9 +6,7 @@ using Extensions;
 using Hex;
 using JetBrains.Annotations;
 using NKMObjects.Effects;
-using UI.CharacterUI;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace NKMObjects.Templates
 {
@@ -50,15 +48,15 @@ namespace NKMObjects.Templates
         public  bool  IsSnared                       =>  Effects.ContainsType<Snare>();
         public  bool  IsFlying                       =>  Effects.ContainsType<Flying>();
         public  bool  HasBasicAttackInabilityEffect  =>  Effects.ContainsType<Disarm>();
-		
-		protected bool CanMove => !IsSnared && !IsGrounded;
+
+		private bool CanMove => !IsSnared && !IsGrounded;
 
 		public bool IsLeaving { get; set; }
 
-		protected bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore ||
+		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore ||
 		                                HasFreeMoveUntilEndOfTheTurn;
 
-		protected bool CanUseBasicAttack =>
+		private bool CanUseBasicAttack =>
 			!HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore &&
 			!HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect || HasFreeAttackUntilEndOfTheTurn;
 
@@ -82,9 +80,10 @@ namespace NKMObjects.Templates
 		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore ||
 		                         Active.Turn.CharacterThatTookActionInTurn != null);
 		#endregion
+		
 		#region Other Properties
 		public bool CanAttackAllies { get; set; }
-		public bool IsOnMap { get; set; }
+		public bool IsOnMap => _game.HexMap.GetCell(this) != null;// { get; set; }
 
 		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }
 		public bool HasUsedBasicAttackInPhaseBefore { private get; set; }
@@ -161,7 +160,6 @@ namespace NKMObjects.Templates
 			ID = id;
 			Name = name;
 			
-            IsOnMap                               =  false;
             TookActionInPhaseBefore               =  true;
             HasUsedBasicAttackInPhaseBefore       =  false;
             HasUsedBasicMoveInPhaseBefore         =  false;
@@ -183,33 +181,17 @@ namespace NKMObjects.Templates
             Shield            =  properties.Shield;
             Type              =  properties.Type;
 
-//			Abilities = new AbilityFactory(this).CreateAndInitiateAbilitiesFromDatabase();
 			Abilities = abilities;
 			
 			_game.AddTriggersToEvents(this);
-			Active.Turn.TurnFinished += character =>
-			{
-				if (character != this) return;
-				HasFreeAttackUntilEndOfTheTurn = false;
-				HasFreeMoveUntilEndOfTheTurn = false;
-				HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;
-			};
 		}
-		protected void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
+
+		private void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
 
 		public void MoveTo(HexCell targetCell)
 		{
 			BeforeMove?.Invoke();
-//			if (ParentCell.CharacterOnCell == this)
-//				ParentCell.CharacterOnCell = null; //checking in case of stepping over a friendly character
 			_game.HexMap.Move(this, targetCell);
-			//ParentCell = targetCell;
-			//if (targetCell.IsFreeToStand)
-//				targetCell.CharacterOnCell = (Character)this; //checking in case of stepping over a friendly character TODO
-			
-			CharacterObject.transform.parent = Active.SelectDrawnCell(targetCell).transform;
-			AnimationPlayer.Add(new MoveTo(CharacterObject.transform,
-				CharacterObject.transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
 			AfterMove?.Invoke();
 		}
 
@@ -217,7 +199,6 @@ namespace NKMObjects.Templates
 		{
 			if (IsAlive) return;
 			OnDeath?.Invoke();
-			Console.Log($"{this.FormattedFirstName()} umiera!");
 			RemoveFromMap();
 			DeathTimer = 0;
 			if (Active.CharacterOnMap == this) Deselect();
@@ -235,7 +216,6 @@ namespace NKMObjects.Templates
 			cellPath.RemoveAt(0); //Remove parent cell
 			foreach (HexCell nextCell in cellPath)
 			{
-				Object.Destroy(Active.SelectDrawnCell(nextCell).gameObject.GetComponent<LineRenderer>()); //Remove the line
 				MoveTo(nextCell);
 			}
 
@@ -326,10 +306,10 @@ namespace NKMObjects.Templates
 			AfterHeal?.Invoke(targetCharacter, diff);
 		}
 
-		protected List<HexCell> GetPrepareBasicMoveCells()
+		private List<HexCell> GetPrepareBasicMoveCells()
 			=> CanMove ? GetBasicMoveCells() : Enumerable.Empty<HexCell>().ToList();
 
-		protected List<HexCell> GetPrepareBasicAttackCells() => CanAttackAllies
+		private List<HexCell> GetPrepareBasicAttackCells() => CanAttackAllies
 			? GetBasicAttackCells().WhereCharacters()
 			: GetBasicAttackCells().WhereEnemiesOf(Owner);
 
@@ -383,26 +363,23 @@ namespace NKMObjects.Templates
 				: ParentCell.GetNeighbors(Owner, Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls);
 
 
+		public event VoidDelegate AfterSelect;
+		public event VoidDelegate AfterDeselect;
 		public void Select()
 		{
 			Active.Clean();
-			Stats.Instance.UpdateCharacterStats(this);
-			MainHPBar.Instance.UpdateHPAmount(this);
 			Active.CharacterOnMap = this;
-			UI.CharacterUI.Abilities.Instance.UpdateButtons();
-			UI.CharacterUI.Effects.Instance.UpdateButtons();
+			AfterSelect?.Invoke();
 			if (Active.GamePlayer != Owner) return;
-
 			PrepareAttackAndMove();
 		}
 		public void Deselect()
 		{
-			Stats.Instance.UpdateCharacterStats(null);
 			Active.CharacterOnMap = null;
 			Active.Action = Action.None;
 			Active.HexCells = null;
-			_game.HexMapDrawer.RemoveHighlights();
 			Active.RemoveMoveCells();
+			AfterDeselect?.Invoke();
 		}
 
 		public void TryToInvokeJustBeforeFirstAction()
@@ -413,9 +390,7 @@ namespace NKMObjects.Templates
 		{
 			if(!IsOnMap) return;
 			_game.HexMap.RemoveFromMap(this);
-//			ParentCell.CharacterOnCell = null;
-//			ParentCell = null;
-			IsOnMap = false;
+			//IsOnMap = false;
 			AnimationPlayer.Add(new Destroy(CharacterObject));
 		}
 		private void PrepareAttackAndMove()
@@ -479,8 +454,8 @@ namespace NKMObjects.Templates
 //			AfterBasicMove?.Invoke();
 			InvokeAfterBasicMove();
 		}
-		
-		public GameObject CharacterObject { get; set; }
+
+		public GameObject CharacterObject => _game.HexMapDrawer.GetCharacterObject(this);// { get; set; }
 		
         public class Properties
         {

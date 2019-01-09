@@ -25,8 +25,9 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 //		parentCell.CharacterOnCell = characterToSpawn;
 		GameStarter.Instance.Game.HexMap.Move(characterToSpawn, parentCell.HexCell);
 		//characterToSpawn.ParentCell = parentCell.HexCell;
-		characterToSpawn.CharacterObject = characterObject;
-		characterToSpawn.IsOnMap = true;
+		//characterToSpawn.CharacterObject = characterObject;
+		Game.HexMapDrawer.SetCharacterObject(characterToSpawn, characterObject);
+		//characterToSpawn.IsOnMap = true;
 	}
 	public void SpawnHighlightCellObject(DrawnHexCell parentCell, string colorName)
 	{

@@ -21,7 +21,6 @@ namespace Animations.Parts
             }
 
             IsFinished = true;
-
         }
     }
 }

@@ -10,9 +10,9 @@ namespace Hex
     public class HexCell
     {
 		public readonly HexCoordinates Coordinates;
-	    public readonly HexMap Map;
+	    private readonly HexMap _map;
 	    public TileType Type;
-		public List<HexCellEffect> Effects = new List<HexCellEffect>();
+		public readonly List<HexCellEffect> Effects = new List<HexCellEffect>();
 		private readonly HexCell[] _neighbors = new HexCell[6];
         public HexCell GetNeighbor(HexDirection direction) => _neighbors[(int)direction];
         public void SetNeighbor(HexDirection direction, HexCell cell)
@@ -23,16 +23,16 @@ namespace Hex
 	    
         public HexCell(HexMap map, HexCoordinates coords, TileType type)
         {
-	        Map = map;
+	        _map = map;
             Coordinates = coords;
 	        Type = type;
         }
 
 	    public bool IsFreeToStand => IsEmpty && Type != TileType.Wall;
 	    public bool IsEmpty => CharactersOnCell.Count == 0;
-	    public List<Character> CharactersOnCell => Map.GetCharacters(this);
+	    public List<Character> CharactersOnCell => _map.GetCharacters(this);
 	    
-		public bool IsSpawnFor([NotNull] GamePlayer player) => Type == Map.SpawnPoints[player.GetIndex()];
+		public bool IsSpawnFor([NotNull] GamePlayer player) => Type == _map.SpawnPoints[player.GetIndex()];
 
 	    public HexDirection GetDirection(HexCell hexCell) => GetDirection(hexCell.Coordinates);
 		public HexDirection GetDirection(HexCoordinates targetCoordinates)
@@ -65,17 +65,17 @@ namespace Hex
 			switch (direction)
 			{
 				case HexDirection.Ne:
-					return Map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y - distance);
+					return _map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y - distance);
 				case HexDirection.E:
-					return Map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + distance && c.Coordinates.Y == Coordinates.Y - distance);
+					return _map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + distance && c.Coordinates.Y == Coordinates.Y - distance);
 				case HexDirection.Se:
-					return Map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + distance && c.Coordinates.Y == Coordinates.Y);
+					return _map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X + distance && c.Coordinates.Y == Coordinates.Y);
 				case HexDirection.Sw:
-					return Map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y + distance);
+					return _map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X && c.Coordinates.Y == Coordinates.Y + distance);
 				case HexDirection.W:
-					return Map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - distance && c.Coordinates.Y == Coordinates.Y + distance);
+					return _map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - distance && c.Coordinates.Y == Coordinates.Y + distance);
 				case HexDirection.Nw:
-					return Map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - distance && c.Coordinates.Y == Coordinates.Y);
+					return _map.Cells.SingleOrDefault(c => c.Coordinates.X == Coordinates.X - distance && c.Coordinates.Y == Coordinates.Y);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
 			}
@@ -124,8 +124,8 @@ namespace Hex
 			bool stopAtFriendlyCharacters = searchFlags.HasFlag(SearchFlags.StopAtFriendlyCharacters);
 			bool straightLine = searchFlags.HasFlag(SearchFlags.StraightLine);
 			if (stopAtWalls) stopAt = stopAt.Or(IsWall); 
-			if (stopAtEnemyCharacters) stopAt = stopAt.Or(IsEnemyStanding(Map, friendlyPlayer));
-			if (stopAtFriendlyCharacters) stopAt = stopAt.Or(IsFriendStanding(Map, friendlyPlayer));
+			if (stopAtEnemyCharacters) stopAt = stopAt.Or(IsEnemyStanding(_map, friendlyPlayer));
+			if (stopAtFriendlyCharacters) stopAt = stopAt.Or(IsFriendStanding(_map, friendlyPlayer));
 			List<HexCell> visited = new List<HexCell>();
 			if (depth == 0) return visited;
 

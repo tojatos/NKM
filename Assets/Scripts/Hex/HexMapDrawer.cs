@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Extensions;
+using NKMObjects.Templates;
 using UnityEngine;
 
 namespace Hex
@@ -11,6 +12,17 @@ namespace Hex
 		private Game _game;
 		public DrawnHexCell CellPrefab;
 		public List<DrawnHexCell> Cells;
+		private readonly Dictionary<Character, GameObject> _characterObjects = new Dictionary<Character, GameObject>();
+
+		public GameObject GetCharacterObject(Character character)
+		{
+			GameObject value;
+			_characterObjects.TryGetValue(character, out value);
+			return value;
+		}
+
+		public void SetCharacterObject(Character character, GameObject cObject) => _characterObjects[character] = cObject;
+	    
 		private HexMesh _hexMesh;
 		public void Init(Game game) => _game = game;
 

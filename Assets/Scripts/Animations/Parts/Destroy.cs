@@ -5,9 +5,9 @@ namespace Animations.Parts
 {
     public class Destroy : NkmAnimationPart
     {
-	    private readonly GameObject _objectToDestroy;
+	    private readonly Object _objectToDestroy;
 
-        public Destroy(GameObject objectToDestroy)
+        public Destroy(Object objectToDestroy)
         {
             _objectToDestroy = objectToDestroy;
         }

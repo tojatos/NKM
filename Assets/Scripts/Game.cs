@@ -65,6 +65,15 @@ public class Game
 		if (!IsInitialized) return false;
 
 		HexMap = HexMapFactory.FromScriptable(Options.MapScriptable);
+		HexMap.AfterMove += (character, cell) =>
+		{
+			if (character.CharacterObject == null) return;
+			character.CharacterObject.transform.parent = Active.SelectDrawnCell(cell).transform;
+            AnimationPlayer.Add(new Destroy(Active.SelectDrawnCell(cell).gameObject.GetComponent<LineRenderer>())); //Remove the line
+			AnimationPlayer.Add(new MoveTo(character.CharacterObject.transform,
+				character.CharacterObject.transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
+			
+		};
 		HexMapDrawer.CreateMap(HexMap);
 		_uiManager.Init();
 		MainCameraController.Instance.Init(Options.MapScriptable.Map.width, Options.MapScriptable.Map.height);
@@ -289,10 +298,31 @@ GAME STARTED: true";
             if (Active.CharacterOnMap == character) MainHPBar.Instance.UpdateHPAmount(character);
         };
         character.OnDeath += () => character.Effects.Clear();
+        character.OnDeath += () => Console.Log($"{character.FormattedFirstName()} umiera!");
         character.AfterHeal += (targetCharacter, value) =>
             Console.Log(targetCharacter != character
                 ? $"{character.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
                 : $"{character.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
+		character.AfterSelect += () =>
+		{
+			Stats.Instance.UpdateCharacterStats(character);
+			MainHPBar.Instance.UpdateHPAmount(character);
+			UI.CharacterUI.Abilities.Instance.UpdateButtons();
+			Effects.Instance.UpdateButtons();
+		};
+		character.AfterDeselect += () =>
+		{
+			HexMapDrawer.RemoveHighlights();
+			Stats.Instance.UpdateCharacterStats(null);
+		};
+		
+        Active.Turn.TurnFinished += other =>
+        {
+            if (other != character) return;
+            character.HasFreeAttackUntilEndOfTheTurn = false;
+            character.HasFreeMoveUntilEndOfTheTurn = false;
+            character.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;
+        };
 
         Active.Phase.PhaseFinished += () =>
         {
