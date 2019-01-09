@@ -6,5 +6,5 @@ using UnityEngine;
 public class ColorToTileType
 {
 	[UsedImplicitly] public Color Color;
-	[UsedImplicitly] public HexTileType HexTileType;
+	[UsedImplicitly] public HexCell.TileType TileType;
 }

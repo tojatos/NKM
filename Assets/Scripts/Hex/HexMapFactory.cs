@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using UnityEngine;
 
 namespace Hex
@@ -12,7 +11,7 @@ namespace Hex
         {
 			int width = hexMapScriptable.Map.width;
 			int height = hexMapScriptable.Map.height;
-	        HexMap map = new HexMap(new List<HexCell>(), hexMapScriptable.SpawnPoints);
+	        var map = new HexMap(new List<HexCell>(), hexMapScriptable.SpawnPoints);
 			for (int z = 0, i = 0; z < height; z++)
 			{
 				for (int x = 0; x < width; x++)
@@ -20,8 +19,8 @@ namespace Hex
                     Color pixelColor = hexMapScriptable.Map.GetPixel(x, z);
 					if (Math.Abs(pixelColor.a) < 0.001) continue; //transparent pixel
 					
-					HexTileType type = hexMapScriptable.ColorMappings.ToList()
-						.First(c => c.Color.Equals(pixelColor)).HexTileType;
+					HexCell.TileType type = hexMapScriptable.ColorMappings.ToList()
+						.First(c => c.Color.Equals(pixelColor)).TileType;
 					GetScriptableCell(ref map, width, type, x, z, i++);
 				}
 			}
@@ -29,7 +28,7 @@ namespace Hex
 	        return map;
         }
 
-	    private static void GetScriptableCell(ref HexMap map, int width, HexTileType type, int x, int z, int i)
+	    private static void GetScriptableCell(ref HexMap map, int width, HexCell.TileType type, int x, int z, int i)
 	    {
 		    HexCell cell = new HexCell(map, HexCoordinates.FromOffsetCoordinates(x, z), type);
 		    map.Cells.Add(cell);

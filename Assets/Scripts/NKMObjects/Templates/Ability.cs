@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using Hex;
-using Managers;
 using NKMObjects.Abilities.Bezimienni;
 
 namespace NKMObjects.Templates
 {
-	public abstract class Ability// : NKMObject
+	public abstract class Ability
 	{
 		
 		protected readonly Game Game;
@@ -61,7 +60,6 @@ namespace NKMObjects.Templates
 			}
 		}
 
-//		public Character ParentCharacter { get; set; }
 		public Character ParentCharacter => Game.Characters.FirstOrDefault(c => c.Abilities.Contains(this));
 
 		public bool CanBeUsed => Validator.AbilityCanBeUsed;
@@ -106,11 +104,11 @@ namespace NKMObjects.Templates
 		{
 			OnFailedUseFinish();
 		}
-	}
-	public enum AbilityType
-	{
-		Passive,
-		Normal,
-		Ultimatum
+        public enum AbilityType
+        {
+            Passive,
+            Normal,
+            Ultimatum
+        }
 	}
 }

@@ -35,7 +35,7 @@ zyskuje ona {AdditionalAttack} ataku i {AdditionalSpeed} szybkości.";
 			if (!IsEnabled) return;
 
 			Active.CharacterOnMap.Deselect();
-			if (ParentCharacter.Name != "Demonic Rem") ParentCharacter.Name = "Demonic Rem";
+			ParentCharacter.Name = "Demonic Rem";
 			if (ParentCharacter.Effects.All(e => e.Name != "Demonic Form Speed Boost"))
 			{
 				var speedBoost = new StatModifier(Game, -1, AdditionalSpeed, ParentCharacter, StatType.Speed, "Demonic Form Speed Boost");

@@ -104,6 +104,7 @@
           <e p="HexMapScriptable.cs" t="Include" />
           <e p="HexMesh.cs" t="Include" />
           <e p="HexMetrics.cs" t="Include" />
+          <e p="SearchFlags.cs" t="Include" />
         </e>
         <e p="HighlightColor.cs" t="Include" />
         <e p="Highlights.cs" t="Include" />
@@ -308,6 +309,7 @@
             <e p="Character.cs" t="Include" />
             <e p="Effect.cs" t="Include" />
             <e p="EnableableAbility.cs" t="Include" />
+            <e p="FightType.cs" t="Include" />
             <e p="HexCellEffect.cs" t="Include" />
             <e p="IClickable.cs" t="Include" />
             <e p="IEnableable.cs" t="Include" />

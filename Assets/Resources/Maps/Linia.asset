@@ -17,10 +17,10 @@ MonoBehaviour:
   SpawnPoints: 0200000003000000
   ColorMappings:
   - Color: {r: 1, g: 1, b: 1, a: 1}
-    HexTileType: 0
+    TileType: 0
   - Color: {r: 0, g: 0, b: 0, a: 1}
-    HexTileType: 1
+    TileType: 1
   - Color: {r: 0, g: 0.07058824, b: 1, a: 1}
-    HexTileType: 2
+    TileType: 2
   - Color: {r: 1, g: 0, b: 0, a: 1}
-    HexTileType: 3
+    TileType: 3

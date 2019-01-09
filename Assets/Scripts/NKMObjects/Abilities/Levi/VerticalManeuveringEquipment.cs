@@ -16,7 +16,7 @@ namespace NKMObjects.Abilities.Levi
         }
 
         public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.Type == HexTileType.Wall);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.Type == HexCell.TileType.Wall);
         private List<HexCell> GetMoveTargets(HexCell cell) =>
             cell.GetNeighbors(Owner.Owner, MoveTargetRange, SearchFlags.StraightLine).FindAll(e => e.IsFreeToStand);
 
@@ -28,7 +28,7 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
         public void Use(List<HexCell> cells)
         {
             HexCell cell = cells[0];
-            if (cell.Type == HexTileType.Wall)
+            if (cell.Type == HexCell.TileType.Wall)
             {
                 Active.Prepare(this, GetMoveTargets(cell));
                 AnimationPlayer.Add(new MoveTo(ParentCharacter.CharacterObject.transform, Active.SelectDrawnCell(cell).transform.position, 0.13f));

@@ -7,7 +7,7 @@ namespace Hex
     public class HexMap
     {
 	    public List<HexCell> Cells;
-		public readonly List<HexTileType> SpawnPoints;
+		public readonly List<HexCell.TileType> SpawnPoints;
 	    private readonly Dictionary<Character, HexCell> _charactersOnCells = new Dictionary<Character, HexCell>();
 	    
 	    /// <summary>
@@ -20,7 +20,7 @@ namespace Hex
 	    public List<Character> GetCharacters(HexCell hexCell) =>
 		    _charactersOnCells.Where(pair => pair.Value == hexCell).Select(pair => pair.Key).ToList();
 	    
-		public HexMap (List<HexCell> cells, List<HexTileType> spawnPoints)
+		public HexMap (List<HexCell> cells, List<HexCell.TileType> spawnPoints)
 		{
 			Cells = cells;
 			SpawnPoints = spawnPoints;

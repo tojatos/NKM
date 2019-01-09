@@ -23,15 +23,15 @@ public class AbilityUseValidator
 		ToCheck.Add(IsNotOnCooldown);
 		ToCheck.Add(IsCharacterNotSilenced);
 		ToCheck.Add(CharacterNotGroundedOrCanUseOnGround);
-		if(_abilityToValidate.Type == AbilityType.Ultimatum) ToCheck.Add(IsActivePhaseGreaterThanThree);
+		if(_abilityToValidate.Type == Ability.AbilityType.Ultimatum) ToCheck.Add(IsActivePhaseGreaterThanThree);
 	}
 
 	public Func<bool> CanBeClicked => () => _abilityToValidate is IClickable;
 	public Func<bool> IsCharacterNotSilenced => () => !_abilityToValidate.ParentCharacter.Effects.ContainsType<Silent>();
 	public Func<bool> IsOwnerActivePlayer => () => _abilityToValidate.ParentCharacter.Owner == Active.GamePlayer;
 	public Func<bool> CanCharacterUseAbility => () => _abilityToValidate.ParentCharacter.CanTakeAction
-          && (_abilityToValidate.Type == AbilityType.Normal && _abilityToValidate.ParentCharacter.CanUseNormalAbility
-          || _abilityToValidate.Type == AbilityType.Ultimatum && _abilityToValidate.ParentCharacter.CanUseUltimatumAbility);
+          && (_abilityToValidate.Type == Ability.AbilityType.Normal && _abilityToValidate.ParentCharacter.CanUseNormalAbility
+          || _abilityToValidate.Type == Ability.AbilityType.Ultimatum && _abilityToValidate.ParentCharacter.CanUseUltimatumAbility);
 
 	public Func<bool> IsActivePhaseGreaterThanThree => () => Active.Phase.Number > 3;
 	public Func<bool> AreAnyTargetsInRange => () => _abilityToValidate.GetTargetsInRange().Count > 0;

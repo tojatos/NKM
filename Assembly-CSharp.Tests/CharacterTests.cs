@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NKMObjects;
 using NKMObjects.Templates;
 using Xunit;
 
@@ -10,7 +9,6 @@ namespace Assembly_CSharp.Tests
         [Fact]
         public void CharacterCreatedSuccessfully()
         {
-//            Character character = new Character("Aqua");
             var properties = new Character.Properties
             {
                 HealthPoints      =  new  Stat(StatType.HealthPoints,      60),

@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hex;
-using Managers;
 using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
-//using NKMObject = NKMObjects.Templates.NKMObject;
 using Object = UnityEngine.Object;
+
 /// <summary>
 /// Main utility class.
 /// Contains information about active game state.
 /// </summary>
 public class Active
 {
-	//private static Game Game => GameStarter.Instance.Game;
 	private readonly Game _game;
-	private HexMap HexMap => _game.HexMap;
 	private Console Console => _game.Console;
 	public Active(Game game)
 	{
@@ -33,14 +30,10 @@ public class Active
 	public GamePlayer GamePlayer;
 	public Action Action;
 	public IUseable AbilityToUse;
-	//public NKMObject NkmObject;
 	public Character SelectedCharacterToPlace;
 	public Character CharacterOnMap;
 	public HexCell SelectedCell;
 	public readonly List<HexCell> MoveCells = new List<HexCell>();
-
-//	public delegate void UseableDelegate(IUseable ability);
-//    public event UseableDelegate AfterAbilityUse;
 	
 	public List<HexCell> HexCells { get; set; }
 	//TODO: refactor this

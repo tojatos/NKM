@@ -42,7 +42,7 @@ Czas odnowienia: {Cooldown}";
             HexCell lastCell = character.ParentCell;
             foreach (HexCell c in line)
             {
-                if (c.Type == HexTileType.Wall || c.CharactersOnCell[0] != null)
+                if (c.Type == HexCell.TileType.Wall || c.CharactersOnCell[0] != null)
                 {
                     character.Effects.Add(new Stun(Game, StunDuration, character, Name));
                     ParentCharacter.Attack(this, character, new Damage(Damage, DamageType.Magical));

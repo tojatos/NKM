@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using Hex;
-using Managers;
 
 namespace NKMObjects.Templates
 {
-	public abstract class Effect// : NKMObject
+	public abstract class Effect
 	{
-		private Game Game;
 		public string Name;
-		protected Active Active => Game.Active;
-		protected Console Console => Game.Console;
+		public override string ToString() => Name;
+
+		private readonly Game _game;
+		protected Active Active => _game.Active;
+		protected Console Console => _game.Console;
 		public Character Owner => ParentCharacter;
 		protected Effect(Game game, int cooldown, Character parentCharacter, string name = null)
 		{
-			Game = game;
+			_game = game;
 			CurrentCooldown = cooldown >= 0 ? cooldown : int.MaxValue; //effect is infinite
 			ParentCharacter = parentCharacter;
 			if (name != null) Name = name;
@@ -37,16 +38,10 @@ namespace NKMObjects.Templates
 		public Character ParentCharacter { get; }
 		public EffectType Type { get; protected set; }
 		public virtual bool IsCC => false;
-
 		public abstract string GetDescription();
 		
 		protected List<HexCell> GetNeighboursOfOwner(int depth, SearchFlags searchFlags = SearchFlags.None, Predicate<HexCell> stopAt = null) =>
 			ParentCharacter.ParentCell.GetNeighbors(Owner.Owner, depth, searchFlags, stopAt);
-//		public virtual int Modifier(StatType statType)
-//		{
-//			return 0;
-//		}
-
 		public void RemoveFromParent()
 		{
 			if(!ParentCharacter.Effects.Contains(this)) return;

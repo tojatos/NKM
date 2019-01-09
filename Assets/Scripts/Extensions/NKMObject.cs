@@ -79,7 +79,7 @@ namespace Extensions
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		private static HexTileType GetSpawnPointType(this GamePlayer gamePlayer, HexMap map) => map.SpawnPoints[gamePlayer.GetIndex()];
+		private static HexCell.TileType GetSpawnPointType(this GamePlayer gamePlayer, HexMap map) => map.SpawnPoints[gamePlayer.GetIndex()];
 		public static List<HexCell> GetSpawnPoints(this GamePlayer gamePlayer, HexMap map) => map.Cells.FindAll(c => c.Type == gamePlayer.GetSpawnPointType(map));
 		public static List<Character> GetCharacters(this IEnumerable<HexCell> cells) => cells.SelectMany(c => c.CharactersOnCell).ToList();
 

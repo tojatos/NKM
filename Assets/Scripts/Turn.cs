@@ -1,19 +1,18 @@
 ﻿using System.Linq;
-using Managers;
 using NKMObjects.Templates;
 using UI;
 
 public class Turn
 {
-	private Game Game;
-	private Console Console => Game.Console;
+	private readonly Game _game;
+	private Console Console => _game.Console;
 	public bool IsDone { get; private set; }
 	public bool WasCharacterPlaced { get; set; }
 	public Character CharacterThatTookActionInTurn { get; set; }
 
 	public Turn(Game game)
 	{
-		Game = game;
+		_game = game;
 		IsDone = false;
 		WasCharacterPlaced = false;
 		CharacterThatTookActionInTurn = null;
@@ -26,22 +25,22 @@ public class Turn
 			IsDone = true;
 			WasCharacterPlaced = false;
 			CharacterThatTookActionInTurn = null;
-			Game.Active.Reset();
-			Game.HexMapDrawer.RemoveHighlights();
+			_game.Active.Reset();
+			_game.HexMapDrawer.RemoveHighlights();
 		};
 		TurnFinished += c => Console.GameLog("TURN FINISHED");
 	}
 	public void Start(GamePlayer gamePlayer)
 	{
-		Game.Active.GamePlayer = gamePlayer;
-		Game.Active.Turn.IsDone = false;
-		Game.Active.Reset();
+		_game.Active.GamePlayer = gamePlayer;
+		_game.Active.Turn.IsDone = false;
+		_game.Active.Reset();
 		UIManager.Instance.UpdateActivePlayerUI();
 		TurnStarted?.Invoke(gamePlayer);
 		
 		
-		if (Game.Active.Phase.Number != 0) return;
-		if (Game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap) && !Game.IsReplay)
+		if (_game.Active.Phase.Number != 0) return;
+		if (_game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap) && !_game.IsReplay)
 		{
 			UIManager.Instance.ForcePlacingChampions = true;
 		}

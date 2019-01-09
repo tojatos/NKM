@@ -14,7 +14,6 @@ namespace NKMObjects.Templates
 {
 	public class Character
 	{
-
 		private readonly Game _game;
 		private Active Active => _game.Active;
 		private Console Console => _game.Console;
@@ -29,7 +28,6 @@ namespace NKMObjects.Templates
 		public Func<List<HexCell>> GetBasicAttackCells;
 		
 		#region Readonly Properties
-		
 		public readonly uint ID;
 		public readonly Stat HealthPoints;
 		public readonly Stat AttackPoints;
@@ -42,22 +40,6 @@ namespace NKMObjects.Templates
 
 		public List<Ability> Abilities { get; }
 		public List<Effect> Effects { get; } = new List<Effect>();
-
-		public bool CanAttackAllies { get; set; }
-		public bool IsOnMap { get; set; }
-		
-
-		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }
-		public bool HasUsedBasicAttackInPhaseBefore { private get; set; }
-		public bool HasUsedNormalAbilityInPhaseBefore { get; set; }
-		public bool HasUsedUltimatumAbilityInPhaseBefore { private get; set; }
-		
-		public bool HasFreeAttackUntilEndOfTheTurn { get; set; }
-		public bool HasFreeUltimatumAbilityUseUntilEndOfTheTurn { get; set; }
-		public bool HasFreeMoveUntilEndOfTheTurn { get; set; }
-		public bool TookActionInPhaseBefore { get; set; }
-		
-		public int DeathTimer { get; set; }
 
 		public GamePlayer Owner => _game.Players.First(p => p.Characters.Contains(this));
 		public HexCell ParentCell => _game.HexMap.GetCell(this);
@@ -99,6 +81,22 @@ namespace NKMObjects.Templates
 
 		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore ||
 		                         Active.Turn.CharacterThatTookActionInTurn != null);
+		#endregion
+		#region Other Properties
+		public bool CanAttackAllies { get; set; }
+		public bool IsOnMap { get; set; }
+
+		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }
+		public bool HasUsedBasicAttackInPhaseBefore { private get; set; }
+		public bool HasUsedNormalAbilityInPhaseBefore { get; set; }
+		public bool HasUsedUltimatumAbilityInPhaseBefore { private get; set; }
+		
+		public bool HasFreeAttackUntilEndOfTheTurn { get; set; }
+		public bool HasFreeUltimatumAbilityUseUntilEndOfTheTurn { get; set; }
+		public bool HasFreeMoveUntilEndOfTheTurn { get; set; }
+		public bool TookActionInPhaseBefore { get; set; }
+		
+		public int DeathTimer { get; set; }
 		#endregion
 
 		#region Delegates
@@ -355,7 +353,7 @@ namespace NKMObjects.Templates
                         for (int index = 0; index < line.Count; index++)
                         {
                             HexCell cell = line[index];
-	                        if (cell.Type == HexTileType.Wall)
+	                        if (cell.Type == HexCell.TileType.Wall)
 	                        {
                                 removeAfterIndex = index;
                                 break;
@@ -482,55 +480,7 @@ namespace NKMObjects.Templates
 			InvokeAfterBasicMove();
 		}
 		
-		#region Properties
-
 		public GameObject CharacterObject { get; set; }
-
-		#endregion
-
-		private void AddTriggersToEvents()
-		{
-			JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = this;
-			JustBeforeFirstAction += () => Console.GameLog($"ACTION TAKEN: {this}");
-			HealthPoints.StatChanged += RemoveIfDead;
-			AfterAttack += (targetCharacter, damage) =>
-				Console.Log(
-					$"{this.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
-			AfterAttack += (targetCharacter, damage) =>
-				AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
-			AfterAttack += (targetCharacter, damage) =>
-				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damage.Value.ToString(),
-					Color.red));
-			AfterHeal += (targetCharacter, valueHealed) =>
-				AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(),
-					Color.blue));
-			HealthPoints.StatChanged += () =>
-			{
-				if (Active.CharacterOnMap == this) MainHPBar.Instance.UpdateHPAmount(this);
-			};
-			OnDeath += () => Effects.Clear();
-			AfterHeal += (targetCharacter, value) =>
-				Console.Log(targetCharacter != this
-					? $"{this.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
-					: $"{this.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
-
-			Active.Phase.PhaseFinished += () =>
-			{
-			if (IsOnMap)
-			{
-				HasUsedBasicAttackInPhaseBefore = false;
-				HasUsedBasicMoveInPhaseBefore = false;
-				HasUsedNormalAbilityInPhaseBefore = false;
-				HasUsedUltimatumAbilityInPhaseBefore = false;
-				TookActionInPhaseBefore = false;
-			}
-			if (!IsAlive)
-			{
-				DeathTimer++;
-			}
-				
-			};
-		}
 		
         public class Properties
         {
@@ -545,10 +495,4 @@ namespace NKMObjects.Templates
             public FightType Type;
         }
 	}
-	public enum FightType
-	{
-		Ranged,
-		Melee
-	}
-
 }

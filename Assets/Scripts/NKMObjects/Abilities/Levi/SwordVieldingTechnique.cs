@@ -17,7 +17,7 @@ namespace NKMObjects.Abilities.Levi
         }
 
         public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range, SearchFlags.StraightLine);
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.Type == HexTileType.Wall);
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.Type == HexCell.TileType.Wall);
         private List<HexCell> GetMoveTargets(HexCell cell) =>
             cell.GetNeighbors(Owner.Owner, MoveTargetRange, SearchFlags.StraightLine).FindAll(e => e.IsFreeToStand);
 
@@ -32,7 +32,7 @@ W trakcie przemieszczenia się zadaje podstawowe obrażenia osobom w zasięgu at
         public void Use(List<HexCell> cells)
         {
             HexCell cell = cells[0];
-            if (cell.Type == HexTileType.Wall)
+            if (cell.Type == HexCell.TileType.Wall)
             {
 //                _moveCells = GetMoveTargets(cell);
 //                Active.Prepare(this, _moveCells);

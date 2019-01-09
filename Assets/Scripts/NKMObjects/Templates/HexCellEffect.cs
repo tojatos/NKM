@@ -1,13 +1,11 @@
 ﻿using Hex;
-using Managers;
 
 namespace NKMObjects.Templates
 {
-	public abstract class HexCellEffect// : NKMObject
+	public abstract class HexCellEffect
 	{
-		//protected static Game Game => GameStarter.Instance.Game;
-		public string Name;
-		protected Game Game;
+		public readonly string Name;
+		protected readonly Game Game;
 		protected Active Active => Game.Active;
 		protected Console Console => Game.Console;
 		protected HexCellEffect(Game game, int cooldown, HexCell parentCell, string name = null)

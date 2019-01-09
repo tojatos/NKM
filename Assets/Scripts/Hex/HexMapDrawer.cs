@@ -43,16 +43,16 @@ namespace Hex
 
 			switch (hexCell.Type)
 			{
-				case HexTileType.Normal:
+				case HexCell.TileType.Normal:
                     cell.Color = Color.white;
 					break;
-				case HexTileType.Wall:
+				case HexCell.TileType.Wall:
                     cell.Color = Color.black;
 					break;
-				case HexTileType.SpawnPoint1:
-				case HexTileType.SpawnPoint2:
-				case HexTileType.SpawnPoint3:
-				case HexTileType.SpawnPoint4:
+				case HexCell.TileType.SpawnPoint1:
+				case HexCell.TileType.SpawnPoint2:
+				case HexCell.TileType.SpawnPoint3:
+				case HexCell.TileType.SpawnPoint4:
                     cell.Color = Color.green;
 					break;
 				default:

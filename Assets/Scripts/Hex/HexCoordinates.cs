@@ -54,7 +54,22 @@ namespace Hex
 		}
 
 		public override string ToString() => $"({X}, {Y}, {Z})";
-		public static bool operator ==(HexCoordinates c1, HexCoordinates c2) => c1._x == c2._x && c1._z == c2._z;
+		public static bool operator ==(HexCoordinates c1, HexCoordinates c2) => c1.Equals(c2);
 		public static bool operator !=(HexCoordinates c1, HexCoordinates c2) => !(c1 == c2);
+		private bool Equals(HexCoordinates c) => _x == c._x && _z == c._z;
+		public override bool Equals(object obj) 
+		{
+			if (obj == null || GetType() != obj.GetType()) return false;
+			return Equals((HexCoordinates)obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return (_x * 397) ^ _z;
+			}
+		}
+
 	}
 }

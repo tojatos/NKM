@@ -11,7 +11,7 @@ namespace Hex
     {
 		public readonly HexCoordinates Coordinates;
 	    public readonly HexMap Map;
-	    public HexTileType Type;
+	    public TileType Type;
 		public List<HexCellEffect> Effects = new List<HexCellEffect>();
 		private readonly HexCell[] _neighbors = new HexCell[6];
         public HexCell GetNeighbor(HexDirection direction) => _neighbors[(int)direction];
@@ -21,14 +21,14 @@ namespace Hex
 			cell._neighbors[(int)direction.Opposite()] = this;
 		}
 	    
-        public HexCell(HexMap map, HexCoordinates coords, HexTileType type)
+        public HexCell(HexMap map, HexCoordinates coords, TileType type)
         {
 	        Map = map;
             Coordinates = coords;
 	        Type = type;
         }
 
-	    public bool IsFreeToStand => IsEmpty && Type != HexTileType.Wall;
+	    public bool IsFreeToStand => IsEmpty && Type != TileType.Wall;
 	    public bool IsEmpty => CharactersOnCell.Count == 0;
 	    public List<Character> CharactersOnCell => Map.GetCharacters(this);
 	    
@@ -100,7 +100,7 @@ namespace Hex
 		    cell.CharactersOnCell.Any(c => c.IsEnemyFor(friendlyPlayer));
 	    public static Predicate<HexCell> IsFriendStanding(HexMap map, GamePlayer friendlyPlayer) => cell =>
 		    cell.CharactersOnCell.Any(c => !c.IsEnemyFor(friendlyPlayer));
-	    public static Predicate<HexCell> IsWall => cell => cell.Type == HexTileType.Wall;
+	    public static Predicate<HexCell> IsWall => cell => cell.Type == TileType.Wall;
 
 	    public List<HexCell> GetLine(HexDirection direction, int depth)
 		{
@@ -201,5 +201,14 @@ namespace Hex
 			return areaCells;
 
 		}
+        public enum TileType
+        {
+            Normal,
+            Wall,
+            SpawnPoint1,
+            SpawnPoint2,
+            SpawnPoint3,
+            SpawnPoint4
+        }
     }
 }

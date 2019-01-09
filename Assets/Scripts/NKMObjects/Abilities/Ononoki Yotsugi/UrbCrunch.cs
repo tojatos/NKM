@@ -34,8 +34,8 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         {
             cells.ForEach(c =>
             {
-                if (c.Type != HexTileType.Wall) return;
-                c.Type = HexTileType.Normal;
+                if (c.Type != HexCell.TileType.Wall) return;
+                c.Type = HexCell.TileType.Normal;
                 Active.SelectDrawnCell(c).Color = Color.white;
             });
             HexMapDrawer.Instance.TriangulateCells();
