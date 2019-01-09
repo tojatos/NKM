@@ -10,7 +10,7 @@ namespace NKMObjects.Abilities.Llenn
         {
             OnAwake += () =>
             {
-                ParentCharacter.AfterBasicMove += () =>
+                ParentCharacter.AfterBasicMove += cellList =>
                 {
                     if (!IsEnabled) return;
                     _timesRun++;

@@ -1,9 +1,11 @@
-﻿using Hex;
+﻿using System.Collections.Generic;
+using Hex;
 using NKMObjects.Templates;
 
-public class Delegates
+public static class Delegates
 {
 	public delegate void Void();
+	public delegate void CellList(List<HexCell> cellList);
 	public delegate void AbilityD(Ability ability);
 	public delegate void DamageD(Damage damage);
 	public delegate void EffectCharacterDamage(Effect effect, Character character, Damage damage);

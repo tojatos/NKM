@@ -20,7 +20,10 @@ namespace Hex
 	    }
 	    public Delegates.CharacterCell AfterMove;
 
-	    public void RemoveFromMap(Character character) => _charactersOnCells[character] = null;
+	    /// <summary>
+	    /// Removes character from map or does nothing
+	    /// </summary>
+	    public void RemoveFromMap(Character character) => _charactersOnCells.Remove(character);
 	    
 	    public HexCell GetCell(Character character)
 	    {

@@ -281,7 +281,18 @@ GAME STARTED: true";
 	{
         character.JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = character;
         character.JustBeforeFirstAction += () => Console.GameLog($"ACTION TAKEN: {character}");
-        character.HealthPoints.StatChanged += character.RemoveIfDead;
+		character.OnDeath += () =>
+		{
+			HexMap.RemoveFromMap(character);
+			AnimationPlayer.Add(new Destroy(character.CharacterObject));
+			character.DeathTimer = 0;
+			if (Active.CharacterOnMap == character) character.Deselect();
+		};
+        character.HealthPoints.StatChanged += () =>
+		{
+			if (character.IsAlive) return;
+			character.InvokeOnDeath();
+		};
         character.AfterAttack += (targetCharacter, damage) =>
             Console.Log(
                 $"{character.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
@@ -315,6 +326,8 @@ GAME STARTED: true";
 			HexMapDrawer.RemoveHighlights();
 			Stats.Instance.UpdateCharacterStats(null);
 		};
+		character.AfterBasicMove += moveCells => 
+			Console.GameLog($"MOVE: {string.Join("; ", moveCells.Select(p => p.Coordinates))}"); //logging after action to make reading rng work
 		
         Active.Turn.TurnFinished += other =>
         {

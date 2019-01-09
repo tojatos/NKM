@@ -55,14 +55,14 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 		        ParentCharacter.AfterAbilityUse -= onAbilityUse;
 	        };
 	        ParentCharacter.AfterAbilityUse += onAbilityUse;
-	        Delegates.Void onMove = null;
-	        onMove += () =>
+	        Delegates.CellList onMove = null;
+	        onMove += cellList =>
 	        {
 		        ParentCharacter.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;
 		        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = false;
 		        ParentCharacter.AfterBasicMove -= onMove;
 	        };
-	        ParentCharacter.AfterMove += onMove;
+	        ParentCharacter.AfterBasicMove += onMove;
 		       
 	        Active.Turn.TurnFinished += character1 =>
 	        {

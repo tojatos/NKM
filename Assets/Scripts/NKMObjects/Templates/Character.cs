@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Animations;
 using Extensions;
 using Hex;
 using JetBrains.Annotations;
@@ -20,8 +19,8 @@ namespace NKMObjects.Templates
 		public override string ToString() => Name + $" ({ID})";
 		
 		
-		public Action<Character> BasicAttack { protected get; set; }
-		public Action<List<HexCell>> BasicMove { protected get; set; }
+		public Action<Character> BasicAttack { private get; set; }
+		public Action<List<HexCell>> BasicMove { private get; set; }
 		public Func<List<HexCell>> GetBasicMoveCells { get; }
 		public Func<List<HexCell>> GetBasicAttackCells;
 		
@@ -104,7 +103,7 @@ namespace NKMObjects.Templates
 		public event Delegates.Void OnDeath;
 		public event Delegates.Void BeforeMove;
 		public event Delegates.Void AfterMove;
-		public event Delegates.Void AfterBasicMove;
+		public event Delegates.CellList AfterBasicMove;
 		public event Delegates.AbilityD AfterBeingHitByAbility;
 		public event Delegates.AbilityD AfterAbilityUse;
 		public event Delegates.DamageD BeforeBeingDamaged;
@@ -115,19 +114,12 @@ namespace NKMObjects.Templates
 		public event Delegates.CharacterDamage BeforeAttack;
 		public event Delegates.AbilityCharacterDamage AfterAbilityAttack;
 		public event Delegates.EffectCharacterDamage AfterEffectAttack;
-		public void InvokeAfterAbilityUse(Ability a) => AfterAbilityUse?.Invoke(a);
-		public void InvokeAfterBasicMove() => AfterBasicMove?.Invoke();
-
-		/// <summary>
-		/// Triggers after calculating all modifiers and defenses,
-		/// useful for modifying `true` damage
-		/// </summary>
-//		public event CharacterDamageDelegate JustBeforeAttack;
 		public event Delegates.CharacterDamage AfterAttack;
 		public event Delegates.CharacterInt AfterHeal;
 		public event Delegates.CharacterRefInt BeforeHeal;
-		public void InvokeBeforeHeal(Character targetCharacter, ref int value) => BeforeHeal?.Invoke(targetCharacter, ref value);
-
+		
+		public void InvokeAfterAbilityUse(Ability a) => AfterAbilityUse?.Invoke(a);
+		public void InvokeOnDeath() => OnDeath?.Invoke();
 		#endregion
 
 
@@ -164,8 +156,6 @@ namespace NKMObjects.Templates
 			_game.AddTriggersToEvents(this);
 		}
 
-		private void InvokeJustBeforeFirstAction() => JustBeforeFirstAction?.Invoke();
-
 		public void MoveTo(HexCell targetCell)
 		{
 			BeforeMove?.Invoke();
@@ -177,9 +167,6 @@ namespace NKMObjects.Templates
 		{
 			if (IsAlive) return;
 			OnDeath?.Invoke();
-			RemoveFromMap();
-			DeathTimer = 0;
-			if (Active.CharacterOnMap == this) Deselect();
 		}
 
 		public void DefaultBasicMove(List<HexCell> cellPath)
@@ -362,14 +349,7 @@ namespace NKMObjects.Templates
 
 		public void TryToInvokeJustBeforeFirstAction()
 		{
-			if (Active.Turn.CharacterThatTookActionInTurn == null) InvokeJustBeforeFirstAction();
-		}
-		private void RemoveFromMap()
-		{
-			if(!IsOnMap) return;
-			_game.HexMap.RemoveFromMap(this);
-			//IsOnMap = false;
-			AnimationPlayer.Add(new Destroy(CharacterObject));
+			if (Active.Turn.CharacterThatTookActionInTurn == null) JustBeforeFirstAction?.Invoke();
 		}
 		private void PrepareAttackAndMove()
 		{
@@ -428,9 +408,7 @@ namespace NKMObjects.Templates
 		{
 			TryToInvokeJustBeforeFirstAction();
 			BasicMove(new List<HexCell>(moveCells)); //work on a new list to log unmodified list below
-			Console.GameLog($"MOVE: {string.Join("; ", moveCells.Select(p => p.Coordinates))}"); //logging after action to make reading rng work
-//			AfterBasicMove?.Invoke();
-			InvokeAfterBasicMove();
+			AfterBasicMove?.Invoke(moveCells);
 		}
 
 		public GameObject CharacterObject => _game.HexMapDrawer.GetCharacterObject(this);// { get; set; }
