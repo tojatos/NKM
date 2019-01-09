@@ -5,7 +5,6 @@ using Extensions;
 using Hex;
 using JetBrains.Annotations;
 using NKMObjects.Effects;
-using UnityEngine;
 
 namespace NKMObjects.Templates
 {
@@ -82,7 +81,7 @@ namespace NKMObjects.Templates
 		
 		#region Other Properties
 		public bool CanAttackAllies { get; set; }
-		public bool IsOnMap => _game.HexMap.GetCell(this) != null;// { get; set; }
+		public bool IsOnMap => _game.HexMap.GetCell(this) != null;
 
 		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }
 		public bool HasUsedBasicAttackInPhaseBefore { private get; set; }
@@ -103,6 +102,8 @@ namespace NKMObjects.Templates
 		public event Delegates.Void OnDeath;
 		public event Delegates.Void BeforeMove;
 		public event Delegates.Void AfterMove;
+		public event Delegates.Void AfterSelect;
+		public event Delegates.Void AfterDeselect;
 		public event Delegates.CellList AfterBasicMove;
 		public event Delegates.AbilityD AfterBeingHitByAbility;
 		public event Delegates.AbilityD AfterAbilityUse;
@@ -123,7 +124,7 @@ namespace NKMObjects.Templates
 		#endregion
 
 
-		public Character (Game game, string name, uint id, Properties properties, List<Ability> abilities)
+		public Character(Game game, string name, uint id, Properties properties, List<Ability> abilities)
 		{
 			_game = game;
 				
@@ -163,12 +164,6 @@ namespace NKMObjects.Templates
 			AfterMove?.Invoke();
 		}
 
-		public void RemoveIfDead()
-		{
-			if (IsAlive) return;
-			OnDeath?.Invoke();
-		}
-
 		public void DefaultBasicMove(List<HexCell> cellPath)
 		{
 			HasUsedBasicMoveInPhaseBefore = true;
@@ -176,14 +171,10 @@ namespace NKMObjects.Templates
 			Move(cellPath);
 		}
 
-		private void Move(IList<HexCell> cellPath)
+		private void Move(List<HexCell> cellPath)
 		{
 			cellPath.RemoveAt(0); //Remove parent cell
-			foreach (HexCell nextCell in cellPath)
-			{
-				MoveTo(nextCell);
-			}
-
+			cellPath.ForEach(MoveTo);
 		}
 
 		public void DefaultBasicAttack(Character attackedCharacter)
@@ -322,14 +313,12 @@ namespace NKMObjects.Templates
 
 			return cellRange;
 		}
-		public List<HexCell> DefaultGetBasicMoveCells() => 
+		private List<HexCell> DefaultGetBasicMoveCells() => 
 			IsFlying 
 				? ParentCell.GetNeighbors(Owner, Speed.Value, SearchFlags.StopAtEnemyCharacters)
 				: ParentCell.GetNeighbors(Owner, Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls);
 
 
-		public event Delegates.Void AfterSelect;
-		public event Delegates.Void AfterDeselect;
 		public void Select()
 		{
 			Active.Clean();
@@ -410,8 +399,6 @@ namespace NKMObjects.Templates
 			BasicMove(new List<HexCell>(moveCells)); //work on a new list to log unmodified list below
 			AfterBasicMove?.Invoke(moveCells);
 		}
-
-		public GameObject CharacterObject => _game.HexMapDrawer.GetCharacterObject(this);// { get; set; }
 		
         public class Properties
         {

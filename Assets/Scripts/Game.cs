@@ -67,11 +67,11 @@ public class Game
 		HexMap = HexMapFactory.FromScriptable(Options.MapScriptable);
 		HexMap.AfterMove += (character, cell) =>
 		{
-			if (character.CharacterObject == null) return;
-			character.CharacterObject.transform.parent = Active.SelectDrawnCell(cell).transform;
+			if (HexMapDrawer.GetCharacterObject(character) == null) return;
+			HexMapDrawer.GetCharacterObject(character).transform.parent = Active.SelectDrawnCell(cell).transform;
             AnimationPlayer.Add(new Destroy(Active.SelectDrawnCell(cell).gameObject.GetComponent<LineRenderer>())); //Remove the line
-			AnimationPlayer.Add(new MoveTo(character.CharacterObject.transform,
-				character.CharacterObject.transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
+			AnimationPlayer.Add(new MoveTo(HexMapDrawer.GetCharacterObject(character).transform,
+				HexMapDrawer.GetCharacterObject(character).transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
 			
 		};
 		HexMapDrawer.CreateMap(HexMap);
@@ -284,7 +284,7 @@ GAME STARTED: true";
 		character.OnDeath += () =>
 		{
 			HexMap.RemoveFromMap(character);
-			AnimationPlayer.Add(new Destroy(character.CharacterObject));
+			AnimationPlayer.Add(new Destroy(HexMapDrawer.GetCharacterObject(character)));
 			character.DeathTimer = 0;
 			if (Active.CharacterOnMap == character) character.Deselect();
 		};
@@ -297,12 +297,12 @@ GAME STARTED: true";
             Console.Log(
                 $"{character.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
         character.AfterAttack += (targetCharacter, damage) =>
-            AnimationPlayer.Add(new Tilt(targetCharacter.CharacterObject.transform));
+            AnimationPlayer.Add(new Tilt(HexMapDrawer.GetCharacterObject(targetCharacter).transform));
         character.AfterAttack += (targetCharacter, damage) =>
-            AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, damage.Value.ToString(),
+            AnimationPlayer.Add(new ShowInfo(HexMapDrawer.GetCharacterObject(targetCharacter).transform, damage.Value.ToString(),
                 Color.red));
         character.AfterHeal += (targetCharacter, valueHealed) =>
-            AnimationPlayer.Add(new ShowInfo(targetCharacter.CharacterObject.transform, valueHealed.ToString(),
+            AnimationPlayer.Add(new ShowInfo(HexMapDrawer.GetCharacterObject(targetCharacter).transform, valueHealed.ToString(),
                 Color.blue));
         character.HealthPoints.StatChanged += () =>
         {
