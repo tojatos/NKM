@@ -11,7 +11,7 @@ namespace NKMObjects.Effects
 			Name = name ?? "Heal Over Time";
 			_healPerTick = healPerTick;
 			Type = EffectType.Positive;
-            Character.VoidDelegate tryToActivateEffect = () => characterThatHeals.Heal(ParentCharacter, healPerTick);
+            Delegates.Void tryToActivateEffect = () => characterThatHeals.Heal(ParentCharacter, healPerTick);
 			ParentCharacter.JustBeforeFirstAction += tryToActivateEffect;
 			OnRemove += () => ParentCharacter.JustBeforeFirstAction -= tryToActivateEffect;
 		}

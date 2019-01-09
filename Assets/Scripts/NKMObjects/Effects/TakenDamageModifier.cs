@@ -12,7 +12,7 @@ namespace NKMObjects.Effects
 			Name = name ?? "Taken Damage Modifier";
 			Value = value;
 			Type = value <= 0 ? EffectType.Positive : EffectType.Negative;
-			Character.DamageDelegate d = damage => damage.Value += (int)(damage.Value * (Value / 100f));
+			Delegates.DamageD d = damage => damage.Value += (int)(damage.Value * (Value / 100f));
 			parentCharacter.BeforeBeingDamaged += d;
 			OnRemove += () => parentCharacter.BeforeBeingDamaged -= d;
 		}

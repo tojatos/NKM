@@ -41,21 +41,21 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 	        Swap(ParentCharacter, character);
 	        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
 	        ParentCharacter.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = true; // TODO
-	        Character.CharacterDamageDelegate onAttack = null;
+	        Delegates.CharacterDamage onAttack = null;
 	        onAttack = (c, d) =>
 	        {
 		        ParentCharacter.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;
 		        ParentCharacter.AfterBasicAttack -= onAttack;
 	        };
 	        ParentCharacter.AfterBasicAttack += onAttack;
-	        Character.AbilityDelegate onAbilityUse = null;
+	        Delegates.AbilityD onAbilityUse = null;
 	        onAbilityUse += ability =>
 	        {
 		        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = false;
 		        ParentCharacter.AfterAbilityUse -= onAbilityUse;
 	        };
 	        ParentCharacter.AfterAbilityUse += onAbilityUse;
-	        Character.VoidDelegate onMove = null;
+	        Delegates.Void onMove = null;
 	        onMove += () =>
 	        {
 		        ParentCharacter.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = false;

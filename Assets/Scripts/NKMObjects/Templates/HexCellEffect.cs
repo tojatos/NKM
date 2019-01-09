@@ -6,8 +6,7 @@ namespace NKMObjects.Templates
 	{
 		public readonly string Name;
 		protected readonly Game Game;
-		protected Active Active => Game.Active;
-		protected Console Console => Game.Console;
+		private Active Active => Game.Active;
 		protected HexCellEffect(Game game, int cooldown, HexCell parentCell, string name = null)
 		{
 			Game = game;
@@ -24,7 +23,7 @@ namespace NKMObjects.Templates
 			};
 		}
 		
-		public event Character.VoidDelegate OnRemove;
+		public event Delegates.Void OnRemove;
 
 		public void Remove()
 		{
@@ -32,7 +31,7 @@ namespace NKMObjects.Templates
             OnRemove?.Invoke();
 		}
 		protected int CurrentCooldown { get; private set; }
-		protected HexCell ParentCell { get; }
+		private HexCell ParentCell { get; }
 
 		public abstract string GetDescription();
 		

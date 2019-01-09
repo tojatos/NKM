@@ -98,44 +98,23 @@ namespace NKMObjects.Templates
 		public int DeathTimer { get; set; }
 		#endregion
 
-		#region Delegates
-
-		public delegate void VoidDelegate();
-
-		public delegate void AbilityDelegate(Ability ability);
-
-		public delegate void DamageDelegate(Damage damage);
-
-		public delegate void CharacterDamageDelegate(Character character, Damage damage);
-
-		public delegate void EffectCharacterDamageDelegate(Effect effect, Character character, Damage damage);
-
-		public delegate void AbilityCharacterDamageDelegate(Ability ability, Character character, Damage damage);
-
-		public delegate void CharacterIntDelegate(Character targetCharacter, int value);
-
-		public delegate void CharacterRefIntDelegate(Character targetCharacter, ref int value);
-
-		#endregion
-
 		#region Events
-
-		public event VoidDelegate JustBeforeFirstAction;
-		public event VoidDelegate OnKill;
-		public event VoidDelegate OnDeath;
-		public event VoidDelegate BeforeMove;
-		public event VoidDelegate AfterMove;
-		public event VoidDelegate AfterBasicMove;
-		public event AbilityDelegate AfterBeingHitByAbility;
-		public event AbilityDelegate AfterAbilityUse;
-		public event DamageDelegate BeforeBeingDamaged;
-		public event DamageDelegate AfterBeingDamaged;
-		public event CharacterDamageDelegate BeforeBeingBasicAttacked;
-		public event CharacterDamageDelegate BeforeBasicAttack;
-		public event CharacterDamageDelegate AfterBasicAttack;
-		public event CharacterDamageDelegate BeforeAttack;
-		public event AbilityCharacterDamageDelegate AfterAbilityAttack;
-		public event EffectCharacterDamageDelegate AfterEffectAttack;
+		public event Delegates.Void JustBeforeFirstAction;
+		public event Delegates.Void OnKill;
+		public event Delegates.Void OnDeath;
+		public event Delegates.Void BeforeMove;
+		public event Delegates.Void AfterMove;
+		public event Delegates.Void AfterBasicMove;
+		public event Delegates.AbilityD AfterBeingHitByAbility;
+		public event Delegates.AbilityD AfterAbilityUse;
+		public event Delegates.DamageD BeforeBeingDamaged;
+		public event Delegates.DamageD AfterBeingDamaged;
+		public event Delegates.CharacterDamage BeforeBeingBasicAttacked;
+		public event Delegates.CharacterDamage BeforeBasicAttack;
+		public event Delegates.CharacterDamage AfterBasicAttack;
+		public event Delegates.CharacterDamage BeforeAttack;
+		public event Delegates.AbilityCharacterDamage AfterAbilityAttack;
+		public event Delegates.EffectCharacterDamage AfterEffectAttack;
 		public void InvokeAfterAbilityUse(Ability a) => AfterAbilityUse?.Invoke(a);
 		public void InvokeAfterBasicMove() => AfterBasicMove?.Invoke();
 
@@ -144,10 +123,9 @@ namespace NKMObjects.Templates
 		/// useful for modifying `true` damage
 		/// </summary>
 //		public event CharacterDamageDelegate JustBeforeAttack;
-		public event CharacterDamageDelegate AfterAttack;
-
-		public event CharacterIntDelegate AfterHeal;
-		public event CharacterRefIntDelegate BeforeHeal;
+		public event Delegates.CharacterDamage AfterAttack;
+		public event Delegates.CharacterInt AfterHeal;
+		public event Delegates.CharacterRefInt BeforeHeal;
 		public void InvokeBeforeHeal(Character targetCharacter, ref int value) => BeforeHeal?.Invoke(targetCharacter, ref value);
 
 		#endregion
@@ -363,8 +341,8 @@ namespace NKMObjects.Templates
 				: ParentCell.GetNeighbors(Owner, Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls);
 
 
-		public event VoidDelegate AfterSelect;
-		public event VoidDelegate AfterDeselect;
+		public event Delegates.Void AfterSelect;
+		public event Delegates.Void AfterDeselect;
 		public void Select()
 		{
 			Active.Clean();

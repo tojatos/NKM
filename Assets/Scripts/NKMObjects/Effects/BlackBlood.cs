@@ -15,7 +15,7 @@ namespace NKMObjects.Effects
         {
             _characterThatAttacks = characterThatAttacks;
             Type = effectTarget.Owner == characterThatAttacks.Owner ? EffectType.Positive : EffectType.Negative;
-            Character.DamageDelegate tryToActivateEffect = d => 
+            Delegates.DamageD tryToActivateEffect = d => 
             {
                 if(d.Value==0) return;
                 if(_wasActivatedOnce) return;//prevent infinite loop

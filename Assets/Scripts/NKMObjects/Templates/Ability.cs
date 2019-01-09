@@ -96,8 +96,8 @@ namespace NKMObjects.Templates
 		}
 		protected void OnFailedUseFinish() => Active.CleanAndTrySelecting();
 		
-		protected event Character.VoidDelegate OnAwake;
-		public event Character.VoidDelegate AfterUseFinish;
+		protected event Delegates.Void OnAwake;
+		public event Delegates.Void AfterUseFinish;
 		public void Awake() => OnAwake?.Invoke();
 
 		public virtual void Cancel()

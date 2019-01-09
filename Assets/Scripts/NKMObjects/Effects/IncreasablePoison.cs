@@ -13,7 +13,7 @@ namespace NKMObjects.Effects
 			Damage = initialDamage;
 			Type = EffectType.Negative;
 			_increase = increase;
-            Character.VoidDelegate tryToActivateEffect = () =>
+            Delegates.Void tryToActivateEffect = () =>
             {
 	            characterThatAttacks.Attack(this, ParentCharacter, Damage);
 	            Damage.Value += _increase;
