@@ -22,12 +22,8 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 		characterObject.transform.Find("Character Sprite").GetComponent<SpriteRenderer>().sprite = characterSprite;
 		characterObject.transform.Find("Border").GetComponent<SpriteRenderer>().color = characterToSpawn.Owner.GetColor();
 		characterObject.transform.localPosition = new Vector3(0, 10, 0);
-//		parentCell.CharacterOnCell = characterToSpawn;
-		GameStarter.Instance.Game.HexMap.Move(characterToSpawn, parentCell.HexCell);
-		//characterToSpawn.ParentCell = parentCell.HexCell;
-		//characterToSpawn.CharacterObject = characterObject;
+		//GameStarter.Instance.Game.HexMap.Place(characterToSpawn, parentCell.HexCell);
 		Game.HexMapDrawer.SetCharacterObject(characterToSpawn, characterObject);
-		//characterToSpawn.IsOnMap = true;
 	}
 	public void SpawnHighlightCellObject(DrawnHexCell parentCell, string colorName)
 	{

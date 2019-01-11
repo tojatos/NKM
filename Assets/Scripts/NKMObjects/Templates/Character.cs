@@ -330,7 +330,7 @@ namespace NKMObjects.Templates
 		public void Deselect()
 		{
 			Active.CharacterOnMap = null;
-			Active.Action = Action.None;
+			Active.ActionType = ActionType.None;
 			Active.HexCells = null;
 			Active.RemoveMoveCells();
 			AfterDeselect?.Invoke();
@@ -338,7 +338,7 @@ namespace NKMObjects.Templates
 
 		public void TryToInvokeJustBeforeFirstAction()
 		{
-			if (Active.Turn.CharacterThatTookActionInTurn == null) JustBeforeFirstAction?.Invoke();
+			if (CanTakeAction) JustBeforeFirstAction?.Invoke();
 		}
 		private void PrepareAttackAndMove()
 		{
@@ -357,16 +357,16 @@ namespace NKMObjects.Templates
 
 			if (!CanUseBasicMove && CanUseBasicAttack)
 			{
-				isPreparationSuccessful = Active.Prepare(Action.AttackAndMove, GetPrepareBasicAttackCells());
+				isPreparationSuccessful = Active.Prepare(ActionType.AttackAndMove, GetPrepareBasicAttackCells());
 			}
 			else if (CanUseBasicMove && !CanUseBasicAttack)
 			{
-				isPreparationSuccessful = Active.Prepare(Action.AttackAndMove, GetPrepareBasicMoveCells());
+				isPreparationSuccessful = Active.Prepare(ActionType.AttackAndMove, GetPrepareBasicMoveCells());
 			}
 			else
 			{
-				var p1 = Active.Prepare(Action.AttackAndMove, GetPrepareBasicMoveCells());
-				var p2 = Active.Prepare(Action.AttackAndMove, GetPrepareBasicAttackCells(), true);
+				var p1 = Active.Prepare(ActionType.AttackAndMove, GetPrepareBasicMoveCells());
+				var p2 = Active.Prepare(ActionType.AttackAndMove, GetPrepareBasicAttackCells(), true);
 				isPreparationSuccessful = p1 || p2;
 			}
 			if (!isPreparationSuccessful)

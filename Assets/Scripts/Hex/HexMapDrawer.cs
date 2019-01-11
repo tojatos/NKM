@@ -116,7 +116,7 @@ namespace Hex
 				}
 			}
 
-			if (_game.Active.Action == Action.AttackAndMove)
+			if (_game.Active.ActionType == ActionType.AttackAndMove)
 			{
 				HexCell cellPointed = CellPointed();
 				if (cellPointed != null && (_game.Active.HexCells.Contains(cellPointed)||cellPointed==_game.Active.CharacterOnMap.ParentCell))

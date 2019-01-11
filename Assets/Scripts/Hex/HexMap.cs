@@ -6,19 +6,22 @@ namespace Hex
 {
     public class HexMap
     {
-	    public List<HexCell> Cells;
+	    public readonly List<HexCell> Cells;
 		public readonly List<HexCell.TileType> SpawnPoints;
 	    private readonly Dictionary<Character, HexCell> _charactersOnCells = new Dictionary<Character, HexCell>();
 
-	    /// <summary>
-	    /// Moves or places character on a cell
-	    /// </summary>
-	    public void Move(Character character, HexCell hexCell)
+	    public void Place(Character character, HexCell cell)
 	    {
-		    _charactersOnCells[character] = hexCell;
-		    AfterMove?.Invoke(character, hexCell);
+		    _charactersOnCells[character] = cell;
+		    AfterCharacterPlace?.Invoke(character, cell);
+	    }
+	    public void Move(Character character, HexCell cell)
+	    {
+		    _charactersOnCells[character] = cell;
+		    AfterMove?.Invoke(character, cell);
 	    }
 	    public Delegates.CharacterCell AfterMove;
+	    public Delegates.CharacterCell AfterCharacterPlace;
 
 	    /// <summary>
 	    /// Removes character from map or does nothing
@@ -32,8 +35,8 @@ namespace Hex
 		    return value;
 	    }
 
-	    public List<Character> GetCharacters(HexCell hexCell) =>
-		    _charactersOnCells.Where(pair => pair.Value == hexCell).Select(pair => pair.Key).ToList();
+	    public List<Character> GetCharacters(HexCell cell) =>
+		    _charactersOnCells.Where(pair => pair.Value == cell).Select(pair => pair.Key).ToList();
 	    
 		public HexMap (List<HexCell> cells, List<HexCell.TileType> spawnPoints)
 		{

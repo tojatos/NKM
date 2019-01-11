@@ -39,6 +39,7 @@
       <e p="Assets/Scripts" t="Include">
         <e p="AbilityUseValidator.cs" t="Include" />
         <e p="Action.cs" t="Include" />
+        <e p="ActionType.cs" t="Include" />
         <e p="Active.cs" t="Include" />
         <e p="AirSelection.cs" t="Include" />
         <e p="AnimationPlayer.cs" t="Include" />

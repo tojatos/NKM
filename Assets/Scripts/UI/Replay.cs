@@ -21,7 +21,7 @@ namespace UI
 
         private void PlayNextAction()
         {
-            GameStarter.Instance.Game.MakeAction(Actions.Dequeue());
+//            GameStarter.Instance.Game.MakeAction(Actions.Dequeue());
             
             if(Actions.Count == 0) return;
             string nextActionName = Actions.Peek()[0];

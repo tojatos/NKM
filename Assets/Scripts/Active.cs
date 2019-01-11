@@ -23,12 +23,12 @@ public class Active
 		AirSelection = new AirSelection(game);
 	}
 
-	public Turn Turn { get; }
-	public Phase Phase { get; }
+	public readonly Turn Turn;// { get; }
+	public readonly Phase Phase;// { get; }
 	public AirSelection AirSelection { get; }
 
 	public GamePlayer GamePlayer;
-	public Action Action;
+	public ActionType ActionType;
 	public IUseable AbilityToUse;
 	public Character SelectedCharacterToPlace;
 	public Character CharacterOnMap;
@@ -51,7 +51,7 @@ public class Active
 	private List<HexCell> _helpHexCells;
 	private List<GameObject> _buttons;
 
-	public bool IsActiveUse => !(AbilityToUse == null && (Action == Action.None || Action == Action.AttackAndMove) && SelectedCharacterToPlace == null);
+	public bool IsActiveUse => !(AbilityToUse == null && (ActionType == ActionType.None || ActionType == ActionType.AttackAndMove) && SelectedCharacterToPlace == null);
 
 	public void Reset()
 	{
@@ -65,7 +65,7 @@ public class Active
 		//NkmObject = null;
 		SelectedCharacterToPlace = null;
 		SelectedCell = null;
-		Action = Action.None;
+		ActionType = ActionType.None;
 		if (AirSelection.IsEnabled) AirSelection.Disable();
 	}
 	public void Cancel()
@@ -88,7 +88,7 @@ public class Active
 	}
 
 	public void Prepare(IUseable abilityToPrepare) => AbilityToUse = abilityToPrepare;
-	public bool Prepare(Action actionToPrepare, List<HexCell> cellRange, bool addToRange = false)
+	public bool Prepare(ActionType actionTypeToPrepare, List<HexCell> cellRange, bool addToRange = false)
 	{
 		if (cellRange == null)
 		{
@@ -108,12 +108,12 @@ public class Active
 		{
 			HexCells = cellRange;
 		}
-		Action = actionToPrepare;
+		ActionType = actionTypeToPrepare;
 		return true;
 	}
 	public void Prepare(IUseable abilityToPrepare, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
 	{
-		Prepare(Action.UseAbility, cellRange, addToRange);
+		Prepare(ActionType.UseAbility, cellRange, addToRange);
 
 		AbilityToUse = abilityToPrepare;
 		if (!toggleToRed) return;
@@ -175,7 +175,7 @@ public class Active
 		RemoveMoveCells();
 		if(AirSelection.IsEnabled) AirSelection.Disable();
 		AbilityToUse = null;
-		Action = Action.None;
+		ActionType = ActionType.None;
 		HexCells = null;
 		_game.HexMapDrawer.RemoveHighlights();
 		_game.HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
@@ -185,20 +185,20 @@ public class Active
         Clean();	
 		CharacterOnMap?.Select();
 	}
-	private void MakeAction(Character characterThatMakesAction, Action action, List<HexCell> cells)
+	private void MakeAction(Character characterThatMakesAction, ActionType actionType, List<HexCell> cells)
 	{
-		switch (action)
+		switch (actionType)
 		{
-			case Action.None:
+			case ActionType.None:
 				Console.DebugLog("Żadna akcja nie jest aktywna!");
 				return;
-			case Action.UseAbility:
+			case ActionType.UseAbility:
                 CharacterOnMap.TryToInvokeJustBeforeFirstAction();
 //				Console.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {string.Join("; ", cells.Select(p => p.Coordinates))}");
 				AbilityToUse.Use(cells);
 				Console.GameLog($"ABILITY USE: {string.Join("; ", cells.Select(p => p.Coordinates))}");
 				break;
-			case Action.AttackAndMove:
+			case ActionType.AttackAndMove:
 				if (cells.Count != 1)
 				{
                     Console.DebugLog("Próbowano wykonać ruch lub atak na więcej niż jedno pole!");
@@ -209,7 +209,7 @@ public class Active
 				if(!isActionSuccessful) return;
 				
 				HexCells = null;//TODO is this really needed?
-				Action = Action.None;
+				ActionType = ActionType.None;
 				characterThatMakesAction.Select();
 				break;
 			default:
@@ -234,10 +234,10 @@ public class Active
 		return true;
 	}
 
-	public void MakeAction(Character characterThatMakesAction, Action action, HexCell cell) =>
-		MakeAction(characterThatMakesAction, action, new List<HexCell>{cell});
+	public void MakeAction(Character characterThatMakesAction, ActionType actionType, HexCell cell) =>
+		MakeAction(characterThatMakesAction, actionType, new List<HexCell>{cell});
 
-	public void MakeAction(List<HexCell> cells) => MakeAction(!_game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn, Action, cells);
+	public void MakeAction(List<HexCell> cells) => MakeAction(!_game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn, ActionType, cells);
 	public void MakeAction(HexCell cell) => MakeAction(new List<HexCell> {cell});
 	public void MakeAction() => (!_game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn).TryToInvokeJustBeforeFirstAction();
 
