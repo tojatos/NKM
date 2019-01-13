@@ -40,12 +40,12 @@ namespace UI.CharacterUI
 
 		private void SetAttackHelpTriggers()
 		{
-			RangeObject.AddTrigger(EventTriggerType.PointerEnter, e => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetBasicAttackCells());
+			RangeObject.AddTrigger(EventTriggerType.PointerEnter, e => Game.Active.HelpHexCells = Game.Active.Character.GetBasicAttackCells());
 			RangeObject.AddTrigger(EventTriggerType.PointerExit, e => Game.Active.HelpHexCells = null);
 		}
 		private void SetMoveHelpTriggers()
 		{
-			SpeedObject.AddTrigger(EventTriggerType.PointerEnter, e => Game.Active.HelpHexCells = Game.Active.CharacterOnMap.GetBasicMoveCells());
+			SpeedObject.AddTrigger(EventTriggerType.PointerEnter, e => Game.Active.HelpHexCells = Game.Active.Character.GetBasicMoveCells());
 			SpeedObject.AddTrigger(EventTriggerType.PointerExit, e => Game.Active.HelpHexCells = null);
 		}
 		private void EmptyTextes()

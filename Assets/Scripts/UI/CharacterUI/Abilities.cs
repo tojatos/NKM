@@ -24,9 +24,9 @@ namespace UI.CharacterUI
 
 		public void UpdateButtons()
 		{
-			if (Game.Active.CharacterOnMap == null) return;
+			if (Game.Active.Character == null) return;
 
-			Character character = Game.Active.CharacterOnMap;
+			Character character = Game.Active.Character;
 			RemoveButtons();
 
 			//Create an ability button for each character ability
@@ -96,9 +96,9 @@ namespace UI.CharacterUI
 		}
 		public void UpdateButtonData()
 		{
-			if(Game?.Active.CharacterOnMap == null) return;
+			if(Game?.Active.Character == null) return;
 
-			Character character = Game.Active.CharacterOnMap;
+			Character character = Game.Active.Character;
 			Buttons.ForEach(button =>
 			{
 				Ability ability = character.Abilities[int.Parse(button.name)];

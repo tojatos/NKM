@@ -34,7 +34,7 @@ zyskuje ona {AdditionalAttack} ataku i {AdditionalSpeed} szybkości.";
 		{
 			if (!IsEnabled) return;
 
-			Active.CharacterOnMap.Deselect();
+			//Active.Character.Deselect();
 			ParentCharacter.Name = "Demonic Rem";
 			if (ParentCharacter.Effects.All(e => e.Name != "Demonic Form Speed Boost"))
 			{
@@ -49,7 +49,8 @@ zyskuje ona {AdditionalAttack} ataku i {AdditionalSpeed} szybkości.";
 				attackBoost.OnRemove += TryToActivateDemonicForm;
 				ParentCharacter.Effects.Add(attackBoost);
 			}
-			ParentCharacter.Select();
+//			ParentCharacter.Select();
+			Active.Select(ParentCharacter);
 		}
 	}
 }

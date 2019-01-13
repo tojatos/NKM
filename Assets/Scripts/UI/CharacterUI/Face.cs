@@ -15,9 +15,9 @@ namespace UI.CharacterUI
 
 		private void Update() //TODO: Remove Update
 		{
-			if (Game.Active.CharacterOnMap != null)
+			if (Game.Active.Character != null)
 			{
-				UpdateFace(Game.Active.CharacterOnMap);
+				UpdateFace(Game.Active.Character);
 			}
 		}
 

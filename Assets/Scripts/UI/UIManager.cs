@@ -48,7 +48,7 @@ namespace UI
 			Tooltip.Instance.Init();
 			_spriteSelect = SpriteSelect.Instance;
 			EndTurnImage.AddTrigger(EventTriggerType.PointerClick, e => EndTurnImageClick());
-			CancelButton.AddTrigger(EventTriggerType.PointerClick, e => Game.Active.Cancel());
+			CancelButton.AddTrigger(EventTriggerType.PointerClick, e => Game.Action.Cancel());
 			HourglassImage.AddTrigger(EventTriggerType.PointerClick, e => HourglassImageClick());
 			ActivePlayerText.gameObject.AddSetTooltipEvent("Nazwa aktywnego gracza");
 			ActivePlayerText.gameObject.AddRemoveTooltipEvent();
@@ -91,14 +91,14 @@ namespace UI
 			}
 			}
 			Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
-			CharacterUI.ToggleIf(Game.Active.CharacterOnMap == null);
-			if (Active.CharacterOnMap != null) ActiveCharacterText.text = Active.CharacterOnMap.Name;
+			CharacterUI.ToggleIf(Game.Active.Character == null);
+			if (Active.Character != null) ActiveCharacterText.text = Active.Character.Name;
 			if (Active.SelectedCell != null) ActiveHexCellText.text = Active.SelectedCell.Type.ToString();
 			EndTurnImage.ToggleIf(!CanClickEndTurnButton);
 			bool isActiveUse = Game.Active.IsActiveUse;
 			AbilityButtons.ToggleIf(isActiveUse);
 			CancelButton.ToggleIf(!isActiveUse);
-			HourglassImage.ToggleIf(isActiveUse || Active.CharacterOnMap!=null && !Active.CharacterOnMap.CanWait);
+			HourglassImage.ToggleIf(isActiveUse || Active.Character!=null && !Active.Character.CanWait);
 			
 			HexCellUI.ToggleIf(Active.SelectedCell == null);
             if(Active.SelectedCell!=null) HexImage.Instance.UpdateImage();
@@ -107,14 +107,16 @@ namespace UI
 		private static void EndTurnImageClick()
 		{
 			if (Game.Active.Phase.Number == 0) return;
-			if (CanClickEndTurnButton) Game.Active.Turn.Finish();
+			if (CanClickEndTurnButton) Game.Action.FinishTurn();//Game.Active.Turn.Finish();
 		}
 		
 		private static void HourglassImageClick()
 		{
-            if(Active.CharacterOnMap.Owner != Active.GamePlayer) return;
-			Active.CharacterOnMap.TryToInvokeJustBeforeFirstAction();
-			Active.Turn.Finish();
+            if(Active.Character.Owner != Active.GamePlayer) return;
+			//Active.CharacterOnMap.TryToInvokeJustBeforeFirstAction();
+			Game.Action.TakeTurn(Active.Character);
+//			Active.Turn.Finish();
+			Game.Action.FinishTurn();
         }
 
 	}

@@ -1,6 +1,6 @@
-﻿public enum ActionType
-{
-	None,
-	UseAbility,
-	AttackAndMove
-}
+﻿//public enum ActionType
+//{
+//	None,
+//	UseAbility,
+//	AttackAndMove
+//}

@@ -43,7 +43,8 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         private void Use(Character character)
         {
-            Active.MakeAction();
+            //Active.MakeAction();
+			ParentCharacter.TryToTakeTurn();
             for (int i = 0; i < AttackTimes; i++) 
                 ParentCharacter.Attack(this, character, new Damage(Damage, DamageType.True));
             if (!IsEnabled) IsEnabled = true;

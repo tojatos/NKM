@@ -37,8 +37,8 @@ namespace NKMObjects.HexCellEffects
             var effect = new StatModifier(Game, 1, -_speedDecrease, character, StatType.Speed, Name);
 			effect.OnRemove += () =>
 			{
-				if (effect.ParentCharacter.ParentCell.Effects.ContainsType(typeof(HowlingBlizzard))&&!effect.ParentCharacter.IsLeaving&&!_isBeingRemoved)
-					AddEffect(effect.ParentCharacter);
+//				if (effect.ParentCharacter.ParentCell.Effects.ContainsType(typeof(HowlingBlizzard))&&!effect.ParentCharacter.IsLeaving&&!_isBeingRemoved)
+//					AddEffect(effect.ParentCharacter);//TODO
 			};
             character.Effects.Add(effect);
 		}

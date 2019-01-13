@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Extensions;
 using Hex;
 using NKMObjects.Templates;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class Active
 {
 	private readonly Game _game;
 	private Console Console => _game.Console;
+	private Action Action => _game.Action;
 	public Active(Game game)
 	{
 		_game = game;
@@ -28,12 +30,14 @@ public class Active
 	public AirSelection AirSelection { get; }
 
 	public GamePlayer GamePlayer;
-	public ActionType ActionType;
+//	public ActionType ActionType;
 	public IUseable AbilityToUse;
 	public Character SelectedCharacterToPlace;
-	public Character CharacterOnMap;
+	public Character Character;
 	public HexCell SelectedCell;
 	public readonly List<HexCell> MoveCells = new List<HexCell>();
+	public event Delegates.CharacterD AfterSelect;
+	public event Delegates.Void AfterDeselect;
 	
 	public List<HexCell> HexCells { get; set; }
 	//TODO: refactor this
@@ -49,31 +53,49 @@ public class Active
 	}
 
 	private List<HexCell> _helpHexCells;
-	private List<GameObject> _buttons;
 
-	public bool IsActiveUse => !(AbilityToUse == null && (ActionType == ActionType.None || ActionType == ActionType.AttackAndMove) && SelectedCharacterToPlace == null);
+	public bool IsActiveUse => !(AbilityToUse == null && SelectedCharacterToPlace == null);// (ActionType == ActionType.None || ActionType == ActionType.AttackAndMove) && SelectedCharacterToPlace == null);
 
 	public void Reset()
 	{
-//		((Ability)AbilityToUse)?.Finish();
-		if (IsActiveUse || Turn.IsDone)
-		{
-			CharacterOnMap?.Deselect();
-		}
+		if (IsActiveUse || Turn.IsDone) Deselect();
 		AbilityToUse = null;
 		HexCells = null;
-		//NkmObject = null;
 		SelectedCharacterToPlace = null;
 		SelectedCell = null;
-		ActionType = ActionType.None;
 		if (AirSelection.IsEnabled) AirSelection.Disable();
+	}
+
+	public void Select(Character character)
+	{
+        Clean();
+        Character = character;
+		AfterSelect?.Invoke(character);
+		
+		if (GamePlayer != character.Owner || !character.CanTakeAction) return;
+		
+		Prepare(character.GetPrepareBasicAttackCells());
+		Prepare(character.GetPrepareBasicMoveCells(), true);
+
+        HexCells.Distinct().ToList().ForEach(c =>
+            SelectDrawnCell(c).AddHighlight(!c.IsEmpty && character.CanBasicAttack(c.FirstCharacter)
+                    ? Highlights.RedTransparent : Highlights.GreenTransparent));
+        RemoveMoveCells();
+        MoveCells.Add(character.ParentCell);
+	}
+	public void Deselect()
+	{
+        Character = null;
+        HexCells = null;
+        RemoveMoveCells();
+		_game.HexMapDrawer.RemoveHighlights();
 	}
 	public void Cancel()
 	{
 		if (AbilityToUse != null)
 		{
 			((Ability)AbilityToUse).Cancel();
-			Console.GameLog($"ABILITY CANCEL");
+			//Console.GameLog($"ABILITY CANCEL");
 		}
 		else if (SelectedCharacterToPlace != null)
 		{
@@ -82,13 +104,13 @@ public class Active
 		}
 		else
 		{
-			CharacterOnMap?.Deselect();
+			Deselect();
 			SelectedCell = null;
 		}
 	}
 
 	public void Prepare(IUseable abilityToPrepare) => AbilityToUse = abilityToPrepare;
-	public bool Prepare(ActionType actionTypeToPrepare, List<HexCell> cellRange, bool addToRange = false)
+	public bool Prepare(List<HexCell> cellRange, bool addToRange = false)
 	{
 		if (cellRange == null)
 		{
@@ -108,12 +130,12 @@ public class Active
 		{
 			HexCells = cellRange;
 		}
-		ActionType = actionTypeToPrepare;
+		//ActionType = actionTypeToPrepare;
 		return true;
 	}
 	public void Prepare(IUseable abilityToPrepare, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
 	{
-		Prepare(ActionType.UseAbility, cellRange, addToRange);
+		Prepare(cellRange, addToRange);
 
 		AbilityToUse = abilityToPrepare;
 		if (!toggleToRed) return;
@@ -175,7 +197,7 @@ public class Active
 		RemoveMoveCells();
 		if(AirSelection.IsEnabled) AirSelection.Disable();
 		AbilityToUse = null;
-		ActionType = ActionType.None;
+//		ActionType = ActionType.None;
 		HexCells = null;
 		_game.HexMapDrawer.RemoveHighlights();
 		_game.HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
@@ -183,63 +205,62 @@ public class Active
 	public void CleanAndTrySelecting()
 	{
         Clean();	
-		CharacterOnMap?.Select();
+//		Character?.Select();
+		Select(Character);
 	}
-	private void MakeAction(Character characterThatMakesAction, ActionType actionType, List<HexCell> cells)
-	{
-		switch (actionType)
-		{
-			case ActionType.None:
-				Console.DebugLog("Żadna akcja nie jest aktywna!");
-				return;
-			case ActionType.UseAbility:
-                CharacterOnMap.TryToInvokeJustBeforeFirstAction();
-//				Console.GameLog($"ABILITY USE: {((Ability)AbilityToUse).ID}: {string.Join("; ", cells.Select(p => p.Coordinates))}");
-				AbilityToUse.Use(cells);
-				Console.GameLog($"ABILITY USE: {string.Join("; ", cells.Select(p => p.Coordinates))}");
-				break;
-			case ActionType.AttackAndMove:
-				if (cells.Count != 1)
-				{
-                    Console.DebugLog("Próbowano wykonać ruch lub atak na więcej niż jedno pole!");
-					return;
-				}
+//	private void MakeAction(Character characterThatMakesAction, ActionType actionType, List<HexCell> cells)
+//	{
+//		if(!characterThatMakesAction.CanTakeAction) return;
+//		switch (actionType)
+//		{
+//			case ActionType.None:
+//				Console.DebugLog("Żadna akcja nie jest aktywna!");
+//				return;
+//			case ActionType.UseAbility:
+//                //CharacterOnMap.TryToInvokeJustBeforeFirstAction();
+//				CharacterOnMap.TryToTakeTurn();
+//				//AbilityToUse.Use(cells);
+//				Action.UseAbility(AbilityToUse, cells);
+//				//Console.GameLog($"ABILITY USE: {string.Join("; ", cells.Select(p => p.Coordinates))}");
+//				break;
+//			case ActionType.AttackAndMove:
+//				bool isActionSuccessful = MakeAttackAndMoveAction(characterThatMakesAction, cells[0], MoveCells);
+//				if(!isActionSuccessful) return;
+//				
+//				HexCells = null;//TODO is this really needed?
+//				ActionType = ActionType.None;
+//				characterThatMakesAction.Select();
+//				break;
+//			default:
+//				throw new ArgumentOutOfRangeException();
+//		}	
+//	}
 
-				bool isActionSuccessful = MakeAttackAndMoveAction(characterThatMakesAction, cells[0], MoveCells);
-				if(!isActionSuccessful) return;
-				
-				HexCells = null;//TODO is this really needed?
-				ActionType = ActionType.None;
-				characterThatMakesAction.Select();
-				break;
-			default:
-				throw new ArgumentOutOfRangeException();
-		}	
-	}
+//	private bool MakeAttackAndMoveAction(Character character, HexCell cell, List<HexCell> moveCells)
+//	{
+//        if (cell.CharactersOnCell.Count > 0 && character.CanBasicAttack(cell.CharactersOnCell[0]))
+//        {
+//	        Action.BasicAttack(character, cell.CharactersOnCell[0]);
+//            //character.MakeActionBasicAttack(cell.CharactersOnCell[0]);
+//        }
+//        else
+//        {
+//	        //try to move
+//            if (!cell.IsFreeToStand) return false;
+//            if (MoveCells.Last() != cell) return false;
+//	        character.BasicMove(moveCells);
+//	        //character.MakeActionBasicMove(moveCells);
+//        }
+//
+//		return true;
+//	}
 
-	private bool MakeAttackAndMoveAction(Character character, HexCell cell, List<HexCell> moveCells)
-	{
-        if (cell.CharactersOnCell.Count > 0 && character.CanBasicAttack(cell.CharactersOnCell[0]))
-        {
-            character.MakeActionBasicAttack(cell.CharactersOnCell[0]);
-        }
-        else
-        {
-	        //try to move
-            if (!cell.IsFreeToStand) return false;
-            if (MoveCells.Last() != cell) return false;
-            character.MakeActionBasicMove(moveCells);
-        }
+//	public void MakeAction(Character characterThatMakesAction, ActionType actionType, HexCell cell) =>
+//		MakeAction(characterThatMakesAction, actionType, new List<HexCell>{cell});
 
-		return true;
-	}
-
-	public void MakeAction(Character characterThatMakesAction, ActionType actionType, HexCell cell) =>
-		MakeAction(characterThatMakesAction, actionType, new List<HexCell>{cell});
-
-	public void MakeAction(List<HexCell> cells) => MakeAction(!_game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn, ActionType, cells);
-	public void MakeAction(HexCell cell) => MakeAction(new List<HexCell> {cell});
-	public void MakeAction() => (!_game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn).TryToInvokeJustBeforeFirstAction();
+//	public void MakeAction(List<HexCell> cells) => MakeAction(!_game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn, ActionType, cells);
+//	public void MakeAction(HexCell cell) => MakeAction(new List<HexCell> {cell});
+//	public void MakeAction() => (!_game.IsReplay ? CharacterOnMap : Turn.CharacterThatTookActionInTurn).TryToInvokeJustBeforeFirstAction();
 
 	public static bool IsPointerOverUiObject()
 	{

@@ -30,6 +30,7 @@ namespace Hex
 
 	    public bool IsFreeToStand => IsEmpty && Type != TileType.Wall;
 	    public bool IsEmpty => CharactersOnCell.Count == 0;
+	    public Character FirstCharacter => CharactersOnCell[0];
 	    public List<Character> CharactersOnCell => _map.GetCharacters(this);
 	    
 		public bool IsSpawnFor([NotNull] GamePlayer player) => Type == _map.SpawnPoints[player.GetIndex()];

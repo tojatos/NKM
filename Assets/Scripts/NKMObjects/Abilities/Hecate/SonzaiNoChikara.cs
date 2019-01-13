@@ -20,7 +20,8 @@ Ilość HP, jakie zgromadziła w postaci Energii Życiowej jest równo rozdziela
 		public void Click()
 		{
 			Active.Prepare(this, GetTargetsInRange());
-			Active.MakeAction(Active.HexCells);
+			//Active.MakeAction(Active.HexCells);
+			ParentCharacter.TryToTakeTurn();
 		}
 
 		public void Use(List<HexCell> cells)

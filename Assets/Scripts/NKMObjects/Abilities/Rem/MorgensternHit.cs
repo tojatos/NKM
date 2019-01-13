@@ -26,7 +26,8 @@ Czas odnowienia: {Cooldown}";
 		public void Click()
 		{
 			Active.Prepare(this, GetTargetsInRange());
-			Active.MakeAction(Active.HexCells);
+			//Active.MakeAction(Active.HexCells);
+			ParentCharacter.TryToTakeTurn();
 		}
 		public void Use(List<HexCell> cells)
 		{

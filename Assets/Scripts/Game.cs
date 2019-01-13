@@ -169,7 +169,7 @@ GAME STARTED: true";
 				await TakeTurn(player);
 			}
 
-			if (Players.Count(p => !p.IsEliminated) == 1) FinishGame();
+			if (Players.Count(p => !p.IsEliminated) <= 1) FinishGame();
 
 			if (!IsEveryCharacterPlacedInTheFirstPhase) continue;
 
@@ -204,7 +204,18 @@ GAME STARTED: true";
 		}
 		else if (Active.HexCells?.Contains(touchedCell) == true)
 		{
-			Active.MakeAction(touchedCell);
+			//Active.MakeAction(touchedCell);
+			if (Active.AbilityToUse != null)
+			{
+				Action.UseAbility(Active.AbilityToUse, Active.AirSelection.IsEnabled ? Active.AirSelection.HexCells : Active.HexCells);
+			}
+			else if (Active.Character != null)
+			{
+				if(!touchedCell.IsEmpty && Active.Character.CanBasicAttack(touchedCell.FirstCharacter))
+                    Action.BasicAttack(Active.Character, touchedCell.FirstCharacter);
+				else if(touchedCell.IsFreeToStand && Active.Character.CanBasicMove(touchedCell) && Active.MoveCells.Last() == touchedCell)
+					Action.BasicMove(Active.Character, Active.MoveCells);
+			}
 		}
 		else
 		{
@@ -218,13 +229,14 @@ GAME STARTED: true";
 				HexMapDrawer.RemoveHighlights();
 			}
 			
-			if (touchedCell.CharactersOnCell.Count > 0)
-			{
-				touchedCell.CharactersOnCell[0].Select();
-			}
+//			if (touchedCell.CharactersOnCell.Count > 0)
+//			{
+//				touchedCell.CharactersOnCell[0].Select();
+//			}
+			if(!touchedCell.IsEmpty) Action.Select(touchedCell.FirstCharacter);
 			else
 			{
-				Active.CharacterOnMap?.Deselect();
+				Action.Deselect();
 				Active.SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
 			}
 		}
@@ -291,7 +303,7 @@ GAME STARTED: true";
 			HexMap.RemoveFromMap(character);
 			AnimationPlayer.Add(new Destroy(HexMapDrawer.GetCharacterObject(character)));
 			character.DeathTimer = 0;
-			if (Active.CharacterOnMap == character) character.Deselect();
+			if (Active.Character == character) Active.Deselect();
 		};
         character.HealthPoints.StatChanged += () =>
 		{
@@ -311,7 +323,7 @@ GAME STARTED: true";
                 Color.blue));
         character.HealthPoints.StatChanged += () =>
         {
-            if (Active.CharacterOnMap == character) MainHPBar.Instance.UpdateHPAmount(character);
+            if (Active.Character == character) MainHPBar.Instance.UpdateHPAmount(character);
         };
         character.OnDeath += () => character.Effects.Clear();
         character.OnDeath += () => Console.Log($"{character.FormattedFirstName()} umiera!");
@@ -319,14 +331,18 @@ GAME STARTED: true";
             Console.Log(targetCharacter != character
                 ? $"{character.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
                 : $"{character.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
-		character.AfterSelect += () =>
+		Action.AfterAction += str =>
 		{
-			Stats.Instance.UpdateCharacterStats(character);
-			MainHPBar.Instance.UpdateHPAmount(character);
+			if (str == Action.Types.BasicAttack || str == Action.Types.BasicMove) Active.Select(Active.Character);
+		};
+		Active.AfterSelect += chara =>
+		{
+			Stats.Instance.UpdateCharacterStats(chara);
+			MainHPBar.Instance.UpdateHPAmount(chara);
 			UI.CharacterUI.Abilities.Instance.UpdateButtons();
 			Effects.Instance.UpdateButtons();
 		};
-		character.AfterDeselect += () =>
+		Active.AfterDeselect += () =>
 		{
 			HexMapDrawer.RemoveHighlights();
 			Stats.Instance.UpdateCharacterStats(null);

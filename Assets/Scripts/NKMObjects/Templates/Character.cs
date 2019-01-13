@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using Hex;
-using JetBrains.Annotations;
 using NKMObjects.Effects;
 
 namespace NKMObjects.Templates
@@ -18,8 +17,8 @@ namespace NKMObjects.Templates
 		public override string ToString() => Name + $" ({ID})";
 		
 		
-		public Action<Character> BasicAttack { private get; set; }
-		public Action<List<HexCell>> BasicMove { private get; set; }
+		public Action<Character> BasicAttack { get; set; }
+		public Action<List<HexCell>> BasicMove { get; set; }
 		public Func<List<HexCell>> GetBasicMoveCells { get; }
 		public Func<List<HexCell>> GetBasicAttackCells;
 		
@@ -47,14 +46,14 @@ namespace NKMObjects.Templates
         public  bool  IsFlying                       =>  Effects.ContainsType<Flying>();
         public  bool  HasBasicAttackInabilityEffect  =>  Effects.ContainsType<Disarm>();
 
-		private bool CanMove => !IsSnared && !IsGrounded;
+		public bool CanMove => !IsSnared && !IsGrounded;
 
-		public bool IsLeaving { get; set; }
+		//public bool IsLeaving { get; set; }
 
-		private bool CanUseBasicMove => !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore ||
+		public bool CanUseBasicMove => CanMove && !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore ||
 		                                HasFreeMoveUntilEndOfTheTurn;
 
-		private bool CanUseBasicAttack =>
+		public bool CanUseBasicAttack =>
 			!HasUsedBasicAttackInPhaseBefore && !HasUsedNormalAbilityInPhaseBefore &&
 			!HasUsedUltimatumAbilityInPhaseBefore && !HasBasicAttackInabilityEffect || HasFreeAttackUntilEndOfTheTurn;
 
@@ -67,13 +66,16 @@ namespace NKMObjects.Templates
 			HasFreeUltimatumAbilityUseUntilEndOfTheTurn;
 
 		public bool CanBasicAttack(Character targetCharacter) =>
-			(this.IsEnemyFor(targetCharacter) || CanAttackAllies) &&
+			CanUseBasicAttack && (this.IsEnemyFor(targetCharacter) || CanAttackAllies) &&
 			GetBasicAttackCells().Contains(targetCharacter.ParentCell);
+
+		public bool CanBasicMove(HexCell targetCell) => targetCell.IsFreeToStand && CanUseBasicMove;
 
 
 		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive ||
 		                               Active.Turn.CharacterThatTookActionInTurn != null &&
-		                               Active.Turn.CharacterThatTookActionInTurn != this || IsStunned);
+		                               Active.Turn.CharacterThatTookActionInTurn != this || IsStunned ||
+		                               Active.GamePlayer != Owner);
 
 		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore ||
 		                         Active.Turn.CharacterThatTookActionInTurn != null);
@@ -83,7 +85,7 @@ namespace NKMObjects.Templates
 		public bool CanAttackAllies { get; set; }
 		public bool IsOnMap => _game.HexMap.GetCell(this) != null;
 
-		public bool HasUsedBasicMoveInPhaseBefore { private get; set; }
+		public bool HasUsedBasicMoveInPhaseBefore { get; set; }
 		public bool HasUsedBasicAttackInPhaseBefore { private get; set; }
 		public bool HasUsedNormalAbilityInPhaseBefore { get; set; }
 		public bool HasUsedUltimatumAbilityInPhaseBefore { private get; set; }
@@ -102,8 +104,6 @@ namespace NKMObjects.Templates
 		public event Delegates.Void OnDeath;
 		public event Delegates.Void BeforeMove;
 		public event Delegates.Void AfterMove;
-		public event Delegates.Void AfterSelect;
-		public event Delegates.Void AfterDeselect;
 		public event Delegates.CellList AfterBasicMove;
 		public event Delegates.AbilityD AfterBeingHitByAbility;
 		public event Delegates.AbilityD AfterAbilityUse;
@@ -122,8 +122,6 @@ namespace NKMObjects.Templates
 		public void InvokeAfterAbilityUse(Ability a) => AfterAbilityUse?.Invoke(a);
 		public void InvokeOnDeath() => OnDeath?.Invoke();
 		#endregion
-
-
 		public Character(Game game, string name, uint id, Properties properties, List<Ability> abilities)
 		{
 			_game = game;
@@ -169,6 +167,7 @@ namespace NKMObjects.Templates
 			HasUsedBasicMoveInPhaseBefore = true;
 			if (HasFreeMoveUntilEndOfTheTurn) HasFreeMoveUntilEndOfTheTurn = false;
 			Move(cellPath);
+			AfterBasicMove?.Invoke(cellPath);
 		}
 
 		private void Move(List<HexCell> cellPath)
@@ -262,12 +261,12 @@ namespace NKMObjects.Templates
 			AfterHeal?.Invoke(targetCharacter, diff);
 		}
 
-		private List<HexCell> GetPrepareBasicMoveCells()
-			=> CanMove ? GetBasicMoveCells() : Enumerable.Empty<HexCell>().ToList();
+		public List<HexCell> GetPrepareBasicMoveCells()
+			=> CanUseBasicMove ? GetBasicMoveCells() : new List<HexCell>();
 
-		private List<HexCell> GetPrepareBasicAttackCells() => CanAttackAllies
+		public List<HexCell> GetPrepareBasicAttackCells() => CanUseBasicAttack ? CanAttackAllies
 			? GetBasicAttackCells().WhereCharacters()
-			: GetBasicAttackCells().WhereEnemiesOf(Owner);
+			: GetBasicAttackCells().WhereEnemiesOf(Owner) : new List<HexCell>();
 
 		public List<HexCell> DefaultGetBasicAttackCells() => DefaultGetBasicAttackCells(ParentCell);
 		public List<HexCell> DefaultGetBasicAttackCells(HexCell fromCell)
@@ -319,86 +318,90 @@ namespace NKMObjects.Templates
 				: ParentCell.GetNeighbors(Owner, Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls);
 
 
-		public void Select()
+//		public void Select()
+//		{
+//			Active.Clean();
+//			Active.Character = this;
+//			AfterSelect?.Invoke();
+//			if (Active.GamePlayer != Owner) return;
+//			PrepareAttackAndMove();
+//		}
+//		public void Deselect()
+//		{
+//			Active.Character = null;
+////			Active.ActionType = ActionType.None;
+//			Active.HexCells = null;
+//			Active.RemoveMoveCells();
+//			AfterDeselect?.Invoke();
+//		}
+
+//		public void TryToInvokeJustBeforeFirstAction()
+//		{
+//			if (CanTakeAction) JustBeforeFirstAction?.Invoke();
+//		}
+		public void TryToTakeTurn()
 		{
-			Active.Clean();
-			Active.CharacterOnMap = this;
-			AfterSelect?.Invoke();
-			if (Active.GamePlayer != Owner) return;
-			PrepareAttackAndMove();
-		}
-		public void Deselect()
-		{
-			Active.CharacterOnMap = null;
-			Active.ActionType = ActionType.None;
-			Active.HexCells = null;
-			Active.RemoveMoveCells();
-			AfterDeselect?.Invoke();
-		}
-
-		public void TryToInvokeJustBeforeFirstAction()
-		{
-			if (CanTakeAction) JustBeforeFirstAction?.Invoke();
-		}
-		private void PrepareAttackAndMove()
-		{
-			if (Active.GamePlayer != Owner)
-			{
-				Console.DebugLog("Nie jesteś właścicielem! Wara!");
-				return;
-			}
-
-			bool isPreparationSuccessful;
-			if (!CanTakeAction || !CanUseBasicMove && !CanUseBasicAttack)
-			{
-				Console.DebugLog("Ta postać nie może się ruszać ani atakować!");
-				return;
-			}
-
-			if (!CanUseBasicMove && CanUseBasicAttack)
-			{
-				isPreparationSuccessful = Active.Prepare(ActionType.AttackAndMove, GetPrepareBasicAttackCells());
-			}
-			else if (CanUseBasicMove && !CanUseBasicAttack)
-			{
-				isPreparationSuccessful = Active.Prepare(ActionType.AttackAndMove, GetPrepareBasicMoveCells());
-			}
-			else
-			{
-				var p1 = Active.Prepare(ActionType.AttackAndMove, GetPrepareBasicMoveCells());
-				var p2 = Active.Prepare(ActionType.AttackAndMove, GetPrepareBasicAttackCells(), true);
-				isPreparationSuccessful = p1 || p2;
-			}
-			if (!isPreparationSuccessful)
-			{
-				//there are no cells to move or attack
-				return;
-			}
-
-			Active.HexCells.Distinct().ToList().ForEach(c =>
-				Active.SelectDrawnCell(c).AddHighlight(
-					!c.IsEmpty&&
-					(c.CharactersOnCell[0].IsEnemyFor(Owner) || CanAttackAllies && CanUseBasicAttack && GetBasicAttackCells().Contains(c))
-						? Highlights.RedTransparent
-						: Highlights.GreenTransparent));
-				
-			Active.RemoveMoveCells();
-			Active.MoveCells.Add(ParentCell);
-
+			if(Active.Turn.CharacterThatTookActionInTurn==null) JustBeforeFirstAction?.Invoke();
 		}
 
-		public void MakeActionBasicAttack([NotNull] Character target)
-		{
-			TryToInvokeJustBeforeFirstAction();
-            BasicAttack(target);
-			Console.GameLog($"BASIC ATTACK: {target}"); //logging after action to make reading rng work
-		}
-		public void MakeActionBasicMove([NotNull] List<HexCell> moveCells)
-		{
-			TryToInvokeJustBeforeFirstAction();
-			BasicMove(new List<HexCell>(moveCells)); //work on a new list to log unmodified list below
-			AfterBasicMove?.Invoke(moveCells);
-		}
+//		private void PrepareAttackAndMove()
+//		{
+//			if (Active.GamePlayer != Owner)
+//			{
+//				Console.DebugLog("Nie jesteś właścicielem! Wara!");
+//				return;
+//			}
+//
+//			bool isPreparationSuccessful;
+//			if (!CanTakeAction || !CanUseBasicMove && !CanUseBasicAttack)
+//			{
+//				Console.DebugLog("Ta postać nie może się ruszać ani atakować!");
+//				return;
+//			}
+//
+//			if (!CanUseBasicMove && CanUseBasicAttack)
+//			{
+//				isPreparationSuccessful = Active.Prepare(GetPrepareBasicAttackCells());
+//			}
+//			else if (CanUseBasicMove && !CanUseBasicAttack)
+//			{
+//				isPreparationSuccessful = Active.Prepare(GetPrepareBasicMoveCells());
+//			}
+//			else
+//			{
+//				var p1 = Active.Prepare(GetPrepareBasicMoveCells());
+//				var p2 = Active.Prepare(GetPrepareBasicAttackCells(), true);
+//				isPreparationSuccessful = p1 || p2;
+//			}
+//			if (!isPreparationSuccessful)
+//			{
+//				//there are no cells to move or attack
+//				return;
+//			}
+//
+//			Active.HexCells.Distinct().ToList().ForEach(c =>
+//				Active.SelectDrawnCell(c).AddHighlight(
+//					!c.IsEmpty&&
+//					(c.CharactersOnCell[0].IsEnemyFor(Owner) || CanAttackAllies && CanUseBasicAttack && GetBasicAttackCells().Contains(c))
+//						? Highlights.RedTransparent
+//						: Highlights.GreenTransparent));
+//				
+//			Active.RemoveMoveCells();
+//			Active.MoveCells.Add(ParentCell);
+//
+//		}
+
+//		public void MakeActionBasicAttack(Character target)
+//		{
+//			TryToInvokeJustBeforeFirstAction();
+//            BasicAttack(target);
+//			//Console.GameLog($"BASIC ATTACK: {target}"); //logging after action to make reading rng work
+//		}
+//		public void MakeActionBasicMove([NotNull] List<HexCell> moveCells)
+//		{
+//			TryToInvokeJustBeforeFirstAction();
+//			BasicMove(new List<HexCell>(moveCells)); //work on a new list to log unmodified list below
+//		}
 		
         public class Properties
         {

@@ -64,7 +64,8 @@ Umiejętność jest włączona od {_currentDuration} faz.";
 
         private void Enable()
         {
-            Active.MakeAction();
+//            Active.MakeAction();
+			ParentCharacter.TryToTakeTurn();
             IsEnabled = true;
             _currentDuration = 1;
             AddHexEffectsInRange();
@@ -92,7 +93,8 @@ Umiejętność jest włączona od {_currentDuration} faz.";
                 ParentCharacter.Attack(this, c, damage);
             });
             _currentDuration = 0;
-            ParentCharacter.Select(); // Character can move immediately, and the ability button is not shown as clickable
+//            ParentCharacter.Select(); // Character can move immediately, and the ability button is not shown as clickable
+            Active.Select(ParentCharacter);
         }
 
         public bool IsEnabled { get; private set; }

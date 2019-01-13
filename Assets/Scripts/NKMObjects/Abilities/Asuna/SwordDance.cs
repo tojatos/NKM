@@ -59,7 +59,8 @@ Pozostałe ataki do zablokowania: {_attacksToBlock}";
 		}
 		public void Click()
 		{
-			Active.MakeAction();
+			//Active.MakeAction();
+			ParentCharacter.TryToTakeTurn();
 			IsEnabled = true;
 			Finish(0);
 			UI.CharacterUI.Abilities.Instance.UpdateButtonData();

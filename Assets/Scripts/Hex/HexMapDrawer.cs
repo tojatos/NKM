@@ -116,10 +116,11 @@ namespace Hex
 				}
 			}
 
-			if (_game.Active.ActionType == ActionType.AttackAndMove)
+//			if (_game.Active.ActionType == ActionType.AttackAndMove)
+			if(_game.Active.Character!=null && _game.Active.Character.CanUseBasicMove && _game.Active.HexCells != null)
 			{
 				HexCell cellPointed = CellPointed();
-				if (cellPointed != null && (_game.Active.HexCells.Contains(cellPointed)||cellPointed==_game.Active.CharacterOnMap.ParentCell))
+				if (cellPointed != null && (_game.Active.HexCells.Contains(cellPointed)||cellPointed==_game.Active.Character.ParentCell))
 				{
 					HexCell lastMoveCell = _game.Active.MoveCells.LastOrDefault();
 					if(lastMoveCell==null) throw new Exception("Move cell is null!");
@@ -139,8 +140,8 @@ namespace Hex
 								_game.Active.MoveCells.RemoveAt(i);
 							}
 						}
-						else if (_game.Active.CharacterOnMap.Speed.Value >= _game.Active.MoveCells.Count &&
-						         lastMoveCell.GetNeighbors(_game.Active.GamePlayer, 1).Contains(cellPointed) && (cellPointed.CharactersOnCell.Count == 0||!cellPointed.CharactersOnCell.Any(c => c.IsEnemyFor(_game.Active.CharacterOnMap.Owner))))
+						else if (_game.Active.Character.Speed.Value >= _game.Active.MoveCells.Count &&
+						         lastMoveCell.GetNeighbors(_game.Active.GamePlayer, 1).Contains(cellPointed) && (cellPointed.CharactersOnCell.Count == 0||!cellPointed.CharactersOnCell.Any(c => c.IsEnemyFor(_game.Active.Character.Owner))))
 						{
 							_game.Active.AddMoveCell(cellPointed);
 
@@ -157,7 +158,8 @@ namespace Hex
 				{
 					if (_game.Active.AirSelection.IsEnabled && _game.Active.HexCells.Contains(cellPointed))
 					{
-						_game.Active.MakeAction(_game.Active.AirSelection.HexCells);
+						//_game.Active.MakeAction(_game.Active.AirSelection.HexCells);
+						
 					}
 					else
 					{

@@ -12,6 +12,7 @@ namespace NKMObjects.Templates
 		
 		protected readonly Game Game;
 		protected Active Active => Game.Active;
+		protected Action Action => Game.Action;
 		protected HexMap HexMap => Game.HexMap;
 		protected Console Console => Game.Console;
 		public Character Owner => Game.Characters.First(c => c.Abilities.Contains(this));

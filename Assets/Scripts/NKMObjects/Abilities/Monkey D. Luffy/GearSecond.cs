@@ -30,7 +30,8 @@ Czas odnowienia: {Cooldown}";
 
         public void Click()
         {
-		  	Active.MakeAction();
+		  	//Active.MakeAction();
+			ParentCharacter.TryToTakeTurn();
             ParentCharacter.Effects.Add(new StatModifier(Game, Duration+1, SpeedIncrease, ParentCharacter, StatType.Speed, Name));
             Ability normalAbility = ParentCharacter.Abilities.Find(a => a.Type == AbilityType.Normal);
             if (normalAbility is IEnchantable) ((IEnchantable) normalAbility).IsEnchanted = true;

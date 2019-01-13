@@ -25,7 +25,8 @@ ogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną."
 	    public void Click()
 		{
 			Active.Prepare(this, GetTargetsInRange());
-			Active.MakeAction(Active.HexCells);
+//			Active.MakeAction(Active.HexCells);
+			ParentCharacter.TryToTakeTurn();
 		}
 		public void Use(List<HexCell> cells)
 		{

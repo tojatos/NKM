@@ -19,7 +19,7 @@ namespace NKMObjects.Templates
 			CurrentCooldown = cooldown >= 0 ? cooldown : int.MaxValue; //effect is infinite
 			ParentCharacter = parentCharacter;
 			if (name != null) Name = name;
-			if (Active.CharacterOnMap == ParentCharacter) UI.CharacterUI.Effects.Instance.UpdateButtons();
+			if (Active.Character == ParentCharacter) UI.CharacterUI.Effects.Instance.UpdateButtons();
 			Active.Turn.TurnFinished += character => {
 				if(character != ParentCharacter) return;
 				if(CurrentCooldown == int.MaxValue) return;
@@ -27,7 +27,7 @@ namespace NKMObjects.Templates
 				if (CurrentCooldown != 0) return;
 				RemoveFromParent();
 				
-				if (Active.CharacterOnMap == ParentCharacter) UI.CharacterUI.Effects.Instance.UpdateButtons();
+				if (Active.Character == ParentCharacter) UI.CharacterUI.Effects.Instance.UpdateButtons();
 			};
 
 		}

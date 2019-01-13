@@ -56,7 +56,8 @@ Pozostały czas trwania: {_currentTimeDurability}";
 
         public void Click()
         {
-            Active.MakeAction();
+//            Active.MakeAction();
+			ParentCharacter.TryToTakeTurn();
 
             IsEnabled = true;
             _currentHitRemains = HitDurability;

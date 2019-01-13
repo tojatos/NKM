@@ -30,7 +30,8 @@ Gdy trafi co najmniej {EnemiesToHitToActivateSnare} wrogów unieruchamia ich dod
 
         public void Use(List<HexCell> cells)
         {
-            Active.MakeAction();
+           // Active.MakeAction();
+			ParentCharacter.TryToTakeTurn();
             List<Character> enemiesInRange = cells.WhereEnemiesOf(Owner).GetCharacters();
             enemiesInRange.ForEach(c =>
             {

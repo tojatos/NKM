@@ -16,9 +16,9 @@ namespace UI.CharacterUI
 
 		public void UpdateButtons()
 		{
-			if (Game.Active.CharacterOnMap == null) return;
+			if (Game.Active.Character == null) return;
 
-			Character character = Game.Active.CharacterOnMap;
+			Character character = Game.Active.Character;
 			RemoveButtons();
 			character.Effects.ForEach(effect => CreateEffectButton(character, effect));
 		}

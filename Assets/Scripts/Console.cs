@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Extensions;
 using Managers;
+using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -102,17 +105,24 @@ public class Console : SingletonMonoBehaviour<Console>
                 if ((new[] { "free", "f" }).Contains(arguments[2])) Game.Characters.FindAll(c => c.IsOnMap)
                   .ForEach(c => c.Abilities.ForEach(a => a.CurrentCooldown = 0));
             }
-            if (Active.CharacterOnMap == null) return;
-            if ((new[] { "hp", "h" }).Contains(arguments[1])) Active.CharacterOnMap.HealthPoints.Value = int.Parse(arguments[2]);
-            if ((new[] { "atk", "at", "a" }).Contains(arguments[1])) Active.CharacterOnMap.AttackPoints.Value = int.Parse(arguments[2]);
-            if ((new[] { "speed", "sp", "s" }).Contains(arguments[1])) Active.CharacterOnMap.Speed.Value = int.Parse(arguments[2]);
-            if ((new[] { "range", "rang", "r" }).Contains(arguments[1])) Active.CharacterOnMap.BasicAttackRange.Value = int.Parse(arguments[2]);
-            if ((new[] { "shield", "sh" }).Contains(arguments[1])) Active.CharacterOnMap.Shield.Value = int.Parse(arguments[2]);
+            if (Active.Character == null) return;
+            if ((new[] { "hp", "h" }).Contains(arguments[1])) Active.Character.HealthPoints.Value = int.Parse(arguments[2]);
+            if ((new[] { "atk", "at", "a" }).Contains(arguments[1])) Active.Character.AttackPoints.Value = int.Parse(arguments[2]);
+            if ((new[] { "speed", "sp", "s" }).Contains(arguments[1])) Active.Character.Speed.Value = int.Parse(arguments[2]);
+            if ((new[] { "range", "rang", "r" }).Contains(arguments[1])) Active.Character.BasicAttackRange.Value = int.Parse(arguments[2]);
+            if ((new[] { "shield", "sh" }).Contains(arguments[1])) Active.Character.Shield.Value = int.Parse(arguments[2]);
 
         }
         else if ((new[] {"get", "g"}).Contains(arguments[0]))
         {
             if ((new[] { "gamepads", "g" }).Contains(arguments[1])) Log(string.Join("\n", Input.GetJoystickNames()));
+            if ((new[] {"character", "c"}).Contains(arguments[1]))
+            {
+                if((new[] {"names", "n"}).Contains(arguments[2])) 
+                    Game.Characters.Select(c => c.ToString()).ToList().ForEach(Log);
+                if((new[] {"actionstate", "a"}).Contains(arguments[2])) 
+                    Game.Characters.Select(c => c.ToString() + " " + c.TookActionInPhaseBefore.ToString()).ToList().ForEach(Log);
+            }
             
         }
         else Log("<i>Nieznana komenda:</i> " + text);

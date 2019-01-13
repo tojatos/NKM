@@ -25,7 +25,8 @@ a przeciwnicy, którzy stracili ten efekt zostają ogłuszeni na {Duration} fazy
 
         public void Click()
         {
-            Active.MakeAction();
+            //Active.MakeAction();
+			ParentCharacter.TryToTakeTurn();
             List<Character> targets = GetTargetsInRange().GetCharacters();
             targets.ForEach(c => c.Effects.FindAll(e => e.Name == "Zero Gravity").ForEach(ef => ef.RemoveFromParent()));
             targets.FindAll(t => t.IsEnemyFor(Owner)).ToList().ForEach(c => c.Effects.Add(new Stun(Game, Duration, c, Name)));
