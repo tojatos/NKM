@@ -156,7 +156,7 @@ namespace Hex
 				HexCell cellPointed = CellPointed();
 				if (cellPointed != null)
 				{
-					if (_game.Active.AirSelection.IsEnabled && _game.Active.HexCells.Contains(cellPointed))
+					if (_game.Active.AirSelection.IsEnabled && _game.Active.HexCells?.Contains(cellPointed) == true)
 					{
 						//_game.Active.MakeAction(_game.Active.AirSelection.HexCells);
 						

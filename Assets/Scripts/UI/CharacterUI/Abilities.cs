@@ -79,15 +79,11 @@ namespace UI.CharacterUI
 				{
 					if (ability.CanBeUsed)
 					{
-						((IClickable) ability).Click();
+						Game.Action.ClickAbility((IClickable)ability);
+//						((IClickable) ability).Click();
 						Console.GameLog($"ABILITY CLICK: {ability.ID}");
 					}	
 				});
-//                button.GetComponent<Button>().onClick.AddListener(()=>
-//                {
-//                    if(ability.CanBeUsed) ((IClickable) ability).ImageClick();
-//    				ability.TryPrepare();
-//                }); //try to prepare an ability on click
                     
 			}
 			SetRangeHelpTriggers(button, ability);

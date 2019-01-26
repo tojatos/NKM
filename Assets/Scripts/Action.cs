@@ -60,12 +60,14 @@ public class Action
 
     public void BasicMove(Character character, List<HexCell> cellPath)
     {
+        character.TryToTakeTurn();
         character.BasicMove(cellPath);
         AfterAction?.Invoke(Types.BasicMove);
     }
 
     public void BasicAttack(Character character, Character target)
     {
+        character.TryToTakeTurn();
         character.BasicAttack(target);
         AfterAction?.Invoke(Types.BasicAttack);
     }

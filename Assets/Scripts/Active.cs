@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Extensions;
 using Hex;
 using NKMObjects.Templates;
 using UnityEngine;
@@ -15,8 +14,6 @@ using Object = UnityEngine.Object;
 public class Active
 {
 	private readonly Game _game;
-	private Console Console => _game.Console;
-	private Action Action => _game.Action;
 	public Active(Game game)
 	{
 		_game = game;
@@ -25,12 +22,11 @@ public class Active
 		AirSelection = new AirSelection(game);
 	}
 
-	public readonly Turn Turn;// { get; }
-	public readonly Phase Phase;// { get; }
+	public readonly Turn Turn;
+	public readonly Phase Phase;
 	public AirSelection AirSelection { get; }
 
 	public GamePlayer GamePlayer;
-//	public ActionType ActionType;
 	public IUseable AbilityToUse;
 	public Character SelectedCharacterToPlace;
 	public Character Character;
@@ -110,28 +106,13 @@ public class Active
 	}
 
 	public void Prepare(IUseable abilityToPrepare) => AbilityToUse = abilityToPrepare;
-	public bool Prepare(List<HexCell> cellRange, bool addToRange = false)
+	private void Prepare(List<HexCell> cellRange, bool addToRange = false)
 	{
-		if (cellRange == null)
-		{
-			throw new Exception("Cell range cannot be null!");
-		}
-
-		if (cellRange.Count == 0 && !addToRange)
-		{
-			return false;
-		}
-
-		if (HexCells!=null&&addToRange)
-		{
-			HexCells.AddRange(cellRange);
-		}
-		else
-		{
+        if (cellRange == null) cellRange = new List<HexCell>();
+		if (!addToRange)
 			HexCells = cellRange;
-		}
-		//ActionType = actionTypeToPrepare;
-		return true;
+		else
+			HexCells.AddRange(cellRange);
 	}
 	public void Prepare(IUseable abilityToPrepare, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
 	{

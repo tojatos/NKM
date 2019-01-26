@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Extensions;
 using Managers;
-using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -11,7 +11,6 @@ namespace NKMObjects.Templates
 	{
 		private readonly Game _game;
 		private Active Active => _game.Active;
-		private Console Console => _game.Console;
 		
 		public string Name;
 		public override string ToString() => Name + $" ({ID})";

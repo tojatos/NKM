@@ -7,23 +7,20 @@ public class Turn
 	private readonly Game _game;
 	private Console Console => _game.Console;
 	public bool IsDone { get; private set; }
-	public bool WasCharacterPlaced { get; set; }
 	public Character CharacterThatTookActionInTurn { get; set; }
 
 	public Turn(Game game)
 	{
 		_game = game;
 		IsDone = false;
-		WasCharacterPlaced = false;
 		CharacterThatTookActionInTurn = null;
-		TurnFinished += (character) =>
+		TurnFinished += character =>
 		{
 			if (CharacterThatTookActionInTurn != null)
 			{
 				CharacterThatTookActionInTurn.TookActionInPhaseBefore = true;
 			}
 			IsDone = true;
-			WasCharacterPlaced = false;
 			CharacterThatTookActionInTurn = null;
 			_game.Active.Reset();
 			_game.HexMapDrawer.RemoveHighlights();
