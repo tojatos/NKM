@@ -1,6 +1,6 @@
 # NKM
 
-A multiplayer turn-based strategy game on a hex board.
+A local multiplayer turn-based strategy game on a hex board.
 
 Made with C# (Unity as frontend)
 
@@ -9,8 +9,7 @@ Made with C# (Unity as frontend)
 This is my first bigger project. I learned a lot here.
 This game was rewritten many times, as you may see in commit history.
 Every time I wanted to add a new feature, a new problem would arise.
-
-And I overcame them.
+Hopefully I'm good enough now to stop rewriting the game and start developing!
 
 ## How the game works
 
@@ -33,4 +32,4 @@ You can build using Unity's usual way (ctrl+B), using `Developement` on the tool
 ## Future
 
 Right now I am focused on decoupling and writing tests.
-In the future I'll add multiplayer mode, better documentation for contributing and a website.
+In the future I'd like to add multiplayer mode, support for mobile devices, better documentation for contributing and a website.
