@@ -151,7 +151,7 @@ namespace Hex
 			}
 			if (Input.GetMouseButtonDown(0))
 			{
-				if (Active.IsPointerOverUiObject()) return; //Do not touch cells if mouse is over UI
+				if (Game.IsPointerOverUiObject()) return; //Do not touch cells if mouse is over UI
 
 				HexCell cellPointed = CellPointed();
 				if (cellPointed != null)

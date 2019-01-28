@@ -2,6 +2,7 @@
 using System.Linq;
 using Extensions;
 using Hex;
+using Managers;
 using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Monkey_D._Luffy
@@ -58,7 +59,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
         public void Click()
         {
             Active.Prepare(this, GetTargetsInRange());
-            Active.PlayAudio("gomu gomu no");
+            MusicManager.PlayAudio("gomu gomu no");
         }
 
         public void Use(List<HexCell> cells)
@@ -76,7 +77,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
         private void Pistol(Character enemy)
         {
             ParentCharacter.Attack(this, enemy,new Damage(IsEnchanted ? JetPistolDamage : PistolDamage, DamageType.Physical));
-            Active.PlayAudio("pistol");
+            MusicManager.PlayAudio("pistol");
             Finish();
         }
 
@@ -94,7 +95,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
             HexDirection direction = ParentCharacter.ParentCell.GetDirection(cell);
             int distance = ParentCharacter.ParentCell.GetDistance(cell);
             if(distance<=0) return;
-            Active.PlayAudio("gomu gomu no rocket effect");
+            MusicManager.PlayAudio("gomu gomu no rocket effect");
             ThrowCharacter(ParentCharacter, direction, distance*2);
             Finish();
         }

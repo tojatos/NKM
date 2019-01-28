@@ -50,12 +50,12 @@ namespace UI.CharacterUI
 		{
 			button.AddTrigger(EventTriggerType.PointerEnter, e =>
 			{
-				Game.Active.HelpHexCells = ability.GetRangeCells();
+				Game.ShowHelpHexCells(ability.GetRangeCells());
 				ability.GetTargetsInRange().ForEach(c => Active.SelectDrawnCell(c).AddHighlight(Highlights.BlackTransparent));
 			});
 			button.AddTrigger(EventTriggerType.PointerExit, e =>
 			{
-				Game.Active.HelpHexCells = null;
+				Game.HideHelpHexCells();
 				HexMapDrawer.Instance.RemoveHighlightsOfColor(Highlights.BlackTransparent);
 			});
 		}

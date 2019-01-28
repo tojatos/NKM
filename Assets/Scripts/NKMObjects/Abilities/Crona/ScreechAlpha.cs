@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Crona
 {
-    public class ScreechAlpha : Ability, IClickable, IUseable
+    public class ScreechAlpha : Ability, IClickable
     {
         private const int Radius = 3;
 
@@ -24,21 +24,13 @@ ogłuszający wrogów dookoła na 1 turę i spowalniający ich na 1 następną."
 
 	    public void Click()
 		{
-			Active.Prepare(this, GetTargetsInRange());
-//			Active.MakeAction(Active.HexCells);
 			ParentCharacter.TryToTakeTurn();
-		}
-		public void Use(List<HexCell> cells)
-		{
-			List<Character> characters = cells.GetCharacters();
-			characters.ForEach(c =>
+			GetTargetsInRange().GetCharacters().ForEach(c =>
 			{
 				c.Effects.Add(new Stun(Game, 1, c, Name)); 
 				c.Effects.Add(new StatModifier(Game, 2, -3, c, StatType.Speed, Name));
 			});
 			Finish();
 		}
-
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Extensions;
 using Hex;
+using Managers;
 using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Roronoa_Zoro
@@ -38,7 +39,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
                 HexCell moveCell = c.GetCell(direction, 2);
                 Active.SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
 			});
-			Active.PlayAudio("oni");
+			MusicManager.PlayAudio("oni");
 		}
 	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
@@ -49,7 +50,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			ParentCharacter.MoveTo(moveCell);
 			var damage = new Damage(ParentCharacter.AttackPoints.Value, DamageType.Physical);
 			ParentCharacter.Attack(this, targetCharacter, damage);
-			Active.PlayAudio("giri");
+			MusicManager.PlayAudio("giri");
 			Finish();
 		}
 	}

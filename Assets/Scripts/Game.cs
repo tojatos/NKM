@@ -11,6 +11,8 @@ using NKMObjects.Templates;
 using UI;
 using UI.CharacterUI;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Object = UnityEngine.Object;
 
 public class Game
 {
@@ -200,11 +202,9 @@ GAME STARTED: true";
 		if (Active.SelectedCharacterToPlace != null)
 		{
 			Action.PlaceCharacter(Active.SelectedCharacterToPlace, touchedCell);
-
 		}
 		else if (Active.HexCells?.Contains(touchedCell) == true)
 		{
-			//Active.MakeAction(touchedCell);
 			if (Active.AbilityToUse != null)
 			{
 				Action.UseAbility(Active.AbilityToUse, Active.AirSelection.IsEnabled ? Active.AirSelection.HexCells : Active.HexCells);
@@ -228,11 +228,6 @@ GAME STARTED: true";
 			{
 				HexMapDrawer.RemoveHighlights();
 			}
-			
-//			if (touchedCell.CharactersOnCell.Count > 0)
-//			{
-//				touchedCell.CharactersOnCell[0].Select();
-//			}
 			if(!touchedCell.IsEmpty) Action.Select(touchedCell.FirstCharacter);
 			else
 			{
@@ -240,37 +235,8 @@ GAME STARTED: true";
 				Active.SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
 			}
 		}
-//		touchedCell.GetArea(HexDirection.Ne, 6, 7).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
 	}
 
-//	private void PlaceCharacter(HexCell cell)
-//	{
-//		if (Active.Turn.WasCharacterPlaced) return;
-//		var activeCharacter = Active.SelectedCharacterToPlace;
-//		PlaceCharacter(activeCharacter, cell);
-//	}
-
-//	private void PlaceCharacter(Character characterToPlace, HexCell targetCell)
-//	{
-//		if(!Spawner.CanSpawn(characterToPlace, targetCell)) return;
-//			
-//		Action.PlaceCharacter(characterToPlace, targetCell);
-//		//_spawner.Spawn(Active.SelectDrawnCell(targetCell), characterToPlace);
-//
-//		Active.Turn.WasCharacterPlaced = true;
-//		if (Active.Phase.Number == 0)
-//		{
-//			_uiManager.ForcePlacingChampions = false;
-//			Active.Turn.Finish();
-//		}
-//		else
-//		{
-//			Active.SelectedCharacterToPlace = null;
-//			HexMapDrawer.RemoveHighlights();
-//			characterToPlace?.Select();
-//		}
-//		
-//	}
 
 	/// <summary>
 	/// Try to place all characters from game on their spawns
@@ -374,5 +340,37 @@ GAME STARTED: true";
 		        character.DeathTimer++;
 	        }
         };
+		Active.BeforeMoveCellsRemoved += cells => Active.SelectDrawnCells(cells).ForEach(c => Object.Destroy(c.gameObject.GetComponent<LineRenderer>()));
+		Active.AfterMoveCellAdded += hexcell =>
+		{
+			//Draw a line between two hexcell centres
+
+			//Check for component in case of Zoro's Lack of Orientation
+			DrawnHexCell cell = Active.SelectDrawnCell(hexcell);
+			LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null
+				? cell.gameObject.GetComponent<LineRenderer>()
+				: cell.gameObject.AddComponent<LineRenderer>();
+			lRend.SetPositions(new[]
+			{
+				Active.SelectDrawnCell(Active.MoveCells.Last()).transform.position + Vector3.up * 20,
+				cell.transform.position + Vector3.up * 20
+			});
+			lRend.material = new Material(Shader.Find("Standard")) {color = Color.black};
+			lRend.startColor = Color.black;
+			lRend.endColor = Color.black;
+			lRend.widthMultiplier = 2;
+		};
 	}
+	
+	public static bool IsPointerOverUiObject()
+	{
+		var eventDataCurrentPosition =
+			new PointerEventData(EventSystem.current) {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
+		List<RaycastResult> results = new List<RaycastResult>();
+		EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+		return results.Count > 0;
+	}
+
+	public void ShowHelpHexCells(List<HexCell> cells) => Active.SelectDrawnCells(cells).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
+	public void HideHelpHexCells() => HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
 }

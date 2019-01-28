@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -55,6 +56,20 @@ namespace Managers
 			}
 			SessionSettings.Instance.IsMuted = !SessionSettings.Instance.IsMuted;
 		}
+		
+        public static void PlayAudio(string path, float volume = 0.8f)
+        {
+            try
+            {
+                var ac = Resources.Load("Audio/"+path) as AudioClip;
+                AudioSource.PlayClipAtPoint(ac, Camera.main.transform.position, volume);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning(e.Message);
+            }
+            
+        }
 
 	}
 }

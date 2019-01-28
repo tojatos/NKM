@@ -2,6 +2,7 @@
 using System.Linq;
 using Extensions;
 using Hex;
+using Managers;
 using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Roronoa_Zoro
@@ -30,7 +31,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		private void Use(Character targetCharacter)
 		{
-			Active.PlayAudio(Name);
+			MusicManager.PlayAudio(Name);
 			HexCell targetCell = targetCharacter.ParentCell;
 			SendShockwave(targetCell);
 			SendShockwave(targetCell);

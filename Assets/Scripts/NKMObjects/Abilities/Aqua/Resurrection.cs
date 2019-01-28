@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Extensions;
 using Hex;
@@ -10,6 +11,7 @@ namespace NKMObjects.Abilities.Aqua
 	public class Resurrection : Ability, IClickable, IUseable
 	{
 		private Character _characterToResurrect;
+		private readonly Func<Character, bool> _isResurrectable = c => !c.IsAlive && c.DeathTimer <= 1;
 		public override List<HexCell> GetRangeCells() => Active.GamePlayer.GetSpawnPoints(HexMap).Where(sp => sp.IsFreeToStand).ToList();
 
 		public Resurrection(Game game) : base(game, AbilityType.Ultimatum, "Resurrection", 8)
@@ -18,7 +20,6 @@ namespace NKMObjects.Abilities.Aqua
 			{
                 Validator.ToCheck.Add(() => IsAnyCharacterToRevive);
                 Validator.ToCheck.Add(() => IsAnyFreeCellToPlaceACharacter);
-//				Active.Phase.PhaseFinished += () => _characterToResurrect = null; //TODO: is this really needed?
 			};
 		}
 		public override string GetDescription() => 
@@ -26,14 +27,13 @@ $@"{ParentCharacter.Name} wskrzesza sojuszniczą postać, która zginęła maksy
 Postać odradza się z połową maksymalnego HP, na wybranym spawnie.
 Czas odnowienia: {Cooldown}";
 
-		private bool IsAnyCharacterToRevive => ParentCharacter.Owner.Characters.Any(c => !c.IsAlive && c.DeathTimer <= 1);
+		private bool IsAnyCharacterToRevive => ParentCharacter.Owner.Characters.Any(_isResurrectable);
 		private bool IsAnyFreeCellToPlaceACharacter => GetRangeCells().Count >= 1;
 
 		public void Click()
 		{
-//			Active.AbilityToUse = this;
 			Active.Prepare(this);
-			SpriteSelect.Instance.Open(Active.GamePlayer.Characters.Where(c => !c.IsAlive && c.DeathTimer <= 1),
+			SpriteSelect.Instance.Open(Active.GamePlayer.Characters.Where(_isResurrectable),
 				FinishSelectingButtonClick, "Postać do ożywienia", "Zakończ wybieranie postaci");
 		}
 
@@ -50,10 +50,10 @@ Czas odnowienia: {Cooldown}";
 
 		private void Use(HexCell cell)
 		{
-				Spawner.Instance.Spawn(Active.SelectDrawnCell(cell), _characterToResurrect);
-				_characterToResurrect.HealthPoints.Value = _characterToResurrect.HealthPoints.BaseValue / 2;
+			Game.HexMap.Place(_characterToResurrect, cell);
+            _characterToResurrect.HealthPoints.Value = _characterToResurrect.HealthPoints.BaseValue / 2;
 
-				Finish();
+            Finish();
 			
 		}
 		public void Use(List<HexCell> cells) => Use(cells[0]);

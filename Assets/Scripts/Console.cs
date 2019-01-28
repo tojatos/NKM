@@ -66,13 +66,9 @@ public class Console : SingletonMonoBehaviour<Console>
         _loggedLines.Add(new ConsoleLine
         {
             Text = text,
-            IsDebug = true
+            IsDebug = true,
         });
         UpdateLogText();
-        //		if (!Game.Active.IsDebug) return;
-        //		LogText.text += "<b><color=red>" + text + "</color></b>";
-        //		LogText.text += endline ? "\n" : "";
-        //		FinishLogging();
     }
 
     public void GameLog(string text)

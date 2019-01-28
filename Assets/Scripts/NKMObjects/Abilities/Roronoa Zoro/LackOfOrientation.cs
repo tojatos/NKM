@@ -2,6 +2,7 @@
 using System.Linq;
 using Extensions;
 using Hex;
+using Managers;
 using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Roronoa_Zoro
@@ -42,7 +43,7 @@ $"{ParentCharacter.Name} ma 50% szansy na pójście w losowe miejsce podczas wyk
 				Console.Log($"{ParentCharacter.FormattedFirstName()}: Cholera, znowu się zgubili?");
 //				int rand = UnityEngine.Random.Range(1, 4);
 				int soundID = NKMRandom.Get($"{Name} - ID", 1, 4);
-				Active.PlayAudio("op wtf " + soundID);
+				MusicManager.PlayAudio("op wtf " + soundID);
 			}
 		}
 	}

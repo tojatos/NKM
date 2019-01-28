@@ -12,7 +12,6 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 {
 	public GameObject CharacterPrefab;
 	public GameObject HighlightPrefab;
-	private Console Console => Console.Instance;
 	private static Game Game => GameStarter.Instance.Game;
 	private void SpawnCharacterObject(DrawnHexCell parentCell, Character characterToSpawn)
 	{
@@ -59,7 +58,6 @@ public class Spawner : SingletonMonoBehaviour<Spawner>
 	public static bool CanSpawn(Character character, HexCell cell) => cell.IsFreeToStand && cell.IsSpawnFor(character.Owner);
 	public void Spawn(DrawnHexCell cell, Character characterToSpawn)
 	{
-		Console.GameLog($"CHARACTER PLACED: {characterToSpawn}; {cell}");
 		SpawnCharacterObject(cell, characterToSpawn);
 	}
 }
