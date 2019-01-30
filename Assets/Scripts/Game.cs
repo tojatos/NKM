@@ -26,7 +26,6 @@ public class Game
 	private Spawner _spawner;
 	public HexMapDrawer HexMapDrawer;
 	public HexMap HexMap;
-	public static ConsoleDrawer ConsoleDrawer => ConsoleDrawer.Instance;
 	public readonly Action Action;
 	public readonly Console Console;
 
