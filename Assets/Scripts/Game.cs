@@ -196,46 +196,6 @@ GAME STARTED: true";
 		await isTurnDone.WaitToBeTrue();
 	}
 
-	public void TouchCell(HexCell touchedCell)
-	{
-		Active.SelectedCell = touchedCell;
-		if (Active.SelectedCharacterToPlace != null)
-		{
-			Action.PlaceCharacter(Active.SelectedCharacterToPlace, touchedCell);
-		}
-		else if (Active.HexCells?.Contains(touchedCell) == true)
-		{
-			if (Active.AbilityToUse != null)
-			{
-				Action.UseAbility(Active.AbilityToUse, Active.AirSelection.IsEnabled ? Active.AirSelection.HexCells : Active.HexCells);
-			}
-			else if (Active.Character != null)
-			{
-				if(!touchedCell.IsEmpty && Active.Character.CanBasicAttack(touchedCell.FirstCharacter))
-                    Action.BasicAttack(Active.Character, touchedCell.FirstCharacter);
-				else if(touchedCell.IsFreeToStand && Active.Character.CanBasicMove(touchedCell) && Active.MoveCells.Last() == touchedCell)
-					Action.BasicMove(Active.Character, Active.MoveCells);
-			}
-		}
-		else
-		{
-			if (Active.AbilityToUse != null)
-			{
-				return;
-			}
-			//possibility of highlighting with control pressed
-			if (!Input.GetKey(KeyCode.LeftControl))
-			{
-				HexMapDrawer.RemoveHighlights();
-			}
-			if(!touchedCell.IsEmpty) Action.Select(touchedCell.FirstCharacter);
-			else
-			{
-				Action.Deselect();
-				Active.SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
-			}
-		}
-	}
 
 
 	/// <summary>
@@ -350,9 +310,10 @@ GAME STARTED: true";
 			LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null
 				? cell.gameObject.GetComponent<LineRenderer>()
 				: cell.gameObject.AddComponent<LineRenderer>();
+			Debug.Log(lRend);
 			lRend.SetPositions(new[]
 			{
-				Active.SelectDrawnCell(Active.MoveCells.Last()).transform.position + Vector3.up * 20,
+				Active.SelectDrawnCell(Active.MoveCells.SecondLast()).transform.position + Vector3.up * 20,
 				cell.transform.position + Vector3.up * 20
 			});
 			lRend.material = new Material(Shader.Find("Standard")) {color = Color.black};

@@ -10,6 +10,8 @@ namespace Hex
 	public class HexMapDrawer : SingletonMonoBehaviour<HexMapDrawer>
 	{
 		private Game _game;
+		private Active Active => _game.Active;
+		private Action Action => _game.Action;
 		public DrawnHexCell CellPrefab;
 		public List<DrawnHexCell> Cells;
 		private readonly Dictionary<Character, GameObject> _characterObjects = new Dictionary<Character, GameObject>();
@@ -163,7 +165,7 @@ namespace Hex
 					}
 					else
 					{
-						_game.TouchCell(cellPointed);
+						TouchCell(cellPointed);
 					}
 				}
 			}
@@ -182,5 +184,46 @@ namespace Hex
 			Vector3 position = hit.point;
 			return Instance.GetCellByPosition(ref position);
 		}
+
+		private void TouchCell(HexCell touchedCell)
+        {
+            Active.SelectedCell = touchedCell;
+            if (Active.SelectedCharacterToPlace != null)
+            {
+                Action.PlaceCharacter(Active.SelectedCharacterToPlace, touchedCell);
+            }
+            else if (Active.HexCells?.Contains(touchedCell) == true)
+            {
+                if (Active.AbilityToUse != null)
+                {
+                    Action.UseAbility(Active.AbilityToUse, Active.AirSelection.IsEnabled ? Active.AirSelection.HexCells : Active.HexCells);
+                }
+                else if (Active.Character != null)
+                {
+                    if(!touchedCell.IsEmpty && Active.Character.CanBasicAttack(touchedCell.FirstCharacter))
+                        Action.BasicAttack(Active.Character, touchedCell.FirstCharacter);
+                    else if(touchedCell.IsFreeToStand && Active.Character.CanBasicMove(touchedCell) && Active.MoveCells.Last() == touchedCell)
+                        Action.BasicMove(Active.Character, Active.MoveCells);
+                }
+            }
+            else
+            {
+                if (Active.AbilityToUse != null)
+                {
+                    return;
+                }
+                //possibility of highlighting with control pressed
+                if (!Input.GetKey(KeyCode.LeftControl))
+                {
+                    RemoveHighlights();
+                }
+                if(!touchedCell.IsEmpty) Action.Select(touchedCell.FirstCharacter);
+                else
+                {
+                    Action.Deselect();
+                    Active.SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
+                }
+            }
+        }
 	}
 }
