@@ -292,7 +292,7 @@ namespace NKMObjects.Templates
                                 removeAfterIndex = index;
                                 break;
 	                        }
-                            if (!cell.IsEmpty && (CanAttackAllies || cell.CharactersOnCell[0].IsEnemyFor(Owner)))
+                            if (!cell.IsEmpty && (CanAttackAllies || cell.FirstCharacter.IsEnemyFor(Owner)))
                             {
                                 removeAfterIndex = index + 1;
                                 break;
@@ -381,7 +381,7 @@ namespace NKMObjects.Templates
 //			Active.HexCells.Distinct().ToList().ForEach(c =>
 //				Active.SelectDrawnCell(c).AddHighlight(
 //					!c.IsEmpty&&
-//					(c.CharactersOnCell[0].IsEnemyFor(Owner) || CanAttackAllies && CanUseBasicAttack && GetBasicAttackCells().Contains(c))
+//					(c.FirstCharacter.IsEnemyFor(Owner) || CanAttackAllies && CanUseBasicAttack && GetBasicAttackCells().Contains(c))
 //						? Highlights.RedTransparent
 //						: Highlights.GreenTransparent));
 //				

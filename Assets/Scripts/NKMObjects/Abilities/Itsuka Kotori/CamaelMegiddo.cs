@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Itsuka_Kotori
 {
-    public class CamaelMegiddo : Ability, IClickable, IUseable
+    public class CamaelMegiddo : Ability, IClickable, IUseableCell
     {
         private const int LineDamage = 40;
         private const int ConflargationDamage = 20;
@@ -85,9 +85,10 @@ Czas odnowienia: {Cooldown}";
 
         }
 
-        public void Use(List<HexCell> cells)
+        public void Use(HexCell cell)
         {
-            HexDirection direction = ParentCharacter.ParentCell.GetDirection(cells[0]);
+            ParentCharacter.TryToTakeTurn();
+            HexDirection direction = ParentCharacter.ParentCell.GetDirection(cell);
             SendFlamewave(direction);
             Finish();
         }

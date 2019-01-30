@@ -56,7 +56,6 @@ Pozostały czas trwania: {_currentTimeDurability}";
 
         public void Click()
         {
-//            Active.MakeAction();
 			ParentCharacter.TryToTakeTurn();
 
             IsEnabled = true;

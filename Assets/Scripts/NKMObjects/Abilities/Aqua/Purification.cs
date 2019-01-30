@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Aqua
 {
-	public class Purification : Ability, IClickable, IUseable
+	public class Purification : Ability, IClickable, IUseableCharacter
 	{
 		private const int AbilityRange = 5;
 
@@ -23,9 +23,9 @@ Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";
 
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
-		public void Use(List<HexCell> cells) => Use(cells[0].FirstCharacter);
-		private void Use(Character character)
+		public void Use(Character character)
 		{
+			ParentCharacter.TryToTakeTurn();
 			character.Effects.Where(e => e.Type == EffectType.Negative).ToList().ForEach(e => e.RemoveFromParent());
 			Finish();
 		}

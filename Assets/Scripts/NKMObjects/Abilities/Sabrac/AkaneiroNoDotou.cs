@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Sabrac
 {
-    public class AkaneiroNoDotou : Ability, IClickable, IUseable
+    public class AkaneiroNoDotou : Ability, IClickable, IUseableCell
     {
         private const int Range = 9;
         private const int Damage = 30;
@@ -26,11 +26,10 @@ Czas odnowienia: {Cooldown}";
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().FindAll(c => c.IsFreeToStand);
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-
-        public void Use(List<HexCell> cells) => Use(cells[0]);
         
-        private void Use(HexCell cell)
+        public void Use(HexCell cell)
         {
+            ParentCharacter.TryToTakeTurn();
             List<HexCell> targetCells = ParentCharacter.ParentCell.GetArea(cell, Width);
             ParentCharacter.MoveTo(cell);
             targetCells.WhereEnemiesOf(Owner).GetCharacters().ForEach(c =>

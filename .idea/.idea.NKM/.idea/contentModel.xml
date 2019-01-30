@@ -75,6 +75,7 @@
         <e p="ColorToHighlight.cs" t="Include" />
         <e p="ColorToTileType.cs" t="Include" />
         <e p="Console.cs" t="Include" />
+        <e p="ConsoleDrawer.cs" t="Include" />
         <e p="CreatableBackgroundCamera.cs" t="Include" />
         <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
         <e p="Damage.cs" t="Include" />
@@ -317,7 +318,9 @@
             <e p="IEnableable.cs" t="Include" />
             <e p="IEnchantable.cs" t="Include" />
             <e p="IRunnable.cs" t="Include" />
-            <e p="IUseable.cs" t="Include" />
+            <e p="IUseableCell.cs" t="Include" />
+            <e p="IUseableCellList.cs" t="Include" />
+            <e p="IUseableCharacter.cs" t="Include" />
             <e p="NKMCharacter.cs" t="Include" />
             <e p="NKMObject.cs" t="Include" />
           </e>

@@ -11,7 +11,6 @@ namespace NKMObjects.Abilities.Dekomori_Sanae
 		{
 			OnAwake += () =>
 			{
-
 				ParentCharacter.BeforeAttack += (character, d) =>
 				{
 					if (!IsEnabled || _isBeingUsed) return;

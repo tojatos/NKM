@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Yasaka_Mahiro
 {
-	public class SharpenedForks : Ability, IClickable, IUseable
+	public class SharpenedForks : Ability, IClickable, IUseableCharacter
 	{
 		private const int Damage = 5;
 		private const float MissingHealthPercentDamage = 20;
@@ -35,10 +35,10 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			if (!CanBeUsed)	Cancel();
 			else Active.Prepare(this, GetTargetsInRange());
 		}
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(Character targetCharacter)
+		public void Use(Character targetCharacter)
 		{
+			ParentCharacter.TryToTakeTurn();
 			var damageValue = (int) (Damage + MissingHealthPercentDamage / 100 *
 			                 (targetCharacter.HealthPoints.BaseValue - targetCharacter.HealthPoints.Value));
 //			AnimationPlayer.Instance.StartCoroutine(

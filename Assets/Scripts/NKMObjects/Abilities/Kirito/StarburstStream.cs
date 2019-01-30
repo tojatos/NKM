@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Kirito
 {
-    public class StarburstStream : Ability, IClickable, IEnableable, IUseable
+    public class StarburstStream : Ability, IClickable, IEnableable, IUseableCharacter
     {
         private const int Range = 3;
         private const int AttackTimes = 16;
@@ -39,11 +39,9 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         private bool _gotFreeAttackThisTurn;
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-        private void Use(Character character)
+        public void Use(Character character)
         {
-            //Active.MakeAction();
 			ParentCharacter.TryToTakeTurn();
             for (int i = 0; i < AttackTimes; i++) 
                 ParentCharacter.Attack(this, character, new Damage(Damage, DamageType.True));

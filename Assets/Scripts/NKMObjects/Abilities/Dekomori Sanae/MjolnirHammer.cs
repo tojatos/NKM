@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Dekomori_Sanae
 {
-	public class MjolnirHammer : Ability, IClickable, IUseable
+	public class MjolnirHammer : Ability, IClickable, IUseableCharacter
 	{
 		private const int Damage = 18;
 		private const int Range = 7;
@@ -31,7 +31,6 @@ Jeżeli obydwa ataki wymierzone są w ten sam cel, otrzymuje on połowę obraże
 Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public void Click() => PrepareHammerHit();
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
 		private void PrepareHammerHit()
 		{
@@ -39,8 +38,9 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			else Active.Prepare(this, GetTargetsInRange());
 		}
 		
-		private void Use(Character targetCharacter)
+		public void Use(Character targetCharacter)
 		{
+            ParentCharacter.TryToTakeTurn();
 			int damageToDeal = Damage;
 			if (_firstAbilityTarget == targetCharacter)
 			{

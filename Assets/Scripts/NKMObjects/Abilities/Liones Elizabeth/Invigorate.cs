@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Liones_Elizabeth
 {
-    public class Invigorate : Ability, IClickable, IUseable
+    public class Invigorate : Ability, IClickable, IUseableCharacter
     {
         private const int Range = 5;
         private const int Heal = 6;
@@ -26,10 +26,10 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        public void Use(List<HexCell> cells)
+        public void Use(Character character)
         {
-            cells[0].CharactersOnCell[0].Effects
-                .Add(new HealOverTime(Game, ParentCharacter, Heal, Duration, cells[0].CharactersOnCell[0], Name));
+			ParentCharacter.TryToTakeTurn();
+            character.Effects.Add(new HealOverTime(Game, ParentCharacter, Heal, Duration, character, Name));
             Finish();
         }
     }

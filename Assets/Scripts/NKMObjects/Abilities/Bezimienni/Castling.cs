@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Bezimienni
 {
-    public class Castling : Ability, IClickable, IUseable
+    public class Castling : Ability, IClickable, IUseableCharacter
     {
 	    private Character _firstCharacterToSwap;
 	    private Character _secondCharacterToSwap;
@@ -24,11 +24,11 @@ namespace NKMObjects.Abilities.Bezimienni
 	    private void PrepareCharacterSelection()
 	    {
 		    List<HexCell> cellRange = GetTargetsInRange();
-		    if (_firstCharacterToSwap != null) cellRange.RemoveAll(c => c.CharactersOnCell[0] == _firstCharacterToSwap);
+		    if (_firstCharacterToSwap != null) cellRange.RemoveAll(c => c.FirstCharacter == _firstCharacterToSwap);
 		    Active.Prepare(this, cellRange);
 	    }
 
-	    private void Use(Character character)
+	    public void Use(Character character)
 		{
 			if (_firstCharacterToSwap == null)
 			{
@@ -38,6 +38,7 @@ namespace NKMObjects.Abilities.Bezimienni
 			else
 			{
 				_secondCharacterToSwap = character;
+                ParentCharacter.TryToTakeTurn();
 				Swap();
 				Finish();
 			}
@@ -59,17 +60,11 @@ namespace NKMObjects.Abilities.Bezimienni
 	    {
 		    HexCell c1 = _firstCharacterToSwap.ParentCell;
 		    HexCell c2 = _secondCharacterToSwap.ParentCell;
-		    //_firstCharacterToSwap.ParentCell = c2;
-		    //_secondCharacterToSwap.ParentCell = c1;
-		    //c1.CharactersOnCell[0] = _secondCharacterToSwap;
-		    //c2.CharactersOnCell[0] = _firstCharacterToSwap;
 		    HexMap.Move(_firstCharacterToSwap, c2);
 		    HexMap.Move(_secondCharacterToSwap, c1);
 		    
 		    AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(_firstCharacterToSwap).transform, Active.SelectDrawnCell(c2).transform.position, 1f));
 		    AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(_secondCharacterToSwap).transform, Active.SelectDrawnCell(c1).transform.position, 1f));
 	    }
-
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
     }
 }

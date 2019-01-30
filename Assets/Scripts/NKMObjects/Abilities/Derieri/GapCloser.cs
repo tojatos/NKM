@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Derieri
 {
-    public class GapCloser : Ability, IClickable, IUseable
+    public class GapCloser : Ability, IClickable, IUseableCharacter, IUseableCell
     {
         private const int MaxDistanceFromTarget = 2;
         private const int Range = 9;
@@ -27,23 +27,20 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         {
 			ComboStar passiveAbility = ParentCharacter.Abilities.OfType<ComboStar>().SingleOrDefault();
             Character targetCharacter = passiveAbility?.ComboCharacter;
-            return targetCharacter==null ? new List<HexCell>() : GetRangeCells().FindAll(c => c.CharactersOnCell[0] == targetCharacter).FindAll(c => c.GetNeighbors(Owner.Owner, MaxDistanceFromTarget).Any(cc => cc.IsFreeToStand));
+            return targetCharacter==null ? new List<HexCell>() : GetRangeCells().FindAll(c => c.FirstCharacter == targetCharacter).FindAll(c => c.GetNeighbors(Owner.Owner, MaxDistanceFromTarget).Any(cc => cc.IsFreeToStand));
         }
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        public void Use(List<HexCell> cells)
+        public void Use(Character character) =>
+            Active.Prepare(this, character.ParentCell.GetNeighbors(Owner.Owner, MaxDistanceFromTarget).FindAll(c => c.IsFreeToStand));
+
+        public void Use(HexCell cell)
         {
-            if (cells[0].CharactersOnCell[0] != null)
-            {
-                Active.Prepare(this, cells[0].GetNeighbors(Owner.Owner, MaxDistanceFromTarget).FindAll(c => c.IsFreeToStand));
-            }
-            else
-            {
-                ParentCharacter.MoveTo(cells[0]);
-                ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
-                Finish();
-            }
+            ParentCharacter.TryToTakeTurn();
+            ParentCharacter.MoveTo(cell);
+            ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
+            Finish();
         }
     }
 }

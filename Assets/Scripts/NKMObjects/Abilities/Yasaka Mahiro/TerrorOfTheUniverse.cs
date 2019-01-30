@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Yasaka_Mahiro
 {
-	public class TerrorOfTheUniverse : Ability, IClickable, IUseable
+	public class TerrorOfTheUniverse : Ability, IClickable, IUseableCellList
 	{
 		private const float CurrentHealthPercentDamage = 40f;
 		private const int Range = 6;
@@ -29,6 +29,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 		}
 		public void Use(List<HexCell> cells)
 		{
+			ParentCharacter.TryToTakeTurn();
 			List<Character> characters = cells.GetCharacters();
 			characters.ForEach(targetCharacter =>
 			{

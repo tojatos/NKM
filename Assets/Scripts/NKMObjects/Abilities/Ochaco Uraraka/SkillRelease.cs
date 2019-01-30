@@ -16,7 +16,7 @@ namespace NKMObjects.Abilities.Ochaco_Uraraka
         }
 
         public override List<HexCell> GetRangeCells() => HexMap.Cells;
-        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereCharacters().FindAll(c => c.CharactersOnCell[0].Effects.Any(e => e.Name == "Zero Gravity"));
+        public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereCharacters().FindAll(c => c.FirstCharacter.Effects.Any(e => e.Name == "Zero Gravity"));
 
         public override string GetDescription() =>
 $@"{ParentCharacter.FirstName()} uwalnia podstawową umiejętność,
@@ -25,7 +25,6 @@ a przeciwnicy, którzy stracili ten efekt zostają ogłuszeni na {Duration} fazy
 
         public void Click()
         {
-            //Active.MakeAction();
 			ParentCharacter.TryToTakeTurn();
             List<Character> targets = GetTargetsInRange().GetCharacters();
             targets.ForEach(c => c.Effects.FindAll(e => e.Name == "Zero Gravity").ForEach(ef => ef.RemoveFromParent()));

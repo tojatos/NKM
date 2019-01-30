@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Dekomori_Sanae
 {
-	public class MjolnirDestinyImpulse : Ability, IClickable, IUseable
+	public class MjolnirDestinyImpulse : Ability, IClickable, IUseableCellList
 	{
 		private const int Damage = 25;
 		private const int Range = 8;
@@ -34,6 +34,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 		}
 		public void Use(List<HexCell> cells)
 		{
+            ParentCharacter.TryToTakeTurn();
 			List<Character> characters = cells.GetCharacters();
 			bool killedSomeone = false;
 			characters.ForEach(targetCharacter =>

@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Crona
 {
-    public class Infection : Ability, IClickable, IUseable
+    public class Infection : Ability, IClickable, IUseableCharacter
     {
         private const int Range = 6;
         private const int EffectCooldown = 3;
@@ -22,11 +22,11 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 	    
 	    public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
 	    public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereEnemiesOf(Owner);
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
 	    public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    private void Use(Character character)
+	    public void Use(Character character)
 		{
+            ParentCharacter.TryToTakeTurn();
 			character.Effects.Add(new Effects.BlackBlood(Game, ParentCharacter, character, EffectCooldown, BlackBlood.Damage, BlackBlood.Range));
 			Finish();
 		}

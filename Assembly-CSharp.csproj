@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -85,6 +86,7 @@
     <Compile Include="Assets\Scripts\Animations\Tilt.cs" />
     <Compile Include="Assets\Scripts\ColorToHighlight.cs" />
     <Compile Include="Assets\Scripts\ColorToTileType.cs" />
+    <Compile Include="Assets\Scripts\Console.cs" />
     <Compile Include="Assets\Scripts\CreatableBackgroundCamera.cs" />
     <Compile Include="Assets\Scripts\CreatableSingletonMonoBehaviour.cs" />
     <Compile Include="Assets\Scripts\Damage.cs" />
@@ -124,7 +126,7 @@
     <Compile Include="Assets\Scripts\Managers\MusicManager.cs" />
     <Compile Include="Assets\Scripts\Managers\Options.cs" />
     <Compile Include="Assets\Scripts\Managers\PreGameOptions.cs" />
-    <Compile Include="Assets\Scripts\Console.cs" />
+    <Compile Include="Assets\Scripts\ConsoleDrawer.cs" />
     <Compile Include="Assets\Scripts\Managers\ServerList.cs" />
     <Compile Include="Assets\Scripts\NKMID.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Abilities\Aqua\NaturesBeauty.cs" />
@@ -242,6 +244,8 @@
     <Compile Include="Assets\Scripts\NKMObjects\Templates\Ability.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\Character.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\FightType.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Templates\IUseableCell.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Templates\IUseableCharacter.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\NKMCharacter.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\Effect.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\EnableableAbility.cs" />
@@ -250,7 +254,7 @@
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IEnableable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IEnchantable.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\IRunnable.cs" />
-    <Compile Include="Assets\Scripts\NKMObjects\Templates\IUseable.cs" />
+    <Compile Include="Assets\Scripts\NKMObjects\Templates\IUseableCellList.cs" />
     <Compile Include="Assets\Scripts\NKMObjects\Templates\NKMObject.cs" />
     <Compile Include="Assets\Scripts\NKMRandom.cs" />
     <Compile Include="Assets\Scripts\Phase.cs" />

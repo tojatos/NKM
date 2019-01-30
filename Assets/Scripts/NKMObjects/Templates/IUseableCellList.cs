@@ -3,7 +3,7 @@ using Hex;
 
 namespace NKMObjects.Templates
 {
-    public interface IUseable
+    public interface IUseableCellList
     {
         void Use(List<HexCell> cells);
     }

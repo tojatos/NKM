@@ -156,18 +156,7 @@ namespace Hex
 				if (Game.IsPointerOverUiObject()) return; //Do not touch cells if mouse is over UI
 
 				HexCell cellPointed = CellPointed();
-				if (cellPointed != null)
-				{
-					if (_game.Active.AirSelection.IsEnabled && _game.Active.HexCells?.Contains(cellPointed) == true)
-					{
-						//_game.Active.MakeAction(_game.Active.AirSelection.HexCells);
-						
-					}
-					else
-					{
-						TouchCell(cellPointed);
-					}
-				}
+				if (cellPointed != null) TouchCell(cellPointed);
 			}
 
 			if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
@@ -196,7 +185,13 @@ namespace Hex
             {
                 if (Active.AbilityToUse != null)
                 {
-                    Action.UseAbility(Active.AbilityToUse, Active.AirSelection.IsEnabled ? Active.AirSelection.HexCells : Active.HexCells);
+	                //It is important to check in that order, in case ability uses multiple interfaces!
+	                if(Active.AbilityToUse is IUseableCharacter && touchedCell.FirstCharacter != null)
+		                Action.UseAbility((IUseableCharacter)Active.AbilityToUse, touchedCell.FirstCharacter);
+	                else if(Active.AbilityToUse is IUseableCell)
+		                Action.UseAbility((IUseableCell)Active.AbilityToUse, touchedCell);
+	                else if(Active.AbilityToUse is IUseableCellList)
+                        Action.UseAbility((IUseableCellList)Active.AbilityToUse, Active.AirSelection.IsEnabled ? Active.AirSelection.HexCells : Active.HexCells);
                 }
                 else if (Active.Character != null)
                 {
@@ -217,12 +212,13 @@ namespace Hex
                 {
                     RemoveHighlights();
                 }
-                if(!touchedCell.IsEmpty) Action.Select(touchedCell.FirstCharacter);
-                else
-                {
-                    Action.Deselect();
-                    Active.SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
-                }
+
+	            if (!touchedCell.IsEmpty) Action.Select(touchedCell.FirstCharacter);
+	            else
+	            {
+		            Action.Deselect();
+		            Active.SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
+	            }
             }
         }
 	}

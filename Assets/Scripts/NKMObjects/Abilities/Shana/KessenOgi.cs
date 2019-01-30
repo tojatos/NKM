@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Shana
 {
-	public class KessenOgi : Ability, IClickable, IUseable
+	public class KessenOgi : Ability, IClickable, IUseableCharacter
 	{
 		private const int FlameDamage = 15;
 		private const int Range = 5;
@@ -40,9 +40,9 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
-		private void Use(Character character)
+		public void Use(Character character)
 		{
+			ParentCharacter.TryToTakeTurn();
 			Shinku(character);
 			Hien(character);
 			ShinpanAndDanzai(character);
@@ -66,9 +66,9 @@ Zasięg użycia: {Range} Czas odnowienia: {Cooldown}";
 			List<HexCell> cells = ParentCharacter.ParentCell.GetArea(direction, range, FlameWidth);
 			foreach (HexCell c in cells)
 			{
-				if (c.IsEmpty || !c.CharactersOnCell[0].IsEnemyFor(Owner)) continue;
+				if (c.IsEmpty || !c.FirstCharacter.IsEnemyFor(Owner)) continue;
 				var damage = new Damage(FlameDamage, DamageType.Magical);
-				ParentCharacter.Attack(this, c.CharactersOnCell[0], damage);
+				ParentCharacter.Attack(this, c.FirstCharacter, damage);
 			}
 		}
 		private void ShinpanAndDanzai(Character character)

@@ -26,8 +26,9 @@ public class Game
 	private Spawner _spawner;
 	public HexMapDrawer HexMapDrawer;
 	public HexMap HexMap;
-	public Console Console => Console.Instance;
+	public static ConsoleDrawer ConsoleDrawer => ConsoleDrawer.Instance;
 	public readonly Action Action;
+	public readonly Console Console;
 
 	public bool IsInitialized;
 	public bool IsReplay => Options.GameLog != null;
@@ -35,6 +36,7 @@ public class Game
 	{
 		Active = new Active(this);
 		Action = new Action(this);
+		Console = new Console(this);
 	}
 
 	public void Init(GameOptions gameOptions)
@@ -310,7 +312,6 @@ GAME STARTED: true";
 			LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null
 				? cell.gameObject.GetComponent<LineRenderer>()
 				: cell.gameObject.AddComponent<LineRenderer>();
-			Debug.Log(lRend);
 			lRend.SetPositions(new[]
 			{
 				Active.SelectDrawnCell(Active.MoveCells.SecondLast()).transform.position + Vector3.up * 20,

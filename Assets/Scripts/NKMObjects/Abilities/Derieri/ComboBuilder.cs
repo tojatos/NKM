@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Derieri
 {
-    public class ComboBuilder : Ability, IClickable, IUseable
+    public class ComboBuilder : Ability, IClickable, IUseableCharacter
     {
         private const int ComboIncrease = 3;
         private const int Range = 2;
@@ -26,17 +26,15 @@ Zasięg liniowy: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        public void Use(List<HexCell> cells)
+        public void Use(Character target)
         {
-            Character target = cells[0].CharactersOnCell[0];
+            ParentCharacter.TryToTakeTurn();
 			ComboStar passiveAbility = ParentCharacter.Abilities.OfType<ComboStar>().SingleOrDefault();
-            if (passiveAbility == null)
+            if (passiveAbility != null)
             {
-                OnFailedUseFinish();
-                return;
+                if (target != passiveAbility.ComboCharacter) passiveAbility.SetNewComboCharacter(target);
+                passiveAbility.Combo += 3;
             }
-            if (target != passiveAbility.ComboCharacter) passiveAbility.SetNewComboCharacter(target);
-            passiveAbility.Combo += 3;
             ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
             Finish();
         }

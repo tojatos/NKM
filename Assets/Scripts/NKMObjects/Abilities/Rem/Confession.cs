@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Rem
 {
-	public class Confession : Ability, IClickable, IUseable
+	public class Confession : Ability, IClickable, IUseableCharacter
 	{
 		private const int Range = 6;
 
@@ -15,7 +15,7 @@ namespace NKMObjects.Abilities.Rem
 		}
 		
 		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner).FindAll(c => c.CharactersOnCell[0].TookActionInPhaseBefore);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner).FindAll(c => c.FirstCharacter.TookActionInPhaseBefore);
 
 		public override string GetDescription() =>
 $@"{ParentCharacter.Name} wyznaje miłość wybranej postaci, umożliwiając jej ponowną akcję w tej fazie.
@@ -23,10 +23,10 @@ $@"{ParentCharacter.Name} wyznaje miłość wybranej postaci, umożliwiając jej
 Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(Character character)
+		public void Use(Character character)
 		{
+			ParentCharacter.TryToTakeTurn();
 			character.TookActionInPhaseBefore = false;
 			character.HasUsedBasicAttackInPhaseBefore = false;
 			character.HasUsedBasicMoveInPhaseBefore = false;

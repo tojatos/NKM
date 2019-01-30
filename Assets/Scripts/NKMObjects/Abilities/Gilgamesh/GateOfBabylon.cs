@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Gilgamesh
 {
-	public class GateOfBabylon : Ability, IClickable, IUseable
+	public class GateOfBabylon : Ability, IClickable, IUseableCellList
 	{
 		private const int Damage = 25;
 		private const int Range = 6;
@@ -30,6 +30,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 		}
 		public void Use(List<HexCell> cells)
 		{
+            ParentCharacter.TryToTakeTurn();
 			List<Character> characters = cells.GetCharacters();
 			characters.ForEach(targetCharacter =>
 			{

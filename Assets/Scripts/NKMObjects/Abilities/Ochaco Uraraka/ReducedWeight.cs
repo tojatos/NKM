@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Ochaco_Uraraka
 {
-    public class ReducedWeight : Ability, IClickable, IUseable
+    public class ReducedWeight : Ability, IClickable, IUseableCharacter
     {
         public ReducedWeight(Game game) : base(game, AbilityType.Normal, "Reduced Weight", 3)
         {
@@ -26,10 +26,9 @@ Czas odnowienia: {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
-
-        private void Use(Character character)
+        public void Use(Character character)
         {
+			ParentCharacter.TryToTakeTurn();
             ParentCharacter.Abilities.OfType<ZeroGravity>().First().AddEffect(character);
             character.Effects.Add(new StatModifier(Game, 1, character.Speed.RealValue, character, StatType.Speed, Name));
             Finish();

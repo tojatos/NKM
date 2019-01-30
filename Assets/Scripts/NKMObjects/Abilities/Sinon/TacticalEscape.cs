@@ -21,10 +21,8 @@ Czas trwania: {Duration}	Czas odnowienia: {Cooldown}";
 
 		public void Click()
 		{
-//			Active.MakeAction();
 			ParentCharacter.TryToTakeTurn();
 			ParentCharacter.Effects.Add(new StatModifier(Game, Duration, SpeedIncrease, ParentCharacter, StatType.Speed, Name));
-			//ParentCharacter.Effects.Add(new BasicAttackInability(Duration, ParentCharacter, Name));
 			Finish();
 
 		}

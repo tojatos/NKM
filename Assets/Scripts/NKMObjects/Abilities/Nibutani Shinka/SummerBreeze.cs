@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Nibutani_Shinka
 {
-    public class SummerBreeze : Ability, IClickable, IUseable
+    public class SummerBreeze : Ability, IClickable, IUseableCharacter
     {
         private const int Range = 6;
         private const int Damage = 15;
@@ -28,9 +28,9 @@ Czas odnowienia: {Cooldown}";
 
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-        public void Use(List<HexCell> cells)
+        public void Use(Character target)
         {
-            Character target = cells[0].CharactersOnCell[0];
+			ParentCharacter.TryToTakeTurn();
             HexDirection direction = ParentCharacter.ParentCell.GetDirection(target.ParentCell);
             Knockback(target, direction);
             Finish();
@@ -42,7 +42,7 @@ Czas odnowienia: {Cooldown}";
             HexCell lastCell = character.ParentCell;
             foreach (HexCell c in line)
             {
-                if (c.Type == HexCell.TileType.Wall || c.CharactersOnCell[0] != null)
+                if (c.Type == HexCell.TileType.Wall || c.FirstCharacter != null)
                 {
                     character.Effects.Add(new Stun(Game, StunDuration, character, Name));
                     ParentCharacter.Attack(this, character, new Damage(Damage, DamageType.Magical));

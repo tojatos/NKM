@@ -11,7 +11,7 @@ namespace NKMObjects.Templates
 
 		private readonly Game _game;
 		protected Active Active => _game.Active;
-		protected Console Console => _game.Console;
+		protected ConsoleDrawer ConsoleDrawer => Game.ConsoleDrawer;
 		public Character Owner => ParentCharacter;
 		protected Effect(Game game, int cooldown, Character parentCharacter, string name = null)
 		{

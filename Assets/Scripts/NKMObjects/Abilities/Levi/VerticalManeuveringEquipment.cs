@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Levi
 {
-    public class VerticalManeuveringEquipment : Ability, IClickable, IUseable
+    public class VerticalManeuveringEquipment : Ability, IClickable, IUseableCell
     {
         private const int Range = 7;
         private const int MoveTargetRange = 7;
@@ -25,9 +25,8 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        public void Use(List<HexCell> cells)
+        public void Use(HexCell cell)
         {
-            HexCell cell = cells[0];
             if (cell.Type == HexCell.TileType.Wall)
             {
                 Active.Prepare(this, GetMoveTargets(cell));
@@ -35,6 +34,7 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
             }
             else
             {
+                ParentCharacter.TryToTakeTurn();
                 ParentCharacter.MoveTo(cell);
                 Finish();
             }

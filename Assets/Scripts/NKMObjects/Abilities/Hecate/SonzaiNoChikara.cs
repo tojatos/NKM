@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Hecate
 {
-	public class SonzaiNoChikara : Ability, IClickable, IUseable
+	public class SonzaiNoChikara : Ability, IClickable, IUseableCellList
 	{
 		public SonzaiNoChikara(Game game) : base(game, AbilityType.Ultimatum, "Sonzai no Chikara", 8){}
 

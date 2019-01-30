@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Satou_Kazuma
 {
-    public class Steal : Ability, IClickable, IUseable, IEnableable
+    public class Steal : Ability, IClickable, IUseableCharacter, IEnableable
     {
         private const int Duration = 4;
         private const int Range = 6;
@@ -38,14 +38,13 @@ Umiejętność jest włączona od {_currentDuration} faz.";
         }
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-        public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
-
 
         private Character _lastTargetCharacter;
         private int _currentDuration;
         
-        private void Use(Character character)
+        public void Use(Character character)
         {
+			ParentCharacter.TryToTakeTurn();
             _lastTargetCharacter = character;
             _currentDuration = 1;
 

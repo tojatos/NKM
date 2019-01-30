@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Kirito
 {
-    public class Switch : Ability, IClickable, IUseable
+    public class Switch : Ability, IClickable, IUseableCharacter
     {
         private const int Range = 7;
 
@@ -34,10 +34,10 @@ jeśli któryś z nich znajduje się w zasięgu podstawowego ataku wrogiej posta
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-	    private void Use(Character character)
+	    public void Use(Character character)
         {
+			ParentCharacter.TryToTakeTurn();
 	        Swap(ParentCharacter, character);
 	        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
 	        ParentCharacter.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = true; // TODO

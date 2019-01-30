@@ -6,7 +6,7 @@ using Extensions;
 
 namespace NKMObjects.Abilities.Sakai_Yuuji
 {
-    public class Grammatica : Ability, IClickable, IUseable
+    public class Grammatica : Ability, IClickable, IUseableCell, IUseableCharacter
     {
         private const int HealthPercentDamage = 25;
         private const int Range = 7;
@@ -31,15 +31,11 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        public void Use(List<HexCell> cells)
-        {
-            if(!cells[0].IsEmpty) Use(cells[0].CharactersOnCell[0]);
-            else Use(cells[0]);
-        }
 
         private Character _target;
-        private void Use(HexCell targetCell)
+        public void Use(HexCell targetCell)
         {
+			ParentCharacter.TryToTakeTurn();
             AnimationPlayer.Add(new GrammaticaStart(Game.HexMapDrawer.GetCharacterObject(ParentCharacter).transform, _target, Owner.Owner));
             if (_target.IsEnemyFor(Owner))
             {
@@ -51,7 +47,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
             Finish();
 
         }
-        private void Use(Character character)
+        public void Use(Character character)
         {
             _target = character;
             Active.Prepare(this, GetMoveCells());

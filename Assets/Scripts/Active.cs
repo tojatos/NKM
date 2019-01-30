@@ -24,7 +24,7 @@ public class Active
 	public AirSelection AirSelection { get; }
 
 	public GamePlayer GamePlayer;
-	public IUseable AbilityToUse;
+	public Ability AbilityToUse;
 	public Character SelectedCharacterToPlace;
 	public Character Character;
 	public HexCell SelectedCell;
@@ -77,7 +77,7 @@ public class Active
 	{
 		if (AbilityToUse != null)
 		{
-			((Ability)AbilityToUse).Cancel();
+			AbilityToUse.Cancel();
 			//Console.GameLog($"ABILITY CANCEL");
 		}
 		else if (SelectedCharacterToPlace != null)
@@ -92,7 +92,11 @@ public class Active
 		}
 	}
 
-	public void Prepare(IUseable abilityToPrepare) => AbilityToUse = abilityToPrepare;
+	public void Prepare(Ability a)
+	{
+		if(a is IUseableCellList || a is IUseableCell || a is IUseableCharacter) AbilityToUse = a;
+	}
+
 	private void Prepare(List<HexCell> cellRange, bool addToRange = false)
 	{
         if (cellRange == null) cellRange = new List<HexCell>();
@@ -101,11 +105,11 @@ public class Active
 		else
 			HexCells.AddRange(cellRange);
 	}
-	public void Prepare(IUseable abilityToPrepare, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
+	public void Prepare(Ability a, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
 	{
 		Prepare(cellRange, addToRange);
 
-		AbilityToUse = abilityToPrepare;
+		Prepare(a);
 		if (!toggleToRed) return;
 		_game.HexMapDrawer.RemoveHighlights();
 		SelectDrawnCells(HexCells).ForEach(c => c.AddHighlight(Highlights.RedTransparent));

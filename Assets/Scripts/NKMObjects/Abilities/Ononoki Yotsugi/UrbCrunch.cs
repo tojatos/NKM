@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace NKMObjects.Abilities.Ononoki_Yotsugi
 {
-    public class UrbCrunch : Ability, IClickable, IUseable
+    public class UrbCrunch : Ability, IClickable, IUseableCellList
     {
         private const int Damage = 20;
         private const int Range = 5;
@@ -32,6 +32,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Use(List<HexCell> cells)
         {
+			ParentCharacter.TryToTakeTurn();
             cells.ForEach(c =>
             {
                 if (c.Type != HexCell.TileType.Wall) return;

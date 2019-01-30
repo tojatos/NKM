@@ -39,8 +39,7 @@ Po użyciu tej umiejętności {ParentCharacter.Name} może się poruszyć.";
         {
 	        if (!IsEnabled)
 	        {
-		        //Active.MakeAction();
-			ParentCharacter.TryToTakeTurn();
+                ParentCharacter.TryToTakeTurn();
 		        IsEnabled = true;
                 ParentCharacter.Effects.Add(new Flying(Game, -1, ParentCharacter, Name));
 		        ParentCharacter.Effects.Add(new StatModifier(Game, -1, InitialADBonus, ParentCharacter, StatType.AttackPoints, Name));

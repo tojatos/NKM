@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Monkey_D._Luffy
 {
-    public class GomuGomuNoMi : Ability, IClickable, IUseable, IEnchantable
+    public class GomuGomuNoMi : Ability, IClickable, IUseableCell, IEnchantable
     {
         private const int Range = 7;
         private const int BazookaRange = 3;
@@ -62,13 +62,13 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
             MusicManager.PlayAudio("gomu gomu no");
         }
 
-        public void Use(List<HexCell> cells)
+        public void Use(HexCell cell)
         {
-            HexCell cell = cells[0];
+			ParentCharacter.TryToTakeTurn();
             if (cell.Type == HexCell.TileType.Wall) Rocket(cell);
             else
             {
-                Character enemy = cell.CharactersOnCell[0];
+                Character enemy = cell.FirstCharacter;
                 if (GetNeighboursOfOwner(BazookaRange).Contains(cell)) Bazooka(enemy);
                 else Pistol(enemy);
             }

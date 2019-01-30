@@ -1,79 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Extensions;
-using Managers;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Console : SingletonMonoBehaviour<Console>
+public class Console
 {
-    private readonly List<ConsoleLine> _loggedLines = new List<ConsoleLine>();
-    private List<ConsoleLine> NonDebugTexts => _loggedLines.FindAll(t => t.IsDebug == false);
-    public Text LogText;
-    public InputField InputField;
-    private static Game Game => GameStarter.Instance.Game;
-    private static Active Active => Game.Active;
-    private const int TextsDisplayed = 8;
+    public readonly List<ConsoleLine> LoggedLines = new List<ConsoleLine>();
+    public List<ConsoleLine> NonDebugLines => LoggedLines.FindAll(t => t.IsDebug == false);
+    
+    private readonly Game _game;
+    private Active Active => _game.Active;
 
-    private int _startingIndex;
+    public Console(Game game)
+    {
+        _game = game;
+    }
+
+    public event Delegates.Void AfterLog;
     private bool _isDebug = true;
 
-    public void Toggle()
+    public void Log(string text) => AddLog(text);
+    public void DebugLog(string text) => AddLog(text, true);
+    private void AddLog(string text, bool isDebug = false)
     {
-        if (gameObject.activeSelf) gameObject.Hide();
-        else Show();
-    }
-
-    private void Show()
-    {
-        UpdateLogText();
-        gameObject.Show();
-        InputField.ActivateInputField();
-    }
-
-    private void UpdateLogText(bool updateIndex = true)
-    {
-        if (updateIndex) _startingIndex = Mathf.Clamp(_loggedLines.Count - TextsDisplayed, 0, _loggedLines.Count);
-        string text = "";
-        List<ConsoleLine> texts = _isDebug ? _loggedLines : NonDebugTexts;
-        for (int i = _startingIndex; i < _startingIndex + TextsDisplayed; i++)
-        {
-            if (texts.ElementAtOrDefault(i) == null) break;
-            ConsoleLine lineToAdd = texts[i];
-            if (lineToAdd.IsDebug) text += "<b><color=red>" + lineToAdd + "</color></b>\n";
-            else text += lineToAdd + "\n";
-        }
-
-        LogText.text = text;
-    }
-
-    public void Log(string text)
-    {
-        //		LogText.text += text;
-        //		LogText.text += endline ? "\n": "";
-        //		FinishLogging();
-        _loggedLines.Add(new ConsoleLine
+        LoggedLines.Add(new ConsoleLine
         {
             Text = text,
-            IsDebug = false
+            IsDebug = isDebug,
         });
-        UpdateLogText();
+        AfterLog?.Invoke();
     }
-
-    public void DebugLog(string text)
-    {
-        _loggedLines.Add(new ConsoleLine
-        {
-            Text = text,
-            IsDebug = true,
-        });
-        UpdateLogText();
-    }
-
     public void GameLog(string text)
     {
-        string path = Game.Options.LogFilePath;
+        string path = _game.Options.LogFilePath;
         if (path == null) return;
         
         //Make sure target directory exists
@@ -82,12 +41,10 @@ public class Console : SingletonMonoBehaviour<Console>
         
         File.AppendAllText(path, text + '\n');
     }
-
-    private void OnGUI()
+    public void ExecuteCommand(string text)
     {
-        if (!InputField.isFocused || InputField.text == "" || !Input.GetKey(KeyCode.Return)) return;
-        string text = InputField.text;
         string[] arguments = text.Split(' ');
+        if(arguments.Length == 0) return; //TODO: check for arguments below to avoid IndexOutOfRange, maybe use a library?
 
         if ((new[] { "set", "s" }).Contains(arguments[0]))
         {
@@ -95,7 +52,7 @@ public class Console : SingletonMonoBehaviour<Console>
             if ((new[] { "debug", "d" }).Contains(arguments[1])) bool.TryParse(arguments[2], out _isDebug);
             if ((new[] { "abilities", "ab" }).Contains(arguments[1]))
             {
-                if ((new[] { "free", "f" }).Contains(arguments[2])) Game.Characters.FindAll(c => c.IsOnMap)
+                if ((new[] { "free", "f" }).Contains(arguments[2])) _game.Characters.FindAll(c => c.IsOnMap)
                   .ForEach(c => c.Abilities.ForEach(a => a.CurrentCooldown = 0));
             }
             if (Active.Character == null) return;
@@ -112,17 +69,13 @@ public class Console : SingletonMonoBehaviour<Console>
             if ((new[] {"character", "c"}).Contains(arguments[1]))
             {
                 if((new[] {"names", "n"}).Contains(arguments[2])) 
-                    Game.Characters.Select(c => c.ToString()).ToList().ForEach(Log);
+                    _game.Characters.Select(c => c.ToString()).ToList().ForEach(Log);
                 if((new[] {"actionstate", "a"}).Contains(arguments[2])) 
-                    Game.Characters.Select(c => c.ToString() + " " + c.TookActionInPhaseBefore.ToString()).ToList().ForEach(Log);
+                    _game.Characters.Select(c => c.ToString() + " " + c.TookActionInPhaseBefore.ToString()).ToList().ForEach(Log);
             }
             
         }
-        else Log("<i>Nieznana komenda:</i> " + text);
-
-        UpdateLogText();
-        InputField.text = "";
-        InputField.ActivateInputField();
+        else Log("Nieznana komenda: " + text);
     }
 }
 

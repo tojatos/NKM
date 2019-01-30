@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Asuna
 {
-	public class Dash : Ability, IClickable, IUseable
+	public class Dash : Ability, IClickable, IUseableCell
 	{
 		private const int AbilityRange = 4;
 		private const int AbilityHitRange = 4;
@@ -36,6 +36,7 @@ Czas odnowienia: {Cooldown + 1} z atakiem, {Cooldown} bez ataku.";
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 		private void DashTo(HexCell cell)
 		{
+			ParentCharacter.TryToTakeTurn();
 			ParentCharacter.MoveTo(cell);
 			_hasDashed = true;
 			List<HexCell> cellRange = GetNeighboursOfOwner(AbilityHitRange, SearchFlags.StopAtWalls | SearchFlags.StraightLine).WhereEnemiesOf(Owner);
@@ -60,10 +61,10 @@ Czas odnowienia: {Cooldown + 1} z atakiem, {Cooldown} bez ataku.";
 			else OnFailedUseFinish();
 		}
 
-		public void Use(List<HexCell> cells)
+		public void Use(HexCell cell)
 		{
-			if(!_hasDashed) DashTo(cells[0]);
-			else AfterDashAttack(cells[0].CharactersOnCell[0]);
+			if(!_hasDashed) DashTo(cell);
+			else AfterDashAttack(cell.FirstCharacter);
 		}
 	}
 }

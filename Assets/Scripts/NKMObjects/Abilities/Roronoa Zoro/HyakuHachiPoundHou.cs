@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Roronoa_Zoro
 {
-	public class HyakuHachiPoundHou : Ability, IClickable, IUseable
+	public class HyakuHachiPoundHou : Ability, IClickable, IUseableCharacter
 	{
 		private const int Damage = 18;
 		private const int Range = 6;
@@ -27,10 +27,9 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
-
-		private void Use(Character targetCharacter)
+		public void Use(Character targetCharacter)
 		{
+			ParentCharacter.TryToTakeTurn();
 			MusicManager.PlayAudio(Name);
 			HexCell targetCell = targetCharacter.ParentCell;
 			SendShockwave(targetCell);
@@ -45,10 +44,10 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			List<HexCell> shockwaveCells = ParentCharacter.ParentCell.GetLine(direction, Range).ToList();
 			foreach (HexCell c in shockwaveCells)
 			{
-				if (c.IsEmpty|| !c.CharactersOnCell[0].IsEnemyFor(Owner)) continue;
+				if (c.IsEmpty|| !c.FirstCharacter.IsEnemyFor(Owner)) continue;
 
 				var damage = new Damage(Damage, DamageType.Physical);
-				ParentCharacter.Attack(this, c.CharactersOnCell[0], damage);
+				ParentCharacter.Attack(this, c.FirstCharacter, damage);
 				break;
 			}
 		}

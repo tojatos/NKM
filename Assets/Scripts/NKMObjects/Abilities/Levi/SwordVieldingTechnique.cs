@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Levi
 {
-    public class SwordVieldingTechnique : Ability, IClickable, IUseable
+    public class SwordVieldingTechnique : Ability, IClickable, IUseableCell
     {
         private const int Range = 7;
         private const int MoveTargetRange = 7;
@@ -26,24 +26,19 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
 W trakcie przemieszczenia się zadaje podstawowe obrażenia osobom w zasięgu ataku.";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-//        private List<HexCell> _moveCells;
         private HexCell _theWall;
 
-        public void Use(List<HexCell> cells)
+        public void Use(HexCell cell)
         {
-            HexCell cell = cells[0];
             if (cell.Type == HexCell.TileType.Wall)
             {
-//                _moveCells = GetMoveTargets(cell);
-//                Active.Prepare(this, _moveCells);
                 _theWall = cell;
                 Active.Prepare(this, GetMoveTargets(cell));
                 AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(cell).transform.position, 0.13f));
             }
             else
             {
-//                int removeAfterIndex = _moveCells.FindIndex(c => c == cell);
-//                List<HexCell> realMoveCells = _moveCells.GetRange(0, removeAfterIndex);
+                ParentCharacter.TryToTakeTurn();
                 ParentCharacter.MoveTo(cell);
                 List<HexCell> realMoveCells = _theWall.GetLine(_theWall.GetDirection(cell), _theWall.GetDistance(cell));
                 

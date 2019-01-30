@@ -26,7 +26,6 @@ Promień działania: {HealRange}    Czas odnowienia: {Cooldown}";
 
         public void Click()
         {
-//            Active.MakeAction();
 			ParentCharacter.TryToTakeTurn();
             GetTargetsInRange().GetCharacters().ForEach(c => ParentCharacter.Heal(c, (int)(c.HealthPoints.BaseValue * HealPercent / 100f)));
             ParentCharacter.Effects.Add(new StatModifier(Game, BonusDuration, BasicAttackRangeBonus, ParentCharacter, StatType.BasicAttackRange, Name));

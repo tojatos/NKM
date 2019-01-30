@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Hanekawa_Tsubasa
 {
-	public class BloodKiss : Ability, IClickable, IUseable
+	public class BloodKiss : Ability, IClickable, IUseableCharacter
 	{
 		private const int Range = 3;
 		private const int DoTDamage = 8;
@@ -25,10 +25,10 @@ $@"{ParentCharacter.Name} liże wroga, wywołując silne krwawienie, które zada
 Zasięg: {Range} Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(Character targetCharacter)
+		public void Use(Character targetCharacter)
 		{
+            ParentCharacter.TryToTakeTurn();
 			var damage = new Damage(DoTDamage, DamageType.True);
 			targetCharacter.Effects.Add(new Poison(Game, ParentCharacter, damage, DoTTime, targetCharacter, Name));
 			Finish();

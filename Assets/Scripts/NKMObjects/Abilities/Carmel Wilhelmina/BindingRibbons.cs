@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Carmel_Wilhelmina
 {
-    public class BindingRibbons : Ability, IClickable, IUseable
+    public class BindingRibbons : Ability, IClickable, IUseableCellList
     {
         private const int Range = 4;
         private const int Radius = 3;
@@ -30,7 +30,6 @@ Gdy trafi co najmniej {EnemiesToHitToActivateSnare} wrogów unieruchamia ich dod
 
         public void Use(List<HexCell> cells)
         {
-           // Active.MakeAction();
 			ParentCharacter.TryToTakeTurn();
             List<Character> enemiesInRange = cells.WhereEnemiesOf(Owner).GetCharacters();
             enemiesInRange.ForEach(c =>

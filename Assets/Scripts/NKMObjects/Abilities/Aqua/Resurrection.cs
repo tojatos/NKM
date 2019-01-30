@@ -8,7 +8,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Aqua
 {
-	public class Resurrection : Ability, IClickable, IUseable
+	public class Resurrection : Ability, IClickable, IUseableCell
 	{
 		private Character _characterToResurrect;
 		private readonly Func<Character, bool> _isResurrectable = c => !c.IsAlive && c.DeathTimer <= 1;
@@ -48,14 +48,14 @@ Czas odnowienia: {Cooldown}";
 			SpriteSelect.Instance.Close();
 		}
 
-		private void Use(HexCell cell)
+		public void Use(HexCell cell)
 		{
+			ParentCharacter.TryToTakeTurn();
 			Game.HexMap.Place(_characterToResurrect, cell);
             _characterToResurrect.HealthPoints.Value = _characterToResurrect.HealthPoints.BaseValue / 2;
 
             Finish();
 			
 		}
-		public void Use(List<HexCell> cells) => Use(cells[0]);
 	}
 }

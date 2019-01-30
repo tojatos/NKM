@@ -32,7 +32,6 @@ Czas trwania: {Duration}    Czas odnowienia: {Cooldown}";
 
         public void Click()
         {
-            //Active.MakeAction();
 			ParentCharacter.TryToTakeTurn();
             Ability normalAbility = ParentCharacter.Abilities.Find(a => a.Type == AbilityType.Passive);
             if (normalAbility is IEnchantable) ((IEnchantable) normalAbility).IsEnchanted = true;

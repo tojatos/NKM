@@ -28,7 +28,11 @@ Zasięg: {Range}
 Czas trwania spowolnienia: {SlowDuration}
 Czas odnowienia: {Cooldown}";
 
-        public void Click() => Run();
+        public void Click()
+        {
+            ParentCharacter.TryToTakeTurn();
+            Run();
+        }
 
         public void Run()
         {

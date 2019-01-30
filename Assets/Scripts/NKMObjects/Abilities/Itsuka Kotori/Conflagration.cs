@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Itsuka_Kotori
 {
-    public class Conflagration : Ability, IClickable, IUseable
+    public class Conflagration : Ability, IClickable, IUseableCellList
     {
         private const int Range = 10;
         private const int Radius = 3;
@@ -52,6 +52,7 @@ Zasięg: {1}	Czas odnowienia: {2}",
 
         public void Use(List<HexCell> cells)
         {
+            ParentCharacter.TryToTakeTurn();
             cells.ForEach(c => c.Effects.Add(new HexCellEffects.Conflagration(Game, -1, c, ParentCharacter)));
             Finish();
         }

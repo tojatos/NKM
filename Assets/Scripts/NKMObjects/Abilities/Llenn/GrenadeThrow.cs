@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Llenn
 {
-    public class GrenadeThrow : Ability, IClickable, IUseable
+    public class GrenadeThrow : Ability, IClickable, IUseableCellList
     {
         private const int Damage = 16;
         private const int Range = 7;
@@ -27,6 +27,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Use(List<HexCell> cells)
         {
+			ParentCharacter.TryToTakeTurn();
             cells.GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(Damage, DamageType.Physical)));
             Finish();
         }

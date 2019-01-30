@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Rem
 {
-	public class AlHuma : Ability, IClickable, IUseable
+	public class AlHuma : Ability, IClickable, IUseableCellList
 	{
 		private const int Damage = 10;
 		private const int Range = 7;
@@ -26,9 +26,10 @@ ogłuszając go i zadając {Damage} obrażeń magicznych.
 Czas odnowiania: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
+	    public void Use(List<HexCell> cells) => Use(cells[0].FirstCharacter);
 		private void Use(Character targetCharacter)
 		{
+			ParentCharacter.TryToTakeTurn();
 			var damage = new Damage(Damage, DamageType.Magical);
 			ParentCharacter.Attack(this,targetCharacter, damage);
 			targetCharacter.Effects.Add(new Stun(Game, 1, targetCharacter, Name));

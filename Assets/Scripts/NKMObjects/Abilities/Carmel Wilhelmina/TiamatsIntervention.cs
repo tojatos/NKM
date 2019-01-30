@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Carmel_Wilhelmina
 {
-    public class TiamatsIntervention : Ability, IClickable, IUseable
+    public class TiamatsIntervention : Ability, IClickable, IUseableCell, IUseableCharacter
     {
         private const int Range = 8;
         private const int MoveTargetRange = 3;
@@ -30,23 +30,17 @@ a jeśli przeciwnik, ogłusza go na {StunDuration} fazę.";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-        public void Use(List<HexCell> cells)
-        {
-            HexCell cell = cells[0];
-            if(!cell.IsEmpty) Use(cell.CharactersOnCell[0]);
-            else Use(cell);
-        }
-
         private Character _selectedCharacter;
 
-        private void Use(Character character)
+        public void Use(Character character)
         {
             _selectedCharacter = character;
             Active.Prepare(this, GetMoveTargets());
         }
 
-        private void Use(HexCell cell)
+        public void Use(HexCell cell)
         {
+            ParentCharacter.TryToTakeTurn();
             _selectedCharacter.MoveTo(cell);
             if (_selectedCharacter.IsEnemyFor(Owner)) _selectedCharacter.Effects.Add(new Stun(Game, StunDuration, _selectedCharacter, Name));
             else _selectedCharacter.Shield.Value += Shield;

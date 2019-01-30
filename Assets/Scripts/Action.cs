@@ -78,9 +78,20 @@ public class Action
         AfterAction?.Invoke(Types.ClickAbility);
     }
 
-    public void UseAbility(IUseable ability, List<HexCell> cells)
+    public void UseAbility(IUseableCell ability, HexCell cell)
+    {
+        ability.Use(cell);
+        AfterAction?.Invoke(Types.UseAbility);
+    }
+    public void UseAbility(IUseableCellList ability, List<HexCell> cells)
     {
         ability.Use(cells);
+        AfterAction?.Invoke(Types.UseAbility);
+    }
+
+    public void UseAbility(IUseableCharacter ability, Character character)
+    {
+        ability.Use(character);
         AfterAction?.Invoke(Types.UseAbility);
     }
 

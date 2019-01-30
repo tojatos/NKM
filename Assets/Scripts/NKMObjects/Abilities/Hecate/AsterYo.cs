@@ -7,7 +7,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Hecate
 {
-	public class AsterYo : Ability, IClickable, IUseable
+	public class AsterYo : Ability, IClickable, IUseableCellList
 	{
 		private const int Damage = 12;
 		private const int Range = 10;

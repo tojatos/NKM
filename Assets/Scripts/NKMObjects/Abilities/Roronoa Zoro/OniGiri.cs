@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Roronoa_Zoro
 {
-	public class OniGiri : Ability, IClickable, IUseable
+	public class OniGiri : Ability, IClickable, IUseableCharacter
 	{
 		private const int Range = 4;
 
@@ -41,10 +41,10 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			});
 			MusicManager.PlayAudio("oni");
 		}
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-		private void Use(Character targetCharacter)
+		public void Use(Character targetCharacter)
 		{
+			ParentCharacter.TryToTakeTurn();
 			HexDirection direction = ParentCharacter.ParentCell.GetDirection(targetCharacter.ParentCell);
 			HexCell moveCell = targetCharacter.ParentCell.GetCell(direction, 2);
 			ParentCharacter.MoveTo(moveCell);

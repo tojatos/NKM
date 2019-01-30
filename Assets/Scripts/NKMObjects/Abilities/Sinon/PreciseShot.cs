@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Sinon
 {
-	public class PreciseShot : Ability, IClickable, IUseable
+	public class PreciseShot : Ability, IClickable, IUseableCharacter
 	{
 		private const int Damage = 40;
 		private const int Range = 11;
@@ -25,9 +25,9 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-	    public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
-		private void Use(Character character)
+		public void Use(Character character)
 		{
+			ParentCharacter.TryToTakeTurn();
 			var damage = new Damage(Damage, DamageType.Physical);
 			ParentCharacter.Attack(this, character, damage);
 			Finish();

@@ -64,7 +64,6 @@ Umiejętność jest włączona od {_currentDuration} faz.";
 
         private void Enable()
         {
-//            Active.MakeAction();
 			ParentCharacter.TryToTakeTurn();
             IsEnabled = true;
             _currentDuration = 1;

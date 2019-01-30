@@ -6,7 +6,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Ononoki_Yotsugi
 {
-    public class UrbRefuge : Ability, IClickable, IUseable
+    public class UrbRefuge : Ability, IClickable, IUseableCell
     {
         private const int Damage = 20;
         private const int CharacterGrabRange = 5;
@@ -35,23 +35,23 @@ Czas odnowienia; {Cooldown}";
 
         private Character _characterToTake;
         private HexCell _targetCell;
-        public void Use(List<HexCell> cells)
+        public void Use(HexCell cell)
         {
-            HexCell targetCell = cells[0];
-            if (!targetCell.IsEmpty)
+            if (!cell.IsEmpty)
             {
-                _characterToTake = targetCell.CharactersOnCell[0];
+                _characterToTake = cell.FirstCharacter;
                 Active.Prepare(this, GetTargetCells());
             }
             else if (_targetCell == null)
             {
-                _targetCell = targetCell;
+                _targetCell = cell;
                 Active.Prepare(this, _targetCell.GetNeighbors(Owner.Owner, Radius).FindAll(c => c.IsFreeToStand));
             }
             else
             {
+                ParentCharacter.TryToTakeTurn();
                 ParentCharacter.MoveTo(_targetCell);
-                _characterToTake.MoveTo(targetCell);
+                _characterToTake.MoveTo(cell);
 
                 ParentCharacter.Attack(this, _characterToTake, new Damage(Damage, DamageType.Physical));
                 _targetCell.GetNeighbors(Owner.Owner, Radius).WhereEnemiesOf(Owner).GetCharacters()

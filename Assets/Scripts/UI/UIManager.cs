@@ -19,7 +19,7 @@ namespace UI
 		private static Game Game => GameStarter.Instance.Game;
 		private static Active Active => Game.Active;
 		private static HexMap HexMap => Game.HexMap;
-		private static Console Console => Console.Instance;
+		private static ConsoleDrawer ConsoleDrawer => ConsoleDrawer.Instance;
 
 		private SpriteSelect _spriteSelect;
 
@@ -78,7 +78,7 @@ namespace UI
 		private void Update()
 		{
 			if (Input.GetKeyDown(KeyCode.F2))
-				Console.Toggle();
+				ConsoleDrawer.Toggle();
 
 			if (Game==null) return;
 

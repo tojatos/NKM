@@ -5,7 +5,7 @@ using NKMObjects.Templates;
 
 namespace NKMObjects.Abilities.Satou_Kazuma
 {
-    public class DrainTouch : Ability, IClickable, IUseable
+    public class DrainTouch : Ability, IClickable, IUseableCharacter
     {
         private const int Damage = 18;
         private const int Range = 6;
@@ -25,10 +25,10 @@ i przywracając sobie HP równe wartości zadanej przeciwnikowi.
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
-        public void Use(List<HexCell> cells) => Use(cells[0].CharactersOnCell[0]);
 
-        private void Use(Character character)
+        public void Use(Character character)
         {
+			ParentCharacter.TryToTakeTurn();
             var dmg = new Damage(Damage, DamageType.Magical);
             ParentCharacter.Attack(this, character, dmg);
             ParentCharacter.Heal(ParentCharacter, dmg.Value);
