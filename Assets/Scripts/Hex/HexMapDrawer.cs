@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Animations;
 using Extensions;
 using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Object = UnityEngine.Object;
 
 namespace Hex
 {
@@ -27,7 +29,45 @@ namespace Hex
 		public void SetCharacterObject(Character character, GameObject cObject) => _characterObjects[character] = cObject;
 	    
 		private HexMesh _hexMesh;
-		public void Init(Game game) => _game = game;
+		public void Init(Game game)
+		{
+			_game = game;
+			AddTriggersToEvents();
+		}
+
+		private void AddTriggersToEvents()
+		{
+            _game.HexMap.AfterMove += (character, cell) =>
+            {
+                if (GetCharacterObject(character) == null) return;
+                GetCharacterObject(character).transform.parent = Active.SelectDrawnCell(cell).transform;
+                AnimationPlayer.Add(new Destroy(Active.SelectDrawnCell(cell).gameObject.GetComponent<LineRenderer>())); //Remove the line
+                AnimationPlayer.Add(new MoveTo(GetCharacterObject(character).transform,
+                    GetCharacterObject(character).transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
+                
+            };
+            _game.HexMap.AfterCharacterPlace += (character, cell) => Spawner.Instance.Spawn(Active.SelectDrawnCell(cell), character);
+            Active.BeforeMoveCellsRemoved += cells => Active.SelectDrawnCells(cells).ForEach(c => Object.Destroy(c.gameObject.GetComponent<LineRenderer>()));
+            Active.AfterMoveCellAdded += hexcell =>
+            {
+                //Draw a line between two hexcell centres
+
+                //Check for component in case of Zoro's Lack of Orientation
+                DrawnHexCell cell = Active.SelectDrawnCell(hexcell);
+                LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null
+                    ? cell.gameObject.GetComponent<LineRenderer>()
+                    : cell.gameObject.AddComponent<LineRenderer>();
+                lRend.SetPositions(new[]
+                {
+                    Active.SelectDrawnCell(Active.MoveCells.SecondLast()).transform.position + Vector3.up * 20,
+                    cell.transform.position + Vector3.up * 20
+                });
+                lRend.material = new Material(Shader.Find("Standard")) {color = Color.black};
+                lRend.startColor = Color.black;
+                lRend.endColor = Color.black;
+                lRend.widthMultiplier = 2;
+            };
+		}
 
 		public void CreateMap(HexMap hexMap)
 		{

@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Animations;
 using Extensions;
 using Hex;
-using Managers;
 using NKMObjects;
 using NKMObjects.Templates;
-using UI;
-using UI.CharacterUI;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using Object = UnityEngine.Object;
+
 
 public class Game
 {
@@ -20,11 +14,8 @@ public class Game
 
 	public List<GamePlayer> Players;
 	public List<Character> Characters => Players.SelectMany(p => p.Characters).ToList();
-	public List<Ability> Abilities => Characters.SelectMany(p => p.Abilities).ToList();
+	private List<Ability> Abilities => Characters.SelectMany(c => c.Abilities).ToList();
 	public readonly Active Active;
-	private UIManager _uiManager;
-	private Spawner _spawner;
-	public HexMapDrawer HexMapDrawer;
 	public HexMap HexMap;
 	public readonly Action Action;
 	public readonly Console Console;
@@ -43,24 +34,15 @@ public class Game
 		Options = gameOptions;
 
 		Players = new List<GamePlayer>(gameOptions.Players);
-		_uiManager = Options.UIManager;
-		HexMapDrawer = HexMapDrawer.Instance;
-		HexMapDrawer.Init(this);
-		_spawner = Spawner.Instance;
-		Players.ForEach(p => p.Characters.ForEach(c => c.Abilities.ForEach(a => a.Awake())));
-		NKMRandom.OnValueGet += (name, value) => Console.GameLog($"RNG: {name}; {value}");
+		Abilities.ForEach(a => a.Awake());
 		HexMap = HexMapFactory.FromScriptable(Options.MapScriptable);
-		HexMap.AfterMove += (character, cell) =>
+		NKMRandom.OnValueGet += (name, value) => Console.GameLog($"RNG: {name}; {value}");
+		Action.AfterAction += str =>
 		{
-			if (HexMapDrawer.GetCharacterObject(character) == null) return;
-			HexMapDrawer.GetCharacterObject(character).transform.parent = Active.SelectDrawnCell(cell).transform;
-            AnimationPlayer.Add(new Destroy(Active.SelectDrawnCell(cell).gameObject.GetComponent<LineRenderer>())); //Remove the line
-			AnimationPlayer.Add(new MoveTo(HexMapDrawer.GetCharacterObject(character).transform,
-				HexMapDrawer.GetCharacterObject(character).transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
-			
+			if (str == Action.Types.BasicAttack || str == Action.Types.BasicMove) Active.Select(Active.Character);
 		};
-		HexMap.AfterCharacterPlace += (character, cell) => _spawner.Spawn(Active.SelectDrawnCell(cell), character);
 		IsInitialized = true;
+		
 		
 	}
 	/// <summary>
@@ -80,18 +62,9 @@ public class Game
 	{
 		if (!IsInitialized) return false;
 
-		HexMapDrawer.CreateMap(HexMap);
-		_uiManager.Init();
-		MainCameraController.Instance.Init(Options.MapScriptable.Map.width, Options.MapScriptable.Map.height);
-		UI.CharacterUI.Abilities.Instance.Init();
-		_uiManager.UpdateActivePhaseText();
 		TakeTurns();
 		LogGameStart();
-		if (GameStarter.Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2) PlaceAllCharactersOnSpawns(); //testing or all random
-//		if (IsReplay)
-//		{
-//			MakeGameLogActions();
-//		}
+		if(Options.PlaceAllCharactersRandomlyAtStart) PlaceAllCharactersOnSpawns();
 		return true;
 	}
 
@@ -181,7 +154,10 @@ GAME STARTED: true";
 		// ReSharper disable once FunctionNeverReturns
 	}
 
-	private static void FinishGame() => Victory.Instance.Show();
+	private static void FinishGame()
+	{
+		//TODO
+	}
 
 	private bool EveryCharacterTookActionInPhase => Players.All(p => p.Characters.Where(c => c.IsAlive).All(c => c.TookActionInPhaseBefore));
 	private bool IsEveryCharacterPlacedInTheFirstPhase => !(Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap)));
@@ -220,12 +196,14 @@ GAME STARTED: true";
 
 	public void AddTriggersToEvents(Character character)
 	{
+		AnimationPlayer.Instance.AddAnimationTriggers(character);
+		UI.UIManager.Instance.AddUITriggers(character);
+		Console.AddTriggersToEvents(character);
+		
         character.JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = character;
-        character.JustBeforeFirstAction += () => Console.GameLog($"ACTION TAKEN: {character}");
 		character.OnDeath += () =>
 		{
 			HexMap.RemoveFromMap(character);
-			AnimationPlayer.Add(new Destroy(HexMapDrawer.GetCharacterObject(character)));
 			character.DeathTimer = 0;
 			if (Active.Character == character) Active.Deselect();
 		};
@@ -234,45 +212,7 @@ GAME STARTED: true";
 			if (character.IsAlive) return;
 			character.InvokeOnDeath();
 		};
-        character.AfterAttack += (targetCharacter, damage) =>
-            Console.Log(
-                $"{character.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
-        character.AfterAttack += (targetCharacter, damage) =>
-            AnimationPlayer.Add(new Tilt(HexMapDrawer.GetCharacterObject(targetCharacter).transform));
-        character.AfterAttack += (targetCharacter, damage) =>
-            AnimationPlayer.Add(new ShowInfo(HexMapDrawer.GetCharacterObject(targetCharacter).transform, damage.Value.ToString(),
-                Color.red));
-        character.AfterHeal += (targetCharacter, valueHealed) =>
-            AnimationPlayer.Add(new ShowInfo(HexMapDrawer.GetCharacterObject(targetCharacter).transform, valueHealed.ToString(),
-                Color.blue));
-        character.HealthPoints.StatChanged += () =>
-        {
-            if (Active.Character == character) MainHPBar.Instance.UpdateHPAmount(character);
-        };
         character.OnDeath += () => character.Effects.Clear();
-        character.OnDeath += () => Console.Log($"{character.FormattedFirstName()} umiera!");
-        character.AfterHeal += (targetCharacter, value) =>
-            Console.Log(targetCharacter != character
-                ? $"{character.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
-                : $"{character.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
-		Action.AfterAction += str =>
-		{
-			if (str == Action.Types.BasicAttack || str == Action.Types.BasicMove) Active.Select(Active.Character);
-		};
-		Active.AfterSelect += chara =>
-		{
-			Stats.Instance.UpdateCharacterStats(chara);
-			MainHPBar.Instance.UpdateHPAmount(chara);
-			UI.CharacterUI.Abilities.Instance.UpdateButtons();
-			Effects.Instance.UpdateButtons();
-		};
-		Active.AfterDeselect += () =>
-		{
-			HexMapDrawer.RemoveHighlights();
-			Stats.Instance.UpdateCharacterStats(null);
-		};
-		character.AfterBasicMove += moveCells => 
-			Console.GameLog($"MOVE: {string.Join("; ", moveCells.Select(p => p.Coordinates))}"); //logging after action to make reading rng work
 		
         Active.Turn.TurnFinished += other =>
         {
@@ -298,25 +238,5 @@ GAME STARTED: true";
 		        character.DeathTimer++;
 	        }
         };
-		Active.BeforeMoveCellsRemoved += cells => Active.SelectDrawnCells(cells).ForEach(c => Object.Destroy(c.gameObject.GetComponent<LineRenderer>()));
-		Active.AfterMoveCellAdded += hexcell =>
-		{
-			//Draw a line between two hexcell centres
-
-			//Check for component in case of Zoro's Lack of Orientation
-			DrawnHexCell cell = Active.SelectDrawnCell(hexcell);
-			LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null
-				? cell.gameObject.GetComponent<LineRenderer>()
-				: cell.gameObject.AddComponent<LineRenderer>();
-			lRend.SetPositions(new[]
-			{
-				Active.SelectDrawnCell(Active.MoveCells.SecondLast()).transform.position + Vector3.up * 20,
-				cell.transform.position + Vector3.up * 20
-			});
-			lRend.material = new Material(Shader.Find("Standard")) {color = Color.black};
-			lRend.startColor = Color.black;
-			lRend.endColor = Color.black;
-			lRend.widthMultiplier = 2;
-		};
 	}
 }

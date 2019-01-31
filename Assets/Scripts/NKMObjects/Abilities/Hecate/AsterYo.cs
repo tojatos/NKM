@@ -39,7 +39,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 				ItadakiNoKura passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();
 
 				characters = characters.Where(c => c.Owner != ParentCharacter.Owner).ToList();
-				AnimationPlayer.Add(new Animations.AsterYo(Game.HexMapDrawer.GetCharacterObject(ParentCharacter).transform, characters.Select(c => Game.HexMapDrawer.GetCharacterObject(c).transform).ToList()));
+				AnimationPlayer.Add(new Animations.AsterYo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, characters.Select(c => HexMapDrawer.Instance.GetCharacterObject(c).transform).ToList()));
 				characters.ForEach(targetCharacter =>
 				{
 					var damage = new Damage(Damage, DamageType.Magical);

@@ -36,13 +36,13 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         public void Use(HexCell targetCell)
         {
 			ParentCharacter.TryToTakeTurn();
-            AnimationPlayer.Add(new GrammaticaStart(Game.HexMapDrawer.GetCharacterObject(ParentCharacter).transform, _target, Owner.Owner));
+            AnimationPlayer.Add(new GrammaticaStart(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, _target, Owner.Owner));
             if (_target.IsEnemyFor(Owner))
             {
                 int dmg = (int)(_target.HealthPoints.BaseValue * HealthPercentDamage / 100f);
                 ParentCharacter.Attack(this, _target, new Damage(dmg, DamageType.True));
             }
-            AnimationPlayer.Add(new GrammaticaFinish(Game.HexMapDrawer.GetCharacterObject(ParentCharacter).transform, Game.HexMapDrawer.GetCharacterObject(_target).transform, Active.SelectDrawnCell(targetCell).transform.TransformPoint(0,10,0)));
+            AnimationPlayer.Add(new GrammaticaFinish(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, HexMapDrawer.Instance.GetCharacterObject(_target).transform, Active.SelectDrawnCell(targetCell).transform.TransformPoint(0,10,0)));
             _target.MoveTo(targetCell);
             Finish();
 

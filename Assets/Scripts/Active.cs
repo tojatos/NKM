@@ -70,7 +70,6 @@ public class Active
         Character = null;
         HexCells = null;
         RemoveMoveCells();
-		_game.HexMapDrawer.RemoveHighlights();
 		AfterDeselect?.Invoke();
 	}
 	public void Cancel()
@@ -82,7 +81,7 @@ public class Active
 		}
 		else if (SelectedCharacterToPlace != null)
 		{
-			_game.HexMapDrawer.RemoveHighlights();
+			HexMapDrawer.Instance.RemoveHighlights();
 			SelectedCharacterToPlace = null;
 		}
 		else
@@ -111,7 +110,7 @@ public class Active
 
 		Prepare(a);
 		if (!toggleToRed) return;
-		_game.HexMapDrawer.RemoveHighlights();
+        HexMapDrawer.Instance.RemoveHighlights();
 		SelectDrawnCells(HexCells).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
 	}
 	public static List<DrawnHexCell> SelectDrawnCells(IEnumerable<HexCell> cells) => cells.Select(SelectDrawnCell).ToList();
@@ -142,8 +141,8 @@ public class Active
 		if(AirSelection.IsEnabled) AirSelection.Disable();
 		AbilityToUse = null;
 		HexCells = null;
-		_game.HexMapDrawer.RemoveHighlights();
-		_game.HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
+        HexMapDrawer.Instance.RemoveHighlights();
+        HexMapDrawer.Instance.RemoveHighlightsOfColor(Highlights.BlueTransparent);
 	}
 	public void CleanAndTrySelecting()
 	{

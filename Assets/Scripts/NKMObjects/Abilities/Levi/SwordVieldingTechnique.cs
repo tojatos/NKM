@@ -34,7 +34,7 @@ W trakcie przemieszczenia się zadaje podstawowe obrażenia osobom w zasięgu at
             {
                 _theWall = cell;
                 Active.Prepare(this, GetMoveTargets(cell));
-                AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(cell).transform.position, 0.13f));
+                AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(cell).transform.position, 0.13f));
             }
             else
             {
@@ -51,7 +51,7 @@ W trakcie przemieszczenia się zadaje podstawowe obrażenia osobom w zasięgu at
         public override void Cancel()
         {
             base.Cancel();
-            AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(ParentCharacter.ParentCell).transform.position, 0.13f));
+            AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(ParentCharacter.ParentCell).transform.position, 0.13f));
         }
     }
 }

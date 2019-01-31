@@ -34,7 +34,7 @@ public class AirSelection
 					_hexCells.AddRange(value[0].GetNeighbors(_game.Active.GamePlayer, _size));
 				}
 			}
-			_game.HexMapDrawer.RemoveHighlights();
+			HexMapDrawer.Instance.RemoveHighlights();
 			if (_game.Active.HexCells != null && _hexCells != null)
 			{
 				_game.Active.HexCells.ForEach(c =>

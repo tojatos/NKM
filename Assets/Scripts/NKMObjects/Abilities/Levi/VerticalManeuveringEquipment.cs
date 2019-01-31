@@ -30,7 +30,7 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
             if (cell.Type == HexCell.TileType.Wall)
             {
                 Active.Prepare(this, GetMoveTargets(cell));
-                AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(cell).transform.position, 0.13f));
+                AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(cell).transform.position, 0.13f));
             }
             else
             {
@@ -43,7 +43,7 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
         public override void Cancel()
         {
             base.Cancel();
-            AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(ParentCharacter.ParentCell).transform.position, 0.13f));
+            AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(ParentCharacter.ParentCell).transform.position, 0.13f));
         }
     }
 }

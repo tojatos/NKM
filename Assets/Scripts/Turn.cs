@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Hex;
 using NKMObjects.Templates;
 using UI;
 
@@ -23,7 +24,7 @@ public class Turn
 			IsDone = true;
 			CharacterThatTookActionInTurn = null;
 			_game.Active.Reset();
-			_game.HexMapDrawer.RemoveHighlights();
+			HexMapDrawer.Instance.RemoveHighlights();
 		};
 		TurnFinished += c => Console.GameLog("TURN FINISHED");
 	}

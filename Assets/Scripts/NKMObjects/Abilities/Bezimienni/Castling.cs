@@ -63,8 +63,8 @@ namespace NKMObjects.Abilities.Bezimienni
 		    HexMap.Move(_firstCharacterToSwap, c2);
 		    HexMap.Move(_secondCharacterToSwap, c1);
 		    
-		    AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(_firstCharacterToSwap).transform, Active.SelectDrawnCell(c2).transform.position, 1f));
-		    AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(_secondCharacterToSwap).transform, Active.SelectDrawnCell(c1).transform.position, 1f));
+		    AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(_firstCharacterToSwap).transform, Active.SelectDrawnCell(c2).transform.position, 1f));
+		    AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(_secondCharacterToSwap).transform, Active.SelectDrawnCell(c1).transform.position, 1f));
 	    }
     }
 }

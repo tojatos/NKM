@@ -29,7 +29,18 @@ namespace Managers
 		{
 			GameOptions gameOptions = await GetGameOptions();
 
+			if (Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2)
+				gameOptions.PlaceAllCharactersRandomlyAtStart = true;
+
 			Game.Init(gameOptions);
+			
+			UIManager.Instance.Init();
+            UIManager.Instance.UpdateActivePhaseText();
+			HexMapDrawer.Instance.Init(Game);
+            HexMapDrawer.Instance.CreateMap(Game.HexMap);
+            MainCameraController.Instance.Init(gameOptions.MapScriptable.Map.width, gameOptions.MapScriptable.Map.height);
+            UI.CharacterUI.Abilities.Instance.Init();
+		
 			bool isGameStarted = Game.StartGame();
 			if(!isGameStarted) throw new Exception("Game has not started!");
 		}
@@ -49,7 +60,6 @@ namespace Managers
 			{
 				MapScriptable = Stuff.Maps.Single(m => m.Map.name == "TestMap"),
 				Players = testingGamePlayers,
-				UIManager = UIManager.Instance,
 				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
 				Type = GameType.Local
 			};
@@ -78,7 +88,6 @@ namespace Managers
 			{
 				MapScriptable = Stuff.Maps.Single(m => m.Name == gameLog.GetMapName()),
 				Players = gamePlayers,
-				UIManager = UIManager.Instance,
 				Type = GameType.Replay,
 				GameLog = gameLog
 			};
@@ -99,7 +108,6 @@ namespace Managers
 			{
 				MapScriptable = GetMap(),
 				Players = await GetPlayers(),
-				UIManager = UIManager.Instance,
 				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
 				Type = GameType.Local
 			};

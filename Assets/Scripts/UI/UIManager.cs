@@ -10,6 +10,7 @@ using UI.HexCellUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Effects = UI.CharacterUI.Effects;
 
 namespace UI
 {
@@ -68,7 +69,7 @@ namespace UI
 		{
 			if (_spriteSelect.SelectedObjects.Count != 1) return;
 
-			Game.HexMapDrawer.RemoveHighlights();
+			HexMapDrawer.Instance.RemoveHighlights();
 			Active.GamePlayer.GetSpawnPoints(HexMap).FindAll(c => c.IsFreeToStand).ToList().ForEach(c => c.AddHighlight(Highlights.RedTransparent));
 			Active.SelectedCharacterToPlace = Active.GamePlayer.Characters.Single(c => c.Name == _spriteSelect.SelectedObjects[0].Name);
 			_spriteSelect.Close();
@@ -115,6 +116,27 @@ namespace UI
 			Game.Action.TakeTurn(Active.Character);
 			Game.Action.FinishTurn();
         }
+
+		public void AddUITriggers(Character character)
+		{
+            character.HealthPoints.StatChanged += () =>
+            {
+                if (Active.Character == character) MainHPBar.Instance.UpdateHPAmount(character);
+            };
+            Active.AfterSelect += chara =>
+            {
+                Stats.Instance.UpdateCharacterStats(chara);
+                MainHPBar.Instance.UpdateHPAmount(chara);
+                UI.CharacterUI.Abilities.Instance.UpdateButtons();
+                Effects.Instance.UpdateButtons();
+            };
+            Active.AfterDeselect += () =>
+            {
+                HexMapDrawer.Instance.RemoveHighlights();
+                Stats.Instance.UpdateCharacterStats(null);
+            };
+			
+		}
 
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Extensions;
+using NKMObjects.Templates;
 using UnityEngine;
 
 public class Console
@@ -76,6 +78,22 @@ public class Console
             
         }
         else Log("Nieznana komenda: " + text);
+    }
+
+    public void AddTriggersToEvents(Character character)
+    {
+        character.JustBeforeFirstAction += () => GameLog($"ACTION TAKEN: {character}");
+        character.AfterAttack += (targetCharacter, damage) => Log(
+            $"{character.FormattedFirstName()} atakuje {targetCharacter.FormattedFirstName()}, zadając <color=red><b>{damage.Value}</b></color> obrażeń!");
+        character.AfterHeal += (targetCharacter, value) =>
+            Log(targetCharacter != character
+                ? $"{character.FormattedFirstName()} ulecza {targetCharacter.FormattedFirstName()} o <color=blue><b>{value}</b></color> punktów życia!"
+                : $"{character.FormattedFirstName()} ulecza się o <color=blue><b>{value}</b></color> punktów życia!");
+        
+        character.OnDeath += () => Log($"{character.FormattedFirstName()} umiera!");
+		character.AfterBasicMove += moveCells => 
+			GameLog($"MOVE: {string.Join("; ", moveCells.Select(p => p.Coordinates))}"); //logging after action to make reading rng work
+        
     }
 }
 

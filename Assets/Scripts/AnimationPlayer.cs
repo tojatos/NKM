@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Animations;
+using Hex;
+using NKMObjects.Templates;
 using UnityEngine;
 
 public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
@@ -18,6 +20,18 @@ public class AnimationPlayer : SingletonMonoBehaviour<AnimationPlayer>
 		{
 			Debug.LogError(e.Message);
 		}
+	}
+
+	public void AddAnimationTriggers(Character character)
+	{
+        character.AfterAttack += (targetCharacter, damage) =>
+            Add(new Tilt(HexMapDrawer.Instance.GetCharacterObject(targetCharacter).transform));
+        character.AfterAttack += (targetCharacter, damage) =>
+            Add(new ShowInfo(HexMapDrawer.Instance.GetCharacterObject(targetCharacter).transform, damage.Value.ToString(), Color.red));
+        character.AfterHeal += (targetCharacter, valueHealed) =>
+            Add(new ShowInfo(HexMapDrawer.Instance.GetCharacterObject(targetCharacter).transform, valueHealed.ToString(), Color.blue));
+		character.OnDeath += () => Add(new Destroy(HexMapDrawer.Instance.GetCharacterObject(character)));
+
 	}
 //	public IEnumerator SharpenedForkEnumerator(Transform parentTransform, Transform targetTransform)
 //	{

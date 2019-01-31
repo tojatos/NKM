@@ -80,8 +80,8 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 		    HexCell c2 = secondCharacterToSwap.ParentCell;
 		    HexMap.Move(firstCharacterToSwap, c2);
 		    HexMap.Move(secondCharacterToSwap, c1);
-		    AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(firstCharacterToSwap).transform, Active.SelectDrawnCell(c2).transform.position, 0.4f));
-		    AnimationPlayer.Add(new MoveTo(Game.HexMapDrawer.GetCharacterObject(secondCharacterToSwap).transform, Active.SelectDrawnCell(c1).transform.position, 0.4f));
+		    AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(firstCharacterToSwap).transform, Active.SelectDrawnCell(c2).transform.position, 0.4f));
+		    AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(secondCharacterToSwap).transform, Active.SelectDrawnCell(c1).transform.position, 0.4f));
 	    }
     }
 }
