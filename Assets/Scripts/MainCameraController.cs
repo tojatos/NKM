@@ -11,7 +11,7 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 	public float PositionChange = 15f;
 
 	private Camera _cam;
-	private Game Game;
+	private Game _game;
 	private Vector3 _mainPosition;
 
 	private Vector3 _origin;
@@ -20,7 +20,7 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 
 	public void Init(int width, int height)
 	{
-		Game = GameStarter.Instance.Game;
+		_game = GameStarter.Instance.Game;
 		_cam = GetComponent<Camera>();
 		var mapWidth = width * HexMetrics.OuterRadius * 2;
 		var mapHeight = height * HexMetrics.InnerRadius * 2;
@@ -33,7 +33,7 @@ public class MainCameraController : SingletonMonoBehaviour<MainCameraController>
 	}
 	private void Update()
 	{
-		if(Game==null) return;
+		if(_game==null) return;
 //		if (Game.UIManager.VisibleUI != UIManager.Instance.GameUI) return;
 
 		if (Input.touchCount == 2)

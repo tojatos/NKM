@@ -25,10 +25,9 @@ namespace NKMObjects.Effects
 		}
 		public override string GetDescription()
 		{
-			return string.Format(
-@"Zadaje {0} obrażeń co fazę, oraz leczy za tą samą ilość bohatera, który nałożył ten efekt (<b>{1}</b>).
-Czas do zakończenia efektu: {2}",
-						 _damagePerTick, _characterThatAttacks.Name, CurrentCooldown);
+			return
+$@"Zadaje {_damagePerTick} obrażeń co fazę, oraz leczy za tą samą ilość bohatera, który nałożył ten efekt (<b>{_characterThatAttacks.Name}</b>).
+Czas do zakończenia efektu: {CurrentCooldown}";
 		}
 	}
 }

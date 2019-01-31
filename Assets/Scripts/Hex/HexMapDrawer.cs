@@ -6,7 +6,6 @@ using Extensions;
 using NKMObjects.Templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Object = UnityEngine.Object;
 
 namespace Hex
 {
@@ -47,7 +46,7 @@ namespace Hex
                 
             };
             _game.HexMap.AfterCharacterPlace += (character, cell) => Spawner.Instance.Spawn(Active.SelectDrawnCell(cell), character);
-            Active.BeforeMoveCellsRemoved += cells => Active.SelectDrawnCells(cells).ForEach(c => Object.Destroy(c.gameObject.GetComponent<LineRenderer>()));
+            Active.BeforeMoveCellsRemoved += cells => Active.SelectDrawnCells(cells).ForEach(c => Destroy(c.gameObject.GetComponent<LineRenderer>()));
             Active.AfterMoveCellAdded += hexcell =>
             {
                 //Draw a line between two hexcell centres
