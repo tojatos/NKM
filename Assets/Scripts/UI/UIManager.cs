@@ -10,7 +10,6 @@ using UI.HexCellUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-//using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace UI
 {
@@ -113,9 +112,7 @@ namespace UI
 		private static void HourglassImageClick()
 		{
             if(Active.Character.Owner != Active.GamePlayer) return;
-			//Active.CharacterOnMap.TryToInvokeJustBeforeFirstAction();
 			Game.Action.TakeTurn(Active.Character);
-//			Active.Turn.Finish();
 			Game.Action.FinishTurn();
         }
 

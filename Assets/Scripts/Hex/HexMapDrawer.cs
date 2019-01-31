@@ -4,6 +4,7 @@ using System.Linq;
 using Extensions;
 using NKMObjects.Templates;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Hex
 {
@@ -153,7 +154,7 @@ namespace Hex
 			}
 			if (Input.GetMouseButtonDown(0))
 			{
-				if (Game.IsPointerOverUiObject()) return; //Do not touch cells if mouse is over UI
+				if (IsPointerOverUiObject()) return; //Do not touch cells if mouse is over UI
 
 				HexCell cellPointed = CellPointed();
 				if (cellPointed != null) TouchCell(cellPointed);
@@ -221,5 +222,15 @@ namespace Hex
 	            }
             }
         }
+        public static bool IsPointerOverUiObject()
+        {
+            var eventDataCurrentPosition =
+                new PointerEventData(EventSystem.current) {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            return results.Count > 0;
+        }
+        public static void ShowHelpHexCells(List<DrawnHexCell> cells) => cells.ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
+        public void HideHelpHexCells() => RemoveHighlightsOfColor(Highlights.BlueTransparent);
 	}
 }

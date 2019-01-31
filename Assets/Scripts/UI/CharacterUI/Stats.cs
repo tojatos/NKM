@@ -1,4 +1,5 @@
 ﻿using Extensions;
+using Hex;
 using Managers;
 using NKMObjects.Templates;
 using UnityEngine;
@@ -40,13 +41,13 @@ namespace UI.CharacterUI
 
 		private void SetAttackHelpTriggers()
 		{
-			RangeObject.AddTrigger(EventTriggerType.PointerEnter, e => Game.ShowHelpHexCells(Game.Active.Character.GetBasicAttackCells()));
-			RangeObject.AddTrigger(EventTriggerType.PointerExit, e => Game.HideHelpHexCells());
+			RangeObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(Active.SelectDrawnCells(Game.Active.Character.GetBasicAttackCells())));
+			RangeObject.AddTrigger(EventTriggerType.PointerExit, e => HexMapDrawer.Instance.HideHelpHexCells());
 		}
 		private void SetMoveHelpTriggers()
 		{
-			SpeedObject.AddTrigger(EventTriggerType.PointerEnter, e => Game.ShowHelpHexCells(Game.Active.Character.GetBasicMoveCells()));
-			SpeedObject.AddTrigger(EventTriggerType.PointerExit, e => Game.HideHelpHexCells());
+			SpeedObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(Active.SelectDrawnCells(Game.Active.Character.GetBasicMoveCells())));
+			SpeedObject.AddTrigger(EventTriggerType.PointerExit, e => HexMapDrawer.Instance.HideHelpHexCells());
 		}
 		private void EmptyTextes()
 		{

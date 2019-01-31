@@ -176,15 +176,14 @@ GAME STARTED: true";
 
 			if (!IsEveryCharacterPlacedInTheFirstPhase) continue;
 
-//			if (NoCharacterOnMapCanTakeAction) Active.Phase.Finish();
-			if (UIManager.CanClickEndTurnButton && NoCharacterOnMapCanTakeAction || Active.Phase.Number == 0 && NoCharacterOnMapCanTakeAction) Active.Phase.Finish();//TODO
+			if(EveryCharacterTookActionInPhase) Active.Phase.Finish();
 		}
 		// ReSharper disable once FunctionNeverReturns
 	}
 
 	private static void FinishGame() => Victory.Instance.Show();
 
-	private bool NoCharacterOnMapCanTakeAction => Players.All(p => p.Characters.Where(c => c.IsOnMap).All(c => !c.CanTakeAction));
+	private bool EveryCharacterTookActionInPhase => Players.All(p => p.Characters.Where(c => c.IsAlive).All(c => c.TookActionInPhaseBefore));
 	private bool IsEveryCharacterPlacedInTheFirstPhase => !(Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap)));
 
 	/// <summary>
@@ -196,8 +195,6 @@ GAME STARTED: true";
 		Func<bool> isTurnDone = () => Active.Turn.IsDone;
 		await isTurnDone.WaitToBeTrue();
 	}
-
-
 
 	/// <summary>
 	/// Try to place all characters from game on their spawns
@@ -322,16 +319,4 @@ GAME STARTED: true";
 			lRend.widthMultiplier = 2;
 		};
 	}
-	
-	public static bool IsPointerOverUiObject()
-	{
-		var eventDataCurrentPosition =
-			new PointerEventData(EventSystem.current) {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
-		List<RaycastResult> results = new List<RaycastResult>();
-		EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-		return results.Count > 0;
-	}
-
-	public void ShowHelpHexCells(List<HexCell> cells) => Active.SelectDrawnCells(cells).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
-	public void HideHelpHexCells() => HexMapDrawer.RemoveHighlightsOfColor(Highlights.BlueTransparent);
 }

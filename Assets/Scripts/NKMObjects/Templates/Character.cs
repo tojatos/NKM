@@ -315,92 +315,10 @@ namespace NKMObjects.Templates
 			IsFlying 
 				? ParentCell.GetNeighbors(Owner, Speed.Value, SearchFlags.StopAtEnemyCharacters)
 				: ParentCell.GetNeighbors(Owner, Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls);
-
-
-//		public void Select()
-//		{
-//			Active.Clean();
-//			Active.Character = this;
-//			AfterSelect?.Invoke();
-//			if (Active.GamePlayer != Owner) return;
-//			PrepareAttackAndMove();
-//		}
-//		public void Deselect()
-//		{
-//			Active.Character = null;
-////			Active.ActionType = ActionType.None;
-//			Active.HexCells = null;
-//			Active.RemoveMoveCells();
-//			AfterDeselect?.Invoke();
-//		}
-
-//		public void TryToInvokeJustBeforeFirstAction()
-//		{
-//			if (CanTakeAction) JustBeforeFirstAction?.Invoke();
-//		}
 		public void TryToTakeTurn()
 		{
 			if(Active.Turn.CharacterThatTookActionInTurn==null) JustBeforeFirstAction?.Invoke();
 		}
-
-//		private void PrepareAttackAndMove()
-//		{
-//			if (Active.GamePlayer != Owner)
-//			{
-//				Console.DebugLog("Nie jesteś właścicielem! Wara!");
-//				return;
-//			}
-//
-//			bool isPreparationSuccessful;
-//			if (!CanTakeAction || !CanUseBasicMove && !CanUseBasicAttack)
-//			{
-//				Console.DebugLog("Ta postać nie może się ruszać ani atakować!");
-//				return;
-//			}
-//
-//			if (!CanUseBasicMove && CanUseBasicAttack)
-//			{
-//				isPreparationSuccessful = Active.Prepare(GetPrepareBasicAttackCells());
-//			}
-//			else if (CanUseBasicMove && !CanUseBasicAttack)
-//			{
-//				isPreparationSuccessful = Active.Prepare(GetPrepareBasicMoveCells());
-//			}
-//			else
-//			{
-//				var p1 = Active.Prepare(GetPrepareBasicMoveCells());
-//				var p2 = Active.Prepare(GetPrepareBasicAttackCells(), true);
-//				isPreparationSuccessful = p1 || p2;
-//			}
-//			if (!isPreparationSuccessful)
-//			{
-//				//there are no cells to move or attack
-//				return;
-//			}
-//
-//			Active.HexCells.Distinct().ToList().ForEach(c =>
-//				Active.SelectDrawnCell(c).AddHighlight(
-//					!c.IsEmpty&&
-//					(c.FirstCharacter.IsEnemyFor(Owner) || CanAttackAllies && CanUseBasicAttack && GetBasicAttackCells().Contains(c))
-//						? Highlights.RedTransparent
-//						: Highlights.GreenTransparent));
-//				
-//			Active.RemoveMoveCells();
-//			Active.MoveCells.Add(ParentCell);
-//
-//		}
-
-//		public void MakeActionBasicAttack(Character target)
-//		{
-//			TryToInvokeJustBeforeFirstAction();
-//            BasicAttack(target);
-//			//Console.GameLog($"BASIC ATTACK: {target}"); //logging after action to make reading rng work
-//		}
-//		public void MakeActionBasicMove([NotNull] List<HexCell> moveCells)
-//		{
-//			TryToInvokeJustBeforeFirstAction();
-//			BasicMove(new List<HexCell>(moveCells)); //work on a new list to log unmodified list below
-//		}
 		
         public class Properties
         {
