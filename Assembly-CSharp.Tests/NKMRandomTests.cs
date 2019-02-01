@@ -1,3 +1,4 @@
+using NKMCore;
 using Xunit;
 
 namespace Assembly_CSharp.Tests

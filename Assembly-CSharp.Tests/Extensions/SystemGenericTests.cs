@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Extensions;
+using NKMCore.Extensions;
 using Xunit;
 
 namespace Assembly_CSharp.Tests

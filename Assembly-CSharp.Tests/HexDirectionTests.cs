@@ -1,4 +1,4 @@
-using Hex;
+using Unity.Hex;
 using Xunit;
 
 namespace Assembly_CSharp.Tests

@@ -20,9 +20,13 @@ It will be improved later.
 
 `Assets/Scripts/` - all code
 
-`Assets/Scripts/NKMObjects/Templates/` - some important files, such as Ability.cs and Character.cs
+`Assets/Scripts/Unity` - frontend code
 
-`Assets/Scripts/NKMObjects/Abilities/` - fun stuff, character abilities
+`Assets/Scripts/NKMCore` - backend code
+
+`Assets/Scripts/NKMCore/Templates/` - some important files, such as Ability.cs and Character.cs
+
+`Assets/Scripts/NKMCore/Abilities/` - fun stuff - character abilities
 
 ## Running / building the game
 

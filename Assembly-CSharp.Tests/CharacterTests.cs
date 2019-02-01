@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using NKMObjects.Templates;
+using NKMCore;
+using NKMCore.Templates;
 using Xunit;
 
 namespace Assembly_CSharp.Tests
