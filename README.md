@@ -33,6 +33,8 @@ It will be improved later.
 To run the game simply clone the project and open it in Unity (should work in 2018.1+).
 You can build using Unity's usual way (ctrl+B), using `Developement` on the toolbar, or using script in root folder (BuildLinux.sh or BuildWindows.cmd).
 
+Make sure that in the Main Game scene IsTesting is not selected in Game Starter object.
+
 ## Future
 
 Right now I am focused on decoupling and writing tests.
