@@ -35,6 +35,8 @@ You can build using Unity's usual way (ctrl+B), using `Developement` on the tool
 
 Make sure that in the Main Game scene IsTesting is not selected in Game Starter object.
 
+Warning: the game may not work properly on Windows due to a bug with directory names. This will be fixed after decoupling (Soon&trade;)
+
 ## Future
 
 Right now I am focused on decoupling and writing tests.
