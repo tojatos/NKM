@@ -6,6 +6,7 @@ using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Animations;
+using Unity.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Action = NKMCore.Action;
@@ -222,7 +223,11 @@ namespace Unity.Hex
             Active.SelectedCell = touchedCell;
             if (Active.SelectedCharacterToPlace != null)
             {
+	            if(!Active.GamePlayer.GetSpawnPoints(_game.HexMap).Contains(touchedCell)) return;
                 Action.PlaceCharacter(Active.SelectedCharacterToPlace, touchedCell);
+	            if (Active.Phase.Number != 0) return;
+	            UIManager.Instance.ForcePlacingChampions = false;
+	            Active.Turn.Finish();
             }
             else if (Active.HexCells?.Contains(touchedCell) == true)
             {
