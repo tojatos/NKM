@@ -40,3 +40,6 @@ sysinfo.txt
 # Jetbrains
 **/.idea/workspace.xml
 **/.idea/tasks.xml
+
+# Doxygen
+/docs/html/
