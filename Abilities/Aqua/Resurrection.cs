@@ -4,7 +4,6 @@ using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
 
 namespace NKMCore.Abilities.Aqua
 {
@@ -32,20 +31,17 @@ Czas odnowienia: {Cooldown}";
 
 		public void Click()
 		{
-			Active.Prepare(this);
-			SpriteSelect.Instance.Open(Active.GamePlayer.Characters.Where(_isResurrectable),
-				FinishSelectingButtonClick, "Postać do ożywienia", "Zakończ wybieranie postaci");
-		}
-
-		private void FinishSelectingButtonClick()
-		{
-			List<Character> selectedObj = SpriteSelect.Instance.SelectedObjects;
-			if (selectedObj.Count != 1) return;
-
-			Character character = selectedObj[0];
-			_characterToResurrect = character;
-			Active.Prepare(this, GetRangeCells());
-			SpriteSelect.Instance.Close();
+			Active.Select(new SelectableProperties<Character>()
+			{
+				ToSelect = Active.GamePlayer.Characters.FindAll(_isResurrectable.Invoke),
+				ConstraintOfSelection = list => list.Count == 1,
+				OnSelectFinish = list =>
+				{
+					_characterToResurrect = list[0];
+                    Active.Prepare(this, GetRangeCells());
+				},
+				SelectionTitle = "Postać do ożywienia",
+			});
 		}
 
 		public void Use(HexCell cell)
@@ -55,7 +51,6 @@ Czas odnowienia: {Cooldown}";
             _characterToResurrect.HealthPoints.Value = _characterToResurrect.HealthPoints.BaseValue / 2;
 
             Finish();
-			
 		}
 	}
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity;
 using Unity.Hex;
+using UnityEngine.UI;
 
 namespace NKMCore
 {
@@ -162,6 +164,8 @@ namespace NKMCore
 		
 		public bool CanWait(Character character) => !(character.Owner != GamePlayer || character.TookActionInPhaseBefore ||
 		                         Turn.CharacterThatTookActionInTurn != null);
+
+		public void Select<T>(SelectableProperties<T> props) => _game.Selectable.Select(props);
 	}
 }
 
