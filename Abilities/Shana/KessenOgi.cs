@@ -3,7 +3,6 @@ using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity.Hex;
 
 namespace NKMCore.Abilities.Shana
 {

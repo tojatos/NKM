@@ -3,7 +3,6 @@ using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity;
-using Unity.Hex;
 using Unity.Managers;
 
 namespace NKMCore.Abilities.Roronoa_Zoro
