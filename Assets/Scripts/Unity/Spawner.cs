@@ -9,8 +9,6 @@ using Unity.Hex;
 using Unity.Managers;
 using UnityEngine;
 
-//using NKMObject = NKMObjects.Templates.NKMObject;
-
 namespace Unity
 {
 	public class Spawner : SingletonMonoBehaviour<Spawner>
@@ -46,19 +44,6 @@ namespace Unity
 		}
 
 
-		private static T Create<T>(string namespaceName, string className) where T : class 
-		{
-			string typeName = "NKMCore." + namespaceName + "." + className;
-			Type type = Type.GetType(typeName);
-			if (type == null) throw new NullReferenceException();
-
-			return Activator.CreateInstance(type, Game) as T;
-		}
-
-		public static IEnumerable<T> Create<T>(string namespaceName, IEnumerable<string> classNames) where T : class
-		{
-			return classNames.Select(className => Create<T>(namespaceName, className)).ToList();
-		}
 
 		public static bool CanSpawn(Character character, HexCell cell) => cell.IsFreeToStand && cell.IsSpawnFor(character.Owner);
 		public void Spawn(DrawnHexCell cell, Character characterToSpawn)

@@ -16,7 +16,7 @@ namespace NKMCore
 
 			properties.Name = name;
 			properties.Id = id;
-			properties.Abilities = AbilityFactory.CreateAndInitiateAbilitiesFromDatabase(name);
+			properties.Abilities = AbilityFactory.CreateAndInitiateAbilitiesFromDatabase(name, game);
 			return new Character(game, properties);
 		}
 
