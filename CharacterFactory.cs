@@ -12,13 +12,15 @@ namespace NKMCore
 		private static Character CreateCharacterFromDatabase(Game game, string name, uint id)
 		{
 			SqliteRow characterData = GameData.Conn.GetCharacterData(name);
-			Character.Properties properties = GetCharacterProperties(characterData);
-			List<Ability> abilities = AbilityFactory.CreateAndInitiateAbilitiesFromDatabase(name);
-			
-			return new Character(game, name, id, properties, abilities);
+			Character.Properties properties = GetCharacterDbProperties(characterData);
+
+			properties.Name = name;
+			properties.Id = id;
+			properties.Abilities = AbilityFactory.CreateAndInitiateAbilitiesFromDatabase(name);
+			return new Character(game, properties);
 		}
 
-		private static Character.Properties GetCharacterProperties(SqliteRow characterData)
+		private static Character.Properties GetCharacterDbProperties(SqliteRow characterData)
 		{
 			return new Character.Properties
 			{

@@ -58,7 +58,7 @@ namespace NKMCore
 			Character = character;
 			AfterSelect?.Invoke(character);
 		
-			if (GamePlayer != character.Owner || !character.CanTakeAction) return;
+			if (!CanTakeAction(character)) return;
 		
 			Prepare(character.GetPrepareBasicAttackCells());
 			Prepare(character.GetPrepareBasicMoveCells(), true);
@@ -153,6 +153,15 @@ namespace NKMCore
 			Clean();	
 			Select(Character);
 		}
+		
+		public bool CanTakeAction(Character character) => 
+			!(character.TookActionInPhaseBefore || !character.IsAlive ||
+           Turn.CharacterThatTookActionInTurn != null &&
+           Turn.CharacterThatTookActionInTurn != character || character.IsStunned ||
+           GamePlayer != character.Owner);
+		
+		public bool CanWait(Character character) => !(character.Owner != GamePlayer || character.TookActionInPhaseBefore ||
+		                         Turn.CharacterThatTookActionInTurn != null);
 	}
 }
 
