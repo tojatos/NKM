@@ -1,13 +1,9 @@
-﻿using UnityEngine;
-
-namespace Unity.Hex
+﻿namespace NKMCore.Hex
 {
 	public struct HexCoordinates
 	{
-		[SerializeField]
 		private readonly int _x;
 
-		[SerializeField]
 		private readonly int _z;
 
 		public int X => _x;
@@ -16,7 +12,7 @@ namespace Unity.Hex
 
 		public int Y => -X - Z;
 
-		private HexCoordinates(int x, int z)
+		public HexCoordinates(int x, int z)
 		{
 			_x = x;
 			_z = z;
@@ -27,31 +23,6 @@ namespace Unity.Hex
 			return new HexCoordinates(x - z / 2, z);
 		}
 
-		public static HexCoordinates FromPosition(Vector3 position)
-		{
-			var x = position.x / (HexMetrics.InnerRadius * 2f);
-			var y = -x;
-			var offset = position.z / (HexMetrics.OuterRadius * 3f);
-			x -= offset;
-			y -= offset;
-			var iX = Mathf.RoundToInt(x);
-			var iY = Mathf.RoundToInt(y);
-			var iZ = Mathf.RoundToInt(-x - y);
-			if (iX + iY + iZ == 0) return new HexCoordinates(iX, iZ);
-			var dX = Mathf.Abs(x - iX);
-			var dY = Mathf.Abs(y - iY);
-			var dZ = Mathf.Abs(-x - y - iZ);
-
-			if (dX > dY && dX > dZ)
-			{
-				iX = -iY - iZ;
-			}
-			else if (dZ > dY)
-			{
-				iZ = -iX - iY;
-			}
-			return new HexCoordinates(iX, iZ);
-		}
 
 		public override string ToString() => $"({X}, {Y}, {Z})";
 		public static bool operator ==(HexCoordinates c1, HexCoordinates c2) => c1.Equals(c2);

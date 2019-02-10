@@ -4,7 +4,6 @@ using System.Linq;
 using JetBrains.Annotations;
 using NKMCore.Extensions;
 using NKMCore.Templates;
-using Unity.Hex;
 
 namespace NKMCore.Hex
 {

@@ -4,7 +4,6 @@ using System.Linq;
 using NKMCore.Effects;
 using NKMCore.Extensions;
 using NKMCore.Hex;
-using Unity.Hex;
 
 namespace NKMCore.Templates
 {

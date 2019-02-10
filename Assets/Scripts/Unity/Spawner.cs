@@ -37,9 +37,6 @@ namespace Unity
 			sr.sprite = Stuff.Sprites.HighlightHexagons.Single(s => s.name == effectName); 
 			parentCell.EffectHighlights.Add(highlightObject);
 		}
-
-
-
 		public static bool CanSpawn(Character character, HexCell cell) => cell.IsFreeToStand && cell.IsSpawnFor(character.Owner);
 		public void Spawn(DrawnHexCell cell, Character characterToSpawn)
 		{

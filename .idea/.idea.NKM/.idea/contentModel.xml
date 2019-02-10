@@ -240,6 +240,8 @@
           <e p="GamePlayer.cs" t="Include" />
           <e p="Hex" t="Include">
             <e p="HexCell.cs" t="Include" />
+            <e p="HexCoordinates.cs" t="Include" />
+            <e p="HexDirection.cs" t="Include" />
             <e p="HexMap.cs" t="Include" />
             <e p="SearchFlags.cs" t="Include" />
           </e>
@@ -308,13 +310,12 @@
           <e p="CreatableBackgroundCamera.cs" t="Include" />
           <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
           <e p="Extensions" t="Include">
+            <e p="Hex.cs" t="Include" />
             <e p="Tooltip.cs" t="Include" />
             <e p="UnityGameObject.cs" t="Include" />
           </e>
           <e p="Hex" t="Include">
             <e p="DrawnHexCell.cs" t="Include" />
-            <e p="HexCoordinates.cs" t="Include" />
-            <e p="HexDirection.cs" t="Include" />
             <e p="HexMapDrawer.cs" t="Include" />
             <e p="HexMapFactory.cs" t="Include" />
             <e p="HexMapScriptable.cs" t="Include" />

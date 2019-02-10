@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Unity.Hex
+namespace NKMCore.Hex
 {
 	public enum HexDirection 
 	{

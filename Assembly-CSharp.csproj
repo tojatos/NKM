@@ -185,6 +185,8 @@
     <Compile Include="Assets\Scripts\NKMCore\HexCellEffects\Conflagration.cs" />
     <Compile Include="Assets\Scripts\NKMCore\HexCellEffects\HowlingBlizzard.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexCell.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Hex\HexCoordinates.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Hex\HexDirection.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexMap.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\SearchFlags.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Instantiator.cs" />
@@ -239,11 +241,10 @@
     <Compile Include="Assets\Scripts\Unity\ConsoleDrawer.cs" />
     <Compile Include="Assets\Scripts\Unity\CreatableBackgroundCamera.cs" />
     <Compile Include="Assets\Scripts\Unity\CreatableSingletonMonoBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Unity\Extensions\Hex.cs" />
     <Compile Include="Assets\Scripts\Unity\Extensions\Tooltip.cs" />
     <Compile Include="Assets\Scripts\Unity\Extensions\UnityGameObject.cs" />
     <Compile Include="Assets\Scripts\Unity\Hex\DrawnHexCell.cs" />
-    <Compile Include="Assets\Scripts\Unity\Hex\HexCoordinates.cs" />
-    <Compile Include="Assets\Scripts\Unity\Hex\HexDirection.cs" />
     <Compile Include="Assets\Scripts\Unity\Hex\HexMapDrawer.cs" />
     <Compile Include="Assets\Scripts\Unity\Hex\HexMapFactory.cs" />
     <Compile Include="Assets\Scripts\Unity\Hex\HexMapScriptable.cs" />

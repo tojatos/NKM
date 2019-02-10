@@ -6,6 +6,7 @@ using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Animations;
+using Unity.Extensions;
 using Unity.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -144,7 +145,7 @@ namespace Unity.Hex
 		private HexCell GetCellByPosition(ref Vector3 position)
 		{
 			position = transform.InverseTransformPoint(position);
-			HexCoordinates coordinates = HexCoordinates.FromPosition(position);
+			HexCoordinates coordinates = position.ToCoordinates();
 			return _game.HexMap.Cells.First(c => c.Coordinates == coordinates);
 		}
 
