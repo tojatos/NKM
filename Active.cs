@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity;
 using Unity.Hex;
-using UnityEngine.UI;
 
 namespace NKMCore
 {

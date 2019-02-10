@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Unity.Hex;
+using NKMCore.Hex;
 
 namespace NKMCore
 {
 	public class GameOptions
 	{
 		public List<GamePlayer> Players { get; set; }
-		public HexMapScriptable MapScriptable { get; set; }
+		public HexMap HexMap { get; set; }
 		public GameType Type { get; set; }
 		public bool PlaceAllCharactersRandomlyAtStart { get; set; }
 		public ISelectable Selectable { get; set; }

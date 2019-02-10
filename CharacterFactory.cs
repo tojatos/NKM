@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NKMCore.Extensions;
+﻿using NKMCore.Extensions;
 using NKMCore.Templates;
 
 namespace NKMCore
