@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using NKMCore;
+using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Hex;
 using Unity.UI;
@@ -43,7 +44,7 @@ namespace Unity.Managers
             UIManager.Instance.UpdateActivePhaseText();
 			HexMapDrawer.Instance.Init(Game);
             HexMapDrawer.Instance.CreateMap(Game.HexMap);
-            MainCameraController.Instance.Init(gameOptions.MapScriptable.Map.width, gameOptions.MapScriptable.Map.height);
+			MainCameraController.Instance.Init(Game);
             UI.CharacterUI.Abilities.Instance.Init();
 		
 			bool isGameStarted = Game.StartGame();
@@ -63,7 +64,7 @@ namespace Unity.Managers
 				.ToList();
 			var gameOptions = new GameOptions
 			{
-				MapScriptable = Stuff.Maps.Single(m => m.Map.name == "TestMap"),
+				HexMap = HexMapFactory.FromScriptable(Stuff.Maps.Single(m => m.Map.name == "TestMap")),
 				Players = testingGamePlayers,
 				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
 				Type = GameType.Local
@@ -91,7 +92,7 @@ namespace Unity.Managers
 			}).ToList();
 			var gameOptions =  new GameOptions
 			{
-				MapScriptable = Stuff.Maps.Single(m => m.Name == gameLog.GetMapName()),
+				HexMap = HexMapFactory.FromScriptable(Stuff.Maps.Single(m => m.Name == gameLog.GetMapName())),
 				Players = gamePlayers,
 				Type = GameType.Replay,
 				GameLog = gameLog
@@ -111,19 +112,19 @@ namespace Unity.Managers
 
 			return new GameOptions
 			{
-				MapScriptable = GetMap(),
+				HexMap = GetMap(),
 				Players = await GetPlayers(),
 				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
 				Type = GameType.Local
 			};
 		}
 
-		private static HexMapScriptable GetMap()
+		private static HexMap GetMap()
 		{
 //					var mapIndex = SessionSettings.Instance.SelectedMapIndex;
             int mapIndex = S.GetDropdownSetting(SettingType.SelectedMapIndex);
             HexMapScriptable mapScriptable = Stuff.Maps[mapIndex];
-            return mapScriptable;
+            return HexMapFactory.FromScriptable(mapScriptable);
 		}
 		
 		private async Task<List<GamePlayer>> GetPlayers()

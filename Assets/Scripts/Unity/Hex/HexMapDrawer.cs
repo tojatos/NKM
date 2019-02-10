@@ -31,7 +31,7 @@ namespace Unity.Hex
 
 		public void SetCharacterObject(Character character, GameObject cObject) => _characterObjects[character] = cObject;
 	    
-		private HexMesh _hexMesh;
+		public HexMesh HexMesh { get; private set; }
 		public void Init(Game game)
 		{
 			_game = game;
@@ -74,8 +74,8 @@ namespace Unity.Hex
 
 		public void CreateMap(HexMap hexMap)
 		{
-			_hexMesh = GetComponentInChildren<HexMesh>();
-			_hexMesh.Init();
+			HexMesh = GetComponentInChildren<HexMesh>();
+			HexMesh.Init();
 			hexMap.Cells.ForEach(CreateCell);
 			
 			TriangulateCells();
@@ -83,7 +83,7 @@ namespace Unity.Hex
 
 		public void TriangulateCells()
 		{
-			_hexMesh.Triangulate(Cells);
+			HexMesh.Triangulate(Cells);
 		}
 
 		private void CreateCell(HexCell hexCell)
@@ -220,6 +220,7 @@ namespace Unity.Hex
 
 		private void TouchCell(HexCell touchedCell)
         {
+	        Debug.Log(touchedCell.Coordinates);
             Active.SelectedCell = touchedCell;
             if (Active.SelectedCharacterToPlace != null)
             {

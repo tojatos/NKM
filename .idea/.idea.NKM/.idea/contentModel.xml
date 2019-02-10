@@ -247,6 +247,7 @@
             <e p="Conflagration.cs" t="Include" />
             <e p="HowlingBlizzard.cs" t="Include" />
           </e>
+          <e p="Instantiator.cs" t="Include" />
           <e p="NKMID.cs" t="Include" />
           <e p="NKMRandom.cs" t="Include" />
           <e p="Phase.cs" t="Include" />

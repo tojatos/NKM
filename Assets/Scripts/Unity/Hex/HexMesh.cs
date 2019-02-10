@@ -6,7 +6,7 @@ namespace Unity.Hex
 	[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 	public class HexMesh : MonoBehaviour
 	{
-		private Mesh _hexMesh;
+		public Mesh Mesh { get; private set; }
 		private MeshCollider _meshCollider;
 
 		private List<Vector3> _vertices;
@@ -15,9 +15,9 @@ namespace Unity.Hex
 
 		public void Init()
 		{
-			GetComponent<MeshFilter>().mesh = _hexMesh = new Mesh();
+			GetComponent<MeshFilter>().mesh = Mesh = new Mesh();
 			_meshCollider = gameObject.AddComponent<MeshCollider>();
-			_hexMesh.name = "Hex Mesh";
+			Mesh.name = "Hex Mesh";
 			_vertices = new List<Vector3>();
 			_triangles = new List<int>();
 			_colors = new List<Color>();
@@ -25,7 +25,7 @@ namespace Unity.Hex
 		}
 		public void Triangulate(List<DrawnHexCell> cells)
 		{
-			_hexMesh.Clear();
+			Mesh.Clear();
 			_vertices.Clear();
 			_triangles.Clear();
 			_colors.Clear();
@@ -34,11 +34,11 @@ namespace Unity.Hex
 			//	Triangulate(cells[i]);
 			//}
 			cells.ForEach(Triangulate);
-			_hexMesh.vertices = _vertices.ToArray();
-			_hexMesh.colors = _colors.ToArray();
-			_hexMesh.triangles = _triangles.ToArray();
-			_hexMesh.RecalculateNormals();
-			_meshCollider.sharedMesh = _hexMesh;
+			Mesh.vertices = _vertices.ToArray();
+			Mesh.colors = _colors.ToArray();
+			Mesh.triangles = _triangles.ToArray();
+			Mesh.RecalculateNormals();
+			_meshCollider.sharedMesh = Mesh;
 		}
 
 		private void Triangulate(DrawnHexCell cell)

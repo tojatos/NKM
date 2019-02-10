@@ -6,7 +6,6 @@ using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity;
-using Unity.Hex;
 using Unity.UI;
 
 namespace NKMCore
@@ -40,7 +39,7 @@ namespace NKMCore
 
 			Players = new List<GamePlayer>(gameOptions.Players);
 			Abilities.ForEach(a => a.Awake());
-			HexMap = HexMapFactory.FromScriptable(Options.MapScriptable);
+			HexMap = gameOptions.HexMap;//HexMapFactory.FromScriptable(Options.MapScriptable);
 			NKMRandom.OnValueGet += (name, value) => Console.GameLog($"RNG: {name}; {value}");
 			Action.AfterAction += str =>
 			{

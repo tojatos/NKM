@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NKMCore;
+﻿using System.Linq;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Extensions;
 using Unity.Hex;
-using Unity.Managers;
 using UnityEngine;
 
 namespace Unity
@@ -15,7 +11,6 @@ namespace Unity
 	{
 		public GameObject CharacterPrefab;
 		public GameObject HighlightPrefab;
-		private static Game Game => GameStarter.Instance.Game;
 		private void SpawnCharacterObject(DrawnHexCell parentCell, Character characterToSpawn)
 		{
 			Sprite characterSprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(s => s.name == characterToSpawn.Name) ?? Stuff.Sprites.CharacterHexagons.Single(s => s.name == "Empty");
