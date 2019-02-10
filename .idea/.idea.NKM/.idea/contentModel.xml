@@ -37,67 +37,6 @@
         <e p="HexCoordinatesDrawer.cs" t="Include" />
       </e>
       <e p="Assets/Scripts" t="Include">
-        <e p="AnimationPlayer.cs" t="Include" />
-        <e p="Animations" t="Include">
-          <e p="AsterYo.cs" t="Include" />
-          <e p="CamaelMegiddo.cs" t="Include" />
-          <e p="Destroy.cs" t="Include" />
-          <e p="GrammaticaFinish.cs" t="Include" />
-          <e p="GrammaticaStart.cs" t="Include" />
-          <e p="ItadakiNoKura.cs" t="Include" />
-          <e p="MoveTo.cs" t="Include" />
-          <e p="NkmAnimation.cs" t="Include" />
-          <e p="NkmAnimationPart.cs" t="Include" />
-          <e p="Parts" t="Include">
-            <e p="AsterYoFinish.cs" t="Include" />
-            <e p="AsterYoStart.cs" t="Include" />
-            <e p="CamaelMegiddoStart.cs" t="Include" />
-            <e p="Destroy.cs" t="Include" />
-            <e p="DestroyParticles.cs" t="Include" />
-            <e p="FloatingInfoFinish.cs" t="Include" />
-            <e p="FloatingInfoStart.cs" t="Include" />
-            <e p="Hide.cs" t="Include" />
-            <e p="ItadakiNoKuraFinish.cs" t="Include" />
-            <e p="ItadakiNoKuraStart.cs" t="Include" />
-            <e p="MoveToPosition.cs" t="Include" />
-            <e p="Show.cs" t="Include" />
-            <e p="TeleportToPosition.cs" t="Include" />
-            <e p="Wait.cs" t="Include" />
-          </e>
-          <e p="ShowInfo.cs" t="Include" />
-          <e p="Tilt.cs" t="Include" />
-        </e>
-        <e p="ColorToTileType.cs" t="Include" />
-        <e p="ConsoleDrawer.cs" t="Include" />
-        <e p="CreatableBackgroundCamera.cs" t="Include" />
-        <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
-        <e p="Extensions" t="Include">
-          <e p="Tooltip.cs" t="Include" />
-          <e p="UnityGameObject.cs" t="Include" />
-        </e>
-        <e p="Hex" t="Include">
-          <e p="DrawnHexCell.cs" t="Include" />
-          <e p="HexCoordinates.cs" t="Include" />
-          <e p="HexDirection.cs" t="Include" />
-          <e p="HexMapDrawer.cs" t="Include" />
-          <e p="HexMapFactory.cs" t="Include" />
-          <e p="HexMapScriptable.cs" t="Include" />
-          <e p="HexMesh.cs" t="Include" />
-          <e p="HexMetrics.cs" t="Include" />
-        </e>
-        <e p="HighlightColor.cs" t="Include" />
-        <e p="Highlights.cs" t="Include" />
-        <e p="IsRaycastValid.cs" t="Include" />
-        <e p="MainCameraController.cs" t="Include" />
-        <e p="Managers" t="Include">
-          <e p="GameStarter.cs" t="Include" />
-          <e p="MainMenu.cs" t="Include" />
-          <e p="MusicManager.cs" t="Include" />
-          <e p="Options.cs" t="Include" />
-          <e p="PreGameOptions.cs" t="Include" />
-          <e p="ServerList.cs" t="Include" />
-          <e p="ShortcutManager.cs" t="Include" />
-        </e>
         <e p="NKMCore" t="Include">
           <e p="Abilities" t="Include">
             <e p="Aqua" t="Include">
@@ -311,6 +250,7 @@
           <e p="NKMID.cs" t="Include" />
           <e p="NKMRandom.cs" t="Include" />
           <e p="Phase.cs" t="Include" />
+          <e p="SelectableProperties.cs" t="Include" />
           <e p="Stat.cs" t="Include" />
           <e p="Templates" t="Include">
             <e p="Ability.cs" t="Include" />
@@ -331,30 +271,93 @@
           </e>
           <e p="Turn.cs" t="Include" />
         </e>
-        <e p="PlayerPrefsX.cs" t="Include" />
-        <e p="Scenes.cs" t="Include" />
-        <e p="SessionSettings.cs" t="Include" />
-        <e p="SingletonMonoBehaviour.cs" t="Include" />
-        <e p="Spawner.cs" t="Include" />
-        <e p="SpriteSelect.cs" t="Include" />
-        <e p="Stuff.cs" t="Include" />
-        <e p="Tooltip.cs" t="Include" />
-        <e p="UI" t="Include">
-          <e p="CharacterUI" t="Include">
-            <e p="Abilities.cs" t="Include" />
-            <e p="Effects.cs" t="Include" />
-            <e p="Face.cs" t="Include" />
-            <e p="Info.cs" t="Include" />
-            <e p="MainHPBar.cs" t="Include" />
-            <e p="Stats.cs" t="Include" />
+        <e p="Unity" t="Include">
+          <e p="AnimationPlayer.cs" t="Include" />
+          <e p="Animations" t="Include">
+            <e p="AsterYo.cs" t="Include" />
+            <e p="CamaelMegiddo.cs" t="Include" />
+            <e p="Destroy.cs" t="Include" />
+            <e p="GrammaticaFinish.cs" t="Include" />
+            <e p="GrammaticaStart.cs" t="Include" />
+            <e p="ItadakiNoKura.cs" t="Include" />
+            <e p="MoveTo.cs" t="Include" />
+            <e p="NkmAnimation.cs" t="Include" />
+            <e p="NkmAnimationPart.cs" t="Include" />
+            <e p="Parts" t="Include">
+              <e p="AsterYoFinish.cs" t="Include" />
+              <e p="AsterYoStart.cs" t="Include" />
+              <e p="CamaelMegiddoStart.cs" t="Include" />
+              <e p="Destroy.cs" t="Include" />
+              <e p="DestroyParticles.cs" t="Include" />
+              <e p="FloatingInfoFinish.cs" t="Include" />
+              <e p="FloatingInfoStart.cs" t="Include" />
+              <e p="Hide.cs" t="Include" />
+              <e p="ItadakiNoKuraFinish.cs" t="Include" />
+              <e p="ItadakiNoKuraStart.cs" t="Include" />
+              <e p="MoveToPosition.cs" t="Include" />
+              <e p="Show.cs" t="Include" />
+              <e p="TeleportToPosition.cs" t="Include" />
+              <e p="Wait.cs" t="Include" />
+            </e>
+            <e p="ShowInfo.cs" t="Include" />
+            <e p="Tilt.cs" t="Include" />
           </e>
-          <e p="HexCellUI" t="Include">
-            <e p="Effects.cs" t="Include" />
-            <e p="HexImage.cs" t="Include" />
+          <e p="ColorToTileType.cs" t="Include" />
+          <e p="ConsoleDrawer.cs" t="Include" />
+          <e p="CreatableBackgroundCamera.cs" t="Include" />
+          <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
+          <e p="Extensions" t="Include">
+            <e p="Tooltip.cs" t="Include" />
+            <e p="UnityGameObject.cs" t="Include" />
           </e>
-          <e p="Replay.cs" t="Include" />
-          <e p="UIManager.cs" t="Include" />
-          <e p="Victory.cs" t="Include" />
+          <e p="Hex" t="Include">
+            <e p="DrawnHexCell.cs" t="Include" />
+            <e p="HexCoordinates.cs" t="Include" />
+            <e p="HexDirection.cs" t="Include" />
+            <e p="HexMapDrawer.cs" t="Include" />
+            <e p="HexMapFactory.cs" t="Include" />
+            <e p="HexMapScriptable.cs" t="Include" />
+            <e p="HexMesh.cs" t="Include" />
+            <e p="HexMetrics.cs" t="Include" />
+          </e>
+          <e p="HighlightColor.cs" t="Include" />
+          <e p="Highlights.cs" t="Include" />
+          <e p="IsRaycastValid.cs" t="Include" />
+          <e p="MainCameraController.cs" t="Include" />
+          <e p="Managers" t="Include">
+            <e p="GameStarter.cs" t="Include" />
+            <e p="MainMenu.cs" t="Include" />
+            <e p="MusicManager.cs" t="Include" />
+            <e p="Options.cs" t="Include" />
+            <e p="PreGameOptions.cs" t="Include" />
+            <e p="ServerList.cs" t="Include" />
+            <e p="ShortcutManager.cs" t="Include" />
+          </e>
+          <e p="PlayerPrefsX.cs" t="Include" />
+          <e p="Scenes.cs" t="Include" />
+          <e p="SessionSettings.cs" t="Include" />
+          <e p="SingletonMonoBehaviour.cs" t="Include" />
+          <e p="Spawner.cs" t="Include" />
+          <e p="SpriteSelect.cs" t="Include" />
+          <e p="Stuff.cs" t="Include" />
+          <e p="Tooltip.cs" t="Include" />
+          <e p="UI" t="Include">
+            <e p="CharacterUI" t="Include">
+              <e p="Abilities.cs" t="Include" />
+              <e p="Effects.cs" t="Include" />
+              <e p="Face.cs" t="Include" />
+              <e p="Info.cs" t="Include" />
+              <e p="MainHPBar.cs" t="Include" />
+              <e p="Stats.cs" t="Include" />
+            </e>
+            <e p="HexCellUI" t="Include">
+              <e p="Effects.cs" t="Include" />
+              <e p="HexImage.cs" t="Include" />
+            </e>
+            <e p="Replay.cs" t="Include" />
+            <e p="UIManager.cs" t="Include" />
+            <e p="Victory.cs" t="Include" />
+          </e>
         </e>
       </e>
       <e p="Assets/VertexColors.shader" t="Include" />

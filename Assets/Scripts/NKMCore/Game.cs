@@ -22,6 +22,7 @@ namespace NKMCore
 		public HexMap HexMap;
 		public readonly Action Action;
 		public readonly Console Console;
+		public ISelectable Selectable { get; private set; }
 
 		public bool IsInitialized;
 		public bool IsReplay => Options.GameLog != null;
@@ -35,6 +36,7 @@ namespace NKMCore
 		public void Init(GameOptions gameOptions)
 		{
 			Options = gameOptions;
+			Selectable = gameOptions.Selectable;
 
 			Players = new List<GamePlayer>(gameOptions.Players);
 			Abilities.ForEach(a => a.Awake());
@@ -180,5 +182,10 @@ namespace NKMCore
 				}
 			};
 		}
+	}
+
+	public interface ISelectable
+	{
+		void Select<T>(SelectableProperties<T> props);
 	}
 }

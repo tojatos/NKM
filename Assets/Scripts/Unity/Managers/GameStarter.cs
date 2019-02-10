@@ -34,6 +34,7 @@ namespace Unity.Managers
 
 			if (Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2)
 				gameOptions.PlaceAllCharactersRandomlyAtStart = true;
+			gameOptions.Selectable = new SpriteSelectSelectable();
 
 			Game.Init(gameOptions);
 			
@@ -284,5 +285,22 @@ namespace Unity.Managers
 
 
 
+	}
+
+	class SpriteSelectSelectable : ISelectable
+	{
+		public void Select<T>(SelectableProperties<T> props)
+		{
+//			bool isSelected = false;
+			if(typeof(T) == typeof(Character)) SpriteSelect.Instance.Open(props.ToSelect as List<Character>, () =>
+			{
+                List<Character> selectedObj = SpriteSelect.Instance.SelectedObjects;
+				if (!props.ConstraintOfSelection(selectedObj as List<T>)) return;
+				props.OnSelectFinish(selectedObj as List<T>);
+//				isSelected = true;
+
+                SpriteSelect.Instance.Close();
+			}, props.SelectionTitle, "Zakończ wybieranie" );
+		}
 	}
 }
