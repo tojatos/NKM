@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NKMCore.Extensions;
 using NKMCore.Templates;
-using Unity.Extensions;
-using UnityEngine;
 
 namespace NKMCore
 {
@@ -69,7 +68,6 @@ namespace NKMCore
             }
             else if ((new[] {"get", "g"}).Contains(arguments[0]))
             {
-                if ((new[] { "gamepads", "g" }).Contains(arguments[1])) Log(string.Join("\n", Input.GetJoystickNames()));
                 if ((new[] {"character", "c"}).Contains(arguments[1]))
                 {
                     if((new[] {"names", "n"}).Contains(arguments[2])) 
