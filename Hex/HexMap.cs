@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NKMCore.Templates;
 
@@ -20,6 +21,17 @@ namespace NKMCore.Hex
 		    _charactersOnCells[character] = cell;
 		    AfterMove?.Invoke(character, cell);
 	    }
+
+	    public void Swap(Character firstCharacterToSwap, Character secondCharacterToSwap)
+	    {
+		    HexCell c1 = firstCharacterToSwap.ParentCell;
+		    HexCell c2 = secondCharacterToSwap.ParentCell;
+		    Move(firstCharacterToSwap, c2);
+		    Move(secondCharacterToSwap, c1);
+		    AfterSwap?.Invoke(Tuple.Create(firstCharacterToSwap, secondCharacterToSwap));
+	    }
+		    
+	    public Delegates.CharacterTuple AfterSwap;
 	    public Delegates.CharacterCell AfterMove;
 	    public Delegates.CharacterCell AfterCharacterPlace;
 

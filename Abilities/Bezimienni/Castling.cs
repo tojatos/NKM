@@ -2,9 +2,6 @@
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
-using Unity.Animations;
-using Unity.Hex;
 
 namespace NKMCore.Abilities.Bezimienni
 {
@@ -41,7 +38,7 @@ namespace NKMCore.Abilities.Bezimienni
 			{
 				_secondCharacterToSwap = character;
                 ParentCharacter.TryToTakeTurn();
-				Swap();
+				HexMap.Swap(_firstCharacterToSwap, _secondCharacterToSwap);
 				Finish();
 			}
 		}
@@ -56,17 +53,6 @@ namespace NKMCore.Abilities.Bezimienni
 	    {
 		    base.Cancel();
 		    Cleanup();
-	    }
-
-	    private void Swap()
-	    {
-		    HexCell c1 = _firstCharacterToSwap.ParentCell;
-		    HexCell c2 = _secondCharacterToSwap.ParentCell;
-		    HexMap.Move(_firstCharacterToSwap, c2);
-		    HexMap.Move(_secondCharacterToSwap, c1);
-		    
-		    AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(_firstCharacterToSwap).transform, Active.SelectDrawnCell(c2).transform.position, 1f));
-		    AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(_secondCharacterToSwap).transform, Active.SelectDrawnCell(c1).transform.position, 1f));
 	    }
     }
 }

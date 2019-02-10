@@ -3,9 +3,6 @@ using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
-using Unity.Animations;
-using Unity.Hex;
 
 namespace NKMCore.Abilities.Kirito
 {
@@ -40,7 +37,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 	    public void Use(Character character)
         {
 			ParentCharacter.TryToTakeTurn();
-	        Swap(ParentCharacter, character);
+	        HexMap.Swap(ParentCharacter, character);
 	        ParentCharacter.HasFreeAttackUntilEndOfTheTurn = true;
 	        ParentCharacter.HasFreeUltimatumAbilityUseUntilEndOfTheTurn = true; // TODO
 	        Delegates.CharacterDamage onAttack = null;
@@ -75,15 +72,5 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 	        };
 	        Finish();
         }
-        
-	    private void Swap(Character firstCharacterToSwap, Character secondCharacterToSwap)
-	    {
-		    HexCell c1 = firstCharacterToSwap.ParentCell;
-		    HexCell c2 = secondCharacterToSwap.ParentCell;
-		    HexMap.Move(firstCharacterToSwap, c2);
-		    HexMap.Move(secondCharacterToSwap, c1);
-		    AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(firstCharacterToSwap).transform, Active.SelectDrawnCell(c2).transform.position, 0.4f));
-		    AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(secondCharacterToSwap).transform, Active.SelectDrawnCell(c1).transform.position, 0.4f));
-	    }
     }
 }
