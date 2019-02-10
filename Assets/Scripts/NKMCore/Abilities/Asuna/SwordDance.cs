@@ -1,5 +1,5 @@
-﻿using NKMCore.Templates;
-using Unity.Extensions;
+﻿using NKMCore.Extensions;
+using NKMCore.Templates;
 
 namespace NKMCore.Abilities.Asuna
 {

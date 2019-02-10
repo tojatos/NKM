@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Extensions;
@@ -17,9 +18,8 @@ namespace Unity
 			GameObject characterObject = Instantiate(CharacterPrefab, parentCell.transform);
 			characterObject.name = characterToSpawn.Name;
 			characterObject.transform.Find("Character Sprite").GetComponent<SpriteRenderer>().sprite = characterSprite;
-			characterObject.transform.Find("Border").GetComponent<SpriteRenderer>().color = characterToSpawn.Owner.GetColor();
+			characterObject.transform.Find("Border").GetComponent<SpriteRenderer>().color = characterToSpawn.Owner.GetColor().ToUnityColor();
 			characterObject.transform.localPosition = new Vector3(0, 10, 0);
-			//GameStarter.Instance.Game.HexMap.Place(characterToSpawn, parentCell.HexCell);
 			HexMapDrawer.Instance.SetCharacterObject(characterToSpawn, characterObject);
 		}
 		public void SpawnHighlightCellObject(DrawnHexCell parentCell, string colorName)

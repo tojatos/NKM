@@ -221,7 +221,6 @@ namespace Unity.Hex
 
 		private void TouchCell(HexCell touchedCell)
         {
-	        Debug.Log(touchedCell.Coordinates);
             Active.SelectedCell = touchedCell;
             if (Active.SelectedCharacterToPlace != null)
             {

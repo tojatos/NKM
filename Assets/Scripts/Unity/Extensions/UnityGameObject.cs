@@ -1,15 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using NKMCore;
-using NKMCore.Extensions;
-using NKMCore.Templates;
-using Unity.Hex;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 namespace Unity.Extensions
 {
@@ -78,7 +72,6 @@ namespace Unity.Extensions
 		public static Vector3 GetCharacterTransformPoint(this Transform transform) =>
 			transform.TransformPoint(0, 10, 0);
 		
-		private static string ToHex(this Color32 color) => $"#{color.r:X2}{color.g:X2}{color.b:X2}";
 		public static void Clear(this Transform transform)
 		{
 			foreach (Transform child in transform)
@@ -87,28 +80,13 @@ namespace Unity.Extensions
 			}
 			//return transform;
 		}
-		
-		public static Color GetColor(this GamePlayer gamePlayer)
+
+		public static Color ToUnityColor(this string rgbColor)
 		{
-			switch (gamePlayer.GetIndex())
-			{
-				case 0:
-					return Color.red;
-				case 1:
-					return Color.green;
-				case 2:
-					return Color.blue;
-				case 3:
-					return Color.cyan;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+			Color outColor;
+			ColorUtility.TryParseHtmlString(rgbColor, out outColor);
+			return outColor;
 		}
-		
-		public static string FormattedFirstName(this Character character) => string.Format("<color={0}><</color><b>{1}</b><color={0}>></color>", ((Color32)character.Owner.GetColor()).ToHex(), character.Name.Split(' ').Last());
-		
-		public static void AddHighlight(this DrawnHexCell cell, string color) => cell.AddHighlight(color);
-		public static void AddEffectHighlight(this DrawnHexCell cell, string color) => cell.AddEffectHighlight(color);
 	}
 
 	public class DropdownSettings
