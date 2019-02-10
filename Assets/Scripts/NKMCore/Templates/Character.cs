@@ -11,11 +11,9 @@ namespace NKMCore.Templates
 	public class Character
 	{
 		private readonly Game _game;
-		private Active Active => _game.Active;
 		
 		public string Name;
 		public override string ToString() => Name + $" ({ID})";
-		
 		
 		public Action<Character> BasicAttack { get; set; }
 		public Action<List<HexCell>> BasicMove { get; set; }
@@ -48,8 +46,6 @@ namespace NKMCore.Templates
 
 		public bool CanMove => !IsSnared && !IsGrounded;
 
-		//public bool IsLeaving { get; set; }
-
 		public bool CanUseBasicMove => CanMove && !HasUsedBasicMoveInPhaseBefore && !HasUsedUltimatumAbilityInPhaseBefore ||
 		                                HasFreeMoveUntilEndOfTheTurn;
 
@@ -72,13 +68,7 @@ namespace NKMCore.Templates
 		public bool CanBasicMove(HexCell targetCell) => targetCell.IsFreeToStand && CanUseBasicMove;
 
 
-		public bool CanTakeAction => !(TookActionInPhaseBefore || !IsAlive ||
-		                               Active.Turn.CharacterThatTookActionInTurn != null &&
-		                               Active.Turn.CharacterThatTookActionInTurn != this || IsStunned ||
-		                               Active.GamePlayer != Owner);
 
-		public bool CanWait => !(Owner != Active.GamePlayer || TookActionInPhaseBefore ||
-		                         Active.Turn.CharacterThatTookActionInTurn != null);
 		#endregion
 		
 		#region Other Properties
@@ -122,12 +112,12 @@ namespace NKMCore.Templates
 		public void InvokeAfterAbilityUse(Ability a) => AfterAbilityUse?.Invoke(a);
 		public void InvokeOnDeath() => OnDeath?.Invoke();
 		#endregion
-		public Character(Game game, string name, uint id, Properties properties, List<Ability> abilities)
+		public Character(Game game, Properties properties)
 		{
 			_game = game;
 				
-			ID = id;
-			Name = name;
+			ID = properties.Id;
+			Name = properties.Name;
 			
             TookActionInPhaseBefore               =  true;
             HasUsedBasicAttackInPhaseBefore       =  false;
@@ -150,7 +140,7 @@ namespace NKMCore.Templates
             Shield            =  properties.Shield;
             Type              =  properties.Type;
 
-			Abilities = abilities;
+			Abilities = properties.Abilities;
 			
 			_game.AddTriggersToEvents(this);
 		}
@@ -318,11 +308,14 @@ namespace NKMCore.Templates
 				: ParentCell.GetNeighbors(Owner, Speed.Value, SearchFlags.StopAtEnemyCharacters | SearchFlags.StopAtWalls);
 		public void TryToTakeTurn()
 		{
-			if(Active.Turn.CharacterThatTookActionInTurn==null) JustBeforeFirstAction?.Invoke();
+			if(_game.Active.Turn.CharacterThatTookActionInTurn==null) JustBeforeFirstAction?.Invoke();
 		}
 		
         public class Properties
         {
+	        public uint Id;
+	        public string Name;
+	        
             public Stat HealthPoints;
             public Stat AttackPoints;
             public Stat BasicAttackRange;
@@ -332,6 +325,8 @@ namespace NKMCore.Templates
             public Stat Shield;
             
             public FightType Type;
+
+	        public List<Ability> Abilities;
         }
 	}
 }

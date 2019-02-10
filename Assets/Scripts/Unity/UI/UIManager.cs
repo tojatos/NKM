@@ -43,7 +43,7 @@ namespace Unity.UI
 		public bool ForcePlacingChampions { private get; set; }
 		public static bool CanClickEndTurnButton =>
 			!(Game.Active.Phase.Number == 0 || Game.Active.Turn.CharacterThatTookActionInTurn == null &&
-			  Game.Active.GamePlayer.Characters.Any(c => (c.CanWait || c.CanTakeAction) && c.IsOnMap) || Active.AbilityToUse != null);
+			  Game.Active.GamePlayer.Characters.Any(c => (Active.CanWait(c) || Active.CanTakeAction(c)) && c.IsOnMap) || Active.AbilityToUse != null);
 
 		public void Init() //TODO
 		{
@@ -101,7 +101,7 @@ namespace Unity.UI
 			bool isActiveUse = Game.Active.IsActiveUse;
 			AbilityButtons.ToggleIf(isActiveUse);
 			CancelButton.ToggleIf(!isActiveUse);
-			HourglassImage.ToggleIf(isActiveUse || Active.Character!=null && !Active.Character.CanWait);
+			HourglassImage.ToggleIf(isActiveUse || Active.Character!=null && !Active.CanWait(Active.Character));
 			
 			HexCellUI.ToggleIf(Active.SelectedCell == null);
             if(Active.SelectedCell!=null) HexImage.Instance.UpdateImage();

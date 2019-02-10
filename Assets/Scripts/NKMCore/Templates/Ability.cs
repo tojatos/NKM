@@ -11,10 +11,9 @@ namespace NKMCore.Templates
 	{
 		
 		protected readonly Game Game;
-		protected Active Active => Game.Active;
-		protected Action Action => Game.Action;
-		protected HexMap HexMap => Game.HexMap;
-		protected Console Console => Game.Console;
+		public Active Active => Game.Active;
+		public HexMap HexMap => Game.HexMap;
+		public Console Console => Game.Console;
 		public Character Owner => Game.Characters.First(c => c.Abilities.Contains(this));
 		protected Ability(Game game, AbilityType type, string name, int cooldown = 0) : this(game, type, name, cooldown, NKMID.GetNext("Ability")){}
 		protected Ability(Game game, AbilityType type, string name, int cooldown, uint id)

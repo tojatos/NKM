@@ -15,7 +15,7 @@ namespace NKMCore
 	{
 		public readonly List<Func<bool>> ToCheck = new List<Func<bool>>();
 		private readonly Ability _abilityToValidate;
-		private static Active Active => GameStarter.Instance.Game.Active;
+		private Active Active => _abilityToValidate.Active;
 	
 		public AbilityUseValidator(Ability abilityToValidate)
 		{
@@ -32,7 +32,7 @@ namespace NKMCore
 		public Func<bool> CanBeClicked => () => _abilityToValidate is IClickable;
 		public Func<bool> IsCharacterNotSilenced => () => !_abilityToValidate.ParentCharacter.Effects.ContainsType<Silent>();
 		public Func<bool> IsOwnerActivePlayer => () => _abilityToValidate.ParentCharacter.Owner == Active.GamePlayer;
-		public Func<bool> CanCharacterUseAbility => () => _abilityToValidate.ParentCharacter.CanTakeAction
+		public Func<bool> CanCharacterUseAbility => () => Active.CanTakeAction(_abilityToValidate.ParentCharacter)
 		                                                  && (_abilityToValidate.Type == Ability.AbilityType.Normal && _abilityToValidate.ParentCharacter.CanUseNormalAbility
 		                                                      || _abilityToValidate.Type == Ability.AbilityType.Ultimatum && _abilityToValidate.ParentCharacter.CanUseUltimatumAbility);
 
