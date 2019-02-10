@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NKMCore.Hex;
 using NKMCore.Templates;
 
@@ -15,6 +16,7 @@ namespace NKMCore
 		public delegate void EffectCharacterDamage(Effect effect, Character character, Damage damage);
 		public delegate void AbilityCharacterDamage(Ability ability, Character character, Damage damage);
 		public delegate void CharacterD(Character character);
+		public delegate void CharacterTuple(Tuple<Character, Character> characterTuple);
 		public delegate void CharacterCell(Character character, HexCell cell);
 		public delegate void CharacterDamage(Character character, Damage damage);
 		public delegate void CharacterInt(Character targetCharacter, int value);

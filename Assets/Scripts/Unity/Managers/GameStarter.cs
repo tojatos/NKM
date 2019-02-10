@@ -21,6 +21,7 @@ namespace Unity.Managers
 		public bool IsTesting;
 		public bool PlayReplay;
 		public Game Game = new Game();
+		public ISelectable Selectable = new SpriteSelectSelectable();
 		private static SessionSettings S => SessionSettings.Instance;
 		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
 		private static int GetPlayersNumber() => S.GetDropdownSetting(SettingType.NumberOfPlayers) + 2;
@@ -34,7 +35,7 @@ namespace Unity.Managers
 
 			if (Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2)
 				gameOptions.PlaceAllCharactersRandomlyAtStart = true;
-			gameOptions.Selectable = new SpriteSelectSelectable();
+			gameOptions.Selectable = Selectable;
 
 			Game.Init(gameOptions);
 			
