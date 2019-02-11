@@ -6,10 +6,10 @@ namespace NKMCore
 {
 	public class GamePlayer
 	{
-		private readonly Game _game;
+		public readonly Game Game;
 		public GamePlayer(Game game)
 		{
-			_game = game;
+			Game = game;
 		}
 		public string Name { get; set; }
 		public bool HasSelectedCharacters { get; set; }
@@ -36,7 +36,7 @@ namespace NKMCore
 		{
 			List<Character> characters = new List<Character>();
 //		characterNames.ToList().ForEach(n => characters.Add(new Character(n)));
-			characterNames.ToList().ForEach(n => characters.Add(CharacterFactory.Create(_game, n)));
+			characterNames.ToList().ForEach(n => characters.Add(CharacterFactory.Create(Game, n)));
 			AddCharacters(characters);
 
 		}
