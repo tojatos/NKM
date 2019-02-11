@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity.Managers;
 
 namespace NKMCore.Extensions
 {
@@ -39,7 +38,7 @@ namespace NKMCore.Extensions
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);
 			}
 		}
-		public static int GetIndex(this GamePlayer gamePlayer) => GameStarter.Instance.Game.Players.FindIndex(p => p == gamePlayer);
+		public static int GetIndex(this GamePlayer gamePlayer) => gamePlayer.Game.Players.FindIndex(p => p == gamePlayer);
 		public static FightType ToFightType(this string typeName)
 		{
 			switch (typeName)

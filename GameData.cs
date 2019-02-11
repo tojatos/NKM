@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using Mono.Data.Sqlite;
 using UnityEngine;
-//using System.Data.SQLite;
 
 namespace NKMCore
 {
