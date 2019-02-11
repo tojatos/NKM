@@ -34,7 +34,7 @@ namespace Unity.Managers
 		{
 			GameOptions gameOptions = await GetGameOptions();
 
-			if (Instance.IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2)
+			if (IsTesting || SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2)
 				gameOptions.PlaceAllCharactersRandomlyAtStart = true;
 			gameOptions.Selectable = Selectable;
 
@@ -260,33 +260,24 @@ namespace Unity.Managers
 		}
 		private async Task BlindPick(IEnumerable<GamePlayer> players)
 		{
-//			players.ForEach(p => Debug.Log(p.Name));
 			foreach (GamePlayer p in players)
 			{
 				List<Character> allCharacters = Game.GetMockCharacters();//= new List<Character>(GameData.Conn.GetCharacterNames().Select(c => CharacterFactory.CreateWithoutId(Game, c)));
                 SpriteSelect.Instance.Open(allCharacters, () => FinishSelectingCharacters(p), $"Wybór postaci - {p.Name}", "Zakończ wybieranie postaci");
                 Func<bool> hasSelectedCharecters = () => p.HasSelectedCharacters;
                 await Async.WaitToBeTrue(hasSelectedCharecters);
-//				yield return new WaitUntil(()=>p.HasSelectedCharacters);
 			}
 		}
 
 		private static void FinishSelectingCharacters(GamePlayer p)
 		{
-//			int numberOfCharactersPerPlayer = 
-//			var charactersPerPlayer = GetCharactersPerPlayer();
+			List<Character> selectedCharacters = SpriteSelect.Instance.SelectedObjects;
+			if (selectedCharacters.Count != GetCharactersPerPlayerNumber()) return;
 
-			if (SpriteSelect.Instance.SelectedObjects.Count != GetCharactersPerPlayerNumber()) return;
-
-			IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o=>o.Name);
-			p.AddCharacters(names);
+			p.AddCharacters(selectedCharacters.Select(c => c.Name).ToArray());
 			p.HasSelectedCharacters = true;
 			SpriteSelect.Instance.Close();
 		}
-
-
-
-
 	}
 
 	class SpriteSelectSelectable : ISelectable
