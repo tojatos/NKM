@@ -40,10 +40,6 @@ namespace NKMCore
 		
 		
 			if (_game.Active.Phase.Number != 0) return;
-			if (_game.Active.GamePlayer.Characters.Any(c => !c.IsOnMap) && !_game.IsReplay)
-			{
-				UIManager.Instance.ForcePlacingChampions = true;
-			}
 		}
 
 		public delegate void CharacterDelegate(Character character);

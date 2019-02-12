@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using NKMCore.Extensions;
 using NKMCore.Templates;
 
@@ -33,7 +32,7 @@ namespace NKMCore.Hex
 	    public Character FirstCharacter => CharactersOnCell[0];
 	    public List<Character> CharactersOnCell => _map.GetCharacters(this);
 	    
-		public bool IsSpawnFor([NotNull] GamePlayer player) => Type == _map.SpawnPoints[player.GetIndex()];
+		public bool IsSpawnFor(GamePlayer player, Game game) => Type == _map.SpawnPoints[player.GetIndex(game)];
 
 	    public HexDirection GetDirection(HexCell hexCell) => GetDirection(hexCell.Coordinates);
 		public HexDirection GetDirection(HexCoordinates targetCoordinates)

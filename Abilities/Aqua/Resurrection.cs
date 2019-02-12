@@ -11,7 +11,7 @@ namespace NKMCore.Abilities.Aqua
 	{
 		private Character _characterToResurrect;
 		private readonly Func<Character, bool> _isResurrectable = c => !c.IsAlive && c.DeathTimer <= 1;
-		public override List<HexCell> GetRangeCells() => Active.GamePlayer.GetSpawnPoints(HexMap).Where(sp => sp.IsFreeToStand).ToList();
+		public override List<HexCell> GetRangeCells() => Active.GamePlayer.GetSpawnPoints(Game).Where(sp => sp.IsFreeToStand).ToList();
 
 		public Resurrection(Game game) : base(game, AbilityType.Ultimatum, "Resurrection", 8)
 		{

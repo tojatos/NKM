@@ -9,11 +9,11 @@ namespace NKMCore.Extensions
     {
 		public static bool IsEnemyFor(this Character character, GamePlayer player) => character.Owner != player;
 		public static bool IsEnemyFor(this Character character, Character other) => character.IsEnemyFor(other.Owner);
-		public static string FormattedFirstName(this Character character) => string.Format("<color={0}><</color><b>{1}</b><color={0}>></color>", character.Owner.GetColor(), character.Name.Split(' ').Last());
+		public static string FormattedFirstName(this Character character) => string.Format("<color={0}><</color><b>{1}</b><color={0}>></color>", character.Owner.GetColor(character._game), character.Name.Split(' ').Last());
 	    
-		public static string GetColor(this GamePlayer gamePlayer)
+		public static string GetColor(this GamePlayer gamePlayer, Game game)
 		{
-			switch (gamePlayer.GetIndex())
+			switch (gamePlayer.GetIndex(game))
 			{
 				case 0:
 					return "#FF0000";

@@ -32,9 +32,11 @@ namespace NKMCore
 		public Character SelectedCharacterToPlace;
 		public Character Character;
 		public HexCell SelectedCell;
+	
 		public readonly List<HexCell> MoveCells = new List<HexCell>();
-		public event Delegates.CharacterD AfterSelect;
+		public event Delegates.CharacterD AfterCharacterSelect;
 		public event Delegates.Void AfterDeselect;
+		public event Delegates.Void AfterCancel;
 		public event Delegates.CellList BeforeMoveCellsRemoved;
 		public event Delegates.Cell AfterMoveCellAdded;
 	
@@ -56,7 +58,7 @@ namespace NKMCore
 		{
 			Clean();
 			Character = character;
-			AfterSelect?.Invoke(character);
+			AfterCharacterSelect?.Invoke(character);
 		
 			if (!CanTakeAction(character)) return;
 		
@@ -93,13 +95,19 @@ namespace NKMCore
 				Deselect();
 				SelectedCell = null;
 			}
+			AfterCancel?.Invoke();
 		}
 
-		public void Prepare(Ability a)
+		private void Prepare(Ability a)
 		{
 			if(a is IUseableCellList || a is IUseableCell || a is IUseableCharacter) AbilityToUse = a;
 		}
 
+		public void PrepareToPlaceCharacter(List<HexCell> cellRange, bool addToRange = false)
+		{
+			Prepare(cellRange, addToRange);
+			SelectDrawnCells(HexCells).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+		}
 		private void Prepare(List<HexCell> cellRange, bool addToRange = false)
 		{
 			if (cellRange == null) cellRange = new List<HexCell>();
@@ -164,6 +172,7 @@ namespace NKMCore
 		                         Turn.CharacterThatTookActionInTurn != null);
 
 		public void Select<T>(SelectableProperties<T> props) => _game.Selectable.Select(props);
+		public bool CanSpawn(Character character, HexCell cell) => cell.IsFreeToStand && cell.IsSpawnFor(character.Owner, _game);
 	}
 }
 
