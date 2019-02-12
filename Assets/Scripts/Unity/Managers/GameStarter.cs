@@ -23,6 +23,7 @@ namespace Unity.Managers
 		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
 		private static int GetPlayersNumber() => S.GetDropdownSetting(SettingType.NumberOfPlayers) + 2;
 		private static int GetBansNumber() => S.GetDropdownSetting(SettingType.BansNumber) + 1;
+		private static bool BansAreEnabled => S.GetDropdownSetting(SettingType.AreBansEnabled) == 1;
 
 		private void Awake() => PrepareAndStartGame();
 
@@ -60,7 +61,7 @@ namespace Unity.Managers
                         break;
                     case 1:
 	                    List<Character> charactersToPick = Game.GetMockCharacters();
-//                        if(S.GetDropdownSetting(SettingType.AreBansEnabled)==1) Bans(game, charactersToPick);
+                        if(BansAreEnabled) await Bans(game, charactersToPick);
                         await DraftPick(game, charactersToPick);
                         break;
                     case 2:
@@ -79,29 +80,57 @@ namespace Unity.Managers
 			while (!allCharactersPicked())
 			{
 				foreach (GamePlayer player in game.Players) 
-					await SelectOneCharacter(charactersToPick, player, game);
+					await PickOneCharacter(charactersToPick, player, game);
 				if(allCharactersPicked()) break;
 				foreach (GamePlayer player in game.Players.AsEnumerable().Reverse()) 
-					await SelectOneCharacter(charactersToPick, player, game);
+					await PickOneCharacter(charactersToPick, player, game);
+			}
+		}
+		private async Task Bans(Game game, List<Character> charactersToPick)
+		{
+			int bansLeft = GetBansNumber();
+			while(bansLeft != 0)
+			{
+				foreach (GamePlayer player in game.Players) 
+					await BanOneCharacter(charactersToPick, player);
+				bansLeft--;
+				if(bansLeft==0) break;
+				foreach (GamePlayer player in game.Players.AsEnumerable().Reverse()) 
+					await BanOneCharacter(charactersToPick, player);
+				bansLeft--;
 			}
 		}
 
-		private async Task SelectOneCharacter(List<Character> charactersToPick, GamePlayer player, Game game)
+		private async Task PickOneCharacter(List<Character> charactersToPick, GamePlayer player, Game game) =>
+            await SelectOneCharacter(new SelectableProperties<Character>
+            {
+	            ToSelect = charactersToPick,
+	            ConstraintOfSelection = list => list.Count == 1,
+	            OnSelectFinish = list =>
+	            {
+		            player.Characters.Add(CharacterFactory.Create(game, list[0].Name));
+		            charactersToPick.Remove(list[0]);
+	            },
+	            SelectionTitle = $"Wybór postaci - {player.Name}",
+            });
+		
+		private async Task BanOneCharacter(List<Character> charactersToPick, GamePlayer player) =>
+            await SelectOneCharacter(new SelectableProperties<Character>
+            {
+	            ToSelect = charactersToPick,
+	            ConstraintOfSelection = list => list.Count == 1,
+	            OnSelectFinish = list =>
+	            {
+		            charactersToPick.Remove(list[0]);
+	            },
+	            SelectionTitle = $"Banowanie postaci - {player.Name}",
+            });
+		private async Task SelectOneCharacter(SelectableProperties<Character> props)
 		{
-			bool isPicked = false;
-			Selectable.Select(new SelectableProperties<Character>
-			{
-				ToSelect = charactersToPick,
-				ConstraintOfSelection = list => list.Count == 1,
-				OnSelectFinish = list =>
-				{
-					player.Characters.Add(CharacterFactory.Create(game, list[0].Name));
-					charactersToPick.Remove(list[0]);
-					isPicked = true;
-				},
-				SelectionTitle = $"Wybór postaci - {player.Name}",
-			});
-			Func<bool> picked = () => isPicked;
+			bool isSelected= false;
+			props.OnSelectFinish += list => isSelected = true;
+			Selectable.Select(props);
+			Func<bool> picked = () => isSelected;
 			await picked.WaitToBeTrue();
 		}
 
@@ -166,19 +195,6 @@ namespace Unity.Managers
 //			return gameOptions;
 //		}
 
-//		private async Task<GameOptions> GetGameOptions()
-//		{
-//			if (IsTesting) return GetTestingGameOptions();
-//			if (PlayReplay) return GetReplayGameOptions();
-//
-//			return new GameOptions
-//			{
-//				HexMap = GetMap(),
-//				Players = await GetPlayers(),
-//				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
-//				Type = GameType.Local
-//			};
-//		}
 		private GameOptions GetGameOptions()
 		{
 			if (IsTesting) return GetTestingGameOptions();
@@ -204,16 +220,6 @@ namespace Unity.Managers
             HexMapScriptable mapScriptable = Stuff.Maps[mapIndex];
             return HexMapFactory.FromScriptable(mapScriptable);
 		}
-		
-//		private async Task<List<GamePlayer>> GetPlayers()
-//		{
-//			int numberOfPlayers = GetPlayersNumber();
-//			List<GamePlayer> players = new List<GamePlayer>();
-//			for (int i = 0; i < numberOfPlayers; i++)
-//				players.Add(new GamePlayer {Name = GetPlayerName(i)});
-//			await GetCharacters(players);
-//			return players;
-//		}
 
 		private static string GetPlayerName(int i)
 		{
@@ -227,52 +233,6 @@ namespace Unity.Managers
 			}
 		}
 
-//		private async Task GetCharacters(List<GamePlayer> players)
-//		{
-//			switch (S.GetDropdownSetting(SettingType.PickType))
-//			{
-//				case 0:
-//					await BlindPick(players);
-//					break;
-//				case 1:
-//					List<Character> charactersToPick =
-//						new List<Character>(Sqlite.GetCharacterNames(GameData.Conn).Select(c => CharacterFactory.Create(Game, c)));//AllMyGameObjects.Characters.Select(c => new Character(c.Name)));
-//					if(S.GetDropdownSetting(SettingType.AreBansEnabled)==1) await Bans(players, charactersToPick);
-//					await DraftPick(players, charactersToPick);
-//					break;
-//				case 2:
-//					AllRandom(players);
-//					break;
-//			}
-//		}
-//
-//		private static async Task DraftPick(List<GamePlayer> players, ICollection<Character> charactersToPick)
-//		{
-//			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
-//			while (players.Any(p => p.Characters.Count != numberOfCharactersPerPlayer))
-//			{
-//				foreach (GamePlayer player in players) 
-//					await SelectOneCharacter(charactersToPick, player);
-//				foreach (GamePlayer player in players.AsEnumerable().Reverse()) 
-//					await SelectOneCharacter(charactersToPick, player);
-//			}
-//			players.ForEach(p=>p.HasSelectedCharacters=true);
-//		}
-//		private static async Task Bans(List<GamePlayer> players, ICollection<Character> charactersToPick)
-//		{
-//			int bansNumber = GetBansNumber();
-//			while(bansNumber != 0)
-//			{
-//				foreach (GamePlayer player in players) 
-//					await BanOneCharacter(charactersToPick, player);
-//				bansNumber--;
-//				if(bansNumber==0) break;
-//				foreach (GamePlayer player in players.AsEnumerable().Reverse()) 
-//					await BanOneCharacter(charactersToPick, player);
-//				bansNumber--;
-//			}
-//			players.ForEach(p=>p.HasSelectedCharacters=true);
-//		}
 
 //		private void AllRandom(List<GamePlayer> players)
 //		{
@@ -294,47 +254,6 @@ namespace Unity.Managers
 //			
 //		}
 
-//		private static async Task SelectOneCharacter(ICollection<Character> charactersToPick, GamePlayer player)
-//		{
-//			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
-//			if(player.Characters.Count == numberOfCharactersPerPlayer) return;
-//			bool hasSelected = false;
-//			Func<bool> wait = () => hasSelected;
-//			Action<GamePlayer> finishSelectingCharacter = p =>
-//			{
-//				if (SpriteSelect.Instance.SelectedObjects.Count != 1) return;
-//
-//				IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o => o.Name);
-//				Character picked = charactersToPick.Single(c => c.Name == names.First());
-//				charactersToPick.Remove(picked);
-//				p.AddCharacter(picked);
-//				hasSelected = true;
-//				SpriteSelect.Instance.Close();
-//			};
-//
-//			SpriteSelect.Instance.Open(charactersToPick, () => finishSelectingCharacter(player),
-//				$"Wybór postaci - {player.Name}", "Zakończ wybieranie postaci");
-//			await Async.WaitToBeTrue(wait);
-//		}
-//        private static async Task BanOneCharacter(ICollection<Character> charactersToPick, GamePlayer player)
-//		{
-//			bool hasSelected = false;
-//			Func<bool> wait = () => hasSelected;
-//			Action<GamePlayer> finishSelectingCharacter = p =>
-//			{
-//				if (SpriteSelect.Instance.SelectedObjects.Count != 1) return;
-//
-//				IEnumerable<string> names = SpriteSelect.Instance.SelectedObjects.Select(o => o.Name);
-//				Character picked = charactersToPick.Single(c => c.Name == names.First());
-//				charactersToPick.Remove(picked);
-//				hasSelected = true;
-//				SpriteSelect.Instance.Close();
-//			};
-//
-//			SpriteSelect.Instance.Open(charactersToPick, () => finishSelectingCharacter(player),
-//				$"Banowanie postaci - {player.Name}", "Zakończ banowanie postaci");
-//			await Async.WaitToBeTrue(wait);
-//		}
 //		private async Task BlindPick(IEnumerable<GamePlayer> players)
 //		{
 //			foreach (GamePlayer p in players)
