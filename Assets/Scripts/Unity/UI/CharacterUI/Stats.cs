@@ -3,7 +3,6 @@ using NKMCore.Extensions;
 using NKMCore.Templates;
 using Unity.Extensions;
 using Unity.Hex;
-using Unity.Managers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,7 +11,7 @@ namespace Unity.UI.CharacterUI
 {
 	public class Stats : SingletonMonoBehaviour<Stats>
 	{
-		private static Game Game => GameStarter.Instance.Game;
+		private Game _game;
 
 		public Text HealthPoints;
 		public Text AttackPoints;
@@ -23,8 +22,9 @@ namespace Unity.UI.CharacterUI
 		public GameObject RangeObject;
 		public GameObject SpeedObject;
 
-		public void Init()
+		public void Init(Game game)
 		{
+			_game = game;
 			EmptyTextes();
 			SetTooltipTriggers();
 			SetAttackHelpTriggers();
@@ -43,12 +43,12 @@ namespace Unity.UI.CharacterUI
 
 		private void SetAttackHelpTriggers()
 		{
-			RangeObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(Active.SelectDrawnCells(Game.Active.Character.GetBasicAttackCells())));
+			RangeObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(Active.SelectDrawnCells(_game.Active.Character.GetBasicAttackCells())));
 			RangeObject.AddTrigger(EventTriggerType.PointerExit, e => HexMapDrawer.Instance.HideHelpHexCells());
 		}
 		private void SetMoveHelpTriggers()
 		{
-			SpeedObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(Active.SelectDrawnCells(Game.Active.Character.GetBasicMoveCells())));
+			SpeedObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(Active.SelectDrawnCells(_game.Active.Character.GetBasicMoveCells())));
 			SpeedObject.AddTrigger(EventTriggerType.PointerExit, e => HexMapDrawer.Instance.HideHelpHexCells());
 		}
 		private void EmptyTextes()

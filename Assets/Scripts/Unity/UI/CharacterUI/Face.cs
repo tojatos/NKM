@@ -2,7 +2,6 @@
 using NKMCore;
 using NKMCore.Templates;
 using Unity.Hex;
-using Unity.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,17 +10,10 @@ namespace Unity.UI.CharacterUI
 	public class Face : SingletonMonoBehaviour<Face>
 	{
 		private Image _image;
-		private static Game Game => GameStarter.Instance.Game;
 
 		private void Awake() => _image = GetComponent<Image>();
+		public void Init(Game game) => game.Active.AfterCharacterSelect += UpdateFace;
 
-		private void Update() //TODO: Remove Update
-		{
-			if (Game.Active.Character != null)
-			{
-				UpdateFace(Game.Active.Character);
-			}
-		}
 
 		private void UpdateFace(Character characterOnMap)
 		{

@@ -2,7 +2,6 @@
 using JetBrains.Annotations;
 using NKMCore;
 using Unity.Extensions;
-using Unity.Managers;
 using UnityEngine.UI;
 
 namespace Unity.UI
@@ -10,10 +9,9 @@ namespace Unity.UI
     public class Victory : SingletonMonoBehaviour<Victory>
     {
         public Text VictoryText;
-        private static Game Game => GameStarter.Instance.Game;
-        public void Show()
+        public void Show(Game game)
         {
-            GamePlayer playerThatWon = Game.Players.Single(p => !p.IsEliminated);
+            GamePlayer playerThatWon = game.Players.Single(p => !p.IsEliminated);
             VictoryText.text = 
 $@"Koniec gry!
 Wygrał <b>{playerThatWon.Name}!</b>";

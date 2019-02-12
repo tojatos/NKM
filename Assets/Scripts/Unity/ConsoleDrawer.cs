@@ -2,7 +2,6 @@
 using System.Linq;
 using NKMCore;
 using Unity.Extensions;
-using Unity.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,17 +9,18 @@ namespace Unity
 {
     public class ConsoleDrawer : SingletonMonoBehaviour<ConsoleDrawer>
     {
-        private Console Console => GameStarter.Instance.Game.Console;
-//    private readonly List<ConsoleLine> _loggedLines = new List<ConsoleLine>();
-//    private List<ConsoleLine> NonDebugTexts => _loggedLines.FindAll(t => t.IsDebug == false);
+        private Console _console;
         public Text LogText;
         public InputField InputField;
-//    private static Game Game => GameStarter.Instance.Game;
-//    private static Active Active => Game.Active;
         private const int TextsDisplayed = 8;
 
         private int _startingIndex;
         private bool _isDebug = true;
+
+        public void Init(Console console)
+        {
+            _console = console;
+        }
 
         public void Toggle()
         {
@@ -37,9 +37,10 @@ namespace Unity
 
         private void UpdateLogText(bool updateIndex = true)
         {
-            if (updateIndex) _startingIndex = Mathf.Clamp(Console.LoggedLines.Count - TextsDisplayed, 0, Console.LoggedLines.Count);
+            if(_console==null) return;
+            if (updateIndex) _startingIndex = Mathf.Clamp(_console.LoggedLines.Count - TextsDisplayed, 0, _console.LoggedLines.Count);
             string text = "";
-            List<ConsoleLine> texts = _isDebug ? Console.LoggedLines : Console.NonDebugLines;
+            List<ConsoleLine> texts = _isDebug ? _console.LoggedLines : _console.NonDebugLines;
             for (int i = _startingIndex; i < _startingIndex + TextsDisplayed; i++)
             {
                 if (texts.ElementAtOrDefault(i) == null) break;
@@ -53,9 +54,10 @@ namespace Unity
 
         private void OnGUI()
         {
+            if(_console==null) return;
             if (!InputField.isFocused || InputField.text == "" || !Input.GetKey(KeyCode.Return)) return;
         
-            Console.ExecuteCommand(InputField.text);
+            _console.ExecuteCommand(InputField.text);
 
             UpdateLogText();
             InputField.text = "";

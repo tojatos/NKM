@@ -9,7 +9,7 @@ namespace NKMCore.Templates
 {
 	public class Character
 	{
-		private readonly Game _game;
+		public readonly Game _game;
 		
 		public string Name;
 		public override string ToString() => Name + $" ({ID})";
@@ -111,9 +111,9 @@ namespace NKMCore.Templates
 		public void InvokeAfterAbilityUse(Ability a) => AfterAbilityUse?.Invoke(a);
 		public void InvokeOnDeath() => OnDeath?.Invoke();
 		#endregion
-		public Character(Game game, Properties properties)
+		public Character(Properties properties)
 		{
-			_game = game;
+			_game = properties.Game;
 				
 			ID = properties.Id;
 			Name = properties.Name;
@@ -140,8 +140,6 @@ namespace NKMCore.Templates
             Type              =  properties.Type;
 
 			Abilities = properties.Abilities;
-			
-			_game.AddTriggersToEvents(this);
 		}
 
 		public void MoveTo(HexCell targetCell)
@@ -312,6 +310,8 @@ namespace NKMCore.Templates
 		
         public class Properties
         {
+	        public Game Game;
+	        
 	        public uint Id;
 	        public string Name;
 	        

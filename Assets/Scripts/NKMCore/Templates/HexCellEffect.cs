@@ -13,13 +13,13 @@ namespace NKMCore.Templates
 			CurrentCooldown = cooldown >= 0 ? cooldown : int.MaxValue; //effect is infinite
 			ParentCell = parentCell;
 			if (name != null) Name = name;
-			if(Active.SelectedCell==ParentCell) Unity.UI.HexCellUI.Effects.Instance.UpdateButtons();
+			if(Active.SelectedCell==ParentCell) Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(game.Active.SelectedCell);
 			Active.Phase.PhaseFinished += () =>//TODO
 			{
 				if (CurrentCooldown > 0) --CurrentCooldown;
 				if (CurrentCooldown != 0) return;
 				Remove();
-                if(Active.SelectedCell==ParentCell) Unity.UI.HexCellUI.Effects.Instance.UpdateButtons();
+                if(Active.SelectedCell==ParentCell) Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(game.Active.SelectedCell);
 			};
 		}
 		

@@ -1,15 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using JetBrains.Annotations;
+﻿using System.Linq;
 using NKMCore;
-using NKMCore.Extensions;
-using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Extensions;
 using Unity.Hex;
-using Unity.Managers;
 using Unity.UI.CharacterUI;
-using Unity.UI.HexCellUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -19,12 +13,9 @@ namespace Unity.UI
 {
 	public class UIManager : SingletonMonoBehaviour<UIManager>
 	{
-		private static Game Game => GameStarter.Instance.Game;
-		private static Active Active => Game.Active;
-		private static HexMap HexMap => Game.HexMap;
+		private Game _game;
+		private Active Active => _game.Active;
 		private static ConsoleDrawer ConsoleDrawer => ConsoleDrawer.Instance;
-
-		private SpriteSelect _spriteSelect;
 
 		public GameObject CancelButton;
 		public GameObject AbilityButtons;
@@ -40,18 +31,17 @@ namespace Unity.UI
 		public Text ActiveCharacterText;
 		public Text ActiveHexCellText;
 
-		public bool ForcePlacingChampions { private get; set; }
-		public static bool CanClickEndTurnButton =>
-			!(Game.Active.Phase.Number == 0 || Game.Active.Turn.CharacterThatTookActionInTurn == null &&
-			  Game.Active.GamePlayer.Characters.Any(c => (Active.CanWait(c) || Active.CanTakeAction(c)) && c.IsOnMap) || Active.AbilityToUse != null);
+		private bool CanClickEndTurnButton =>
+			!(_game == null || _game.Active.Phase.Number == 0 || _game.Active.Turn.CharacterThatTookActionInTurn == null &&
+			  _game.Active.GamePlayer.Characters.Any(c => (Active.CanWait(c) || Active.CanTakeAction(c)) && c.IsOnMap) || Active.AbilityToUse != null);
 
-		public void Init() //TODO
+		public void Init(Game game) //TODO
 		{
-			Stats.Instance.Init();
+			_game = game;
+			Stats.Instance.Init(game);
 			Tooltip.Instance.Init();
-			_spriteSelect = SpriteSelect.Instance;
 			EndTurnImage.AddTrigger(EventTriggerType.PointerClick, e => EndTurnImageClick());
-			CancelButton.AddTrigger(EventTriggerType.PointerClick, e => Game.Action.Cancel());
+			CancelButton.AddTrigger(EventTriggerType.PointerClick, e => _game.Action.Cancel());
 			HourglassImage.AddTrigger(EventTriggerType.PointerClick, e => HourglassImageClick());
 			ActivePlayerText.gameObject.AddSetTooltipEvent("Nazwa aktywnego gracza");
 			ActivePlayerText.gameObject.AddRemoveTooltipEvent();
@@ -59,65 +49,41 @@ namespace Unity.UI
 			ActivePhaseText.gameObject.AddRemoveTooltipEvent();
 
 		}
-		public void UpdateActivePlayerUI() => ActivePlayerText.SetText(Game.Active.GamePlayer.Name);
-		public void UpdateActivePhaseText() => ActivePhaseText.SetText(Game.Active.Phase.Number.ToString());
-
-		[UsedImplicitly]
-		public void OpenUseCharacterSelect()
-		{
-			List<Character> characters = new List<Character>(Game.Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
-			_spriteSelect.Open(characters, FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
-		}
-		private void FinishUseCharacter()
-		{
-			if (_spriteSelect.SelectedObjects.Count != 1) return;
-
-			HexMapDrawer.Instance.RemoveHighlights();
-			Active.GamePlayer.GetSpawnPoints(HexMap).FindAll(c => c.IsFreeToStand).Select(Active.SelectDrawnCell).ToList().ForEach(c => c.AddHighlight(Highlights.RedTransparent));
-			Active.SelectedCharacterToPlace = Active.GamePlayer.Characters.Single(c => c.Name == _spriteSelect.SelectedObjects[0].Name);
-			_spriteSelect.Close();
-		}
+		public void UpdateActivePlayerUI() => ActivePlayerText.SetText(_game.Active.GamePlayer.Name);
+		public void UpdateActivePhaseText() => ActivePhaseText.SetText(_game.Active.Phase.Number.ToString());
 
 		private void Update()
 		{
 			if (Input.GetKeyDown(KeyCode.F2))
 				ConsoleDrawer.Toggle();
 
-			if (Game==null) return;
-
-			if (Game.Active.Phase.Number == 0)
-			{
-				if (ForcePlacingChampions && !_spriteSelect.IsOpened && Active.SelectedCharacterToPlace == null && Active.GamePlayer.HasFinishedSelecting)
-				{
-					List<Character> characters = new List<Character>(Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive));
-					_spriteSelect.Open(characters, FinishUseCharacter, "Wystaw postać", "Zakończ wybieranie postaci");
-			}
-			}
+			EndTurnImage.ToggleIf(!CanClickEndTurnButton);
 			Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
-			CharacterUI.ToggleIf(Game.Active.Character == null);
+			CharacterUI.ToggleIf(_game?.Active.Character == null);
+			HexCellUI.ToggleIf(_game?.Active.SelectedCell == null);
+			
+			if (_game==null) return;
+			
 			if (Active.Character != null) ActiveCharacterText.text = Active.Character.Name;
 			if (Active.SelectedCell != null) ActiveHexCellText.text = Active.SelectedCell.Type.ToString();
-			EndTurnImage.ToggleIf(!CanClickEndTurnButton);
-			bool isActiveUse = Game.Active.IsActiveUse;
+			bool isActiveUse = _game.Active.IsActiveUse;
 			AbilityButtons.ToggleIf(isActiveUse);
 			CancelButton.ToggleIf(!isActiveUse);
 			HourglassImage.ToggleIf(isActiveUse || Active.Character!=null && !Active.CanWait(Active.Character));
 			
-			HexCellUI.ToggleIf(Active.SelectedCell == null);
-            if(Active.SelectedCell!=null) HexImage.Instance.UpdateImage();
 		}
 
-		private static void EndTurnImageClick()
+		private void EndTurnImageClick()
 		{
-			if (Game.Active.Phase.Number == 0) return;
-			if (CanClickEndTurnButton) Game.Action.FinishTurn();//Game.Active.Turn.Finish();
+			if (_game.Active.Phase.Number == 0) return;
+			if (CanClickEndTurnButton) _game.Action.FinishTurn();//Game.Active.Turn.Finish();
 		}
 		
-		private static void HourglassImageClick()
+		private void HourglassImageClick()
 		{
             if(Active.Character.Owner != Active.GamePlayer) return;
-			Game.Action.TakeTurn(Active.Character);
-			Game.Action.FinishTurn();
+			_game.Action.TakeTurn(Active.Character);
+			_game.Action.FinishTurn();
         }
 
 		public void AddUITriggers(Character character)
@@ -126,7 +92,7 @@ namespace Unity.UI
             {
                 if (Active.Character == character) MainHPBar.Instance.UpdateHPAmount(character);
             };
-            Active.AfterSelect += chara =>
+            Active.AfterCharacterSelect += chara =>
             {
                 Stats.Instance.UpdateCharacterStats(chara);
                 MainHPBar.Instance.UpdateHPAmount(chara);

@@ -1,6 +1,6 @@
 ﻿using NKMCore;
 using NKMCore.Hex;
-using Unity.Managers;
+using Unity.Hex;
 using UnityEngine.UI;
 
 namespace Unity.UI.HexCellUI
@@ -9,9 +9,12 @@ namespace Unity.UI.HexCellUI
     {
         private Image _image;
 
-		private void Awake() => _image = GetComponent<Image>();
+		private void Awake()
+	    {
+		    _image = GetComponent<Image>();
+		    HexMapDrawer.Instance.AfterCellSelect += UpdateImage;
+	    }
 
 	    private void UpdateImage(HexCell hexCell) => _image.color = Active.SelectDrawnCell(hexCell).Color;
-	    public void UpdateImage() => UpdateImage(GameStarter.Instance.Game.Active.SelectedCell);
     }
 }

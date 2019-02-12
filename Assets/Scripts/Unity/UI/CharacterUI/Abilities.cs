@@ -4,7 +4,6 @@ using NKMCore;
 using NKMCore.Templates;
 using Unity.Extensions;
 using Unity.Hex;
-using Unity.Managers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -16,16 +15,20 @@ namespace Unity.UI.CharacterUI
 	/// </summary>
 	public class Abilities : SingletonMonoBehaviour<Abilities>
 	{
-		private static Game Game => GameStarter.Instance.Game;
+		private static Game Game;
 		private Console Console => Game.Console;
 
 		public GameObject AbilityButtonPrefab;
 		private List<GameObject> Buttons { get; set; }
-		public void Init() => Buttons = new List<GameObject>();
+		public void Init(Game game)
+		{
+			Game = game;
+			Buttons = new List<GameObject>();
+		}
 
 		public void UpdateButtons()
 		{
-			if (Game.Active.Character == null) return;
+			if (Game?.Active.Character == null) return;
 
 			Character character = Game.Active.Character;
 			RemoveButtons();

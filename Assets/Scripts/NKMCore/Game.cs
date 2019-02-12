@@ -23,53 +23,83 @@ namespace NKMCore
 		public readonly Console Console;
 		public ISelectable Selectable { get; private set; }
 
-		public bool IsInitialized;
 		public bool IsReplay => Options.GameLog != null;
-		public Game()
+		public Game(GameOptions gameOptions)
 		{
 			Active = new Active(this);
 			Action = new Action(this);
 			Console = new Console(this);
+			Init(gameOptions);
 		}
 
-		public void Init(GameOptions gameOptions)
+		private void Init(GameOptions gameOptions)
 		{
 			Options = gameOptions;
 			Selectable = gameOptions.Selectable;
 
 			Players = new List<GamePlayer>(gameOptions.Players);
-			Abilities.ForEach(a => a.Awake());
-			HexMap = gameOptions.HexMap;//HexMapFactory.FromScriptable(Options.MapScriptable);
+			HexMap = gameOptions.HexMap;
 			NKMRandom.OnValueGet += (name, value) => Console.GameLog($"RNG: {name}; {value}");
 			Action.AfterAction += str =>
 			{
 				if (str == Action.Types.BasicAttack || str == Action.Types.BasicMove) Active.Select(Active.Character);
 			};
-			IsInitialized = true;
-		
-		
 		}
 		/// <summary>
 		/// Get a copy of every character in the game
 		/// </summary>
-		public static List<Character> GetMockCharacters()
-		{
-			var mockGame = new Game();
-			return GameData.Conn.GetCharacterNames().Select(n => CharacterFactory.Create(mockGame, n)).ToList();
-		}
+		public static List<Character> GetMockCharacters() =>
+			GameData.Conn.GetCharacterNames().Select(n => CharacterFactory.Create(null, n)).ToList();
 
-		/// <summary>
-		/// Returns true if game is successfully started,
-		/// otherwise returns false.
-		/// </summary>
-		public bool StartGame()
+		public void Start()
 		{
-			if (!IsInitialized) return false;
+			Active.Turn.TurnStarted += async player =>
+			{
+				if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
+			};
+			Active.AfterCancel += async () =>
+			{
+				if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
+			};
+			Abilities.ForEach(a => a.Awake());
 
+			//TODO
+			Characters.ForEach(c =>
+			{
+                AnimationPlayer.Instance.AddAnimationTriggers(c);
+                UIManager.Instance.AddUITriggers(c);
+			});
 			TakeTurns();
-			if(Options.PlaceAllCharactersRandomlyAtStart) PlaceAllCharactersOnSpawns();
-			return true;
+			if (Options.PlaceAllCharactersRandomlyAtStart)
+			{
+				PlaceAllCharactersRandomlyOnSpawns();
+				if(Active.Phase.Number==0) Active.Phase.Finish();
+			}
 		}
+
+
+		private async Task TryToPlaceCharacter()
+		{
+			List<Character> charactersToPlace = Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive).ToList();
+			if (!charactersToPlace.Any() || Active.SelectedCharacterToPlace != null) return;
+			Character pickedCharacter = null;
+            Selectable.Select(new SelectableProperties<Character>
+            {
+                ToSelect = charactersToPlace,
+                ConstraintOfSelection = list => list.Count == 1,
+                OnSelectFinish = list =>
+                {
+                    Active.PrepareToPlaceCharacter(Active.GamePlayer.GetSpawnPoints(this).FindAll(c => c.IsFreeToStand));
+                    Active.SelectedCharacterToPlace = Active.GamePlayer.Characters.Single(c => c.Name == list[0].Name);
+	                pickedCharacter = Active.SelectedCharacterToPlace;
+                },
+                SelectionTitle = "Wystaw postać",
+            });
+			Func<bool> placed = () => pickedCharacter?.IsOnMap == true;
+			await placed.WaitToBeTrue();
+		}
+
+		private void PlaceAllCharactersRandomlyOnSpawns() => Players.ForEach(p => p.Characters.ForEach(c => TrySpawningOnRandomCell(p, c)));
 
 		/// <summary>
 		/// Infinite loop that manages Turns and Phases
@@ -90,8 +120,7 @@ namespace NKMCore
 					return;
 				}
 
-				if (!IsEveryCharacterPlacedInTheFirstPhase) continue;
-
+                if (!IsEveryCharacterPlacedInTheFirstPhase) continue;
 				if(EveryCharacterTookActionInPhase) Active.Phase.Finish();
 			}
 		}
@@ -102,7 +131,7 @@ namespace NKMCore
 		}
 
 		private bool EveryCharacterTookActionInPhase => Players.All(p => p.Characters.Where(c => c.IsAlive).All(c => c.TookActionInPhaseBefore));
-		private bool IsEveryCharacterPlacedInTheFirstPhase => !(Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap)));
+		private bool IsEveryCharacterPlacedInTheFirstPhase => !(Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap && c.IsAlive)));
 
 		/// <summary>
 		/// Start a turn and wait for player to end it
@@ -114,22 +143,9 @@ namespace NKMCore
 			await isTurnDone.WaitToBeTrue();
 		}
 
-		/// <summary>
-		/// Try to place all characters from game on their spawns
-		/// 
-		/// Dependencies:
-		/// - Players.Characters
-		/// - Active.Phase
-		/// </summary>
-		private void PlaceAllCharactersOnSpawns()
-		{
-			Players.ForEach(p => p.Characters.ForEach(c => TrySpawningOnRandomCell(p, c)));
-			if(Active.Phase.Number==0) Active.Phase.Finish();
-		}
-
 		private void TrySpawningOnRandomCell(GamePlayer p, Character c)
 		{
-			HexCell spawnPoint = p.GetSpawnPoints(HexMap).FindAll(cell => Spawner.CanSpawn(c, cell)).GetRandomNoLog();
+			HexCell spawnPoint = p.GetSpawnPoints(this).FindAll(cell => Active.CanSpawn(c, cell)).GetRandomNoLog();
 			if (spawnPoint == null) return;
 
 			//Spawner.Instance.Spawn(Active.SelectDrawnCell(spawnPoint), c);
@@ -138,8 +154,6 @@ namespace NKMCore
 
 		public void AddTriggersToEvents(Character character)
 		{
-			AnimationPlayer.Instance.AddAnimationTriggers(character);
-			UIManager.Instance.AddUITriggers(character);
 			Console.AddTriggersToEvents(character);
 		
 			character.JustBeforeFirstAction += () => Active.Turn.CharacterThatTookActionInTurn = character;

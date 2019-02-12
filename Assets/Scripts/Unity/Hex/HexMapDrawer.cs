@@ -151,8 +151,7 @@ namespace Unity.Hex
 
 		public void Update()
 		{
-			if(_game == null || !_game.IsInitialized) return;
-//			if (Game.UIManager.VisibleUI != Game.UIManager.GameUI) return;
+			if(_game == null) return;
 
 			if (_game.Active.AirSelection.IsEnabled)
 			{
@@ -219,15 +218,17 @@ namespace Unity.Hex
 			return Instance.GetCellByPosition(ref position);
 		}
 
+		
+		public event Delegates.Cell AfterCellSelect;
 		private void TouchCell(HexCell touchedCell)
         {
             Active.SelectedCell = touchedCell;
+	        AfterCellSelect?.Invoke(touchedCell);
             if (Active.SelectedCharacterToPlace != null)
             {
-	            if(!Active.GamePlayer.GetSpawnPoints(_game.HexMap).Contains(touchedCell)) return;
+	            if(!Active.GamePlayer.GetSpawnPoints(_game).Contains(touchedCell)) return;
                 Action.PlaceCharacter(Active.SelectedCharacterToPlace, touchedCell);
 	            if (Active.Phase.Number != 0) return;
-	            UIManager.Instance.ForcePlacingChampions = false;
 	            Active.Turn.Finish();
             }
             else if (Active.HexCells?.Contains(touchedCell) == true)

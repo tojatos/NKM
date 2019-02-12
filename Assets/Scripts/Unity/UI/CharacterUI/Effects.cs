@@ -3,7 +3,6 @@ using System.Linq;
 using NKMCore;
 using NKMCore.Templates;
 using Unity.Extensions;
-using Unity.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,15 +10,16 @@ namespace Unity.UI.CharacterUI
 {
 	public class Effects : SingletonMonoBehaviour<Effects>
 	{
-		private static Game Game => GameStarter.Instance.Game;
+		private Game _game;
 		public GameObject EffectButtonPrefab;
 		private List<GameObject> Buttons { get; } = new List<GameObject>();
+		public void Init(Game game) => _game = game;
 
 		public void UpdateButtons()
 		{
-			if (Game.Active.Character == null) return;
+			if (_game?.Active.Character == null) return;
 
-			Character character = Game.Active.Character;
+			Character character = _game.Active.Character;
 			RemoveButtons();
 			character.Effects.ForEach(effect => CreateEffectButton(character, effect));
 		}

@@ -16,7 +16,12 @@ namespace NKMCore
 			properties.Name = name;
 			properties.Id = id;
 			properties.Abilities = AbilityFactory.CreateAndInitiateAbilitiesFromDatabase(name, game);
-			return new Character(game, properties);
+			properties.Game = game;
+			
+			var createdCharacter = new Character(properties);
+			game?.AddTriggersToEvents(createdCharacter);
+
+			return createdCharacter;
 		}
 
 		private static Character.Properties GetCharacterDbProperties(SqliteRow characterData)

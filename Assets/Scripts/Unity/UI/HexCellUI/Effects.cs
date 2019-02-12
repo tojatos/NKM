@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NKMCore;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Extensions;
-using Unity.Managers;
+using Unity.Hex;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,20 +11,20 @@ namespace Unity.UI.HexCellUI
 {
 	public class Effects : SingletonMonoBehaviour<Effects>
 	{
-		private static Game Game => GameStarter.Instance.Game;
 		public GameObject HexEffectButtonPrefab;
 		private List<GameObject> Buttons { get; set; }
 
-		private void Awake() => Buttons = new List<GameObject>();
-
-		private void Update() => UpdateButtons();
-
-		public void UpdateButtons()
+		private void Awake()
 		{
-			HexCell cell = Game.Active.SelectedCell;
-			if (cell == null) return;
+			Buttons = new List<GameObject>();
+			HexMapDrawer.Instance.AfterCellSelect += UpdateButtons;
+		}
+
+		public void UpdateButtons(HexCell selectedCell)
+		{
+			if (selectedCell == null) return;
 			RemoveButtons();
-			cell.Effects.ForEach(effect => CreateEffectButton(cell, effect));
+			selectedCell.Effects.ForEach(effect => CreateEffectButton(selectedCell, effect));
 		}
 
 		private static void SetButtonSprite(GameObject button, HexCellEffect effect)
