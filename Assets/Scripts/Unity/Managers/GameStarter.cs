@@ -75,13 +75,14 @@ namespace Unity.Managers
 		private async Task DraftPick(Game game, List<Character> charactersToPick)
 		{
 			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
-			while (game.Players.Any(p => p.Characters.Count != numberOfCharactersPerPlayer))
+			Func<bool> allCharactersPicked = () => game.Players.All(p => p.Characters.Count == numberOfCharactersPerPlayer);
+			while (!allCharactersPicked())
 			{
 				foreach (GamePlayer player in game.Players) 
 					await SelectOneCharacter(charactersToPick, player, game);
+				if(allCharactersPicked()) break;
 				foreach (GamePlayer player in game.Players.AsEnumerable().Reverse()) 
 					await SelectOneCharacter(charactersToPick, player, game);
-				return;
 			}
 		}
 
