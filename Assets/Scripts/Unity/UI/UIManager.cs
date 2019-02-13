@@ -49,8 +49,9 @@ namespace Unity.UI
 			ActivePhaseText.gameObject.AddRemoveTooltipEvent();
 			
 			game.Active.Phase.PhaseChanged += UpdateActivePhaseText;
+			game.Active.Turn.TurnStarted += UpdateActivePlayerUI;
 		}
-		public void UpdateActivePlayerUI() => ActivePlayerText.SetText(_game.Active.GamePlayer.Name);
+		public void UpdateActivePlayerUI(GamePlayer player) => ActivePlayerText.SetText(player.Name);
 		public void UpdateActivePhaseText() => ActivePhaseText.SetText(_game.Active.Phase.Number.ToString());
 
 		private void Update()
