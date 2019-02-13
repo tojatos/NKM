@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NKMCore;
+using NKMCore.Abilities.Ononoki_Yotsugi;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
@@ -72,6 +73,21 @@ namespace Unity.Hex
             };
 		}
 
+		public void AddTriggers(Ability ability)
+		{
+			if (ability is UrbCrunch)
+			{
+				((UrbCrunch) ability).AfterCrunch += list =>
+				{
+					//repaint crushed cells
+					List<HexCell> normalCells = list.FindAll(c => c.Type == HexCell.TileType.Normal);
+					Active.SelectDrawnCells(normalCells).ForEach(c => c.Color = Color.white); //TODO: set the color depending on maps normal cell color
+					TriangulateCells();
+				};
+			}
+			
+		}
+
 		public void CreateMap(HexMap hexMap)
 		{
 			HexMesh = GetComponentInChildren<HexMesh>();
@@ -81,7 +97,7 @@ namespace Unity.Hex
 			TriangulateCells();
 		}
 
-		public void TriangulateCells()
+		private void TriangulateCells()
 		{
 			HexMesh.Triangulate(Cells);
 		}
