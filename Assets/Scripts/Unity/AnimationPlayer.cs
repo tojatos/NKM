@@ -27,19 +27,6 @@ namespace Unity
 			}
 		}
 
-		public void AddAnimationTriggers(HexMap map)
-		{
-			map.AfterSwap += tuple =>
-			{
-				Character firstCharacterToSwap = tuple.Item1;
-				Character secondCharacterToSwap = tuple.Item2;
-				Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(firstCharacterToSwap).transform,
-					Active.SelectDrawnCell(secondCharacterToSwap.ParentCell).transform.position, 0.4f));
-				Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(secondCharacterToSwap).transform,
-					Active.SelectDrawnCell(firstCharacterToSwap.ParentCell).transform.position, 0.4f));
-			};
-		}
-
 		public void AddAnimationTriggers(Ability ability)
 		{
 			if (ability is NKMCore.Abilities.Hecate.AsterYo)
