@@ -60,13 +60,12 @@ namespace Unity.Managers
 			}
 			SessionSettings.Instance.IsMuted = !SessionSettings.Instance.IsMuted;
 		}
-		
-        public static void PlayAudio(string path, float volume = 0.8f)
+
+		private static void PlayAudio(string path, float volume = 0.8f)
         {
             try
             {
                 var ac = Resources.Load("Audio/"+path) as AudioClip;
-	            Debug.Log(ac);
                 AudioSource.PlayClipAtPoint(ac, Camera.main.transform.position, volume);
             }
             catch (Exception e)
@@ -87,6 +86,12 @@ namespace Unity.Managers
 			}
 			if (ability is HyakuHachiPoundHou) ((HyakuHachiPoundHou) ability).BeforeUse += () => PlayAudio(ability.Name);
 			if (ability is LackOfOrientation) ((LackOfOrientation) ability).AfterGettingLost += () => PlayAudio("op wtf " + Random.Range(1, 4));
+			if (ability is OniGiri)
+			{
+				var ab = (OniGiri) ability;
+				ab.AfterOniGiriPrepare += list => PlayAudio("oni");
+				ab.AfterOniGiri += () => PlayAudio("giri");
+			}
 		}
 
 	}

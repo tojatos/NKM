@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NKMCore;
 using NKMCore.Abilities.Ononoki_Yotsugi;
+using NKMCore.Abilities.Roronoa_Zoro;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
@@ -83,6 +84,20 @@ namespace Unity.Hex
 					List<HexCell> normalCells = list.FindAll(c => c.Type == HexCell.TileType.Normal);
 					Active.SelectDrawnCells(normalCells).ForEach(c => c.Color = Color.white); //TODO: set the color depending on maps normal cell color
 					TriangulateCells();
+				};
+			}
+
+			if (ability is OniGiri)
+			{
+				((OniGiri) ability).AfterOniGiriPrepare += list =>
+				{
+					//Show highlights on move cells
+					list.ForEach(c =>
+					{
+						HexDirection direction = ability.ParentCharacter.ParentCell.GetDirection(c);
+						HexCell moveCell = c.GetCell(direction, 2);
+						Active.SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
+					});
 				};
 			}
 			
