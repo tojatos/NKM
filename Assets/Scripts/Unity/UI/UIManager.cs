@@ -47,7 +47,8 @@ namespace Unity.UI
 			ActivePlayerText.gameObject.AddRemoveTooltipEvent();
 			ActivePhaseText.gameObject.AddSetTooltipEvent("Numer fazy");
 			ActivePhaseText.gameObject.AddRemoveTooltipEvent();
-
+			
+			game.Active.Phase.PhaseChanged += UpdateActivePhaseText;
 		}
 		public void UpdateActivePlayerUI() => ActivePlayerText.SetText(_game.Active.GamePlayer.Name);
 		public void UpdateActivePhaseText() => ActivePhaseText.SetText(_game.Active.Phase.Number.ToString());

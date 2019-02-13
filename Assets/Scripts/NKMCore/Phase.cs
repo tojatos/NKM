@@ -1,11 +1,7 @@
-﻿using Unity.UI;
-
-namespace NKMCore
+﻿namespace NKMCore
 {
     public class Phase
     {
-//    private static Game Game => GameStarter.Instance.Game;
-
         private int _number;
         public int Number
         {
@@ -16,16 +12,15 @@ namespace NKMCore
             set
             {
                 _number = value;
-                UIManager.Instance.UpdateActivePhaseText();
+                PhaseChanged?.Invoke();
             }
         }
 
-        public delegate void VoidDelegate();
-        public event VoidDelegate PhaseFinished;
+        public event Delegates.Void PhaseChanged;
+        public event Delegates.Void PhaseFinished;
 
         public void Finish()
         {
-//        Game.Players.ForEach(p => p.Characters.ForEach(c => c.OnPhaseFinish()));
             Number++;
             PhaseFinished?.Invoke();
         }
