@@ -21,5 +21,7 @@ namespace NKMCore
 		public delegate void CharacterDamage(Character character, Damage damage);
 		public delegate void CharacterInt(Character targetCharacter, int value);
 		public delegate void CharacterRefInt(Character targetCharacter, ref int value);
+		
+		public delegate void CharacterCharacterList(Character character, List<Character> characters);
 	}
 }

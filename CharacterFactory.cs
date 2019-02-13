@@ -19,7 +19,8 @@ namespace NKMCore
 			properties.Game = game;
 			
 			var createdCharacter = new Character(properties);
-			game?.AddTriggersToEvents(createdCharacter);
+			
+			game?.InvokeAfterCharacterCreation(createdCharacter);
 
 			return createdCharacter;
 		}
