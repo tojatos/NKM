@@ -6,6 +6,7 @@ using NKMCore.Templates;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Unity.Managers
 {
@@ -85,7 +86,7 @@ namespace Unity.Managers
 				ab.BeforeRocket += () => PlayAudio("gomu gomu no rocket effect");
 			}
 			if (ability is HyakuHachiPoundHou) ((HyakuHachiPoundHou) ability).BeforeUse += () => PlayAudio(ability.Name);
-			
+			if (ability is LackOfOrientation) ((LackOfOrientation) ability).AfterGettingLost += () => PlayAudio("op wtf " + Random.Range(1, 4));
 		}
 
 	}
