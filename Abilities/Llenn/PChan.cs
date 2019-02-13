@@ -1,4 +1,5 @@
-﻿using NKMCore.Templates;
+﻿using NKMCore.Extensions;
+using NKMCore.Templates;
 
 namespace NKMCore.Abilities.Llenn
 {
@@ -8,7 +9,16 @@ namespace NKMCore.Abilities.Llenn
         public PChan(Game game) : base(game, AbilityType.Passive, "P-Chan")
         {
             OnAwake += () =>
-                Owner.Owner.Characters.ForEach(c => c.OnDeath += () => ParentCharacter.Speed.Value = ParentCharacter.Speed.RealValue + SpeedIncrease);
+            {
+                Game.Characters.ForEach(AddFunctionality);
+                Game.AfterCharacterCreation += AddFunctionality;
+            };
+        }
+
+        private void AddFunctionality(Character c)
+        {
+            if(c.IsEnemyFor(Owner)) return;
+            c.OnDeath += () => ParentCharacter.Speed.Value = ParentCharacter.Speed.RealValue + SpeedIncrease;
         }
 
         public override string GetDescription() =>
