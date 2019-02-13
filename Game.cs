@@ -6,6 +6,7 @@ using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity;
+using Unity.Hex;
 using Unity.Managers;
 using Unity.UI;
 
@@ -93,6 +94,7 @@ namespace NKMCore
 			a.Awake();
 			AnimationPlayer.AddTriggers(a);
 			MusicManager.AddTriggers(a);
+			HexMapDrawer.Instance.AddTriggers(a);
 		}
 
 		private async Task TryToPlaceCharacter()

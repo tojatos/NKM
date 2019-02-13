@@ -3,8 +3,6 @@ using NKMCore.Effects;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity.Hex;
-using UnityEngine;
 
 namespace NKMCore.Abilities.Ononoki_Yotsugi
 {
@@ -13,6 +11,9 @@ namespace NKMCore.Abilities.Ononoki_Yotsugi
         private const int Damage = 20;
         private const int Range = 5;
         private const int Radius = 3;
+
+        public event Delegates.CellList AfterCrunch;
+        
         public UrbCrunch(Game game) : base(game, AbilityType.Normal, "URB - Crunch", 3) { }
 
         public override string GetDescription() =>
@@ -34,13 +35,8 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         public void Use(List<HexCell> cells)
         {
 			ParentCharacter.TryToTakeTurn();
-            cells.ForEach(c =>
-            {
-                if (c.Type != HexCell.TileType.Wall) return;
-                c.Type = HexCell.TileType.Normal;
-                Active.SelectDrawnCell(c).Color = Color.white;
-            });
-            HexMapDrawer.Instance.TriangulateCells();
+            cells.FindAll(c => c.Type == HexCell.TileType.Wall).ForEach(c => c.Type = HexCell.TileType.Normal);
+            AfterCrunch?.Invoke(cells);
             cells.WhereEnemiesOf(Owner).GetCharacters().ForEach(e =>
             {
                 ParentCharacter.Attack(this, e, new Damage(Damage, DamageType.Physical));
