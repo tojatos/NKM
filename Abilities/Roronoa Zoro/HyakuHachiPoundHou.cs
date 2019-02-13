@@ -3,7 +3,6 @@ using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity.Managers;
 
 namespace NKMCore.Abilities.Roronoa_Zoro
 {
@@ -11,6 +10,8 @@ namespace NKMCore.Abilities.Roronoa_Zoro
 	{
 		private const int Damage = 18;
 		private const int Range = 6;
+
+		public event Delegates.Void BeforeUse;
 
 		public HyakuHachiPoundHou(Game game) : base(game, AbilityType.Ultimatum, "Hyaku Hachi Pound Hou", 6)
 		{
@@ -29,8 +30,8 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public void Use(Character targetCharacter)
 		{
+			BeforeUse?.Invoke();
 			ParentCharacter.TryToTakeTurn();
-			MusicManager.PlayAudio(Name);
 			HexCell targetCell = targetCharacter.ParentCell;
 			SendShockwave(targetCell);
 			SendShockwave(targetCell);
