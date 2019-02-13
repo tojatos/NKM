@@ -74,10 +74,9 @@ namespace NKMCore
 			{
 				PlaceAllCharactersRandomlyOnSpawns();
 				if(Active.Phase.Number==0) Active.Phase.Finish();
+				if(SpriteSelect.Instance.IsOpened) SpriteSelect.Instance.Close(); //TODO
 			}
 		}
-
-
 		private async Task TryToPlaceCharacter()
 		{
 			List<Character> charactersToPlace = Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive).ToList();
@@ -98,9 +97,7 @@ namespace NKMCore
 			Func<bool> placed = () => pickedCharacter?.IsOnMap == true;
 			await placed.WaitToBeTrue();
 		}
-
 		private void PlaceAllCharactersRandomlyOnSpawns() => Players.ForEach(p => p.Characters.ForEach(c => TrySpawningOnRandomCell(p, c)));
-
 		/// <summary>
 		/// Infinite loop that manages Turns and Phases
 		/// </summary>
@@ -124,15 +121,12 @@ namespace NKMCore
 				if(EveryCharacterTookActionInPhase) Active.Phase.Finish();
 			}
 		}
-
 		private static void FinishGame()
 		{
 			//TODO
 		}
-
 		private bool EveryCharacterTookActionInPhase => Players.All(p => p.Characters.Where(c => c.IsAlive).All(c => c.TookActionInPhaseBefore));
 		private bool IsEveryCharacterPlacedInTheFirstPhase => !(Active.Phase.Number == 0 && Players.Any(p => p.Characters.Any(c => !c.IsOnMap && c.IsAlive)));
-
 		/// <summary>
 		/// Start a turn and wait for player to end it
 		/// </summary>
@@ -195,10 +189,5 @@ namespace NKMCore
 				}
 			};
 		}
-	}
-
-	public interface ISelectable
-	{
-		void Select<T>(SelectableProperties<T> props);
 	}
 }
