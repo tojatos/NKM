@@ -235,7 +235,7 @@ namespace Unity.Hex
                 if (Active.AbilityToUse != null)
                 {
 	                //It is important to check in that order, in case ability uses multiple interfaces!
-	                if(Active.AbilityToUse is IUseableCharacter && touchedCell.FirstCharacter != null)
+	                if(Active.AbilityToUse is IUseableCharacter && !touchedCell.IsEmpty)
 		                Action.UseAbility((IUseableCharacter)Active.AbilityToUse, touchedCell.FirstCharacter);
 	                else if(Active.AbilityToUse is IUseableCell)
 		                Action.UseAbility((IUseableCell)Active.AbilityToUse, touchedCell);
