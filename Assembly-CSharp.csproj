@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -208,8 +209,6 @@
     <Compile Include="Assets\Scripts\NKMCore\Templates\IUseableCell.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\IUseableCellList.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\IUseableCharacter.cs" />
-    <Compile Include="Assets\Scripts\NKMCore\Templates\NKMCharacter.cs" />
-    <Compile Include="Assets\Scripts\NKMCore\Templates\NKMObject.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Turn.cs" />
     <Compile Include="Assets\Scripts\Unity\AnimationPlayer.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\AsterYo.cs" />
