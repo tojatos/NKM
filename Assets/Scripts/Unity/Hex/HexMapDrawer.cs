@@ -4,6 +4,7 @@ using System.Linq;
 using NKMCore;
 using NKMCore.Abilities.Ononoki_Yotsugi;
 using NKMCore.Abilities.Roronoa_Zoro;
+using NKMCore.Abilities.Ryuko_Matoi;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
@@ -11,6 +12,7 @@ using Unity.Animations;
 using Unity.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Action = NKMCore.Action;
 
 namespace Unity.Hex
@@ -100,7 +102,22 @@ namespace Unity.Hex
 					});
 				};
 			}
-			
+
+			if (ability is FiberDecapitation)
+			{
+				var ab = (FiberDecapitation) ability;
+				ab.AfterPrepare += list =>
+				{
+					//Show highlights on move cells
+					//TODO: redundant code
+					list.ForEach(c =>
+					{
+						HexDirection direction = ability.ParentCharacter.ParentCell.GetDirection(c);
+						HexCell moveCell = c.GetCell(direction, FiberDecapitation.TargetCellOffset);
+						Active.SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
+					});
+				};
+			}
 		}
 
 		public void CreateMap(HexMap hexMap)
