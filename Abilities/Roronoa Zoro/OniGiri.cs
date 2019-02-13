@@ -2,14 +2,15 @@
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
-using Unity.Managers;
 
 namespace NKMCore.Abilities.Roronoa_Zoro
 {
 	public class OniGiri : Ability, IClickable, IUseableCharacter
 	{
 		private const int Range = 4;
+
+		public event Delegates.CellList AfterOniGiriPrepare;
+		public event Delegates.Void AfterOniGiri;
 
 		public OniGiri(Game game) : base(game, AbilityType.Normal, "Oni Giri", 4)
 		{
@@ -32,15 +33,9 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public void Click()
 		{
-			Active.Prepare(this, GetTargetsInRange());
-			//Show highlights on move cells
-			GetTargetsInRange().ForEach(c =>
-			{
-				HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);
-                HexCell moveCell = c.GetCell(direction, 2);
-                Active.SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
-			});
-			MusicManager.PlayAudio("oni");
+			List<HexCell> targetCells = GetTargetsInRange();
+			Active.Prepare(this, targetCells);
+			AfterOniGiriPrepare?.Invoke(targetCells);
 		}
 
 		public void Use(Character targetCharacter)
@@ -51,7 +46,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			ParentCharacter.MoveTo(moveCell);
 			var damage = new Damage(ParentCharacter.AttackPoints.Value, DamageType.Physical);
 			ParentCharacter.Attack(this, targetCharacter, damage);
-			MusicManager.PlayAudio("giri");
+			AfterOniGiri?.Invoke();
 			Finish();
 		}
 	}
