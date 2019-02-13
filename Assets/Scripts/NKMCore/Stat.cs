@@ -5,22 +5,18 @@ namespace NKMCore
 	public class Stat
 	{
 		private readonly StatType _type;
-//	private readonly Character _parentCharacter;
 		public readonly List<Modifier> Modifiers = new List<Modifier>();
 		public readonly int BaseValue;
 
 		public delegate void OnStatChange();
 		public event OnStatChange StatChanged;
 
-//	public int Bonus => Value - BaseValue;
 		public int RealValue { get; private set; }
 		public int Value
 		{
 			get
 			{
 				int modifier = 0;
-//			_parentCharacter.Effects.ForEach(e => modifier += e.Modifier(_type));
-//			_effects.ForEach(e => modifier += e.Modifier(_type));
 				Modifiers.ForEach(m => modifier += modifier);
 				return RealValue + modifier;
 			}
@@ -34,7 +30,6 @@ namespace NKMCore
 
 
 
-//	public Stat(Character parentCharacter, StatType type, int baseValue)
 		public Stat(StatType type, int baseValue)
 		{
 			_type = type;
