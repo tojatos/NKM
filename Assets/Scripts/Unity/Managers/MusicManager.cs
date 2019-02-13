@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NKMCore.Abilities.Monkey_D._Luffy;
+using NKMCore.Abilities.Roronoa_Zoro;
 using NKMCore.Templates;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -83,6 +84,7 @@ namespace Unity.Managers
 				ab.BeforePistol += () => PlayAudio("pistol");
 				ab.BeforeRocket += () => PlayAudio("gomu gomu no rocket effect");
 			}
+			if (ability is HyakuHachiPoundHou) ((HyakuHachiPoundHou) ability).BeforeUse += () => PlayAudio(ability.Name);
 			
 		}
 
