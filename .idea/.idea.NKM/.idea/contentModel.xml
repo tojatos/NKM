@@ -270,8 +270,6 @@
             <e p="IUseableCell.cs" t="Include" />
             <e p="IUseableCellList.cs" t="Include" />
             <e p="IUseableCharacter.cs" t="Include" />
-            <e p="NKMCharacter.cs" t="Include" />
-            <e p="NKMObject.cs" t="Include" />
           </e>
           <e p="Turn.cs" t="Include" />
         </e>

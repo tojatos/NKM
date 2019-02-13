@@ -8,13 +8,19 @@ namespace NKMCore.Abilities.Kurogane_Ikki
         private const int HealAmount = 15;
         public RakudaiKishi(Game game) : base(game, AbilityType.Passive, "Rakudai Kishi")
         {
-            OnAwake += () => 
-                Game.Characters.FindAll(c => c.IsEnemyFor(Owner))
-                    .ForEach(c => c.OnDeath += () =>
-                    {
-                        if(!ParentCharacter.IsAlive) return;
-                        ParentCharacter.Heal(ParentCharacter, HealAmount);
-                    });
+            OnAwake += () =>
+            {
+                Game.Characters.ForEach(AddFunctionality);
+                Game.AfterCharacterCreation += AddFunctionality;
+            };
+        }
+
+        private void AddFunctionality(Character character)
+        {
+            if (character.IsEnemyFor(Owner))
+            {
+                character.OnDeath += () => ParentCharacter.Heal(ParentCharacter, HealAmount);
+            }
         }
 
         public override string GetDescription() =>
