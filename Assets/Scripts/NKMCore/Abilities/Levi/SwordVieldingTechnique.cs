@@ -3,9 +3,6 @@ using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
-using Unity.Animations;
-using Unity.Hex;
 
 namespace NKMCore.Abilities.Levi
 {
@@ -13,6 +10,9 @@ namespace NKMCore.Abilities.Levi
     {
         private const int Range = 7;
         private const int MoveTargetRange = 7;
+
+        public event Delegates.CharacterCell OnSwing;
+        
         public SwordVieldingTechnique(Game game) : base(game, AbilityType.Ultimatum, "Sword-Vielding Technique", 5)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
@@ -36,7 +36,7 @@ W trakcie przemieszczenia się zadaje podstawowe obrażenia osobom w zasięgu at
             {
                 _theWall = cell;
                 Active.Prepare(this, GetMoveTargets(cell));
-                AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(cell).transform.position, 0.13f));
+                OnSwing?.Invoke(ParentCharacter, cell);
             }
             else
             {
@@ -53,7 +53,7 @@ W trakcie przemieszczenia się zadaje podstawowe obrażenia osobom w zasięgu at
         public override void Cancel()
         {
             base.Cancel();
-            AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(ParentCharacter.ParentCell).transform.position, 0.13f));
+            OnSwing?.Invoke(ParentCharacter, ParentCharacter.ParentCell);
         }
     }
 }

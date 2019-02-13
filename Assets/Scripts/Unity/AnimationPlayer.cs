@@ -45,6 +45,15 @@ namespace Unity
                         conflargationCells.Select(c => Active.SelectDrawnCell(c).transform).ToList()
                     ));
 			}
+			if (ability is NKMCore.Abilities.Levi.SwordVieldingTechnique)
+			{
+				((NKMCore.Abilities.Levi.SwordVieldingTechnique) ability).OnSwing += (character, cell) => 
+                    Add(new MoveTo(
+	                    HexMapDrawer.Instance.GetCharacterObject(character).transform,
+	                    Active.SelectDrawnCell(cell).transform.position, 0.13f
+                    ));
+			}
+			
 				
 		}
 		public void AddAnimationTriggers(Character character)
