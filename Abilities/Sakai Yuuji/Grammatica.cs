@@ -2,9 +2,6 @@
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
-using Unity.Animations;
-using Unity.Hex;
 
 namespace NKMCore.Abilities.Sakai_Yuuji
 {
@@ -12,6 +9,10 @@ namespace NKMCore.Abilities.Sakai_Yuuji
     {
         private const int HealthPercentDamage = 25;
         private const int Range = 7;
+
+        public event Delegates.CharacterCharacter BeforeGrammatica;
+        public event Delegates.CharacterCharacterCell AfterGrammatica;
+        
         public Grammatica(Game game) : base(game, AbilityType.Ultimatum, "Grammatica", 5)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
@@ -26,28 +27,24 @@ Następnie wraca z wybraną postacią w miejsce, na którym stał przed użyciem
 Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 
         public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
-
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereCharacters();
-        //    c.CharacterOnCell != null && ParentCharacter.ParentCell.GetCell(ParentCharacter.ParentCell.GetDirection(c), 1).IsFreeToStand);
         private List<HexCell> GetMoveCells() => GetNeighboursOfOwner(1).FindAll(c => c.IsFreeToStand);
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
-
         private Character _target;
         public void Use(HexCell targetCell)
         {
-			ParentCharacter.TryToTakeTurn();
-            AnimationPlayer.Add(new GrammaticaStart(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, _target, Owner.Owner));
+            BeforeGrammatica?.Invoke(ParentCharacter, _target); 
+            ParentCharacter.TryToTakeTurn();
             if (_target.IsEnemyFor(Owner))
             {
                 int dmg = (int)(_target.HealthPoints.BaseValue * HealthPercentDamage / 100f);
                 ParentCharacter.Attack(this, _target, new Damage(dmg, DamageType.True));
             }
-            AnimationPlayer.Add(new GrammaticaFinish(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, HexMapDrawer.Instance.GetCharacterObject(_target).transform, Active.SelectDrawnCell(targetCell).transform.TransformPoint(0,10,0)));
+            AfterGrammatica?.Invoke(ParentCharacter, _target, targetCell); 
             _target.MoveTo(targetCell);
             Finish();
-
         }
         public void Use(Character character)
         {
