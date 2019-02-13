@@ -2,9 +2,6 @@
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
-using Unity.Animations;
-using Unity.Hex;
 
 namespace NKMCore.Abilities.Levi
 {
@@ -12,6 +9,9 @@ namespace NKMCore.Abilities.Levi
     {
         private const int Range = 7;
         private const int MoveTargetRange = 7;
+        
+        public event Delegates.CharacterCell OnSwing;
+        
         public VerticalManeuveringEquipment(Game game) : base(game, AbilityType.Normal, "Vertical Maneuvering Equipment", 2)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
@@ -32,7 +32,7 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
             if (cell.Type == HexCell.TileType.Wall)
             {
                 Active.Prepare(this, GetMoveTargets(cell));
-                AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(cell).transform.position, 0.13f));
+                OnSwing?.Invoke(ParentCharacter, cell);
             }
             else
             {
@@ -45,7 +45,7 @@ $@"{ParentCharacter.FirstName()} zaczepia się ściany w zasięgu {Range} i prze
         public override void Cancel()
         {
             base.Cancel();
-            AnimationPlayer.Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, Active.SelectDrawnCell(ParentCharacter.ParentCell).transform.position, 0.13f));
+            OnSwing?.Invoke(ParentCharacter, ParentCharacter.ParentCell);
         }
     }
 }
