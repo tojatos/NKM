@@ -249,6 +249,7 @@
             <e p="Conflagration.cs" t="Include" />
             <e p="HowlingBlizzard.cs" t="Include" />
           </e>
+          <e p="ISelectable.cs" t="Include" />
           <e p="Instantiator.cs" t="Include" />
           <e p="NKMID.cs" t="Include" />
           <e p="NKMRandom.cs" t="Include" />
@@ -334,6 +335,7 @@
             <e p="PreGameOptions.cs" t="Include" />
             <e p="ServerList.cs" t="Include" />
             <e p="ShortcutManager.cs" t="Include" />
+            <e p="SpriteSelectSelectable.cs" t="Include" />
           </e>
           <e p="PlayerPrefsX.cs" t="Include" />
           <e p="Scenes.cs" t="Include" />

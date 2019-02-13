@@ -67,7 +67,7 @@ namespace Unity.Managers
                         await DraftPick(game, charactersToPick);
                         break;
                     case 2:
-//                        AllRandom(game);
+                        AllRandom(game);
                         break;
                 }
 				
@@ -105,6 +105,20 @@ namespace Unity.Managers
 				foreach (GamePlayer player in game.Players.AsEnumerable().Reverse()) 
 					await DraftPickOneCharacter(charactersToPick, player, game);
 			}
+		}
+		private static void AllRandom(Game game)
+		{
+			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
+			List<string> allCharacterNames = GameData.Conn.GetCharacterNames();
+			game.Players.ForEach(p=>
+			{
+				while (p.Characters.Count != numberOfCharactersPerPlayer)
+				{
+                    string randomCharacterName = allCharacterNames.GetRandomNoLog();
+                    allCharacterNames.Remove(randomCharacterName);
+                    p.Characters.Add(CharacterFactory.Create(game, randomCharacterName));
+				}
+			});
 		}
 		private async Task Bans(Game game, List<Character> charactersToPick)
 		{
@@ -219,43 +233,5 @@ namespace Unity.Managers
 				default: return $"Player {i + 1}";
 			}
 		}
-
-
-//		private void AllRandom(List<GamePlayer> players)
-//		{
-//			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
-//
-//			List<string> allCharacterNames = Sqlite.GetCharacterNames(GameData.Conn);//AllMyGameObjects.Characters.Select(c => c.Name).ToList();
-//			
-//			players.ForEach(p=>
-//			{
-//				while (p.Characters.Count != numberOfCharactersPerPlayer)
-//				{
-//                    string randomCharacterName = SystemGeneric.GetRandomNoLog(allCharacterNames);
-//                    allCharacterNames.Remove(randomCharacterName);
-//                    p.AddCharacter(Game, randomCharacterName);
-//				}
-//				
-//				p.HasSelectedCharacters = true;
-//			});
-//			
-//		}
-
 	}
-
-	class SpriteSelectSelectable : ISelectable
-	{
-		public void Select<T>(SelectableProperties<T> props)
-		{
-			if(typeof(T) == typeof(Character)) SpriteSelect.Instance.Open(props.ToSelect as List<Character>, () =>
-			{
-                List<Character> selectedObj = SpriteSelect.Instance.SelectedObjects;
-				if (!props.ConstraintOfSelection(selectedObj as List<T>)) return;
-				props.OnSelectFinish(selectedObj as List<T>);
-
-                SpriteSelect.Instance.Close();
-			}, props.SelectionTitle, "Zakończ wybieranie" );
-		}
-	}
-
 }

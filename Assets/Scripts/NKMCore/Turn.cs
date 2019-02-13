@@ -37,9 +37,6 @@ namespace NKMCore
 			_game.Active.Reset();
 			UIManager.Instance.UpdateActivePlayerUI();
 			TurnStarted?.Invoke(gamePlayer);
-		
-		
-			if (_game.Active.Phase.Number != 0) return;
 		}
 
 		public delegate void CharacterDelegate(Character character);

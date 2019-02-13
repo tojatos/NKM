@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -189,6 +190,7 @@
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexMap.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\SearchFlags.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Instantiator.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\ISelectable.cs" />
     <Compile Include="Assets\Scripts\NKMCore\NKMID.cs" />
     <Compile Include="Assets\Scripts\NKMCore\NKMRandom.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Phase.cs" />
@@ -260,6 +262,7 @@
     <Compile Include="Assets\Scripts\Unity\Managers\PreGameOptions.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\ServerList.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\ShortcutManager.cs" />
+    <Compile Include="Assets\Scripts\Unity\Managers\SpriteSelectSelectable.cs" />
     <Compile Include="Assets\Scripts\Unity\PlayerPrefsX.cs" />
     <Compile Include="Assets\Scripts\Unity\Scenes.cs" />
     <Compile Include="Assets\Scripts\Unity\SessionSettings.cs" />
