@@ -9,7 +9,6 @@ namespace NKMCore.Templates
 {
 	public abstract class Ability
 	{
-		
 		protected readonly Game Game;
 		public Active Active => Game.Active;
 		public HexMap HexMap => Game.HexMap;

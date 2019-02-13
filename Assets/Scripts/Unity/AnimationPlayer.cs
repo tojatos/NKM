@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NKMCore;
 using NKMCore.Hex;
@@ -37,6 +38,16 @@ namespace Unity
 				Add(new MoveTo(HexMapDrawer.Instance.GetCharacterObject(secondCharacterToSwap).transform,
 					Active.SelectDrawnCell(firstCharacterToSwap.ParentCell).transform.position, 0.4f));
 			};
+		}
+
+		public void AddAnimationTriggers(Ability ability)
+		{
+			if (ability is NKMCore.Abilities.Hecate.AsterYo)
+			{
+				((NKMCore.Abilities.Hecate.AsterYo) ability).BeforeAsterBlaster += (character, characters) => 
+                    Add(new AsterYo(HexMapDrawer.Instance.GetCharacterObject(character).transform, characters.Select(c => HexMapDrawer.Instance.GetCharacterObject(c).transform).ToList()));
+			}
+				
 		}
 		public void AddAnimationTriggers(Character character)
 		{

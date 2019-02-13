@@ -51,6 +51,11 @@ namespace NKMCore
 		public static List<Character> GetMockCharacters() =>
 			GameData.Conn.GetCharacterNames().Select(n => CharacterFactory.Create(null, n)).ToList();
 
+		public event Delegates.AbilityD AfterAbilityCreation;
+		public event Delegates.CharacterD AfterCharacterCreation;
+		public void InvokeAfterCharacterCreation(Character c) => AfterCharacterCreation?.Invoke(c);
+		public void InvokeAfterAbilityCreation(Ability a) => AfterAbilityCreation?.Invoke(a);
+		
 		public void Start()
 		{
 			Active.Turn.TurnStarted += async player =>
@@ -61,14 +66,30 @@ namespace NKMCore
 			{
 				if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
 			};
-			Abilities.ForEach(a => a.Awake());
+			Abilities.ForEach(a =>
+			{
+				a.Awake();
+				AnimationPlayer.Instance.AddAnimationTriggers(a);
+			});
+			AfterAbilityCreation += a =>
+			{
+				a.Awake();
+				AnimationPlayer.Instance.AddAnimationTriggers(a);
+			};
 
 			//TODO
 			Characters.ForEach(c =>
 			{
                 AnimationPlayer.Instance.AddAnimationTriggers(c);
                 UIManager.Instance.AddUITriggers(c);
+				AddTriggersToEvents(c);
 			});
+			AfterCharacterCreation += c =>
+			{
+				AnimationPlayer.Instance.AddAnimationTriggers(c);
+				UIManager.Instance.AddUITriggers(c);
+				AddTriggersToEvents(c);
+			};
 			TakeTurns();
 			if (Options.PlaceAllCharactersRandomlyAtStart)
 			{

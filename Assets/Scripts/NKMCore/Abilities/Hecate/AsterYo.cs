@@ -4,8 +4,6 @@ using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
-using Unity.Hex;
 
 namespace NKMCore.Abilities.Hecate
 {
@@ -14,6 +12,8 @@ namespace NKMCore.Abilities.Hecate
 		private const int Damage = 12;
 		private const int Range = 10;
 		private const int Radius = 6;
+
+		public event Delegates.CharacterCharacterList BeforeAsterBlaster;
 		
 		public AsterYo(Game game) : base(game, AbilityType.Normal, "Aster Yo", 3){}
 		
@@ -41,7 +41,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 				ItadakiNoKura passiveAbility = ParentCharacter.Abilities.OfType<ItadakiNoKura>().SingleOrDefault();
 
 				characters = characters.Where(c => c.Owner != ParentCharacter.Owner).ToList();
-				AnimationPlayer.Add(new Unity.Animations.AsterYo(HexMapDrawer.Instance.GetCharacterObject(ParentCharacter).transform, characters.Select(c => HexMapDrawer.Instance.GetCharacterObject(c).transform).ToList()));
+				BeforeAsterBlaster?.Invoke(ParentCharacter, characters);
 				characters.ForEach(targetCharacter =>
 				{
 					var damage = new Damage(Damage, DamageType.Magical);
