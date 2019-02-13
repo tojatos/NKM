@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NKMCore.Templates;
+﻿using NKMCore.Templates;
 using Unity.Hex;
 using Unity.UI;
 

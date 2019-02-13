@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NKMCore;
-using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Animations;
 using Unity.Hex;
@@ -32,7 +31,19 @@ namespace Unity
 			if (ability is NKMCore.Abilities.Hecate.AsterYo)
 			{
 				((NKMCore.Abilities.Hecate.AsterYo) ability).BeforeAsterBlaster += (character, characters) => 
-                    Add(new AsterYo(HexMapDrawer.Instance.GetCharacterObject(character).transform, characters.Select(c => HexMapDrawer.Instance.GetCharacterObject(c).transform).ToList()));
+                    Add(new AsterYo(
+                        HexMapDrawer.Instance.GetCharacterObject(character).transform,
+                        characters.Select(c => HexMapDrawer.Instance.GetCharacterObject(c).transform).ToList()
+                    ));
+			}
+
+			if (ability is NKMCore.Abilities.Itsuka_Kotori.CamaelMegiddo)
+			{
+				((NKMCore.Abilities.Itsuka_Kotori.CamaelMegiddo) ability).BeforeFlamewave += (lineCells, conflargationCells) => 
+                    Add(new CamaelMegiddo(
+                        lineCells.Select(c => Active.SelectDrawnCell(c).transform).ToList(),
+                        conflargationCells.Select(c => Active.SelectDrawnCell(c).transform).ToList()
+                    ));
 			}
 				
 		}

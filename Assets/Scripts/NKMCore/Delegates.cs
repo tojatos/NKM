@@ -23,5 +23,6 @@ namespace NKMCore
 		public delegate void CharacterRefInt(Character targetCharacter, ref int value);
 		
 		public delegate void CharacterCharacterList(Character character, List<Character> characters);
+		public delegate void CellListCellList(List<HexCell> cellList1, List<HexCell> cellList2);
 	}
 }

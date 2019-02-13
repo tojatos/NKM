@@ -4,7 +4,6 @@ using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
 
 namespace NKMCore.Abilities.Itsuka_Kotori
 {
@@ -12,6 +11,8 @@ namespace NKMCore.Abilities.Itsuka_Kotori
     {
         private const int LineDamage = 40;
         private const int ConflargationDamage = 20;
+
+        public event Delegates.CellListCellList BeforeFlamewave;
 
         public CamaelMegiddo(Game game) : base(game, AbilityType.Ultimatum, "Camael - Megiddo", 6) { }
 
@@ -74,14 +75,13 @@ Czas odnowienia: {Cooldown}";
             IGrouping<bool, HexCell>[] cellsByConflargation = cells.GroupBy(c => c.Effects.ContainsType<HexCellEffects.Conflagration>()).ToArray();
 			List<HexCell> lineCells = cellsByConflargation.Where(k => k.Key == false).SelectMany(x => x).ToList();
 			List<HexCell> conflargationCells = cellsByConflargation.Where(k => k.Key).SelectMany(x => x).ToList();
-            AnimationPlayer.Add(new Unity.Animations.CamaelMegiddo(lineCells.Select(c => Active.SelectDrawnCell(c).transform).ToList(), conflargationCells.Select(c => Active.SelectDrawnCell(c).transform).ToList()));
+            BeforeFlamewave?.Invoke(lineCells, conflargationCells);
 
 			//deal damages
 			lineCells.WhereEnemiesOf(Owner).GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(LineDamage, DamageType.Magical)));
 			conflargationCells.WhereEnemiesOf(Owner).GetCharacters().ForEach(c => ParentCharacter.Attack(this, c, new Damage(ConflargationDamage, DamageType.Magical)));
 
 			//remove conflargation effects
-//			conflargationCells.ForEach(c => c.Effects.RemoveAll(e => e.GetType() == typeof(HexCellEffects.Conflagration)));
 			conflargationCells.ForEach(c => c.Effects.FindAll(e => e.GetType() == typeof(HexCellEffects.Conflagration)).ForEach(e => e.Remove()));
 
         }
