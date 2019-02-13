@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NKMCore;
+using NKMCore.Abilities.Levi;
+using NKMCore.Abilities.Sakai_Yuuji;
 using NKMCore.Templates;
 using Unity.Animations;
 using Unity.Hex;
@@ -45,9 +47,9 @@ namespace Unity
                         conflargationCells.Select(c => Active.SelectDrawnCell(c).transform).ToList()
                     ));
 			}
-			if (ability is NKMCore.Abilities.Levi.SwordVieldingTechnique)
+			if (ability is SwordVieldingTechnique)
 			{
-				((NKMCore.Abilities.Levi.SwordVieldingTechnique) ability).OnSwing += (character, cell) => 
+				((SwordVieldingTechnique) ability).OnSwing += (character, cell) => 
                     Add(new MoveTo(
 	                    HexMapDrawer.Instance.GetCharacterObject(character).transform,
 	                    Active.SelectDrawnCell(cell).transform.position,
@@ -55,13 +57,25 @@ namespace Unity
                     ));
 			}
 			
-			if (ability is NKMCore.Abilities.Levi.VerticalManeuveringEquipment)
+			if (ability is VerticalManeuveringEquipment)
 			{
-				((NKMCore.Abilities.Levi.VerticalManeuveringEquipment) ability).OnSwing += (character, cell) => 
+				((VerticalManeuveringEquipment) ability).OnSwing += (character, cell) => 
                     Add(new MoveTo(
 	                    HexMapDrawer.Instance.GetCharacterObject(character).transform,
 	                    Active.SelectDrawnCell(cell).transform.position,
 	                    0.13f
+                    ));
+			}
+			
+			if (ability is Grammatica)
+			{
+				var ab = (Grammatica) ability;
+				ab.BeforeGrammatica += (parentCharacter, targetCharacter) => Add(new GrammaticaStart(parentCharacter, targetCharacter));
+				ab.AfterGrammatica += (parentCharacter, targetCharacter, targetCell) =>
+                    Add(new GrammaticaFinish(
+                        HexMapDrawer.Instance.GetCharacterObject(parentCharacter).transform,
+                        HexMapDrawer.Instance.GetCharacterObject(targetCharacter).transform,
+                        Active.SelectDrawnCell(targetCell).transform.TransformPoint(0,10,0)
                     ));
 			}
 			

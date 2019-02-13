@@ -22,10 +22,13 @@ namespace Unity.Animations.Parts
         }
         public override IEnumerator Play()
         {
+            if (_transformToMove == null)
+            {
+                IsFinished = true;
+                yield break;
+            }
             _transformToMove.position = _targetTransform != null ? _targetTransform.position : _targetPosition;
-
             IsFinished = true;
-            yield break;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Unity.Animations.Parts
         
         public override IEnumerator Play()
         {
-            _objectToHide.Hide();
+            if (_objectToHide != null) _objectToHide.Hide();
 
             IsFinished = true;
             yield break;

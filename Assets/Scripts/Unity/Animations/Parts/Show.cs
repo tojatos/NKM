@@ -15,7 +15,7 @@ namespace Unity.Animations.Parts
         
         public override IEnumerator Play()
         {
-            _objectToShow.Show();
+            if(_objectToShow != null) _objectToShow.Show();
 
             IsFinished = true;
             yield break;
