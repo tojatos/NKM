@@ -12,7 +12,6 @@ using Unity.Animations;
 using Unity.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Action = NKMCore.Action;
 
 namespace Unity.Hex
@@ -74,6 +73,23 @@ namespace Unity.Hex
                 lRend.endColor = Color.black;
                 lRend.widthMultiplier = 2;
             };
+			Active.AirSelection.AfterEnable += list => Active.SelectDrawnCells(list).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
+			Active.AirSelection.AfterCellsSet += list =>
+			{
+				RemoveHighlights();
+				if (_game.Active.HexCells != null && list != null)
+				{
+					_game.Active.HexCells.ForEach(c =>
+					{
+						if (list.All(ac => ac != c))
+						{
+							Active.SelectDrawnCell(c).AddHighlight(Highlights.BlueTransparent);
+						}
+					});
+				}
+
+				list?.ForEach(c => Active.SelectDrawnCell(c).AddHighlight(Highlights.RedTransparent));
+			};
 		}
 
 		public void AddTriggers(Ability ability)
