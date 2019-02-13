@@ -34,7 +34,6 @@ namespace NKMCore
 			_game.Active.GamePlayer = gamePlayer;
 			_game.Active.Turn.IsDone = false;
 			_game.Active.Reset();
-			UIManager.Instance.UpdateActivePlayerUI();
 			TurnStarted?.Invoke(gamePlayer);
 		}
 
