@@ -28,10 +28,8 @@ namespace NKMCore.Hex
 		    HexCell c2 = secondCharacterToSwap.ParentCell;
 		    Move(firstCharacterToSwap, c2);
 		    Move(secondCharacterToSwap, c1);
-		    AfterSwap?.Invoke(Tuple.Create(firstCharacterToSwap, secondCharacterToSwap));
 	    }
 		    
-	    public Delegates.CharacterTuple AfterSwap;
 	    public Delegates.CharacterCell AfterMove;
 	    public Delegates.CharacterCell AfterCharacterPlace;
 
