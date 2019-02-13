@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NKMCore.Hex;
-using Unity;
-using Unity.Hex;
 
 namespace NKMCore
 {
 	public class AirSelection
 	{
 		private readonly Game _game;
+
+		public event Delegates.CellList AfterEnable;
+		public event Delegates.CellList AfterCellsSet;
+		
 		public bool IsEnabled { get; private set; }
 		public enum SelectionShape
 		{
@@ -24,6 +26,9 @@ namespace NKMCore
 		}
 		private SelectionShape _shape;
 		private int _size;
+		/// <summary>
+		/// Sets cells in respect to first cell in the list
+		/// </summary>
 		private List<HexCell> _hexCells;
 		public List<HexCell> HexCells
 		{
@@ -38,28 +43,16 @@ namespace NKMCore
 						_hexCells.AddRange(value[0].GetNeighbors(_game.Active.GamePlayer, _size));
 					}
 				}
-				HexMapDrawer.Instance.RemoveHighlights();
-				if (_game.Active.HexCells != null && _hexCells != null)
-				{
-					_game.Active.HexCells.ForEach(c =>
-					{
-						if (_hexCells.All(ac => ac != c))
-						{
-							Active.SelectDrawnCell(c).AddHighlight(Highlights.BlueTransparent);
-						}
-					});
-				}
-
-				_hexCells?.ForEach(c => Active.SelectDrawnCell(c).AddHighlight(Highlights.RedTransparent));
+				AfterCellsSet?.Invoke(_hexCells);
 			}
 		}
 
 		public void Enable(SelectionShape shape, int size)
 		{
-			_game.Active.HexCells.ForEach(c => Active.SelectDrawnCell(c).AddHighlight(Highlights.BlueTransparent));
 			IsEnabled = true;
 			_shape = shape;
 			_size = size;
+			AfterEnable?.Invoke(_game.Active.HexCells);
 		}
 		public void Disable()
 		{
