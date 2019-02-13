@@ -2,16 +2,18 @@
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
 
 namespace NKMCore.Abilities.Ryuko_Matoi
 {
     public class FiberDecapitation : Ability, IClickable, IUseableCharacter
     {
         private const int PhysicalDefenseDecrease = 15;
-        private const int TargetCellOffset = 3;
+        public const int TargetCellOffset = 3;
         private const int Range = 6;
         private const int Damage = 20;
+
+	    public event Delegates.CellList AfterPrepare;
+	    
         public FiberDecapitation(Game game) : base(game, AbilityType.Normal, "Fiber Decapitation", 3)
         {
 			OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
@@ -32,14 +34,9 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
 	    
 		public void Click()
 		{
-			Active.Prepare(this, GetTargetsInRange());
-			//Show highlights on move cells
-			GetTargetsInRange().ForEach(c =>
-			{
-				HexDirection direction = ParentCharacter.ParentCell.GetDirection(c);
-                HexCell moveCell = c.GetCell(direction, TargetCellOffset);
-				Active.SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
-			});
+			List<HexCell> targetCells = GetTargetsInRange();
+			Active.Prepare(this, targetCells);
+			AfterPrepare?.Invoke(targetCells);
 		}
 
 		public void Use(Character targetCharacter)
