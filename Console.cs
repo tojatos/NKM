@@ -19,7 +19,6 @@ namespace NKMCore
             _game = game;
         }
 
-        public event Delegates.Void AfterLog;
         private bool _isDebug = true;
 
         public void Log(string text) => AddLog(text);
@@ -31,7 +30,6 @@ namespace NKMCore
                 Text = text,
                 IsDebug = isDebug,
             });
-            AfterLog?.Invoke();
         }
         public void GameLog(string text)
         {
