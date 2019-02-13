@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using NKMCore.Abilities.Monkey_D._Luffy;
+using NKMCore.Templates;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -62,6 +64,7 @@ namespace Unity.Managers
             try
             {
                 var ac = Resources.Load("Audio/"+path) as AudioClip;
+	            Debug.Log(ac);
                 AudioSource.PlayClipAtPoint(ac, Camera.main.transform.position, volume);
             }
             catch (Exception e)
@@ -70,6 +73,18 @@ namespace Unity.Managers
             }
             
         }
+
+		public static void AddTriggers(Ability ability)
+		{
+			if (ability is GomuGomuNoMi)
+			{
+				var ab = (GomuGomuNoMi) ability;
+				ab.OnClick += () => PlayAudio("gomu gomu no");
+				ab.BeforePistol += () => PlayAudio("pistol");
+				ab.BeforeRocket += () => PlayAudio("gomu gomu no rocket effect");
+			}
+			
+		}
 
 	}
 }

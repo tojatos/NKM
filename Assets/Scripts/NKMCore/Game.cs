@@ -6,6 +6,7 @@ using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity;
+using Unity.Managers;
 using Unity.UI;
 
 namespace NKMCore
@@ -66,30 +67,12 @@ namespace NKMCore
 			{
 				if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
 			};
-			Abilities.ForEach(a =>
-			{
-				a.Awake();
-				AnimationPlayer.Instance.AddAnimationTriggers(a);
-			});
-			AfterAbilityCreation += a =>
-			{
-				a.Awake();
-				AnimationPlayer.Instance.AddAnimationTriggers(a);
-			};
+			Abilities.ForEach(Init);
+			AfterAbilityCreation += Init;
 
-			//TODO
-			Characters.ForEach(c =>
-			{
-                AnimationPlayer.Instance.AddAnimationTriggers(c);
-                UIManager.Instance.AddUITriggers(c);
-				AddTriggersToEvents(c);
-			});
-			AfterCharacterCreation += c =>
-			{
-				AnimationPlayer.Instance.AddAnimationTriggers(c);
-				UIManager.Instance.AddUITriggers(c);
-				AddTriggersToEvents(c);
-			};
+			Characters.ForEach(Init);
+			AfterCharacterCreation += Init;
+			
 			TakeTurns();
 			if (Options.PlaceAllCharactersRandomlyAtStart)
 			{
@@ -98,6 +81,20 @@ namespace NKMCore
 				if(SpriteSelect.Instance.IsOpened) SpriteSelect.Instance.Close(); //TODO
 			}
 		}
+
+		private void Init(Character c)
+		{
+			AnimationPlayer.AddTriggers(c);
+			UIManager.Instance.AddUITriggers(c);
+			AddTriggersToEvents(c);
+		}
+		private static void Init(Ability a)
+		{
+			a.Awake();
+			AnimationPlayer.AddTriggers(a);
+			MusicManager.AddTriggers(a);
+		}
+
 		private async Task TryToPlaceCharacter()
 		{
 			List<Character> charactersToPlace = Active.GamePlayer.Characters.Where(c => !c.IsOnMap && c.IsAlive).ToList();

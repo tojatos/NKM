@@ -26,7 +26,7 @@ namespace Unity
 			}
 		}
 
-		public void AddAnimationTriggers(Ability ability)
+		public static void AddTriggers(Ability ability)
 		{
 			if (ability is NKMCore.Abilities.Hecate.AsterYo)
 			{
@@ -50,7 +50,8 @@ namespace Unity
 				((NKMCore.Abilities.Levi.SwordVieldingTechnique) ability).OnSwing += (character, cell) => 
                     Add(new MoveTo(
 	                    HexMapDrawer.Instance.GetCharacterObject(character).transform,
-	                    Active.SelectDrawnCell(cell).transform.position, 0.13f
+	                    Active.SelectDrawnCell(cell).transform.position,
+	                    0.13f
                     ));
 			}
 			
@@ -59,13 +60,14 @@ namespace Unity
 				((NKMCore.Abilities.Levi.VerticalManeuveringEquipment) ability).OnSwing += (character, cell) => 
                     Add(new MoveTo(
 	                    HexMapDrawer.Instance.GetCharacterObject(character).transform,
-	                    Active.SelectDrawnCell(cell).transform.position, 0.13f
+	                    Active.SelectDrawnCell(cell).transform.position,
+	                    0.13f
                     ));
 			}
 			
 				
 		}
-		public void AddAnimationTriggers(Character character)
+		public static void AddTriggers(Character character)
 		{
 			character.AfterAttack += (targetCharacter, damage) =>
 				Add(new Tilt(HexMapDrawer.Instance.GetCharacterObject(targetCharacter).transform));

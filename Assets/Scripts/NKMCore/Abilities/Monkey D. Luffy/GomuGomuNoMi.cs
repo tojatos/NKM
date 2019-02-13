@@ -3,7 +3,6 @@ using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity.Managers;
 
 namespace NKMCore.Abilities.Monkey_D._Luffy
 {
@@ -18,6 +17,11 @@ namespace NKMCore.Abilities.Monkey_D._Luffy
         private const int JetBazookaKnockback = 14;
         private const int JetBazookaDamage = 23;
         private const int JetPistolDamage = 19;
+
+        public event Delegates.Void OnClick;
+        public event Delegates.Void BeforePistol;
+        public event Delegates.Void BeforeRocket;
+        
         public GomuGomuNoMi(Game game) : base(game, AbilityType.Normal, "Gomu Gomu no Mi", 2)
         {
             OnAwake += () => Validator.ToCheck.Add(Validator.AreAnyTargetsInRange);
@@ -59,7 +63,7 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
         public void Click()
         {
             Active.Prepare(this, GetTargetsInRange());
-            MusicManager.PlayAudio("gomu gomu no");
+            OnClick?.Invoke();
         }
 
         public void Use(HexCell cell)
@@ -76,8 +80,8 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
 
         private void Pistol(Character enemy)
         {
+            BeforePistol?.Invoke();
             ParentCharacter.Attack(this, enemy,new Damage(IsEnchanted ? JetPistolDamage : PistolDamage, DamageType.Physical));
-            MusicManager.PlayAudio("pistol");
             Finish();
         }
 
@@ -95,7 +99,8 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown} ({BazookaCooldown}, jeżeli uży
             HexDirection direction = ParentCharacter.ParentCell.GetDirection(cell);
             int distance = ParentCharacter.ParentCell.GetDistance(cell);
             if(distance<=0) return;
-            MusicManager.PlayAudio("gomu gomu no rocket effect");
+            
+            BeforeRocket?.Invoke();
             ThrowCharacter(ParentCharacter, direction, distance*2);
             Finish();
         }
