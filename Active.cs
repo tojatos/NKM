@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
-using Unity.Hex;
 
 namespace NKMCore
 {
@@ -25,9 +22,7 @@ namespace NKMCore
 
 		public readonly Turn Turn;
 		public readonly Phase Phase;
-		public AirSelection AirSelection { get; }
-
-
+		public readonly AirSelection AirSelection;
 		public GamePlayer GamePlayer;
 		public Ability AbilityToUse;
 		public Character SelectedCharacterToPlace;
@@ -94,30 +89,26 @@ namespace NKMCore
 			if(a is IUseableCellList || a is IUseableCell || a is IUseableCharacter) AbilityToUse = a;
 		}
 
-		public void PrepareToPlaceCharacter(List<HexCell> cellRange)
+		public void PrepareToPlaceCharacter(IEnumerable<HexCell> cellRange)
 		{
 			Prepare(cellRange);
 			AfterCharacterPlacePrepare?.Invoke(HexCells);
 		}
-		private void Prepare(List<HexCell> cellRange) => HexCells = new HashSet<HexCell>(cellRange);
-		private void AdditionalPrepare(List<HexCell> cellRange) => HexCells.UnionWith(cellRange);
+		private void Prepare(IEnumerable<HexCell> cellRange) => HexCells = new HashSet<HexCell>(cellRange);
+		private void AdditionalPrepare(IEnumerable<HexCell> cellRange) => HexCells.UnionWith(cellRange);
 
-		public void PrepareAirSelection(Ability a, List<HexCell> cellRange, AirSelection.SelectionShape shape, int radius)
+		public void PrepareAirSelection(Ability a, IEnumerable<HexCell> cellRange, AirSelection.SelectionShape shape, int radius)
 		{
             Prepare(a, cellRange);
             AirSelection.Enable(shape, radius);
 		}
 
-		public void Prepare(Ability a, List<HexCell> cellRange)
+		public void Prepare(Ability a, IEnumerable<HexCell> cellRange)
 		{
 			Prepare(a);
 			Prepare(cellRange);
 			AfterAbilityPrepare?.Invoke(a, HexCells);
 		}
-		public static List<DrawnHexCell> SelectDrawnCells(IEnumerable<HexCell> cells) => cells.Select(SelectDrawnCell).ToList();
-		public static DrawnHexCell SelectDrawnCell(HexCell cell) =>
-			HexMapDrawer.Instance.Cells.FirstOrDefault(g => g.HexCell == cell);
-
 
 		public void RemoveMoveCells()
 		{

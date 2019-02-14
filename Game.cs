@@ -162,7 +162,7 @@ namespace NKMCore
 			HexCell spawnPoint = p.GetSpawnPoints(this).FindAll(cell => Active.CanSpawn(c, cell)).GetRandomNoLog();
 			if (spawnPoint == null) return;
 
-			//Spawner.Instance.Spawn(Active.SelectDrawnCell(spawnPoint), c);
+			//Spawner.Instance.Spawn(HexMapDrawer.Instance.SelectDrawnCell(spawnPoint), c);
 			Action.PlaceCharacter(c, spawnPoint);
 		}
 
