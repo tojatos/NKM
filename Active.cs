@@ -37,7 +37,8 @@ namespace NKMCore
 		public readonly List<HexCell> MoveCells = new List<HexCell>();
 		public event Delegates.CharacterD AfterCharacterSelect;
 		public event Delegates.Void AfterDeselect;
-		public event Delegates.Void AfterCancel;
+		public event Delegates.Void AfterCancelPlacingCharacter;
+		public event Delegates.Void AfterClean;
 		public event Delegates.CellList BeforeMoveCellsRemoved;
 		public event Delegates.Cell AfterMoveCellAdded;
 		public event Delegates.CharacterCellHashSet AfterCharacterSelectPrepare;
@@ -47,16 +48,6 @@ namespace NKMCore
 		public HashSet<HexCell> HexCells { get; private set; }
 
 		public bool IsActiveUse => !(AbilityToUse == null && SelectedCharacterToPlace == null);
-
-		public void Reset()
-		{
-			if (IsActiveUse || Turn.IsDone) Deselect();
-			AbilityToUse = null;
-			HexCells = null;
-			SelectedCharacterToPlace = null;
-			SelectedCell = null;
-			if (AirSelection.IsEnabled) AirSelection.Disable();
-		}
 
 		public void Select(Character character)
 		{
@@ -82,20 +73,20 @@ namespace NKMCore
 		}
 		public void Cancel()
 		{
-			if (AbilityToUse != null)
-			{
-				AbilityToUse.Cancel();
-			}
-			else if (SelectedCharacterToPlace != null)
-			{
-				SelectedCharacterToPlace = null;
-			}
+			if (AbilityToUse != null) AbilityToUse.Cancel();
+			else if (SelectedCharacterToPlace != null) CancelPlacingCharacter();
 			else
 			{
 				Deselect();
 				SelectedCell = null;
 			}
-			AfterCancel?.Invoke();
+
+		}
+
+		private void CancelPlacingCharacter()
+		{
+			SelectedCharacterToPlace = null;
+			AfterCancelPlacingCharacter?.Invoke();
 		}
 
 		private void Prepare(Ability a)
@@ -145,14 +136,22 @@ namespace NKMCore
 		
 		}
 
+		public void Reset()
+		{
+			if (IsActiveUse || Turn.IsDone) Deselect();
+			SelectedCharacterToPlace = null;
+			SelectedCell = null;
+			if (AirSelection.IsEnabled) AirSelection.Disable();
+			Clean();
+		}
+
 		private void Clean()
 		{
 			RemoveMoveCells();
 			if(AirSelection.IsEnabled) AirSelection.Disable();
 			AbilityToUse = null;
 			HexCells = null;
-			HexMapDrawer.Instance.RemoveHighlights();
-			HexMapDrawer.Instance.RemoveHighlightsOfColor(Highlights.BlueTransparent);
+			AfterClean?.Invoke();
 		}
 		public void CleanAndTrySelecting()
 		{
