@@ -5,10 +5,6 @@ using System.Threading.Tasks;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
-using Unity;
-using Unity.Hex;
-using Unity.Managers;
-using Unity.UI;
 
 namespace NKMCore
 {
@@ -55,19 +51,13 @@ namespace NKMCore
 
 		public event Delegates.AbilityD AfterAbilityCreation;
 		public event Delegates.CharacterD AfterCharacterCreation;
+		public event Delegates.AbilityD AfterAbilityInit;
+		public event Delegates.CharacterD AfterCharacterInit;
 		public void InvokeAfterCharacterCreation(Character c) => AfterCharacterCreation?.Invoke(c);
 		public void InvokeAfterAbilityCreation(Ability a) => AfterAbilityCreation?.Invoke(a);
 		
 		public void Start()
 		{
-			Active.Turn.TurnStarted += async player =>
-			{
-				if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
-			};
-			Active.AfterCancelPlacingCharacter += async () =>
-			{
-				if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
-			};
 			Abilities.ForEach(Init);
 			AfterAbilityCreation += Init;
 
@@ -79,22 +69,30 @@ namespace NKMCore
 			{
 				PlaceAllCharactersRandomlyOnSpawns();
 				if(Active.Phase.Number==0) Active.Phase.Finish();
-				if(SpriteSelect.Instance.IsOpened) SpriteSelect.Instance.Close(); //TODO
+			}
+			else
+			{
+                Active.Turn.TurnStarted += async player =>
+                {
+                    if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
+                };
+                Active.AfterCancelPlacingCharacter += async () =>
+                {
+                    if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
+                };
 			}
 		}
 
 		private void Init(Character c)
 		{
-			AnimationPlayer.AddTriggers(c);
-			UIManager.Instance.AddUITriggers(c);
 			AddTriggersToEvents(c);
+			AfterCharacterInit?.Invoke(c);
+			
 		}
-		private static void Init(Ability a)
+		private void Init(Ability a)
 		{
 			a.Awake();
-			AnimationPlayer.AddTriggers(a);
-			MusicManager.AddTriggers(a);
-			HexMapDrawer.Instance.AddTriggers(a);
+			AfterAbilityInit?.Invoke(a);
 		}
 
 		private async Task TryToPlaceCharacter()
@@ -166,7 +164,7 @@ namespace NKMCore
 			Action.PlaceCharacter(c, spawnPoint);
 		}
 
-		public void AddTriggersToEvents(Character character)
+		private void AddTriggersToEvents(Character character)
 		{
 			Console.AddTriggersToEvents(character);
 		

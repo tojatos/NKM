@@ -50,6 +50,18 @@ namespace Unity.Managers
 			Effects.Instance.Init(game);
 			Face.Instance.Init(game);
 			Spawner.Instance.Init(game);
+
+			game.AfterAbilityInit += ability =>
+			{
+				AnimationPlayer.AddTriggers(ability);
+				MusicManager.AddTriggers(ability);
+				HexMapDrawer.Instance.AddTriggers(ability);
+			};
+			game.AfterCharacterInit += character =>
+			{
+				AnimationPlayer.AddTriggers(character);
+				UIManager.Instance.AddUITriggers(character);
+			};
 		}
 		private async Task BindCharactersToPlayers(Game game)
 		{
