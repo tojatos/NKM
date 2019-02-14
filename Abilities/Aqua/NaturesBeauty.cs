@@ -26,6 +26,6 @@ namespace NKMCore.Abilities.Aqua
 		}
 		public override string GetDescription() => $"{ParentCharacter.Name} może używać podstawowych ataków na sojuszników, lecząc ich za ilość HP równą jej obecnemu atakowi.";
 		public override List<HexCell> GetRangeCells() => ParentCharacter.GetBasicAttackCells();
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner.Owner);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner);
 	}
 }

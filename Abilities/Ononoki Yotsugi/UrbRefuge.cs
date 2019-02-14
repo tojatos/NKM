@@ -29,7 +29,7 @@ Czas odnowienia; {Cooldown}";
         public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner);
 
         private List<HexCell> GetTargetCells() => GetNeighboursOfOwner(Range)
-            .FindAll(c => c.IsFreeToStand && c.GetNeighbors(Owner.Owner, Radius).Any(ce => ce.IsFreeToStand));
+            .FindAll(c => c.IsFreeToStand && c.GetNeighbors(Owner, Radius).Any(ce => ce.IsFreeToStand));
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
@@ -45,7 +45,7 @@ Czas odnowienia; {Cooldown}";
             else if (_targetCell == null)
             {
                 _targetCell = cell;
-                Active.Prepare(this, _targetCell.GetNeighbors(Owner.Owner, Radius).FindAll(c => c.IsFreeToStand));
+                Active.Prepare(this, _targetCell.GetNeighbors(Owner, Radius).FindAll(c => c.IsFreeToStand));
             }
             else
             {
@@ -54,7 +54,7 @@ Czas odnowienia; {Cooldown}";
                 _characterToTake.MoveTo(cell);
 
                 ParentCharacter.Attack(this, _characterToTake, new Damage(Damage, DamageType.Physical));
-                _targetCell.GetNeighbors(Owner.Owner, Radius).WhereEnemiesOf(Owner).GetCharacters()
+                _targetCell.GetNeighbors(Owner, Radius).WhereEnemiesOf(Owner).GetCharacters()
                     .ForEach(c => ParentCharacter.Attack(this, c, new Damage(Damage, DamageType.Physical)));
 
                 _targetCell = null;

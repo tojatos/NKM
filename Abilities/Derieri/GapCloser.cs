@@ -27,13 +27,13 @@ Zasięg: {Range}    Czas odnowienia: {Cooldown}";
         {
 			ComboStar passiveAbility = ParentCharacter.Abilities.OfType<ComboStar>().SingleOrDefault();
             Character targetCharacter = passiveAbility?.ComboCharacter;
-            return targetCharacter==null ? new List<HexCell>() : GetRangeCells().FindAll(c => c.FirstCharacter == targetCharacter).FindAll(c => c.GetNeighbors(Owner.Owner, MaxDistanceFromTarget).Any(cc => cc.IsFreeToStand));
+            return targetCharacter==null ? new List<HexCell>() : GetRangeCells().FindAll(c => c.FirstCharacter == targetCharacter).FindAll(c => c.GetNeighbors(Owner, MaxDistanceFromTarget).Any(cc => cc.IsFreeToStand));
         }
 
         public void Click() => Active.Prepare(this, GetTargetsInRange());
 
         public void Use(Character character) =>
-            Active.Prepare(this, character.ParentCell.GetNeighbors(Owner.Owner, MaxDistanceFromTarget).FindAll(c => c.IsFreeToStand));
+            Active.Prepare(this, character.ParentCell.GetNeighbors(Owner, MaxDistanceFromTarget).FindAll(c => c.IsFreeToStand));
 
         public void Use(HexCell cell)
         {

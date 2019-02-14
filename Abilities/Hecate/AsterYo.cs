@@ -27,12 +27,8 @@ na wskazanym obszarze w promieniu {Radius}.
 Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 		
 
-		public void Click()
-		{
-			List<HexCell> cellRange = GetRangeCells();
-			Active.Prepare(this, cellRange, false, false);
-			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, Radius);
-		}
+		public void Click() => Active.PrepareAirSelection(this, GetRangeCells(), AirSelection.SelectionShape.Circle, Radius);
+
 		public void Use(List<HexCell> cells)
 		{
 			List<Character> characters = cells.GetCharacters();

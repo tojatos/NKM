@@ -8,8 +8,8 @@ namespace NKMCore
 	{
 		private readonly Game _game;
 
-		public event Delegates.CellList AfterEnable;
-		public event Delegates.CellList AfterCellsSet;
+		public event Delegates.CellHashSet AfterEnable;
+		public event Delegates.CellHashSet AfterCellsSet;
 		
 		public bool IsEnabled { get; private set; }
 		public enum SelectionShape
@@ -29,8 +29,8 @@ namespace NKMCore
 		/// <summary>
 		/// Sets cells in respect to first cell in the list
 		/// </summary>
-		private List<HexCell> _hexCells;
-		public List<HexCell> HexCells
+		private HashSet<HexCell> _hexCells;
+		public HashSet<HexCell> HexCells
 		{
 			get { return _hexCells; }
 			set
@@ -40,7 +40,7 @@ namespace NKMCore
 				{
 					if (_shape == SelectionShape.Circle)
 					{
-						_hexCells.AddRange(value[0].GetNeighbors(_game.Active.GamePlayer, _size));
+						_hexCells.UnionWith(value.First().GetNeighbors(_game.Active.GamePlayer, _size));
 					}
 				}
 				AfterCellsSet?.Invoke(_hexCells);

@@ -27,6 +27,7 @@ namespace NKMCore
 		public readonly Phase Phase;
 		public AirSelection AirSelection { get; }
 
+
 		public GamePlayer GamePlayer;
 		public Ability AbilityToUse;
 		public Character SelectedCharacterToPlace;
@@ -39,8 +40,11 @@ namespace NKMCore
 		public event Delegates.Void AfterCancel;
 		public event Delegates.CellList BeforeMoveCellsRemoved;
 		public event Delegates.Cell AfterMoveCellAdded;
+		public event Delegates.CharacterCellHashSet AfterCharacterSelectPrepare;
+		public event Delegates.CellHashSet AfterCharacterPlacePrepare;
+		public event Delegates.AbilityHashSet AfterAbilityPrepare;
 	
-		public List<HexCell> HexCells { get; private set; }
+		public HashSet<HexCell> HexCells { get; private set; }
 
 		public bool IsActiveUse => !(AbilityToUse == null && SelectedCharacterToPlace == null);
 
@@ -63,11 +67,9 @@ namespace NKMCore
 			if (!CanTakeAction(character)) return;
 		
 			Prepare(character.GetPrepareBasicAttackCells());
-			Prepare(character.GetPrepareBasicMoveCells(), true);
-
-			HexCells.Distinct().ToList().ForEach(c =>
-				SelectDrawnCell(c).AddHighlight(!c.IsEmpty && character.CanBasicAttack(c.FirstCharacter)
-					? Highlights.RedTransparent : Highlights.GreenTransparent));
+			AdditionalPrepare(character.GetPrepareBasicMoveCells());
+			
+			AfterCharacterSelectPrepare?.Invoke(character, HexCells);
 			RemoveMoveCells();
 			MoveCells.Add(character.ParentCell);
 		}
@@ -83,11 +85,9 @@ namespace NKMCore
 			if (AbilityToUse != null)
 			{
 				AbilityToUse.Cancel();
-				//Console.GameLog($"ABILITY CANCEL");
 			}
 			else if (SelectedCharacterToPlace != null)
 			{
-				HexMapDrawer.Instance.RemoveHighlights();
 				SelectedCharacterToPlace = null;
 			}
 			else
@@ -103,27 +103,25 @@ namespace NKMCore
 			if(a is IUseableCellList || a is IUseableCell || a is IUseableCharacter) AbilityToUse = a;
 		}
 
-		public void PrepareToPlaceCharacter(List<HexCell> cellRange, bool addToRange = false)
+		public void PrepareToPlaceCharacter(List<HexCell> cellRange)
 		{
-			Prepare(cellRange, addToRange);
-			SelectDrawnCells(HexCells).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+			Prepare(cellRange);
+			AfterCharacterPlacePrepare?.Invoke(HexCells);
 		}
-		private void Prepare(List<HexCell> cellRange, bool addToRange = false)
-		{
-			if (cellRange == null) cellRange = new List<HexCell>();
-			if (!addToRange)
-				HexCells = cellRange;
-			else
-				HexCells.AddRange(cellRange);
-		}
-		public void Prepare(Ability a, List<HexCell> cellRange, bool addToRange = false, bool toggleToRed = true)
-		{
-			Prepare(cellRange, addToRange);
+		private void Prepare(List<HexCell> cellRange) => HexCells = new HashSet<HexCell>(cellRange);
+		private void AdditionalPrepare(List<HexCell> cellRange) => HexCells.UnionWith(cellRange);
 
+		public void PrepareAirSelection(Ability a, List<HexCell> cellRange, AirSelection.SelectionShape shape, int radius)
+		{
+            Prepare(a, cellRange);
+            AirSelection.Enable(shape, radius);
+		}
+
+		public void Prepare(Ability a, List<HexCell> cellRange)
+		{
 			Prepare(a);
-			if (!toggleToRed) return;
-			HexMapDrawer.Instance.RemoveHighlights();
-			SelectDrawnCells(HexCells).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+			Prepare(cellRange);
+			AfterAbilityPrepare?.Invoke(a, HexCells);
 		}
 		public static List<DrawnHexCell> SelectDrawnCells(IEnumerable<HexCell> cells) => cells.Select(SelectDrawnCell).ToList();
 		public static DrawnHexCell SelectDrawnCell(HexCell cell) =>

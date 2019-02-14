@@ -31,7 +31,7 @@ $"{ParentCharacter.Name} ma 50% szansy na pójście w losowe miejsce podczas wyk
 				List<HexCell> moveTargets = ParentCharacter.GetBasicMoveCells();
 				while (movementPoints-- > 0 || !lastCell.IsFreeToStand)
 				{
-					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(Owner.Owner, 1).Intersect(moveTargets).ToList();
+					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(Owner, 1).Intersect(moveTargets).ToList();
 					lastCell = neighborMoveCells.GetRandom();
 					Active.AddMoveCell(lastCell);
 				}

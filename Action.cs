@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NKMCore.Hex;
 using NKMCore.Templates;
 
@@ -85,9 +86,9 @@ namespace NKMCore
             ability.Use(cell);
             AfterAction?.Invoke(Types.UseAbility);
         }
-        public void UseAbility(IUseableCellList ability, List<HexCell> cells)
+        public void UseAbility(IUseableCellList ability, IEnumerable<HexCell> cells)
         {
-            ability.Use(cells);
+            ability.Use(cells.ToList());
             AfterAction?.Invoke(Types.UseAbility);
         }
 

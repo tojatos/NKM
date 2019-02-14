@@ -16,7 +16,7 @@ namespace NKMCore.Abilities.Aqua
 		}
 		
 		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(AbilityRange);
-		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner.Owner);
+		public override List<HexCell> GetTargetsInRange() => GetRangeCells().WhereFriendsOf(Owner);
 		
 		public override string GetDescription() => $@"{ParentCharacter.Name} rzuca oczyszczający czar na sojusznika, zdejmując z niego wszelkie negatywne efekty.
 Zasięg: {AbilityRange} Czas odnowienia: {Cooldown}";

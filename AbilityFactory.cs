@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Templates;
@@ -14,6 +15,13 @@ namespace NKMCore
 			abilities.ForEach(a => game?.InvokeAfterAbilityCreation(a));
 			return abilities;
 		}
+
+	    public static Ability CreateAndInit(Type type, Game game)
+	    {
+		    var a = Instantiator.Create<Ability>(type, game);
+		    game?.InvokeAfterAbilityCreation(a);
+		    return a;
+	    }
 
 	    private static List<Ability> SpawnAbilities(string name, IEnumerable<string> abilityClassNames, Game game)
 	    {

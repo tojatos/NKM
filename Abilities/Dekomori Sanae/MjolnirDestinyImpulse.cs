@@ -29,8 +29,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 		{
 			List<HexCell> cellRange = GetRangeCells();
 			cellRange.Add(ParentCharacter.ParentCell);
-			Active.Prepare(this, cellRange, false, false);
-			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, 1);
+			Active.PrepareAirSelection(this, cellRange, AirSelection.SelectionShape.Circle, 1);
 		}
 		public void Use(List<HexCell> cells)
 		{
