@@ -102,8 +102,9 @@ namespace Unity.Hex
 						? Highlights.RedTransparent
 						: Highlights.GreenTransparent));
 			};
-			Active.AfterCharacterPlacePrepare += set => 
-                Active.SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+			Active.AfterCharacterPlacePrepare += set => Active.SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+			Active.AfterCancelPlacingCharacter += () => RemoveHighlights();
+			Active.AfterClean += () => RemoveHighlights();
 
 
 		}
@@ -212,11 +213,6 @@ namespace Unity.Hex
 					hexCell.Highlights.FindAll(predicate).ForEach(Destroy);
 					hexCell.Highlights.RemoveAll(predicate);
 				}
-				//TODO: Check that somewhere else (change responsibility?)
-//				if (hexCell.Highlight != null)
-//				{
-//					hexCell.AddHighlight();
-//				}
 			}
 		}
 		public void RemoveHighlightsOfColor(string colorName) => RemoveHighlights(h => h.GetComponent<SpriteRenderer>().sprite.name == colorName);
@@ -241,7 +237,6 @@ namespace Unity.Hex
 				}
 			}
 
-//			if (_game.Active.ActionType == ActionType.AttackAndMove)
 			if(_game.Active.Character!=null && _game.Active.Character.CanUseBasicMove && _game.Active.HexCells != null)
 			{
 				HexCell cellPointed = CellPointed();

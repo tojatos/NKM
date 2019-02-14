@@ -64,7 +64,7 @@ namespace NKMCore
 			{
 				if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
 			};
-			Active.AfterCancel += async () =>
+			Active.AfterCancelPlacingCharacter += async () =>
 			{
 				if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
 			};
