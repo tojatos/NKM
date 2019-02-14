@@ -1,5 +1,4 @@
 ﻿using NKMCore.Templates;
-using Unity.Hex;
 
 namespace NKMCore
 {
@@ -24,7 +23,6 @@ namespace NKMCore
 				IsDone = true;
 				CharacterThatTookActionInTurn = null;
 				_game.Active.Reset();
-				HexMapDrawer.Instance.RemoveHighlights();
 			};
 			TurnFinished += c => Console.GameLog("TURN FINISHED");
 		}
