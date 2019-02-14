@@ -10,12 +10,13 @@ namespace NKMCore
 		{
 			string typeName = "NKMCore." + namespaceName + "." + className;
 			Type type = Type.GetType(typeName);
-			if (type == null) throw new NullReferenceException();
 
-			return Activator.CreateInstance(type, game) as T;
+			return Create<T>(type, game);
 		}
 
-		public static IEnumerable<T> Create<T>(string namespaceName, IEnumerable<string> classNames, Game game) where T : class
+	    public static T Create<T>(Type type, Game game) where T : class => Activator.CreateInstance(type, game) as T;
+
+	    public static IEnumerable<T> Create<T>(string namespaceName, IEnumerable<string> classNames, Game game) where T : class
 		{
 			return classNames.Select(className => Create<T>(namespaceName, className, game)).ToList();
 		}

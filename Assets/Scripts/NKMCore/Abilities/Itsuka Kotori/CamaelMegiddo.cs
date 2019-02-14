@@ -56,7 +56,7 @@ Czas odnowienia: {Cooldown}";
 
             //then the conflargation cells
             if (!hitConflargation) return cells;
-            List<HexCell> conflargationCells = lastCell.GetNeighbors(Owner.Owner, 500000, SearchFlags.None, neighbor => //TODO wtf
+            List<HexCell> conflargationCells = lastCell.GetNeighbors(Owner, 500000, SearchFlags.None, neighbor => //TODO wtf
                 !neighbor.Effects.ContainsType<HexCellEffects.Conflagration>());
             cells.AddRange(conflargationCells);
             //TODO: find a better value than 500000

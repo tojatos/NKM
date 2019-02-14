@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NKMCore.Abilities.Bezimienni;
+using NKMCore.Abilities.Kurogane_Ikki;
 using NKMCore.Extensions;
 using NKMCore.Hex;
 
@@ -13,7 +14,7 @@ namespace NKMCore.Templates
 		public Active Active => Game.Active;
 		public HexMap HexMap => Game.HexMap;
 		public Console Console => Game.Console;
-		public Character Owner => Game.Characters.First(c => c.Abilities.Contains(this));
+		public GamePlayer Owner => Game.Players.FirstOrDefault(p => p.Characters.Contains(ParentCharacter));
 		protected Ability(Game game, AbilityType type, string name, int cooldown = 0) : this(game, type, name, cooldown, NKMID.GetNext("Ability")){}
 		protected Ability(Game game, AbilityType type, string name, int cooldown, uint id)
 		{
@@ -36,7 +37,7 @@ namespace NKMCore.Templates
 		}
 
 		protected List<HexCell> GetNeighboursOfOwner(int depth, SearchFlags searchFlags = SearchFlags.None, Predicate<HexCell> stopAt = null) =>
-			ParentCharacter.ParentCell.GetNeighbors(Owner.Owner, depth, searchFlags, stopAt);
+			ParentCharacter.ParentCell.GetNeighbors(Owner, depth, searchFlags, stopAt);
 		public readonly string Name;
 		public readonly uint ID;
 		public bool CanUseOnGround { get; protected set; } = true;
@@ -59,7 +60,7 @@ namespace NKMCore.Templates
 			}
 		}
 
-		public Character ParentCharacter => Game.Characters.FirstOrDefault(c => c.Abilities.Contains(this));
+		public Character ParentCharacter => Game.Characters.FirstOrDefault(c => c.Abilities.Contains(this) || c.Abilities.OfType<SwordSteal>().FirstOrDefault()?.CopiedAbility == this);
 
 		public bool CanBeUsed => Validator.AbilityCanBeUsed;
 

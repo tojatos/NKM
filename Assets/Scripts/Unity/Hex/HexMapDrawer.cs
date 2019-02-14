@@ -73,23 +73,39 @@ namespace Unity.Hex
                 lRend.endColor = Color.black;
                 lRend.widthMultiplier = 2;
             };
-			Active.AirSelection.AfterEnable += list => Active.SelectDrawnCells(list).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
-			Active.AirSelection.AfterCellsSet += list =>
+			Active.AirSelection.AfterEnable += set => Active.SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
+			Active.AirSelection.AfterCellsSet += set =>
 			{
 				RemoveHighlights();
-				if (_game.Active.HexCells != null && list != null)
+				if (_game.Active.HexCells != null && set != null)
 				{
-					_game.Active.HexCells.ForEach(c =>
+					_game.Active.HexCells.ToList().ForEach(c =>
 					{
-						if (list.All(ac => ac != c))
+						if (set.All(ac => ac != c))
 						{
 							Active.SelectDrawnCell(c).AddHighlight(Highlights.BlueTransparent);
 						}
 					});
 				}
 
-				list?.ForEach(c => Active.SelectDrawnCell(c).AddHighlight(Highlights.RedTransparent));
+				set?.ToList().ForEach(c => Active.SelectDrawnCell(c).AddHighlight(Highlights.RedTransparent));
 			};
+			Active.AfterAbilityPrepare += (ability, list) =>
+			{
+				RemoveHighlights();
+				Active.SelectDrawnCells(list).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+			};
+			Active.AfterCharacterSelectPrepare += (character, list) =>
+			{
+				Active.SelectDrawnCells(list.Distinct()).ForEach(c =>
+					c.AddHighlight(!c.HexCell.IsEmpty && character.CanBasicAttack(c.HexCell.FirstCharacter)
+						? Highlights.RedTransparent
+						: Highlights.GreenTransparent));
+			};
+			Active.AfterCharacterPlacePrepare += set => 
+                Active.SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+
+
 		}
 
 		public void AddTriggers(Ability ability)
@@ -221,7 +237,7 @@ namespace Unity.Hex
 				HexCell cellPointed = CellPointed();
 				if (cellPointed != null && _game.Active.HexCells.Contains(cellPointed))
 				{
-					_game.Active.AirSelection.HexCells = new List<HexCell> { cellPointed };
+					_game.Active.AirSelection.HexCells = new HashSet<HexCell> { cellPointed };
 				}
 			}
 

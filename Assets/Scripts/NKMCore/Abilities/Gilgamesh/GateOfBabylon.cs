@@ -21,13 +21,8 @@ a w przeciwnym razie - fizyczne.
 Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 
 		public override List<HexCell> GetRangeCells() => GetNeighboursOfOwner(Range);
+		public void Click() => Active.PrepareAirSelection(this, GetRangeCells(), AirSelection.SelectionShape.Circle, Radius);
 
-		public void Click()
-		{
-			List<HexCell> cellRange = GetRangeCells();
-			Active.Prepare(this, cellRange, false, false);
-			Active.AirSelection.Enable(AirSelection.SelectionShape.Circle, Radius);
-		}
 		public void Use(List<HexCell> cells)
 		{
             ParentCharacter.TryToTakeTurn();
