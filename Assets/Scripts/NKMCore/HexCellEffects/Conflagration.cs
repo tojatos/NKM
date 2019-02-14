@@ -1,6 +1,7 @@
 ﻿using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
+using Unity.Hex;
 
 namespace NKMCore.HexCellEffects
 {
@@ -11,8 +12,8 @@ namespace NKMCore.HexCellEffects
 		public Conflagration(Game game, int cooldown, HexCell parentCell, Character characterThatOwnsEffect) : base(game, cooldown, parentCell, "Conflagration")
 		{
 			_characterThatOwnsEffect = characterThatOwnsEffect;
-			Active.SelectDrawnCell(parentCell).AddEffectHighlight(Name);
-			OnRemove += () => Active.SelectDrawnCell(parentCell).RemoveEffectHighlight(Name);
+			HexMapDrawer.Instance.SelectDrawnCell(parentCell).AddEffectHighlight(Name);
+			OnRemove += () => HexMapDrawer.Instance.SelectDrawnCell(parentCell).RemoveEffectHighlight(Name);
 		}
 
 		public override string GetDescription() =>

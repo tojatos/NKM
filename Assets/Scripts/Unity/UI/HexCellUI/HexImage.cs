@@ -1,5 +1,4 @@
-﻿using NKMCore;
-using NKMCore.Hex;
+﻿using NKMCore.Hex;
 using Unity.Hex;
 using UnityEngine.UI;
 
@@ -15,6 +14,6 @@ namespace Unity.UI.HexCellUI
 		    HexMapDrawer.Instance.AfterCellSelect += UpdateImage;
 	    }
 
-	    private void UpdateImage(HexCell hexCell) => _image.color = Active.SelectDrawnCell(hexCell).Color;
+	    private void UpdateImage(HexCell hexCell) => _image.color = HexMapDrawer.Instance.SelectDrawnCell(hexCell).Color;
     }
 }

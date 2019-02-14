@@ -43,12 +43,12 @@ namespace Unity.UI.CharacterUI
 
 		private void SetAttackHelpTriggers()
 		{
-			RangeObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(Active.SelectDrawnCells(_game.Active.Character.GetBasicAttackCells())));
+			RangeObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(HexMapDrawer.Instance.SelectDrawnCells(_game.Active.Character.GetBasicAttackCells())));
 			RangeObject.AddTrigger(EventTriggerType.PointerExit, e => HexMapDrawer.Instance.HideHelpHexCells());
 		}
 		private void SetMoveHelpTriggers()
 		{
-			SpeedObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(Active.SelectDrawnCells(_game.Active.Character.GetBasicMoveCells())));
+			SpeedObject.AddTrigger(EventTriggerType.PointerEnter, e => HexMapDrawer.ShowHelpHexCells(HexMapDrawer.Instance.SelectDrawnCells(_game.Active.Character.GetBasicMoveCells())));
 			SpeedObject.AddTrigger(EventTriggerType.PointerExit, e => HexMapDrawer.Instance.HideHelpHexCells());
 		}
 		private void EmptyTextes()

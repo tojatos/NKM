@@ -100,11 +100,9 @@ namespace NKMCore.Templates
 		public event Delegates.Void AfterUseFinish;
 		public void Awake() => OnAwake?.Invoke();
 
-		public virtual void Cancel()
-		{
-			OnFailedUseFinish();
-		}
-        public enum AbilityType
+		public virtual void Cancel() => OnFailedUseFinish();
+
+		public enum AbilityType
         {
             Passive,
             Normal,

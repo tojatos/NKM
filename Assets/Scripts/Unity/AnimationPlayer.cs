@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NKMCore;
 using NKMCore.Abilities.Levi;
 using NKMCore.Abilities.Sakai_Yuuji;
 using NKMCore.Templates;
@@ -43,8 +42,8 @@ namespace Unity
 			{
 				((NKMCore.Abilities.Itsuka_Kotori.CamaelMegiddo) ability).BeforeFlamewave += (lineCells, conflargationCells) => 
                     Add(new CamaelMegiddo(
-                        lineCells.Select(c => Active.SelectDrawnCell(c).transform).ToList(),
-                        conflargationCells.Select(c => Active.SelectDrawnCell(c).transform).ToList()
+                        lineCells.Select(c => HexMapDrawer.Instance.SelectDrawnCell(c).transform).ToList(),
+                        conflargationCells.Select(c => HexMapDrawer.Instance.SelectDrawnCell(c).transform).ToList()
                     ));
 			}
 			if (ability is SwordVieldingTechnique)
@@ -52,7 +51,7 @@ namespace Unity
 				((SwordVieldingTechnique) ability).OnSwing += (character, cell) => 
                     Add(new MoveTo(
 	                    HexMapDrawer.Instance.GetCharacterObject(character).transform,
-	                    Active.SelectDrawnCell(cell).transform.position,
+	                    HexMapDrawer.Instance.SelectDrawnCell(cell).transform.position,
 	                    0.13f
                     ));
 			}
@@ -62,7 +61,7 @@ namespace Unity
 				((VerticalManeuveringEquipment) ability).OnSwing += (character, cell) => 
                     Add(new MoveTo(
 	                    HexMapDrawer.Instance.GetCharacterObject(character).transform,
-	                    Active.SelectDrawnCell(cell).transform.position,
+	                    HexMapDrawer.Instance.SelectDrawnCell(cell).transform.position,
 	                    0.13f
                     ));
 			}
@@ -75,7 +74,7 @@ namespace Unity
                     Add(new GrammaticaFinish(
                         HexMapDrawer.Instance.GetCharacterObject(parentCharacter).transform,
                         HexMapDrawer.Instance.GetCharacterObject(targetCharacter).transform,
-                        Active.SelectDrawnCell(targetCell).transform.TransformPoint(0,10,0)
+                        HexMapDrawer.Instance.SelectDrawnCell(targetCell).transform.TransformPoint(0,10,0)
                     ));
 			}
 			

@@ -54,8 +54,8 @@ namespace Unity.UI.CharacterUI
 		{
 			button.AddTrigger(EventTriggerType.PointerEnter, e =>
 			{
-				HexMapDrawer.ShowHelpHexCells(Active.SelectDrawnCells(ability.GetRangeCells()));
-				ability.GetTargetsInRange().ForEach(c => Active.SelectDrawnCell(c).AddHighlight(Highlights.BlackTransparent));
+				HexMapDrawer.ShowHelpHexCells(HexMapDrawer.Instance.SelectDrawnCells(ability.GetRangeCells()));
+				ability.GetTargetsInRange().ForEach(c => HexMapDrawer.Instance.SelectDrawnCell(c).AddHighlight(Highlights.BlackTransparent));
 			});
 			button.AddTrigger(EventTriggerType.PointerExit, e =>
 			{

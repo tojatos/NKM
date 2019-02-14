@@ -46,26 +46,26 @@ namespace Unity.Hex
             _game.HexMap.AfterMove += (character, cell) =>
             {
                 if (GetCharacterObject(character) == null) return;
-                GetCharacterObject(character).transform.parent = Active.SelectDrawnCell(cell).transform;
-                AnimationPlayer.Add(new Destroy(Active.SelectDrawnCell(cell).gameObject.GetComponent<LineRenderer>())); //Remove the line
+                GetCharacterObject(character).transform.parent = SelectDrawnCell(cell).transform;
+                AnimationPlayer.Add(new Destroy(SelectDrawnCell(cell).gameObject.GetComponent<LineRenderer>())); //Remove the line
                 AnimationPlayer.Add(new MoveTo(GetCharacterObject(character).transform,
                     GetCharacterObject(character).transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
                 
             };
-            _game.HexMap.AfterCharacterPlace += (character, cell) => Spawner.Instance.Spawn(Active.SelectDrawnCell(cell), character);
-            Active.BeforeMoveCellsRemoved += cells => Active.SelectDrawnCells(cells).ForEach(c => Destroy(c.gameObject.GetComponent<LineRenderer>()));
+            _game.HexMap.AfterCharacterPlace += (character, cell) => Spawner.Instance.Spawn(SelectDrawnCell(cell), character);
+            Active.BeforeMoveCellsRemoved += cells => SelectDrawnCells(cells).ForEach(c => Destroy(c.gameObject.GetComponent<LineRenderer>()));
             Active.AfterMoveCellAdded += hexcell =>
             {
                 //Draw a line between two hexcell centres
 
                 //Check for component in case of Zoro's Lack of Orientation
-                DrawnHexCell cell = Active.SelectDrawnCell(hexcell);
+                DrawnHexCell cell = SelectDrawnCell(hexcell);
                 LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null
                     ? cell.gameObject.GetComponent<LineRenderer>()
                     : cell.gameObject.AddComponent<LineRenderer>();
                 lRend.SetPositions(new[]
                 {
-                    Active.SelectDrawnCell(Active.MoveCells.SecondLast()).transform.position + Vector3.up * 20,
+                    SelectDrawnCell(Active.MoveCells.SecondLast()).transform.position + Vector3.up * 20,
                     cell.transform.position + Vector3.up * 20
                 });
                 lRend.material = new Material(Shader.Find("Standard")) {color = Color.black};
@@ -73,7 +73,7 @@ namespace Unity.Hex
                 lRend.endColor = Color.black;
                 lRend.widthMultiplier = 2;
             };
-			Active.AirSelection.AfterEnable += set => Active.SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
+			Active.AirSelection.AfterEnable += set => SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
 			Active.AirSelection.AfterCellsSet += set =>
 			{
 				RemoveHighlights();
@@ -83,26 +83,26 @@ namespace Unity.Hex
 					{
 						if (set.All(ac => ac != c))
 						{
-							Active.SelectDrawnCell(c).AddHighlight(Highlights.BlueTransparent);
+							SelectDrawnCell(c).AddHighlight(Highlights.BlueTransparent);
 						}
 					});
 				}
 
-				set?.ToList().ForEach(c => Active.SelectDrawnCell(c).AddHighlight(Highlights.RedTransparent));
+				set?.ToList().ForEach(c => SelectDrawnCell(c).AddHighlight(Highlights.RedTransparent));
 			};
 			Active.AfterAbilityPrepare += (ability, list) =>
 			{
 				RemoveHighlights();
-				Active.SelectDrawnCells(list).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+				SelectDrawnCells(list).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
 			};
 			Active.AfterCharacterSelectPrepare += (character, list) =>
 			{
-				Active.SelectDrawnCells(list.Distinct()).ForEach(c =>
+				SelectDrawnCells(list.Distinct()).ForEach(c =>
 					c.AddHighlight(!c.HexCell.IsEmpty && character.CanBasicAttack(c.HexCell.FirstCharacter)
 						? Highlights.RedTransparent
 						: Highlights.GreenTransparent));
 			};
-			Active.AfterCharacterPlacePrepare += set => Active.SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+			Active.AfterCharacterPlacePrepare += set => SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
 			Active.AfterCancelPlacingCharacter += () => RemoveHighlights();
 			Active.AfterClean += () => RemoveHighlights();
 
@@ -117,7 +117,7 @@ namespace Unity.Hex
 				{
 					//repaint crushed cells
 					List<HexCell> normalCells = list.FindAll(c => c.Type == HexCell.TileType.Normal);
-					Active.SelectDrawnCells(normalCells).ForEach(c => c.Color = Color.white); //TODO: set the color depending on maps normal cell color
+					SelectDrawnCells(normalCells).ForEach(c => c.Color = Color.white); //TODO: set the color depending on maps normal cell color
 					TriangulateCells();
 				};
 			}
@@ -131,7 +131,7 @@ namespace Unity.Hex
 					{
 						HexDirection direction = ability.ParentCharacter.ParentCell.GetDirection(c);
 						HexCell moveCell = c.GetCell(direction, 2);
-						Active.SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
+						SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
 					});
 				};
 			}
@@ -147,7 +147,7 @@ namespace Unity.Hex
 					{
 						HexDirection direction = ability.ParentCharacter.ParentCell.GetDirection(c);
 						HexCell moveCell = c.GetCell(direction, FiberDecapitation.TargetCellOffset);
-						Active.SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
+						SelectDrawnCell(moveCell).AddHighlight(Highlights.BlueTransparent);
 					});
 				};
 			}
@@ -254,7 +254,7 @@ namespace Unity.Hex
 								if (_game.Active.MoveCells[i] == cellPointed) break;
 
 								//Remove the line
-								Destroy(Active.SelectDrawnCell(_game.Active.MoveCells[i]).gameObject
+								Destroy(SelectDrawnCell(_game.Active.MoveCells[i]).gameObject
 									.GetComponent<LineRenderer>());
 
 								_game.Active.MoveCells.RemoveAt(i);
@@ -291,6 +291,10 @@ namespace Unity.Hex
 			Vector3 position = hit.point;
 			return Instance.GetCellByPosition(ref position);
 		}
+
+		public List<DrawnHexCell> SelectDrawnCells(IEnumerable<HexCell> cells) => cells.Select(SelectDrawnCell).ToList();
+		public DrawnHexCell SelectDrawnCell(HexCell cell) =>
+			Cells.FirstOrDefault(g => g.HexCell == cell);
 
 		
 		public event Delegates.Cell AfterCellSelect;
@@ -341,7 +345,7 @@ namespace Unity.Hex
 	            else
 	            {
 		            Action.Deselect();
-		            Active.SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
+		            SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
 	            }
             }
         }
