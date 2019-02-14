@@ -17,7 +17,7 @@ namespace NKMCore
 			get
 			{
 				int modifier = 0;
-				Modifiers.ForEach(m => modifier += modifier);
+				Modifiers.ForEach(m => modifier += m.Value);
 				return RealValue + modifier;
 			}
 			set
@@ -27,8 +27,6 @@ namespace NKMCore
 				StatChanged?.Invoke();
 			}
 		}
-
-
 
 		public Stat(StatType type, int baseValue)
 		{

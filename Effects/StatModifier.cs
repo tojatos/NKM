@@ -25,11 +25,6 @@ namespace NKMCore.Effects
 Czas do zakończenia efektu: {2}",
 				Modifier.Value >= 0 ? "Zwiększa" : "Zmniejsza", Math.Abs(Modifier.Value), CurrentCooldown, _statType);
 		}
-//		public override int Modifier(StatType statType)
-//		{
-//			return statType == _statType ? Value : 0;
-//		}
-
 		public override string ToString()
 		{
 			switch (_statType)
