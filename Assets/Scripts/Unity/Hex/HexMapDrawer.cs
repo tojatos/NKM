@@ -110,11 +110,13 @@ namespace Unity.Hex
 			{
 				if (effect is Conflagration)
 					SelectDrawnCell(effect.ParentCell).AddEffectHighlight(effect.Name);
+				Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(Active.SelectedCell);
 			};
 			_game.HexMap.AfterCellEffectRemove += effect =>
 			{
 				if (effect is Conflagration)
 					SelectDrawnCell(effect.ParentCell).RemoveEffectHighlight(effect.Name);
+				Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(Active.SelectedCell);
 			};
 
 

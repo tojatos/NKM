@@ -10,23 +10,19 @@ namespace NKMCore.Templates
 		public override string ToString() => Name;
 
 		private readonly Game _game;
-		protected Active Active => _game.Active;
-		public Character Owner => ParentCharacter;
+		private Active Active => _game.Active;
 		protected Effect(Game game, int cooldown, Character parentCharacter, string name = null)
 		{
 			_game = game;
 			CurrentCooldown = cooldown >= 0 ? cooldown : int.MaxValue; //effect is infinite
 			ParentCharacter = parentCharacter;
 			if (name != null) Name = name;
-			if (Active.Character == ParentCharacter) Unity.UI.CharacterUI.Effects.Instance.UpdateButtons();
 			Active.Turn.TurnFinished += character => {
 				if(character != ParentCharacter) return;
 				if(CurrentCooldown == int.MaxValue) return;
                 if (CurrentCooldown > 0) CurrentCooldown--; 
 				if (CurrentCooldown != 0) return;
 				RemoveFromParent();
-				
-				if (Active.Character == ParentCharacter) Unity.UI.CharacterUI.Effects.Instance.UpdateButtons();
 			};
 
 		}
@@ -34,13 +30,13 @@ namespace NKMCore.Templates
 		public event OnRemoveHandler OnRemove;
 
 		public int CurrentCooldown { get; set; }
-		public Character ParentCharacter { get; }
+		protected Character ParentCharacter { get; }
 		public EffectType Type { get; protected set; }
 		public virtual bool IsCC => false;
 		public abstract string GetDescription();
 		
 		protected List<HexCell> GetNeighboursOfOwner(int depth, SearchFlags searchFlags = SearchFlags.None, Predicate<HexCell> stopAt = null) =>
-			ParentCharacter.ParentCell.GetNeighbors(Owner.Owner, depth, searchFlags, stopAt);
+			ParentCharacter.ParentCell.GetNeighbors(ParentCharacter.Owner, depth, searchFlags, stopAt);
 		public void RemoveFromParent()
 		{
 			if(!ParentCharacter.Effects.Contains(this)) return;

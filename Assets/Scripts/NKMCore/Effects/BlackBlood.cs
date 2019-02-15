@@ -21,7 +21,7 @@ namespace NKMCore.Effects
                 if(_wasActivatedOnce) return;//prevent infinite loop
                 _wasActivatedOnce = true; 
                 List<Character> enemiesInRange =
-                    GetNeighboursOfOwner(range).SelectMany(c => c.CharactersOnCell).Where(c => c.IsEnemyFor(Owner)).ToList();
+                    GetNeighboursOfOwner(range).SelectMany(c => c.CharactersOnCell).Where(c => c.IsEnemyFor(ParentCharacter.Owner)).ToList();
                 if(effectTarget.Owner != characterThatAttacks.Owner) enemiesInRange.Add(effectTarget);
                 enemiesInRange.ForEach(enemy =>
                 {
