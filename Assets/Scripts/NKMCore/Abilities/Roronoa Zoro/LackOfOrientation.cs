@@ -26,7 +26,7 @@ Ilość zgubień się na ruchy: {_lostCounter}/{_moveCounter}";
 		private void MoveOverride(List<HexCell> moveCells)
 		{
 			++_moveCounter;
-			bool isLost = NKMRandom.Get(Name, 0, 2) == 0;
+			bool isLost = Random.Get(Name, 0, 2) == 0;
 			if (!isLost) ParentCharacter.DefaultBasicMove(moveCells);
 			else
 			{
@@ -38,11 +38,10 @@ Ilość zgubień się na ruchy: {_lostCounter}/{_moveCounter}";
 				while (movementPoints-- > 0 || !lastCell.IsFreeToStand)
 				{
 					List<HexCell> neighborMoveCells = lastCell.GetNeighbors(Owner, 1).Intersect(moveTargets).ToList();
-					lastCell = neighborMoveCells.GetRandom();
+					lastCell = neighborMoveCells.GetNKMRandom(Random);
 					Active.AddMoveCell(lastCell);
 				}
 				ParentCharacter.DefaultBasicMove(Active.MoveCells);
-				Console.Log($"{ParentCharacter.FormattedFirstName()}: Cholera, znowu się zgubili?");
 				++_lostCounter;
 				
 				AfterGettingLost?.Invoke();

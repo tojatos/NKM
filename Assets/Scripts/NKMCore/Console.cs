@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using NKMCore.Abilities.Asuna;
+using NKMCore.Abilities.Roronoa_Zoro;
 using NKMCore.Extensions;
 using NKMCore.Templates;
 
@@ -79,6 +80,10 @@ namespace NKMCore
             else Log("Nieznana komenda: " + text);
         }
 
+        public void AddTriggersToEvents(Turn turn)
+        {
+			turn.TurnFinished += c => GameLog("TURN FINISHED");
+        }
         public void AddTriggersToEvents(Character character)
         {
             character.JustBeforeFirstAction += () => GameLog($"ACTION TAKEN: {character}");
@@ -99,6 +104,10 @@ namespace NKMCore
             if(ability is SwordDance)
                 ((SwordDance) ability).OnBlock += attackingCharacter => 
 					Log($"{ability.ParentCharacter.FormattedFirstName()} blokuje atak {attackingCharacter.FormattedFirstName()}!");
+            
+            if(ability is LackOfOrientation)
+                ((LackOfOrientation) ability).AfterGettingLost += () =>
+                    Log($"{ability.ParentCharacter.FormattedFirstName()}: Cholera, znowu się zgubili?");
         }
     }
 

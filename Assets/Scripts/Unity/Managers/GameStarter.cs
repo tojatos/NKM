@@ -126,7 +126,7 @@ namespace Unity.Managers
 			{
 				while (p.Characters.Count != numberOfCharactersPerPlayer)
 				{
-                    string randomCharacterName = allCharacterNames.GetRandomNoLog();
+                    string randomCharacterName = allCharacterNames.GetRandom();
                     allCharacterNames.Remove(randomCharacterName);
                     p.Characters.Add(CharacterFactory.Create(game, randomCharacterName));
 				}

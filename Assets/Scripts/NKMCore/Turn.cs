@@ -24,7 +24,6 @@ namespace NKMCore
 				CharacterThatTookActionInTurn = null;
 				_game.Active.Reset();
 			};
-			TurnFinished += c => Console.GameLog("TURN FINISHED");
 		}
 		public void Start(GamePlayer gamePlayer)
 		{

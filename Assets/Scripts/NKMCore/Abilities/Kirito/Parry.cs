@@ -10,7 +10,7 @@ namespace NKMCore.Abilities.Kirito
         {
             OnAwake += () => ParentCharacter.BeforeBeingBasicAttacked += (character, damage) =>
             {
-                int r = NKMRandom.Get(Name, 1, 101);
+                int r = Random.Get(Name, 1, 101);
                 if (r <= DodgeChancePercent) damage.Value = 0;
             };
         }

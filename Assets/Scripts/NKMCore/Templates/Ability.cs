@@ -12,9 +12,9 @@ namespace NKMCore.Templates
 	{
 		protected readonly Game Game;
 		public Active Active => Game.Active;
-		public HexMap HexMap => Game.HexMap;
-		public Console Console => Game.Console;
-		public GamePlayer Owner => Game.Players.FirstOrDefault(p => p.Characters.Contains(ParentCharacter));
+		protected NKMRandom Random => Game.Random;
+		protected HexMap HexMap => Game.HexMap;
+		protected GamePlayer Owner => Game.Players.FirstOrDefault(p => p.Characters.Contains(ParentCharacter));
 		protected Ability(Game game, AbilityType type, string name, int cooldown = 0) : this(game, type, name, cooldown, NKMID.GetNext("Ability")){}
 		protected Ability(Game game, AbilityType type, string name, int cooldown, uint id)
 		{

@@ -8,6 +8,7 @@ namespace NKMCore
 	{
 		public delegate void Void();
 		public delegate void String(string str);
+		public delegate void StringInt(string str, int i);
 		public delegate void CellList(List<HexCell> cellList);
 		public delegate void CellHashSet(HashSet<HexCell> set);
 		public delegate void Cell(HexCell cell);
