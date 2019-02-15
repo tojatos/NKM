@@ -58,6 +58,18 @@ namespace NKMCore
 		
 		public void Start()
 		{
+			if (!Options.PlaceAllCharactersRandomlyAtStart)
+			{
+				Active.Turn.TurnStarted += async player =>
+				{
+					if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
+				};
+				Active.AfterCancelPlacingCharacter += async () =>
+				{
+					if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
+				};
+			}
+			
 			Abilities.ForEach(Init);
 			AfterAbilityCreation += Init;
 
@@ -68,18 +80,7 @@ namespace NKMCore
 			if (Options.PlaceAllCharactersRandomlyAtStart)
 			{
 				PlaceAllCharactersRandomlyOnSpawns();
-				if(Active.Phase.Number==0) Active.Phase.Finish();
-			}
-			else
-			{
-                Active.Turn.TurnStarted += async player =>
-                {
-                    if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
-                };
-                Active.AfterCancelPlacingCharacter += async () =>
-                {
-                    if (!IsEveryCharacterPlacedInTheFirstPhase) await TryToPlaceCharacter();
-                };
+				if (Active.Phase.Number == 0) Active.Phase.Finish();
 			}
 		}
 

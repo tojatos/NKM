@@ -8,6 +8,5 @@ namespace NKMCore
 	{
 		private static readonly string Path = "Data source=" + Application.streamingAssetsPath + "/database.db;";
 		public static readonly IDbConnection Conn = new SqliteConnection(Path);
-
 	}
 }
