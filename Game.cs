@@ -93,6 +93,7 @@ namespace NKMCore
 		private void Init(Ability a)
 		{
 			a.Awake();
+			Console.AddTriggersToEvents(a);
 			AfterAbilityInit?.Invoke(a);
 		}
 

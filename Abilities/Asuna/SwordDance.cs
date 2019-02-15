@@ -9,6 +9,8 @@ namespace NKMCore.Abilities.Asuna
 		private const int AbilityMaxHits = 3;
 		private const int AbilityBonusAttackGain = 2;
 
+		public event Delegates.CharacterD OnBlock;
+		
 		private int _attacksToBlock = 3;
 		private int _phasesRemain = 3;
 		private int _currentBonusAttack;
@@ -22,8 +24,7 @@ namespace NKMCore.Abilities.Asuna
 				{
 					if (!IsEnabled) return;
 
-					Console.Log(
-						$"{ParentCharacter.FormattedFirstName()} blokuje atak {attackingCharacter.FormattedFirstName()}!");
+					OnBlock?.Invoke(attackingCharacter);
 					_attacksToBlock--;
 					damage.Value = 0;
 					_currentBonusAttack += AbilityBonusAttackGain;
