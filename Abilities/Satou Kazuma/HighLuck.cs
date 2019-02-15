@@ -11,7 +11,6 @@ namespace NKMCore.Abilities.Satou_Kazuma
             OnAwake += () => ParentCharacter.BeforeAttack += (character, damage) =>
             {
                 int r = NKMRandom.Get(Name, 1, 101);
-//                if (UnityEngine.Random.Range(1, 101) <= 25) damage.Value *= 2;
                 if (r <= 25) damage.Value *= 2;
             };
         }

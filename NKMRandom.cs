@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NKMCore
 {
@@ -7,6 +8,7 @@ namespace NKMCore
         private static readonly Dictionary<string, int> Randoms = new Dictionary<string, int>();
         public delegate void VoidDelegate(string name, int value);
         public static event VoidDelegate OnValueGet;
+        private static readonly Random Random = new Random();
 
         /// <summary>
         /// Returns and removes rigged value from the dictionary if is set,
@@ -14,7 +16,7 @@ namespace NKMCore
         /// </summary>
         public static int Get(string name, int min, int max)
         {
-            int rng = Get(name) ?? UnityEngine.Random.Range(min, max);
+            int rng = Get(name) ?? Random.Next(min, max);
             OnValueGet?.Invoke(name, rng);
             return rng;
         }

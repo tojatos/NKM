@@ -62,7 +62,6 @@ Pozostałe ataki do zablokowania: {_attacksToBlock}";
 			ParentCharacter.TryToTakeTurn();
 			IsEnabled = true;
 			Finish(0);
-			Unity.UI.CharacterUI.Abilities.Instance.UpdateButtonData();
 		}
 		private void Disable()
 		{
