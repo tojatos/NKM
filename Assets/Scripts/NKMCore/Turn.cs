@@ -5,7 +5,6 @@ namespace NKMCore
 	public class Turn
 	{
 		private readonly Game _game;
-		private Console Console => _game.Console;
 		public bool IsDone { get; private set; }
 		public Character CharacterThatTookActionInTurn { get; set; }
 
