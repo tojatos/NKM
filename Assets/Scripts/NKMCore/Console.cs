@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NKMCore.Abilities.Asuna;
 using NKMCore.Extensions;
 using NKMCore.Templates;
 
@@ -91,7 +92,13 @@ namespace NKMCore
             character.OnDeath += () => Log($"{character.FormattedFirstName()} umiera!");
             character.AfterBasicMove += moveCells => 
                 GameLog($"MOVE: {string.Join("; ", moveCells.Select(p => p.Coordinates))}"); //logging after action to make reading rng work
-        
+        }
+
+        public void AddTriggersToEvents(Ability ability)
+        {
+            if(ability is SwordDance)
+                ((SwordDance) ability).OnBlock += attackingCharacter => 
+					Log($"{ability.ParentCharacter.FormattedFirstName()} blokuje atak {attackingCharacter.FormattedFirstName()}!");
         }
     }
 
