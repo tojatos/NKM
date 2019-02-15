@@ -49,16 +49,7 @@ namespace NKMCore.Templates
 
 		protected readonly int Cooldown;
 
-		private int _currentCooldown;
-		public int CurrentCooldown
-		{
-			get { return _currentCooldown; }
-			set
-			{
-				_currentCooldown = value;
-				Unity.UI.CharacterUI.Abilities.Instance.UpdateButtonData();
-			}
-		}
+		public int CurrentCooldown { get; set; }
 
 		public Character ParentCharacter => Game.Characters.FirstOrDefault(c => c.Abilities.Contains(this) || c.Abilities.OfType<SwordSteal>().FirstOrDefault()?.CopiedAbility == this);
 

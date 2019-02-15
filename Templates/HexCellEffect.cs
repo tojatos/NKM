@@ -21,13 +21,11 @@ namespace NKMCore.Templates
 			ParentCell = parentCell;
 			if (name != null) Name = name;
 			Game.HexMap.InvokeAfterCellEffectCreate(this);
-			if(Active.SelectedCell==ParentCell) Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(game.Active.SelectedCell);
 			Active.Phase.PhaseFinished += () =>//TODO
 			{
 				if (CurrentCooldown > 0) --CurrentCooldown;
 				if (CurrentCooldown != 0) return;
 				Remove();
-                if(Active.SelectedCell==ParentCell) Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(game.Active.SelectedCell);
 			};
 		}
 
