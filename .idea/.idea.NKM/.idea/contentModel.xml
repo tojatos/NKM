@@ -234,7 +234,6 @@
             <e p="SystemGeneric.cs" t="Include" />
           </e>
           <e p="Game.cs" t="Include" />
-          <e p="GameData.cs" t="Include" />
           <e p="GameLog.cs" t="Include" />
           <e p="GameOptions.cs" t="Include" />
           <e p="GamePlayer.cs" t="Include" />

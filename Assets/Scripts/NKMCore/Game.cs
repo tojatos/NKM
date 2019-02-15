@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using NKMCore.Extensions;
@@ -20,6 +21,7 @@ namespace NKMCore
 		public readonly Action Action;
 		public readonly Console Console;
 		public readonly NKMRandom Random;
+		public static IDbConnection Conn;
 		public ISelectable Selectable { get; private set; }
 
 		public bool IsReplay => Options.GameLog != null;
@@ -36,6 +38,7 @@ namespace NKMCore
 		{
 			Options = gameOptions;
 			Selectable = gameOptions.Selectable;
+			Conn = gameOptions.Connection;
 
 			Players = new List<GamePlayer>(gameOptions.Players);
 			HexMap = gameOptions.HexMap;
@@ -51,7 +54,7 @@ namespace NKMCore
 		/// Get a copy of every character in the game
 		/// </summary>
 		public static List<Character> GetMockCharacters() =>
-			GameData.Conn.GetCharacterNames().Select(n => CharacterFactory.Create(null, n)).ToList();
+			Conn.GetCharacterNames().Select(n => CharacterFactory.Create(null, n)).ToList();
 
 		public event Delegates.AbilityD AfterAbilityCreation;
 		public event Delegates.CharacterD AfterCharacterCreation;

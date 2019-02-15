@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Mono.Data.Sqlite;
 using NKMCore;
 using NKMCore.Extensions;
 using NKMCore.Hex;
@@ -18,13 +20,18 @@ namespace Unity.Managers
 	{
 		public bool IsTesting;
 		public ISelectable Selectable = new SpriteSelectSelectable();
+		private static IDbConnection _conn;
 		private static SessionSettings S => SessionSettings.Instance;
 		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
 		private static int GetPlayersNumber() => S.GetDropdownSetting(SettingType.NumberOfPlayers) + 2;
 		private static int GetBansNumber() => S.GetDropdownSetting(SettingType.BansNumber) + 1;
 		private static bool BansAreEnabled => S.GetDropdownSetting(SettingType.AreBansEnabled) == 1;
 
-		private void Awake() => PrepareAndStartGame();
+		private void Awake()
+		{
+			_conn = new SqliteConnection("Data source=" + Application.streamingAssetsPath + "/database.db");
+			PrepareAndStartGame();
+		}
 
 		private async void PrepareAndStartGame()
 		{
@@ -121,7 +128,7 @@ namespace Unity.Managers
 		private static void AllRandom(Game game)
 		{
 			int numberOfCharactersPerPlayer = GetCharactersPerPlayerNumber();
-			List<string> allCharacterNames = GameData.Conn.GetCharacterNames();
+			List<string> allCharacterNames = _conn.GetCharacterNames();
 			game.Players.ForEach(p=>
 			{
 				while (p.Characters.Count != numberOfCharactersPerPlayer)
@@ -206,6 +213,7 @@ namespace Unity.Managers
 				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
 				Type = GameType.Local,
 				Selectable = Selectable,
+				Connection = _conn,
 				PlaceAllCharactersRandomlyAtStart = true,
 			};
 			return gameOptions;
@@ -221,6 +229,7 @@ namespace Unity.Managers
 				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
 				Type = GameType.Local,
 				Selectable = Selectable,
+				Connection = _conn,
 				PlaceAllCharactersRandomlyAtStart = SessionSettings.Instance.GetDropdownSetting(SettingType.PickType) == 2,
 			};
 		}
