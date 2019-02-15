@@ -26,5 +26,6 @@ namespace NKMCore
 		public delegate void CharacterCharacterCell(Character character1, Character character2, HexCell cell);
 		public delegate void CharacterCellHashSet(Character character, HashSet<HexCell> list);
 		public delegate void AbilityHashSet(Ability ability, HashSet<HexCell> list);
+		public delegate void HexCellEffectD(HexCellEffect effect);
 	}
 }

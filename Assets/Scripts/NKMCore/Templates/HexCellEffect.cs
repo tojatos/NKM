@@ -7,12 +7,20 @@ namespace NKMCore.Templates
 		public readonly string Name;
 		protected readonly Game Game;
 		private Active Active => Game.Active;
+		
+		protected int CurrentCooldown { get; private set; }
+		public HexCell ParentCell { get; }
+		
+		public event Delegates.Void OnRemove;
+
+		public abstract string GetDescription();
 		protected HexCellEffect(Game game, int cooldown, HexCell parentCell, string name = null)
 		{
 			Game = game;
 			CurrentCooldown = cooldown >= 0 ? cooldown : int.MaxValue; //effect is infinite
 			ParentCell = parentCell;
 			if (name != null) Name = name;
+			Game.HexMap.InvokeAfterCellEffectCreate(this);
 			if(Active.SelectedCell==ParentCell) Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(game.Active.SelectedCell);
 			Active.Phase.PhaseFinished += () =>//TODO
 			{
@@ -22,18 +30,13 @@ namespace NKMCore.Templates
                 if(Active.SelectedCell==ParentCell) Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(game.Active.SelectedCell);
 			};
 		}
-		
-		public event Delegates.Void OnRemove;
 
 		public void Remove()
 		{
             ParentCell.Effects.Remove(this);
             OnRemove?.Invoke();
+			Game.HexMap.InvokeAfterCellEffectRemove(this);
 		}
-		protected int CurrentCooldown { get; private set; }
-		private HexCell ParentCell { get; }
-
-		public abstract string GetDescription();
 		
 	}
 

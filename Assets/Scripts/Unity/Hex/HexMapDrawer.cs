@@ -7,6 +7,7 @@ using NKMCore.Abilities.Roronoa_Zoro;
 using NKMCore.Abilities.Ryuko_Matoi;
 using NKMCore.Extensions;
 using NKMCore.Hex;
+using NKMCore.HexCellEffects;
 using NKMCore.Templates;
 using Unity.Animations;
 using Unity.Extensions;
@@ -105,6 +106,16 @@ namespace Unity.Hex
 			Active.AfterCharacterPlacePrepare += set => SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
 			Active.AfterCancelPlacingCharacter += () => RemoveHighlights();
 			Active.AfterClean += () => RemoveHighlights();
+			_game.HexMap.AfterCellEffectCreate += effect =>
+			{
+				if (effect is Conflagration)
+					SelectDrawnCell(effect.ParentCell).AddEffectHighlight(effect.Name);
+			};
+			_game.HexMap.AfterCellEffectRemove += effect =>
+			{
+				if (effect is Conflagration)
+					SelectDrawnCell(effect.ParentCell).RemoveEffectHighlight(effect.Name);
+			};
 
 
 		}
