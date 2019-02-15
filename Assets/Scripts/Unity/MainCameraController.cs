@@ -23,10 +23,11 @@ namespace Unity
 		{
 			_game = game;
 			_cam = GetComponent<Camera>();
-			var cellPos = HexMapDrawer.Instance.HexMesh.Mesh.bounds.center;
-			var startingPosition = new Vector3(cellPos.x, 300, cellPos.z); // some magic calculations
+			Bounds meshBounds = HexMapDrawer.Instance.HexMesh.Mesh.bounds;
+			Vector3 boundsCenter = meshBounds.center;
+			var startingPosition = new Vector3(boundsCenter.x, 300, boundsCenter.z + 10); // add 10 because of topbar
 			_cam.transform.position = startingPosition;
-			var startingZoom = game.HexMap.Cells.Count / 2.3f;
+			float startingZoom = meshBounds.size.magnitude / 2.8f;
 			_cam.orthographicSize = startingZoom;
 			MaxZoom = startingZoom;
 			_mainPosition = startingPosition;
