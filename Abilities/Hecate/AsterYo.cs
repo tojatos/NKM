@@ -48,7 +48,6 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 			}
 			catch (Exception e)
 			{
-				Console.DebugLog(e.Message);
 				OnFailedUseFinish();
 			}
 		}

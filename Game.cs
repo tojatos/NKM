@@ -19,6 +19,7 @@ namespace NKMCore
 		public HexMap HexMap;
 		public readonly Action Action;
 		public readonly Console Console;
+		public readonly NKMRandom Random;
 		public ISelectable Selectable { get; private set; }
 
 		public bool IsReplay => Options.GameLog != null;
@@ -27,6 +28,7 @@ namespace NKMCore
 			Active = new Active(this);
 			Action = new Action(this);
 			Console = new Console(this);
+			Random = new NKMRandom();
 			Init(gameOptions);
 		}
 
@@ -37,11 +39,13 @@ namespace NKMCore
 
 			Players = new List<GamePlayer>(gameOptions.Players);
 			HexMap = gameOptions.HexMap;
-			NKMRandom.OnValueGet += (name, value) => Console.GameLog($"RNG: {name}; {value}");
+			
+			Random.OnValueGet += (name, value) => Console.GameLog($"RNG: {name}; {value}");
 			Action.AfterAction += str =>
 			{
 				if (str == Action.Types.BasicAttack || str == Action.Types.BasicMove) Active.Select(Active.Character);
 			};
+			Console.AddTriggersToEvents(Active.Turn);
 		}
 		/// <summary>
 		/// Get a copy of every character in the game
@@ -159,7 +163,7 @@ namespace NKMCore
 
 		private void TrySpawningOnRandomCell(GamePlayer p, Character c)
 		{
-			HexCell spawnPoint = p.GetSpawnPoints(this).FindAll(cell => Active.CanSpawn(c, cell)).GetRandomNoLog();
+			HexCell spawnPoint = p.GetSpawnPoints(this).FindAll(cell => Active.CanSpawn(c, cell)).GetRandom();
 			if (spawnPoint == null) return;
 
 			//Spawner.Instance.Spawn(HexMapDrawer.Instance.SelectDrawnCell(spawnPoint), c);
