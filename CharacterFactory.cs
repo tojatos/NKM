@@ -10,7 +10,7 @@ namespace NKMCore
 
 		private static Character CreateCharacterFromDatabase(Game game, string name, uint id)
 		{
-			SqliteRow characterData = GameData.Conn.GetCharacterData(name);
+			SqliteRow characterData = Game.Conn.GetCharacterData(name);
 			Character.Properties properties = GetCharacterDbProperties(characterData);
 
 			properties.Name = name;
