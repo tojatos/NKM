@@ -46,7 +46,7 @@ Zasięg: {Range}	Czas odnowienia: {Cooldown}";
 				});
 				Finish();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				OnFailedUseFinish();
 			}
