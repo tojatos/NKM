@@ -15,22 +15,21 @@ namespace Unity.UI.CharacterUI
 	/// </summary>
 	public class Abilities : SingletonMonoBehaviour<Abilities>
 	{
-		private static Game Game;
-		private Console Console => Game.Console;
+		private static Game _game;
 
 		public GameObject AbilityButtonPrefab;
 		private List<GameObject> Buttons { get; set; }
 		public void Init(Game game)
 		{
-			Game = game;
+			_game = game;
 			Buttons = new List<GameObject>();
 		}
 
 		public void UpdateButtons()
 		{
-			if (Game?.Active.Character == null) return;
+			if (_game?.Active.Character == null) return;
 
-			Character character = Game.Active.Character;
+			Character character = _game.Active.Character;
 			RemoveButtons();
 
 			//Create an ability button for each character ability
@@ -83,9 +82,8 @@ namespace Unity.UI.CharacterUI
 				{
 					if (ability.CanBeUsed)
 					{
-						Game.Action.ClickAbility((IClickable)ability);
-//						((IClickable) ability).Click();
-						Console.GameLog($"ABILITY CLICK: {ability.ID}");
+						_game.Action.ClickAbility((IClickable)ability);
+//						Console.GameLog($"ABILITY CLICK: {ability.ID}");
 					}	
 				});
                     
@@ -96,9 +94,9 @@ namespace Unity.UI.CharacterUI
 		}
 		public void UpdateButtonData()
 		{
-			if(Game?.Active.Character == null) return;
+			if(_game?.Active.Character == null) return;
 
-			Character character = Game.Active.Character;
+			Character character = _game.Active.Character;
 			Buttons.ForEach(button =>
 			{
 				Ability ability = character.Abilities[int.Parse(button.name)];
