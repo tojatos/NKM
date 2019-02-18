@@ -210,7 +210,7 @@ namespace Unity.Managers
 			{
 				HexMap = HexMapFactory.FromScriptable(Stuff.Maps.Single(m => m.Map.name == "TestMap")),
 				Players = testingGamePlayers,
-				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
+				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("yyyy-MM-dd hh.mm.ss") + ".txt",
 				Type = GameType.Local,
 				Selectable = Selectable,
 				Connection = _conn,
@@ -226,7 +226,7 @@ namespace Unity.Managers
 			{
 				HexMap = GetMap(),
 				Players = GetPlayers(),
-				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("u") + ".txt",
+				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("yyyy-MM-dd hh.mm.ss") + ".txt",
 				Type = GameType.Local,
 				Selectable = Selectable,
 				Connection = _conn,
