@@ -35,9 +35,9 @@ You can build using Unity's usual way (ctrl+B), using `Developement` on the tool
 
 Make sure that in the Main Game scene IsTesting is not selected in Game Starter object.
 
-Warning: the game may not work properly on Windows due to a bug with directory names. This will be fixed after decoupling (Soon&trade;)
+Warning: git-lfs must be installed to pull everything correctly!
 
 ## Future
 
-Right now I am focused on decoupling and writing tests.
-In the future I'd like to add multiplayer mode, support for mobile devices, better documentation for contributing and a website.
+Right now I am focused on multiplayer mode and writing tests.
+In the future I'd like to support for mobile devices, better documentation for contributing and a website.
