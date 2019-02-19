@@ -27,5 +27,9 @@ namespace NKMCore.Extensions
 			if (list.Count < 2) throw new Exception("Sequence does not contain at least two elements.");
 			return list[list.Count - 2];
 		}
+		public static T ToEnum<T>(this string value)
+		{
+			return (T) Enum.Parse(typeof(T), value, true);
+		}	
 	}
 }

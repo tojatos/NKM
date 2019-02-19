@@ -251,6 +251,7 @@
             <e p="Conflagration.cs" t="Include" />
             <e p="HowlingBlizzard.cs" t="Include" />
           </e>
+          <e p="HexMapSerializer.cs" t="Include" />
           <e p="ISelectable.cs" t="Include" />
           <e p="Instantiator.cs" t="Include" />
           <e p="NKMID.cs" t="Include" />

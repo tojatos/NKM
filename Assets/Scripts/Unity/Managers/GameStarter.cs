@@ -146,9 +146,9 @@ namespace Unity.Managers
 				.ToList();
 			var gameOptions = new GameOptions
 			{
-				HexMap = HexMapFactory.FromScriptable(Stuff.Maps.Single(m => m.Map.name == "TestMap")),
+				HexMap = GetMap(),
 				Players = testingGamePlayers,
-				LogFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Testing Game Logs" + Path.DirectorySeparatorChar + DateTime.Now.ToString("yyyy-MM-dd hh.mm.ss") + ".txt",
+				LogFilePath = GetLogFilePath(),
 				Type = GameType.Local,
 				Selectable = Selectable,
 				Connection = _conn,
