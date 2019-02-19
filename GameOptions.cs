@@ -18,6 +18,7 @@ namespace NKMCore
 
 	public enum GameType
 	{
+		Undefined,
 		Local,
 		Replay
 	}
