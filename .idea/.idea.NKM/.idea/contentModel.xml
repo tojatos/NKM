@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$USER_HOME$/.Rider2018.1/system/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_NKM.-330533029.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.Rider2018.1/system/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_NKM.-95492165.00" t="ExcludeRecursive" />
     <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.3.1/build/netcoreapp1.0/xunit.runner.reporters.netcoreapp10.dll" t="Include" />
     <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.3.1/build/netcoreapp1.0/xunit.runner.utility.netcoreapp10.dll" t="Include" />
     <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.3.1/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
@@ -236,7 +236,10 @@
           <e p="Game.cs" t="Include" />
           <e p="GameLog.cs" t="Include" />
           <e p="GameOptions.cs" t="Include" />
+          <e p="GameOptionsValidator.cs" t="Include" />
           <e p="GamePlayer.cs" t="Include" />
+          <e p="GamePreparer.cs" t="Include" />
+          <e p="GamePreparerOptions.cs" t="Include" />
           <e p="Hex" t="Include">
             <e p="HexCell.cs" t="Include" />
             <e p="HexCoordinates.cs" t="Include" />
@@ -253,6 +256,7 @@
           <e p="NKMID.cs" t="Include" />
           <e p="NKMRandom.cs" t="Include" />
           <e p="Phase.cs" t="Include" />
+          <e p="PickType.cs" t="Include" />
           <e p="SelectableProperties.cs" t="Include" />
           <e p="Stat.cs" t="Include" />
           <e p="Templates" t="Include">
@@ -362,13 +366,12 @@
         </e>
       </e>
       <e p="Assets/VertexColors.shader" t="Include" />
-      <e p="Library" t="ExcludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp" t="ExcludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-      </e>
+      <e p="Temp/bin" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>
+    <e p="$USER_HOME$/UnityProjects/NKM/Library" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/UnityProjects/NKM/Temp" t="ExcludeRecursive" />
   </component>
 </project>
