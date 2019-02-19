@@ -54,8 +54,8 @@ namespace NKMCore.Hex
 			{
 				return Coordinates.X < targetCoordinates.X ? HexDirection.E : HexDirection.W;
 			}
-
-			throw new Exception("direction not found");
+			
+            throw new Exception("direction not found");
 		}
 		public HexCell GetCell(HexDirection direction, int distance)
 		{
