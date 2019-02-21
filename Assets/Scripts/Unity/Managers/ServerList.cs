@@ -14,6 +14,8 @@ namespace Unity.Managers
 		public Button JoinServerButton;
 		public string SelectedIP;
 		public GameObject Servers;
+
+		private Client _client;
 		
 		private void Awake()
 		{
@@ -24,6 +26,12 @@ namespace Unity.Managers
 			});
 			JoinServerButton.onClick.AddListener(() => TryToJoinAServer(SelectedIP));
 			RefreshList();
+			_client = new Client();
+			_client.OnConnection += () => Debug.Log("Connected!");
+			_client.OnDisconnect += () => Debug.Log("Disconnected!");
+			_client.OnError += Debug.LogError;
+			_client.OnMessage += message => Debug.Log($"Server: {message}");
+			_client.OnConnection += () => _client.SendMessage("GREET");
 		}
 
 		private void Update()
@@ -33,8 +41,10 @@ namespace Unity.Managers
 
 		private void TryToJoinAServer(string selectedIP)
 		{
-			Debug.Log("Not implemented - " + selectedIP);//TODO
+			string[] ipInfo = selectedIP.Split(':');
+			_client.TryConnecting(ipInfo[0], int.Parse(ipInfo[1]));
 		}
+
 
 		private void RefreshList()
 		{
@@ -72,7 +82,7 @@ namespace Unity.Managers
 			                            Path.DirectorySeparatorChar + "server_list.txt";
 			// ReSharper disable once AssignNullToNotNullAttribute
 			Directory.CreateDirectory(Path.GetDirectoryName(serverListFilePath));	
-			File.AppendAllLines(serverListFilePath, new []{ip, serverName, ""});
+			File.AppendAllLines(serverListFilePath, new []{serverName, ip, ""});
 		}
 	}
 }

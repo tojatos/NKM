@@ -330,6 +330,7 @@
           <e p="IsRaycastValid.cs" t="Include" />
           <e p="MainCameraController.cs" t="Include" />
           <e p="Managers" t="Include">
+            <e p="Client.cs" t="Include" />
             <e p="GameStarter.cs" t="Include" />
             <e p="MainMenu.cs" t="Include" />
             <e p="MusicManager.cs" t="Include" />
