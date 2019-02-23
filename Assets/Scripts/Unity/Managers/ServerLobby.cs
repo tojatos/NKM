@@ -80,6 +80,13 @@ namespace Unity.Managers
 					}
 					_asyncCaller.Call(RefreshList);
 					break;
+				case "PLAYER_JOIN":
+					string[] s = content.Split(';');
+					int index = int.Parse(s[0]);
+					string pName = s[1];
+					_players[index] = new GamePlayer{Name = pName};
+					_asyncCaller.Call(RefreshList);
+					break;
 			}
 		}
 
