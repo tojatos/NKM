@@ -12,30 +12,64 @@ namespace Unity.Managers
 	{
 		public InputField AddServerName;
 		public InputField AddServerIP;
+		public InputField Nickname;
 		public Button AddServerButton;
 		public Button JoinServerButton;
 		public string SelectedIP;
 		public GameObject Servers;
+		private Client _client;
+		private AsyncCaller _asyncCaller;
 
 		private void Start()
 		{
+			_client = ClientManager.Instance.Client;
+			_asyncCaller = AsyncCaller.Instance;
+			
 			AddServerButton.onClick.AddListener(()=> {
 				if(AddServerName.text == "" || AddServerIP.text == "") return;
 				AddServerInfoToFile(AddServerName.text, AddServerIP.text);
 				CreateServerInfo(AddServerName.text, AddServerIP.text);
 			});
-			JoinServerButton.onClick.AddListener(() => TryToJoinAServer(SelectedIP));
-			RefreshList();
-			ClientManager.Instance.Client.OnConnection += JoinLobby;
-			UnityAction<Scene, LoadSceneMode> removeJoinLobbyTrigger = null;
-			removeJoinLobbyTrigger = (scene, mode) =>
+			JoinServerButton.onClick.AddListener(() =>
 			{
-				ClientManager.Instance.Client.OnConnection -= JoinLobby;
-				SceneManager.sceneLoaded -= removeJoinLobbyTrigger;
-			};
-			SceneManager.sceneLoaded += removeJoinLobbyTrigger;
+				if(Nickname.text == "") return;
+				TryToJoinAServer(SelectedIP);
+			});
+			
+			RefreshList();
+			
+			InitializeMessageHandler();
 		}
-
+		
+		
+		private void InitializeMessageHandler()
+		{
+			_client.OnMessage += HandleMessageFromServer;
+			UnityAction<Scene, LoadSceneMode> removeMessageHandler = null;
+			removeMessageHandler = (scene, mode) =>
+			{
+				_client.OnMessage -= HandleMessageFromServer;
+				SceneManager.sceneLoaded -= removeMessageHandler;
+			};
+			SceneManager.sceneLoaded += removeMessageHandler;
+		}
+		
+		private void HandleMessageFromServer(string message)
+		{
+			string[] data = message.Split(' ');
+			string header = data[0];
+            string content = string.Empty;
+			if(data.Length > 1) content = data[1];
+			switch (header)
+			{
+				case "GET_NICKNAME":
+					_client.SendMessage($"NICKNAME {Nickname.text}");
+					break;
+				case "JOIN":
+					_asyncCaller.Call(JoinLobby);
+					break;
+			}
+		}
 
 		private static void JoinLobby() => SceneManager.LoadScene(Scenes.ServerLobby);
 
@@ -54,10 +88,8 @@ namespace Unity.Managers
 		private void RefreshList()
 		{
 			Servers.transform.Clear();
-//			string serverListFilePath = Directory.GetFiles(Application.persistentDataPath + Path.DirectorySeparatorChar + "Settings" + Path.DirectorySeparatorChar).FirstOrDefault(f => f == "server_list.txt");
 			string serverListFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Settings" +
 			                            Path.DirectorySeparatorChar + "server_list.txt";
-//			if (serverListFilePath == null) return;
 			if(!File.Exists(serverListFilePath)) return;
 			string[] serverListLines = File.ReadAllLines(serverListFilePath);
 			string n = "";

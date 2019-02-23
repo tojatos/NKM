@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NKMCore;
 using Unity.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Action = System.Action;
 
 namespace Unity.Managers
 {
@@ -15,14 +13,14 @@ namespace Unity.Managers
 		public Button ReadyButton;
 		public GameObject PlayersGameObject;
 		private GameOptions _options;
-		private AsyncCaller AsyncCaller;
+		private AsyncCaller _asyncCaller;
 		private Client _client;
-		private Dictionary<int, GamePlayer> Players = new Dictionary<int, GamePlayer>();
-		private int _numberOfPlayers = 1;
+		private readonly Dictionary<int, GamePlayer> _players = new Dictionary<int, GamePlayer>();
+		private int _numberOfPlayers;
 
 		private void Start()
 		{
-			AsyncCaller = AsyncCaller.Instance;
+			_asyncCaller = AsyncCaller.Instance;
 			_client = ClientManager.Instance.Client;
 			_options = new GameOptions {Players = new List<GamePlayer>()};
 			ClearPlayerList();
@@ -72,15 +70,15 @@ namespace Unity.Managers
 			{
 				case "PLAYER_NUM":
 					_numberOfPlayers = int.Parse(content);
-					AsyncCaller.Call(RefreshList);
+					_asyncCaller.Call(RefreshList);
 					break;
 				case "PLAYERS":
 					string[] playersNames = content.Split(';');
 					for (int i = 0; i < playersNames.Length; ++i)
 					{
-						Players[i] = new GamePlayer {Name = playersNames[i]};
+						_players[i] = new GamePlayer {Name = playersNames[i]};
 					}
-					AsyncCaller.Call(RefreshList);
+					_asyncCaller.Call(RefreshList);
 					break;
 			}
 		}
@@ -93,8 +91,8 @@ namespace Unity.Managers
 			ClearPlayerList();
 			for (int i = 0; i < _numberOfPlayers; i++)
 			{
-				if(!Players.ContainsKey(i)) CreateEmptyPlayer();
-				else CreatePlayer(Players[i]);
+				if(!_players.ContainsKey(i)) CreateEmptyPlayer();
+				else CreatePlayer(_players[i]);
 			}
 		}
 

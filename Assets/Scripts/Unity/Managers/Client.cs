@@ -29,7 +29,7 @@ namespace Unity.Managers
 				_client = new TcpClient(hostname, port);
 				OnConnection?.Invoke();
 				_isConnected = true;
-				await Task.Run((Action) ListerForMessages);
+				await Task.Run((Action) ListenForMessages);
 			}
 			catch (Exception e)
 			{
@@ -46,7 +46,7 @@ namespace Unity.Managers
 			}
 		}
 
-	    private void ListerForMessages()
+	    private void ListenForMessages()
 	    {
 			using (NetworkStream s = _client.GetStream())
 			{

@@ -377,5 +377,6 @@
       <e p="packages" t="ExcludeRecursive" />
     </e>
     <e p="$USER_HOME$/UnityProjects/NKM/Library" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/UnityProjects/NKM/Temp" t="ExcludeRecursive" />
   </component>
 </project>

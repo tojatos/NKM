@@ -11,13 +11,11 @@ namespace Unity.Managers
 
 		private void Awake()
 		{
-			
 			Client = new Client();
 			Client.OnConnection += () => Debug.Log("Connected!");
 			Client.OnDisconnect += () => Debug.Log("Disconnected!");
 			Client.OnError += Debug.LogError;
 			Client.OnMessage += message => Debug.Log($"Server: {message}");
-			Client.OnConnection += () => Client.SendMessage("GREET");
 		}
 
 	}
