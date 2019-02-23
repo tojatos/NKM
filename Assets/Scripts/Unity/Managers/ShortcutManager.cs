@@ -30,7 +30,7 @@ namespace Unity.Managers
 				.ForEach(b => b.GetComponent<Button>().onClick.AddListener(LoadLastScene));
 		};
 
-		private void LoadLastScene()
+		public void LoadLastScene()
 		{
 			if(_lastScenes.Count <= 1) return;
 			_lastScenes.Pop(); //Remove current scene name

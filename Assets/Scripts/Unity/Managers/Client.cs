@@ -66,7 +66,6 @@ namespace Unity.Managers
 		    NetworkStream s = _client.GetStream();
 		    var sw = new StreamWriter(s) {AutoFlush = true};
             sw.WriteLine(message);
-		    
 	    }
     }
 }

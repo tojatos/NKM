@@ -830,6 +830,12 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224135163127756400, guid: 4df16e5b8b2f44666a6047b9bfd95107,
     type: 2}
   m_PrefabInternal: {fileID: 390552430}
+--- !u!114 &390552432 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114853390058874966, guid: 4df16e5b8b2f44666a6047b9bfd95107,
+    type: 2}
+  m_PrefabInternal: {fileID: 390552430}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &451598527
 Prefab:
   m_ObjectHideFlags: 0
@@ -1971,6 +1977,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1338887055}
+  - component: {fileID: 1338887056}
   m_Layer: 5
   m_Name: Server Lobby Manager
   m_TagString: Untagged
@@ -1996,6 +2003,19 @@ RectTransform:
   m_AnchoredPosition: {x: 800, y: 450.00003}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1338887056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1338887054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d36f20fdbbf64bfc8846c6fff282d998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ReadyButton: {fileID: 390552432}
+  PlayersGameObject: {fileID: 1893129696}
 --- !u!1001 &1371479081
 Prefab:
   m_ObjectHideFlags: 0

@@ -330,13 +330,16 @@
           <e p="IsRaycastValid.cs" t="Include" />
           <e p="MainCameraController.cs" t="Include" />
           <e p="Managers" t="Include">
+            <e p="AsyncCaller.cs" t="Include" />
             <e p="Client.cs" t="Include" />
+            <e p="ClientManager.cs" t="Include" />
             <e p="GameStarter.cs" t="Include" />
             <e p="MainMenu.cs" t="Include" />
             <e p="MusicManager.cs" t="Include" />
             <e p="Options.cs" t="Include" />
             <e p="PreGameOptions.cs" t="Include" />
             <e p="ServerList.cs" t="Include" />
+            <e p="ServerLobby.cs" t="Include" />
             <e p="ShortcutManager.cs" t="Include" />
             <e p="SpriteSelectSelectable.cs" t="Include" />
           </e>
@@ -374,6 +377,5 @@
       <e p="packages" t="ExcludeRecursive" />
     </e>
     <e p="$USER_HOME$/UnityProjects/NKM/Library" t="ExcludeRecursive" />
-    <e p="$USER_HOME$/UnityProjects/NKM/Temp" t="ExcludeRecursive" />
   </component>
 </project>
