@@ -67,5 +67,14 @@ namespace Unity.Managers
 		    var sw = new StreamWriter(s) {AutoFlush = true};
             sw.WriteLine(message);
 	    }
+
+	    public void Disconnect()
+	    {
+		    if(!_isConnected) return;
+            OnDisconnect?.Invoke();
+            _isConnected = false;
+		    _client.GetStream().Close();
+		    _client.Close();
+	    }
     }
 }

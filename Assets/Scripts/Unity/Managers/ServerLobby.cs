@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NKMCore;
 using Unity.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -25,6 +27,9 @@ namespace Unity.Managers
 			_options = new GameOptions {Players = new List<GamePlayer>()};
 			ClearPlayerList();
 			
+			GameObject.FindGameObjectsWithTag("Back Button").ToList()
+				.ForEach(b => b.AddTrigger(EventTriggerType.PointerClick,
+				() => _client.Disconnect()));
 			InitializeMessageHandler();
 			ChangeSceneOnDisconnect();
 			AskServerForGameInfo();
@@ -81,15 +86,25 @@ namespace Unity.Managers
 					_asyncCaller.Call(RefreshList);
 					break;
 				case "PLAYER_JOIN":
-					string[] s = content.Split(';');
-					int index = int.Parse(s[0]);
-					string pName = s[1];
-					_players[index] = new GamePlayer{Name = pName};
+					HandlePlayerJoin(content);
+					break;
+				
+				case "PLAYER_LEFT":
+					int index = int.Parse(content);
+					_players.Remove(index);
 					_asyncCaller.Call(RefreshList);
 					break;
 			}
 		}
 
+		private void HandlePlayerJoin(string content)
+		{
+			string[] s = content.Split(';');
+			int index = int.Parse(s[0]);
+			string pName = s[1];
+			_players[index] = new GamePlayer {Name = pName};
+			_asyncCaller.Call(RefreshList);
+		}
 
 
 		private void ClearPlayerList() => PlayersGameObject.transform.Clear();
