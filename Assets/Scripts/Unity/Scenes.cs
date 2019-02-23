@@ -10,5 +10,6 @@
 		public static string PreGameOptions => "Pre Game Options";
 		public static string GameStatistics => "Game Statistics";
 		public static string ServerList => "Server List";
+		public static string ServerLobby => "Server Lobby";
 	}
 }

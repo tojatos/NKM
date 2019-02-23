@@ -15,13 +15,20 @@ namespace Unity.Managers
 	    public event Delegates.String OnError;
 
 	    private TcpClient _client;
+	    private bool _isConnected;
 
 	    public async void TryConnecting(string hostname, int port)
 		{
+			if (_isConnected)
+			{
+				OnError?.Invoke("Already connected!");
+				return;
+			}
 			try
 			{
 				_client = new TcpClient(hostname, port);
 				OnConnection?.Invoke();
+				_isConnected = true;
 				await Task.Run((Action) ListerForMessages);
 			}
 			catch (Exception e)
@@ -30,10 +37,11 @@ namespace Unity.Managers
 			}
 			finally
 			{
-				if (_client != null)
+				_client?.Close();
+				if (_isConnected)
 				{
-					_client.Close();
                     OnDisconnect?.Invoke();
+                    _isConnected = false;
 				}
 			}
 		}

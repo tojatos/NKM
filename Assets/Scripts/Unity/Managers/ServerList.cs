@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using Unity.Extensions;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Unity.Managers
@@ -15,9 +17,7 @@ namespace Unity.Managers
 		public string SelectedIP;
 		public GameObject Servers;
 
-		private Client _client;
-		
-		private void Awake()
+		private void Start()
 		{
 			AddServerButton.onClick.AddListener(()=> {
 				if(AddServerName.text == "" || AddServerIP.text == "") return;
@@ -26,13 +26,18 @@ namespace Unity.Managers
 			});
 			JoinServerButton.onClick.AddListener(() => TryToJoinAServer(SelectedIP));
 			RefreshList();
-			_client = new Client();
-			_client.OnConnection += () => Debug.Log("Connected!");
-			_client.OnDisconnect += () => Debug.Log("Disconnected!");
-			_client.OnError += Debug.LogError;
-			_client.OnMessage += message => Debug.Log($"Server: {message}");
-			_client.OnConnection += () => _client.SendMessage("GREET");
+			ClientManager.Instance.Client.OnConnection += JoinLobby;
+			UnityAction<Scene, LoadSceneMode> removeJoinLobbyTrigger = null;
+			removeJoinLobbyTrigger = (scene, mode) =>
+			{
+				ClientManager.Instance.Client.OnConnection -= JoinLobby;
+				SceneManager.sceneLoaded -= removeJoinLobbyTrigger;
+			};
+			SceneManager.sceneLoaded += removeJoinLobbyTrigger;
 		}
+
+
+		private static void JoinLobby() => SceneManager.LoadScene(Scenes.ServerLobby);
 
 		private void Update()
 		{
@@ -42,7 +47,7 @@ namespace Unity.Managers
 		private void TryToJoinAServer(string selectedIP)
 		{
 			string[] ipInfo = selectedIP.Split(':');
-			_client.TryConnecting(ipInfo[0], int.Parse(ipInfo[1]));
+			ClientManager.Instance.Client.TryConnecting(ipInfo[0], int.Parse(ipInfo[1]));
 		}
 
 
