@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using NKMCore;
 using Unity.Extensions;
+using Unity.Hex;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -14,6 +16,8 @@ namespace Unity.Managers
 	{
 		public Button ReadyButton;
 		public GameObject PlayersGameObject;
+		public Text Map;
+		
 		private GameOptions _options;
 		private AsyncCaller _asyncCaller;
 		private Client _client;
@@ -25,6 +29,8 @@ namespace Unity.Managers
 			_asyncCaller = AsyncCaller.Instance;
 			_client = ClientManager.Instance.Client;
 			_options = new GameOptions {Players = new List<GamePlayer>()};
+
+			Map.text = "";
 			ClearPlayerList();
 			
 			GameObject.FindGameObjectsWithTag("Back Button").ToList()
@@ -42,11 +48,11 @@ namespace Unity.Managers
 
 		private void InitializeMessageHandler()
 		{
-			_client.OnMessage += HandleMessageFromServer;
+			_client.OnMessage += HandleMessageFromServerInMainThread;
 			UnityAction<Scene, LoadSceneMode> removeMessageHandler = null;
 			removeMessageHandler = (scene, mode) =>
 			{
-				_client.OnMessage -= HandleMessageFromServer;
+				_client.OnMessage -= HandleMessageFromServerInMainThread;
 				SceneManager.sceneLoaded -= removeMessageHandler;
 			};
 			SceneManager.sceneLoaded += removeMessageHandler;
@@ -65,6 +71,9 @@ namespace Unity.Managers
 			SceneManager.sceneLoaded += removeTrigger;
 		}
 
+		private void HandleMessageFromServerInMainThread(string message) 
+			=> _asyncCaller.Call(() => HandleMessageFromServer(message));
+
 		private void HandleMessageFromServer(string message)
 		{
 			string[] data = message.Split(' ');
@@ -75,7 +84,7 @@ namespace Unity.Managers
 			{
 				case "PLAYER_NUM":
 					_numberOfPlayers = int.Parse(content);
-					_asyncCaller.Call(RefreshList);
+					RefreshList();
 					break;
 				case "PLAYERS":
 					string[] playersNames = content.Split(';');
@@ -83,7 +92,7 @@ namespace Unity.Managers
 					{
 						_players[i] = new GamePlayer {Name = playersNames[i]};
 					}
-					_asyncCaller.Call(RefreshList);
+					RefreshList();
 					break;
 				case "PLAYER_JOIN":
 					HandlePlayerJoin(content);
@@ -92,9 +101,18 @@ namespace Unity.Managers
 				case "PLAYER_LEFT":
 					int index = int.Parse(content);
 					_players.Remove(index);
-					_asyncCaller.Call(RefreshList);
+					RefreshList();
+					break;
+				case "MAPNAME":
+					HandleMapname(content);
 					break;
 			}
+		}
+
+		private void HandleMapname(string content)
+		{
+			_options.HexMap = HexMapFactory.FromScriptable(Stuff.Maps.First(m => m.name == content));
+			Map.text = content;
 		}
 
 		private void HandlePlayerJoin(string content)
@@ -103,7 +121,7 @@ namespace Unity.Managers
 			int index = int.Parse(s[0]);
 			string pName = s[1];
 			_players[index] = new GamePlayer {Name = pName};
-			_asyncCaller.Call(RefreshList);
+			RefreshList();
 		}
 
 

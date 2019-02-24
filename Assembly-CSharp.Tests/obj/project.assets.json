@@ -1675,6 +1675,15 @@
         "build": {
           "build/netcoreapp1.0/xunit.runner.visualstudio.props": {}
         }
+      },
+      "Assembly-CSharp/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/Assembly-CSharp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Assembly-CSharp.dll": {}
+        }
       }
     }
   },
@@ -5759,11 +5768,16 @@
         "xunit.runner.visualstudio.2.3.1.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "Assembly-CSharp/1.0.0": {
+      "type": "project",
+      "path": "../Assembly-CSharp.csproj",
+      "msbuildProject": "../Assembly-CSharp.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
-      "/home/tojatos/UnityProjects/NKM/Assembly-CSharp.csproj",
+      "Assembly-CSharp >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 15.6.0",
       "Microsoft.NETCore.App >= 2.0.0",
       "xunit >= 2.3.1",
@@ -5783,7 +5797,7 @@
       "outputPath": "/home/tojatos/UnityProjects/NKM/Assembly-CSharp.Tests/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/tojatos/NKM/nuget.config",
+        "/home/tojatos/UnityProjects/NKM/nuget.config",
         "/home/tojatos/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
@@ -5836,16 +5850,5 @@
         "warn": true
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1105",
-      "level": "Error",
-      "message": "Unable to find project information for '/home/tojatos/UnityProjects/NKM/Assembly-CSharp.csproj'. The project file may be invalid or missing targets required for restore.",
-      "libraryId": "/home/tojatos/UnityProjects/NKM/Assembly-CSharp.csproj",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v2.0"
-      ]
-    }
-  ]
+  }
 }
