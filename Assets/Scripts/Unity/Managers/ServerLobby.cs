@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using NKMCore;
@@ -22,6 +23,7 @@ namespace Unity.Managers
 		private AsyncCaller _asyncCaller;
 		private Client _client;
 		private readonly Dictionary<int, GamePlayer> _players = new Dictionary<int, GamePlayer>();
+		private readonly Dictionary<int, bool> _readyStates = new Dictionary<int, bool>();
 		private int _numberOfPlayers;
 
 		private void Start()
@@ -32,6 +34,7 @@ namespace Unity.Managers
 
 			Map.text = "";
 			ClearPlayerList();
+			ReadyButton.onClick.AddListener(()=> _client.SendMessage("READY_CHANGE"));
 			
 			GameObject.FindGameObjectsWithTag("Back Button").ToList()
 				.ForEach(b => b.AddTrigger(EventTriggerType.PointerClick,
@@ -87,11 +90,7 @@ namespace Unity.Managers
 					RefreshList();
 					break;
 				case "PLAYERS":
-					string[] playersNames = content.Split(';');
-					for (int i = 0; i < playersNames.Length; ++i)
-					{
-						_players[i] = new GamePlayer {Name = playersNames[i]};
-					}
+					InitPlayers(content);
 					RefreshList();
 					break;
 				case "PLAYER_JOIN":
@@ -106,6 +105,27 @@ namespace Unity.Managers
 				case "MAPNAME":
 					HandleMapname(content);
 					break;
+				case "READY":
+					string[] x = content.Split(';');
+					int playerIndex = int.Parse(x[0]);
+					bool readyState = bool.Parse(x[1]);
+					_readyStates[playerIndex] = readyState;
+					RefreshList();
+					break;
+			}
+		}
+
+		private void InitPlayers(string content)
+		{
+			string[] playerInfos = content.Split(';');
+			foreach (string i in playerInfos.ToList())
+			{
+				string[] playerData = i.Split(':');
+				int playerIndex = int.Parse(playerData[0]);
+				string playerName = playerData[1];
+				bool isReady = bool.Parse(playerData[2]);
+				_players[playerIndex] = new GamePlayer {Name = playerName};
+				_readyStates[playerIndex] = isReady;
 			}
 		}
 
@@ -132,7 +152,7 @@ namespace Unity.Managers
 			for (int i = 0; i < _numberOfPlayers; i++)
 			{
 				if(!_players.ContainsKey(i)) CreateEmptyPlayer();
-				else CreatePlayer(_players[i]);
+				else CreatePlayer(i);
 			}
 		}
 
@@ -141,11 +161,12 @@ namespace Unity.Managers
 			Instantiate(Stuff.Prefabs.Find(p => p.name == "Empty Player"), PlayersGameObject.transform);
 			
 		}
-		private void CreatePlayer(GamePlayer player)
+		private void CreatePlayer(int i)
 		{
+			GamePlayer player = _players[i];
 			GameObject g = Instantiate(Stuff.Prefabs.Find(p => p.name == "Player Info"), PlayersGameObject.transform);
 			g.transform.Find("Name").GetComponent<Text>().text = player.Name;
-			g.transform.Find("Readiness").GetComponent<Text>().text = "Ready: <color=red>No</color>";
+			g.transform.Find("Readiness").GetComponent<Text>().text = $"Ready: {(_readyStates[i] ? "<color=green>Yes</color>" : "<color=red>No</color>")}";
 		}
 	}
 }
