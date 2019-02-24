@@ -44,16 +44,18 @@ namespace Unity.Managers
 		
 		private void InitializeMessageHandler()
 		{
-			_client.OnMessage += HandleMessageFromServer;
+			_client.OnMessage += HandleMessageFromServerInMainThread;
 			UnityAction<Scene, LoadSceneMode> removeMessageHandler = null;
 			removeMessageHandler = (scene, mode) =>
 			{
-				_client.OnMessage -= HandleMessageFromServer;
+				_client.OnMessage -= HandleMessageFromServerInMainThread;
 				SceneManager.sceneLoaded -= removeMessageHandler;
 			};
 			SceneManager.sceneLoaded += removeMessageHandler;
 		}
 		
+		private void HandleMessageFromServerInMainThread(string message) 
+			=> _asyncCaller.Call(() => HandleMessageFromServer(message));
 		private void HandleMessageFromServer(string message)
 		{
 			string[] data = message.Split(' ');
@@ -62,11 +64,15 @@ namespace Unity.Managers
 			if(data.Length > 1) content = data[1];
 			switch (header)
 			{
+				case "TOO_MANY_PLAYERS":
+					Debug.LogError("Too many players!");
+					_client.Disconnect();
+					break;
 				case "GET_NICKNAME":
 					_client.SendMessage($"NICKNAME {Nickname.text}");
 					break;
 				case "JOIN":
-					_asyncCaller.Call(JoinLobby);
+					JoinLobby();
 					break;
 			}
 		}
