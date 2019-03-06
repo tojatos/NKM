@@ -2,8 +2,7 @@
   "runtimeOptions": {
     "additionalProbingPaths": [
       "/home/tojatos/.dotnet/store/|arch|/|tfm|",
-      "/home/tojatos/.nuget/packages",
-      "/opt/dotnet/sdk/NuGetFallbackFolder"
+      "/home/tojatos/.nuget/packages"
     ]
   }
 }

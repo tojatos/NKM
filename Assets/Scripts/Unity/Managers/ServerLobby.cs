@@ -63,7 +63,7 @@ namespace Unity.Managers
 		
 		private void ChangeSceneOnDisconnect()
 		{
-			Delegates.Void onDisconnect = () => ShortcutManager.Instance.LoadLastScene();
+			Delegates.Void onDisconnect = () => AsyncCaller.Instance.Call(ShortcutManager.Instance.LoadLastScene);
 			_client.OnDisconnect += onDisconnect;
 			UnityAction<Scene, LoadSceneMode> removeTrigger = null;
 			removeTrigger = (scene, mode) =>

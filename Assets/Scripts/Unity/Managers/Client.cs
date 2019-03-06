@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NKMCore;
+using UnityEditor;
+using UnityEngine;
 using Action = System.Action;
 
 namespace Unity.Managers
@@ -15,66 +20,94 @@ namespace Unity.Managers
 	    public event Delegates.String OnError;
 
 	    private TcpClient _client;
-	    private bool _isConnected;
+	    private NetworkStream _msgStream;
+	    private bool _running;
+        private bool _clientRequestedDisconnect;
 
-	    public async void TryConnecting(string hostname, int port)
-		{
-			if (_isConnected)
+	    public void TryConnecting(string hostname, int port)
+	    {
+			if (_running)
 			{
 				OnError?.Invoke("Already connected!");
 				return;
 			}
-			try
-			{
-				_client = new TcpClient(hostname, port);
-				OnConnection?.Invoke();
-				_isConnected = true;
-				await Task.Run((Action) ListenForMessages);
-			}
-			catch (Exception e)
-			{
-				OnError?.Invoke(e.Message);
-			}
-			finally
-			{
-				_client?.Close();
-				if (_isConnected)
-				{
-                    OnDisconnect?.Invoke();
-                    _isConnected = false;
-				}
-			}
-		}
 
+		    try
+		    {
+			    _client = new TcpClient(hostname, port);
+			    if (!_client.Connected) return;
+			    OnConnection?.Invoke();
+			    _running = true;
+			    _msgStream = _client.GetStream();
+			    new Thread(ListenForMessages).Start();
+		    }
+		    catch (SocketException se)
+		    {
+			    OnError?.Invoke(se.Message);
+		    }
+
+		}
+	    
+        private void CleanupNetworkResources()
+        {
+            _msgStream?.Close();
+            _msgStream = null;
+	        _client.Close();
+        }
+
+        public void Disconnect()
+        {
+            OnDisconnect?.Invoke();
+	        SendMessage("bye");
+            _running = false;
+            _clientRequestedDisconnect = true;
+        }
 	    private void ListenForMessages()
 	    {
 			using (NetworkStream s = _client.GetStream())
 			{
 				using (var sr = new StreamReader(s))
 				{
-					string message;
-					while((message = sr.ReadLine()) != null)
+					while(_running)
 					{
-						OnMessage?.Invoke(message);
+						if (_client.Available > 0)
+						{
+							string message;
+							if((message = sr.ReadLine()) != null)
+	                            OnMessage?.Invoke(message);
+						}
+						
+                        if (_isDisconnected(_client) && !_clientRequestedDisconnect)
+                        {
+                            _running = false;
+                        }
 					}
+					CleanupNetworkResources();
 				}
 			}	
 	    }
 
 	    public void SendMessage(string message)
 	    {
-		    NetworkStream s = _client.GetStream();
-		    var sw = new StreamWriter(s) {AutoFlush = true};
+		    if(_msgStream==null) return;
+		    var sw = new StreamWriter(_msgStream) {AutoFlush = true};
             sw.WriteLine(message);
 	    }
-
-	    public void Disconnect()
-	    {
-		    if(!_isConnected) return;
-            OnDisconnect?.Invoke();
-            _isConnected = false;
-		    _client.GetStream().Close();
-		    _client.Close();
-	    }
+	    
+        // Checks if a client has disconnected ungracefully
+        // Adapted from: http://stackoverflow.com/questions/722240/instantly-detect-client-disconnection-from-server-socket
+        private static bool _isDisconnected(TcpClient client)
+        {
+            try
+            {
+                Socket s = client.Client;
+                return s.Poll(10 * 1000, SelectMode.SelectRead) && (s.Available == 0);
+            }
+            catch(SocketException)
+            {
+                // We got a socket error, assume it's disconnected
+                return true;
+            }
+        }
     }
 }
