@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NKMCore;
 using UnityEngine;
 
 namespace Unity
@@ -35,6 +36,7 @@ namespace Unity
 		public string PlayerName2;
 		public string PlayerName3;
 		public string PlayerName4;
+		public GameOptions Options;
 
 		//Do not add items to this list from the other classes
 		private readonly Dictionary<string, int> _dropdownSettings = new Dictionary<string, int>();

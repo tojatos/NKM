@@ -6,10 +6,13 @@ using System.Linq;
 using Mono.Data.Sqlite;
 using NKMCore;
 using NKMCore.Hex;
+using NKMCore.Templates;
 using Unity.Hex;
 using Unity.UI;
 using Unity.UI.CharacterUI;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace Unity.Managers
 {
@@ -18,6 +21,7 @@ namespace Unity.Managers
 		public bool IsTesting;
 		public ISelectable Selectable = new SpriteSelectSelectable();
 		private static IDbConnection _conn;
+		private static Game _game;
 		private static SessionSettings S => SessionSettings.Instance;
 		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
 		private static int GetPlayersNumber() => S.GetDropdownSetting(SettingType.NumberOfPlayers) + 2;
@@ -48,10 +52,60 @@ namespace Unity.Managers
 		private void Awake()
 		{
 			_conn = new SqliteConnection("Data source=" + Application.streamingAssetsPath + "/database.db");
+			if (ClientManager.Instance.Client != null)
+			{
+				S.Options.Connection = _conn;
+				_game = new Game(S.Options);
+				return;
+			}
 			if(IsTesting)
                 PrepareAndStartTestingGame();
 			else
                 PrepareAndStartGame();
+		}
+
+		private void Start()
+		{
+			if (ClientManager.Instance.Client != null)
+			{
+                InitializeMessageHandler();
+			}
+		}
+		private void InitializeMessageHandler()
+		{
+			Client client = ClientManager.Instance.Client;
+			client.OnMessage += HandleMessageFromServerInMainThread;
+			UnityAction<Scene, LoadSceneMode> removeMessageHandler = null;
+			removeMessageHandler = (scene, mode) =>
+			{
+				client.OnMessage -= HandleMessageFromServerInMainThread;
+				SceneManager.sceneLoaded -= removeMessageHandler;
+			};
+			SceneManager.sceneLoaded += removeMessageHandler;
+		}
+
+		private void HandleMessageFromServerInMainThread(string message) 
+			=> AsyncCaller.Instance.Call(() => HandleMessageFromServer(message));
+
+		private void HandleMessageFromServer(string message)
+		{
+			string[] data = message.Split(' ');
+			string header = data[0];
+			string content = string.Empty;
+			if (data.Length > 1) content = data[1];
+			switch (header)
+			{
+				case "BLINDPICK":
+					_game.Selectable.Select(new SelectableProperties<Character>
+                    {
+                        ToSelect = Game.GetMockCharacters(),
+                        ConstraintOfSelection = list => list.Count == 4,
+                        OnSelectFinish = list => ClientManager.Instance.Client.SendMessage("PICKED " + string.Join(";", list.Select(c => c.ID))),
+                        SelectionTitle = $"Wybór postaci",
+                    });
+					
+					break;
+			}
 		}
 
 		private void PrepareAndStartTestingGame()
@@ -79,10 +133,14 @@ namespace Unity.Managers
                 Connection = _conn,
                 LogFilePath = GetLogFilePath(),
             });
+
             var game = new Game(preparer.GameOptions);
-            
             await preparer.BindCharactersToPlayers(game);
-            
+            RunGame(game);
+		}
+
+		private static void RunGame(Game game)
+		{
             InitUI(game);
 
             game.Start();

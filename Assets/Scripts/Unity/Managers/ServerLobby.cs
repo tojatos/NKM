@@ -31,6 +31,7 @@ namespace Unity.Managers
 			_asyncCaller = AsyncCaller.Instance;
 			_client = ClientManager.Instance.Client;
 			_options = new GameOptions {Players = new List<GamePlayer>()};
+			_options.Selectable = new SpriteSelectSelectable();
 
 			Map.text = "";
 			ClearPlayerList();
@@ -112,7 +113,17 @@ namespace Unity.Managers
 					_readyStates[playerIndex] = readyState;
 					RefreshList();
 					break;
+				case "GAMEINIT":
+					LoadGame();
+					break;
 			}
+		}
+
+		private void LoadGame()
+		{
+			SessionSettings S = SessionSettings.Instance;
+			S.Options = _options;
+            SceneManager.LoadScene(Scenes.MainGame);
 		}
 
 		private void InitPlayers(string content)
