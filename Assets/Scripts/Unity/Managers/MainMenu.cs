@@ -6,18 +6,18 @@ namespace Unity.Managers
 {
 	public class MainMenu : MonoBehaviour
 	{
-		public Button SingleplayerButton;
-		public Button MultiplayerButton;
+		public Button LocalButton;
+		public Button OnlineButton;
 		public Button OptionsButton;
 		public Button ExitButton;
 		private void Awake()
 		{
-			SingleplayerButton.onClick.AddListener(()=>
+			LocalButton.onClick.AddListener(()=>
 			{
 //				SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 0);
 				SceneManager.LoadScene(Scenes.PreGameOptions);
 			});
-			MultiplayerButton.onClick.AddListener(()=>
+			OnlineButton.onClick.AddListener(()=>
 			{
 //				SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 1);
 				SceneManager.LoadScene(Scenes.ServerList);
@@ -25,7 +25,7 @@ namespace Unity.Managers
 			OptionsButton.onClick.AddListener(Options.Instance.Show);
 			ExitButton.onClick.AddListener(Application.Quit);
 			
-			SingleplayerButton.Select();
+			LocalButton.Select();
 		}
 	}
 }

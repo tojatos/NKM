@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Unity.Extensions;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace Unity.Managers
@@ -17,7 +16,6 @@ namespace Unity.Managers
 	    public void Show()
 	    {
 		    gameObject.Show();
-		    Debug.Log(S.PlayerName1);
 		    PlayerName1.text = S.PlayerName1;
 		    PlayerName2.text = S.PlayerName2;
 		    PlayerName3.text = S.PlayerName3;

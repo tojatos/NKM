@@ -6,7 +6,6 @@
     <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.3.1/build/netcoreapp1.0/xunit.runner.utility.netcoreapp10.dll" t="Include" />
     <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.3.1/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
-      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.Tests" t="IncludeRecursive">
         <e p="Assembly-CSharp.Tests.csproj" t="IncludeRecursive" />
         <e p="CharacterTests.cs" t="Include" />
@@ -30,353 +29,372 @@
           </e>
         </e>
       </e>
-      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
-      <e p="Assets/Editor" t="Include">
-        <e p="BuildManagament.cs" t="Include" />
-        <e p="CustomAssetImporter.cs" t="Include" />
-        <e p="HexCoordinatesDrawer.cs" t="Include" />
-      </e>
-      <e p="Assets/Scripts" t="Include">
-        <e p="NKMCore" t="Include">
-          <e p="Abilities" t="Include">
-            <e p="Aqua" t="Include">
-              <e p="NaturesBeauty.cs" t="Include" />
-              <e p="Purification.cs" t="Include" />
-              <e p="Resurrection.cs" t="Include" />
+      <e p="Assets" t="Include">
+        <e p="Editor" t="Include">
+          <e p="BuildManagament.cs" t="Include" />
+          <e p="CustomAssetImporter.cs" t="Include" />
+          <e p="HexCoordinatesDrawer.cs" t="Include" />
+        </e>
+        <e p="EffectExamples" t="Include">
+          <e p="Editor" t="Include">
+            <e p="PackageManagerAssembly" t="Include">
+              <e p="PackageImportList.txt" t="Include" />
             </e>
-            <e p="Asuna" t="Include">
-              <e p="Dash.cs" t="Include" />
-              <e p="LambentLight.cs" t="Include" />
-              <e p="SwordDance.cs" t="Include" />
+          </e>
+          <e p="Shared" t="Include">
+            <e p="Scripts" t="Include">
+              <e p="DecalDestroyer.cs" t="Include" />
+              <e p="ExtinguishableFire.cs" t="Include" />
+              <e p="GunAim.cs" t="Include" />
+              <e p="GunShoot.cs" t="Include" />
+              <e p="ParticleCollision.cs" t="Include" />
+              <e p="ParticleExamples.cs" t="Include" />
+              <e p="ParticleMenu.cs" t="Include" />
             </e>
-            <e p="Bezimienni" t="Include">
-              <e p="AceInTheHole.cs" t="Include" />
-              <e p="Castling.cs" t="Include" />
-              <e p="Check.cs" t="Include" />
+            <e p="Shaders" t="Include">
+              <e p="SurfaceShader_VC.shader" t="Include" />
             </e>
-            <e p="Carmel Wilhelmina" t="Include">
-              <e p="BindingRibbons.cs" t="Include" />
-              <e p="ManipulatorOfObjects.cs" t="Include" />
-              <e p="TiamatsIntervention.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="NKMCore" t="Include">
+            <e p="Abilities" t="Include">
+              <e p="Aqua" t="Include">
+                <e p="NaturesBeauty.cs" t="Include" />
+                <e p="Purification.cs" t="Include" />
+                <e p="Resurrection.cs" t="Include" />
+              </e>
+              <e p="Asuna" t="Include">
+                <e p="Dash.cs" t="Include" />
+                <e p="LambentLight.cs" t="Include" />
+                <e p="SwordDance.cs" t="Include" />
+              </e>
+              <e p="Bezimienni" t="Include">
+                <e p="AceInTheHole.cs" t="Include" />
+                <e p="Castling.cs" t="Include" />
+                <e p="Check.cs" t="Include" />
+              </e>
+              <e p="Carmel Wilhelmina" t="Include">
+                <e p="BindingRibbons.cs" t="Include" />
+                <e p="ManipulatorOfObjects.cs" t="Include" />
+                <e p="TiamatsIntervention.cs" t="Include" />
+              </e>
+              <e p="Crona" t="Include">
+                <e p="BlackBlood.cs" t="Include" />
+                <e p="Infection.cs" t="Include" />
+                <e p="ScreechAlpha.cs" t="Include" />
+              </e>
+              <e p="Dekomori Sanae" t="Include">
+                <e p="MjolnirDestinyImpulse.cs" t="Include" />
+                <e p="MjolnirHammer.cs" t="Include" />
+                <e p="WickedEyesServant.cs" t="Include" />
+              </e>
+              <e p="Derieri" t="Include">
+                <e p="ComboBuilder.cs" t="Include" />
+                <e p="ComboStar.cs" t="Include" />
+                <e p="GapCloser.cs" t="Include" />
+              </e>
+              <e p="Ditto" t="Include">
+                <e p="Transform.cs" t="Include" />
+              </e>
+              <e p="Empty.cs" t="Include" />
+              <e p="Gilgamesh" t="Include">
+                <e p="Enkidu.cs" t="Include" />
+                <e p="GateOfBabylon.cs" t="Include" />
+                <e p="TheFistHero.cs" t="Include" />
+              </e>
+              <e p="Hanekawa Tsubasa" t="Include">
+                <e p="BloodKiss.cs" t="Include" />
+                <e p="CurseOfTheBlackCat.cs" t="Include" />
+                <e p="NineLives.cs" t="Include" />
+              </e>
+              <e p="Hecate" t="Include">
+                <e p="AsterYo.cs" t="Include" />
+                <e p="ItadakiNoKura.cs" t="Include" />
+                <e p="SonzaiNoChikara.cs" t="Include" />
+              </e>
+              <e p="Itsuka Kotori" t="Include">
+                <e p="CamaelMegiddo.cs" t="Include" />
+                <e p="Conflagration.cs" t="Include" />
+                <e p="ElohimGibor.cs" t="Include" />
+              </e>
+              <e p="Kirito" t="Include">
+                <e p="Parry.cs" t="Include" />
+                <e p="StarburstStream.cs" t="Include" />
+                <e p="Switch.cs" t="Include" />
+              </e>
+              <e p="Kurogane Ikki" t="Include">
+                <e p="IttoShura.cs" t="Include" />
+                <e p="RakudaiKishi.cs" t="Include" />
+                <e p="SwordSteal.cs" t="Include" />
+              </e>
+              <e p="Levi" t="Include">
+                <e p="AwakenedPower.cs" t="Include" />
+                <e p="SwordVieldingTechnique.cs" t="Include" />
+                <e p="VerticalManeuveringEquipment.cs" t="Include" />
+              </e>
+              <e p="Liones Elizabeth" t="Include">
+                <e p="ImmenseHealingPowers.cs" t="Include" />
+                <e p="Invigorate.cs" t="Include" />
+                <e p="PowerOfTheGoddess.cs" t="Include" />
+              </e>
+              <e p="Llenn" t="Include">
+                <e p="GrenadeThrow.cs" t="Include" />
+                <e p="PChan.cs" t="Include" />
+                <e p="RunItDown.cs" t="Include" />
+              </e>
+              <e p="Monkey D. Luffy" t="Include">
+                <e p="GearSecond.cs" t="Include" />
+                <e p="GomuGomuNoMi.cs" t="Include" />
+                <e p="GomuNingen.cs" t="Include" />
+              </e>
+              <e p="Nibutani Shinka" t="Include">
+                <e p="FairyOfLove.cs" t="Include" />
+                <e p="Mabinogion.cs" t="Include" />
+                <e p="SummerBreeze.cs" t="Include" />
+              </e>
+              <e p="Ochaco Uraraka" t="Include">
+                <e p="ReducedWeight.cs" t="Include" />
+                <e p="SkillRelease.cs" t="Include" />
+                <e p="ZeroGravity.cs" t="Include" />
+              </e>
+              <e p="Ononoki Yotsugi" t="Include">
+                <e p="UnlimitedRulebook.cs" t="Include" />
+                <e p="UrbCrunch.cs" t="Include" />
+                <e p="UrbRefuge.cs" t="Include" />
+              </e>
+              <e p="Rem" t="Include">
+                <e p="AlHuma.cs" t="Include" />
+                <e p="Confession.cs" t="Include" />
+                <e p="DemonicForm.cs" t="Include" />
+                <e p="MorgensternHit.cs" t="Include" />
+              </e>
+              <e p="Roronoa Zoro" t="Include">
+                <e p="HyakuHachiPoundHou.cs" t="Include" />
+                <e p="LackOfOrientation.cs" t="Include" />
+                <e p="OniGiri.cs" t="Include" />
+              </e>
+              <e p="Ryuko Matoi" t="Include">
+                <e p="FiberDecapitation.cs" t="Include" />
+                <e p="KamuiSenketsu.cs" t="Include" />
+                <e p="ScissorBlade.cs" t="Include" />
+              </e>
+              <e p="Sabrac" t="Include">
+                <e p="AkaneiroNoDotou.cs" t="Include" />
+                <e p="Fuiuchi.cs" t="Include" />
+                <e p="Stigma.cs" t="Include" />
+              </e>
+              <e p="Sakai Yuuji" t="Include">
+                <e p="DragonTail.cs" t="Include" />
+                <e p="Grammatica.cs" t="Include" />
+                <e p="ReijiMaigo.cs" t="Include" />
+              </e>
+              <e p="Satou Kazuma" t="Include">
+                <e p="DrainTouch.cs" t="Include" />
+                <e p="HighLuck.cs" t="Include" />
+                <e p="Steal.cs" t="Include" />
+              </e>
+              <e p="Shana" t="Include">
+                <e p="GurenNoOodachi.cs" t="Include" />
+                <e p="GurenNoSouyoku.cs" t="Include" />
+                <e p="KessenOgi.cs" t="Include" />
+              </e>
+              <e p="Sinon" t="Include">
+                <e p="PreciseShot.cs" t="Include" />
+                <e p="SnipersSight.cs" t="Include" />
+                <e p="TacticalEscape.cs" t="Include" />
+              </e>
+              <e p="Yasaka Mahiro" t="Include">
+                <e p="SharpenedForks.cs" t="Include" />
+                <e p="TerrorOfTheUniverse.cs" t="Include" />
+                <e p="WhenTheyCry.cs" t="Include" />
+              </e>
+              <e p="Yoshino" t="Include">
+                <e p="HowlingBlizzard.cs" t="Include" />
+                <e p="TheHermit.cs" t="Include" />
+                <e p="Zadkiel.cs" t="Include" />
+              </e>
             </e>
-            <e p="Crona" t="Include">
+            <e p="AbilityFactory.cs" t="Include" />
+            <e p="AbilityUseValidator.cs" t="Include" />
+            <e p="Action.cs" t="Include" />
+            <e p="Active.cs" t="Include" />
+            <e p="AirSelection.cs" t="Include" />
+            <e p="CharacterFactory.cs" t="Include" />
+            <e p="Console.cs" t="Include" />
+            <e p="Damage.cs" t="Include" />
+            <e p="Delegates.cs" t="Include" />
+            <e p="Effects" t="Include">
               <e p="BlackBlood.cs" t="Include" />
-              <e p="Infection.cs" t="Include" />
-              <e p="ScreechAlpha.cs" t="Include" />
+              <e p="Disarm.cs" t="Include" />
+              <e p="Empty.cs" t="Include" />
+              <e p="Flying.cs" t="Include" />
+              <e p="Ground.cs" t="Include" />
+              <e p="HPDrain.cs" t="Include" />
+              <e p="HealOverTime.cs" t="Include" />
+              <e p="IncreasablePoison.cs" t="Include" />
+              <e p="PassiveBuff.cs" t="Include" />
+              <e p="Poison.cs" t="Include" />
+              <e p="Silent.cs" t="Include" />
+              <e p="Snare.cs" t="Include" />
+              <e p="StatModifier.cs" t="Include" />
+              <e p="Stun.cs" t="Include" />
+              <e p="TakenDamageModifier.cs" t="Include" />
             </e>
-            <e p="Dekomori Sanae" t="Include">
-              <e p="MjolnirDestinyImpulse.cs" t="Include" />
-              <e p="MjolnirHammer.cs" t="Include" />
-              <e p="WickedEyesServant.cs" t="Include" />
+            <e p="Extensions" t="Include">
+              <e p="Async.cs" t="Include" />
+              <e p="CharacterExtension.cs" t="Include" />
+              <e p="GameLog.cs" t="Include" />
+              <e p="NKMObject.cs" t="Include" />
+              <e p="Predicates.cs" t="Include" />
+              <e p="Sqlite.cs" t="Include" />
+              <e p="SystemGeneric.cs" t="Include" />
             </e>
-            <e p="Derieri" t="Include">
-              <e p="ComboBuilder.cs" t="Include" />
-              <e p="ComboStar.cs" t="Include" />
-              <e p="GapCloser.cs" t="Include" />
-            </e>
-            <e p="Ditto" t="Include">
-              <e p="Transform.cs" t="Include" />
-            </e>
-            <e p="Empty.cs" t="Include" />
-            <e p="Gilgamesh" t="Include">
-              <e p="Enkidu.cs" t="Include" />
-              <e p="GateOfBabylon.cs" t="Include" />
-              <e p="TheFistHero.cs" t="Include" />
-            </e>
-            <e p="Hanekawa Tsubasa" t="Include">
-              <e p="BloodKiss.cs" t="Include" />
-              <e p="CurseOfTheBlackCat.cs" t="Include" />
-              <e p="NineLives.cs" t="Include" />
-            </e>
-            <e p="Hecate" t="Include">
-              <e p="AsterYo.cs" t="Include" />
-              <e p="ItadakiNoKura.cs" t="Include" />
-              <e p="SonzaiNoChikara.cs" t="Include" />
-            </e>
-            <e p="Itsuka Kotori" t="Include">
-              <e p="CamaelMegiddo.cs" t="Include" />
-              <e p="Conflagration.cs" t="Include" />
-              <e p="ElohimGibor.cs" t="Include" />
-            </e>
-            <e p="Kirito" t="Include">
-              <e p="Parry.cs" t="Include" />
-              <e p="StarburstStream.cs" t="Include" />
-              <e p="Switch.cs" t="Include" />
-            </e>
-            <e p="Kurogane Ikki" t="Include">
-              <e p="IttoShura.cs" t="Include" />
-              <e p="RakudaiKishi.cs" t="Include" />
-              <e p="SwordSteal.cs" t="Include" />
-            </e>
-            <e p="Levi" t="Include">
-              <e p="AwakenedPower.cs" t="Include" />
-              <e p="SwordVieldingTechnique.cs" t="Include" />
-              <e p="VerticalManeuveringEquipment.cs" t="Include" />
-            </e>
-            <e p="Liones Elizabeth" t="Include">
-              <e p="ImmenseHealingPowers.cs" t="Include" />
-              <e p="ImmenseHealingPowers.cs.meta" t="Include" />
-              <e p="Invigorate.cs" t="Include" />
-              <e p="Invigorate.cs.meta" t="Include" />
-              <e p="PowerOfTheGoddess.cs" t="Include" />
-              <e p="PowerOfTheGoddess.cs.meta" t="Include" />
-            </e>
-            <e p="Llenn" t="Include">
-              <e p="GrenadeThrow.cs" t="Include" />
-              <e p="PChan.cs" t="Include" />
-              <e p="RunItDown.cs" t="Include" />
-            </e>
-            <e p="Monkey D. Luffy" t="Include">
-              <e p="GearSecond.cs" t="Include" />
-              <e p="GomuGomuNoMi.cs" t="Include" />
-              <e p="GomuNingen.cs" t="Include" />
-            </e>
-            <e p="Nibutani Shinka" t="Include">
-              <e p="FairyOfLove.cs" t="Include" />
-              <e p="Mabinogion.cs" t="Include" />
-              <e p="SummerBreeze.cs" t="Include" />
-            </e>
-            <e p="Ochaco Uraraka" t="Include">
-              <e p="ReducedWeight.cs" t="Include" />
-              <e p="SkillRelease.cs" t="Include" />
-              <e p="ZeroGravity.cs" t="Include" />
-            </e>
-            <e p="Ononoki Yotsugi" t="Include">
-              <e p="UnlimitedRulebook.cs" t="Include" />
-              <e p="UrbCrunch.cs" t="Include" />
-              <e p="UrbRefuge.cs" t="Include" />
-            </e>
-            <e p="Rem" t="Include">
-              <e p="AlHuma.cs" t="Include" />
-              <e p="Confession.cs" t="Include" />
-              <e p="DemonicForm.cs" t="Include" />
-              <e p="MorgensternHit.cs" t="Include" />
-            </e>
-            <e p="Roronoa Zoro" t="Include">
-              <e p="HyakuHachiPoundHou.cs" t="Include" />
-              <e p="LackOfOrientation.cs" t="Include" />
-              <e p="OniGiri.cs" t="Include" />
-            </e>
-            <e p="Ryuko Matoi" t="Include">
-              <e p="FiberDecapitation.cs" t="Include" />
-              <e p="KamuiSenketsu.cs" t="Include" />
-              <e p="ScissorBlade.cs" t="Include" />
-            </e>
-            <e p="Sabrac" t="Include">
-              <e p="AkaneiroNoDotou.cs" t="Include" />
-              <e p="Fuiuchi.cs" t="Include" />
-              <e p="Stigma.cs" t="Include" />
-            </e>
-            <e p="Sakai Yuuji" t="Include">
-              <e p="DragonTail.cs" t="Include" />
-              <e p="Grammatica.cs" t="Include" />
-              <e p="ReijiMaigo.cs" t="Include" />
-            </e>
-            <e p="Satou Kazuma" t="Include">
-              <e p="DrainTouch.cs" t="Include" />
-              <e p="HighLuck.cs" t="Include" />
-              <e p="Steal.cs" t="Include" />
-            </e>
-            <e p="Shana" t="Include">
-              <e p="GurenNoOodachi.cs" t="Include" />
-              <e p="GurenNoSouyoku.cs" t="Include" />
-              <e p="KessenOgi.cs" t="Include" />
-            </e>
-            <e p="Sinon" t="Include">
-              <e p="PreciseShot.cs" t="Include" />
-              <e p="SnipersSight.cs" t="Include" />
-              <e p="TacticalEscape.cs" t="Include" />
-            </e>
-            <e p="Yasaka Mahiro" t="Include">
-              <e p="SharpenedForks.cs" t="Include" />
-              <e p="TerrorOfTheUniverse.cs" t="Include" />
-              <e p="WhenTheyCry.cs" t="Include" />
-            </e>
-            <e p="Yoshino" t="Include">
-              <e p="HowlingBlizzard.cs" t="Include" />
-              <e p="TheHermit.cs" t="Include" />
-              <e p="Zadkiel.cs" t="Include" />
-            </e>
-          </e>
-          <e p="AbilityFactory.cs" t="Include" />
-          <e p="AbilityUseValidator.cs" t="Include" />
-          <e p="Action.cs" t="Include" />
-          <e p="Active.cs" t="Include" />
-          <e p="AirSelection.cs" t="Include" />
-          <e p="CharacterFactory.cs" t="Include" />
-          <e p="Console.cs" t="Include" />
-          <e p="Damage.cs" t="Include" />
-          <e p="Delegates.cs" t="Include" />
-          <e p="Effects" t="Include">
-            <e p="BlackBlood.cs" t="Include" />
-            <e p="Disarm.cs" t="Include" />
-            <e p="Empty.cs" t="Include" />
-            <e p="Flying.cs" t="Include" />
-            <e p="Ground.cs" t="Include" />
-            <e p="HPDrain.cs" t="Include" />
-            <e p="HealOverTime.cs" t="Include" />
-            <e p="IncreasablePoison.cs" t="Include" />
-            <e p="PassiveBuff.cs" t="Include" />
-            <e p="Poison.cs" t="Include" />
-            <e p="Silent.cs" t="Include" />
-            <e p="Snare.cs" t="Include" />
-            <e p="StatModifier.cs" t="Include" />
-            <e p="Stun.cs" t="Include" />
-            <e p="TakenDamageModifier.cs" t="Include" />
-          </e>
-          <e p="Extensions" t="Include">
-            <e p="Async.cs" t="Include" />
-            <e p="CharacterExtension.cs" t="Include" />
+            <e p="Game.cs" t="Include" />
             <e p="GameLog.cs" t="Include" />
-            <e p="NKMObject.cs" t="Include" />
-            <e p="Predicates.cs" t="Include" />
-            <e p="Sqlite.cs" t="Include" />
-            <e p="SystemGeneric.cs" t="Include" />
+            <e p="GameOptions.cs" t="Include" />
+            <e p="GameOptionsValidator.cs" t="Include" />
+            <e p="GamePlayer.cs" t="Include" />
+            <e p="GamePreparer.cs" t="Include" />
+            <e p="GamePreparerOptions.cs" t="Include" />
+            <e p="Hex" t="Include">
+              <e p="HexCell.cs" t="Include" />
+              <e p="HexCoordinates.cs" t="Include" />
+              <e p="HexDirection.cs" t="Include" />
+              <e p="HexMap.cs" t="Include" />
+              <e p="SearchFlags.cs" t="Include" />
+            </e>
+            <e p="HexCellEffects" t="Include">
+              <e p="Conflagration.cs" t="Include" />
+              <e p="HowlingBlizzard.cs" t="Include" />
+            </e>
+            <e p="HexMapSerializer.cs" t="Include" />
+            <e p="ISelectable.cs" t="Include" />
+            <e p="Instantiator.cs" t="Include" />
+            <e p="NKMID.cs" t="Include" />
+            <e p="NKMRandom.cs" t="Include" />
+            <e p="Phase.cs" t="Include" />
+            <e p="PickType.cs" t="Include" />
+            <e p="SelectableProperties.cs" t="Include" />
+            <e p="Stat.cs" t="Include" />
+            <e p="Templates" t="Include">
+              <e p="Ability.cs" t="Include" />
+              <e p="Character.cs" t="Include" />
+              <e p="Effect.cs" t="Include" />
+              <e p="EnableableAbility.cs" t="Include" />
+              <e p="FightType.cs" t="Include" />
+              <e p="HexCellEffect.cs" t="Include" />
+              <e p="IClickable.cs" t="Include" />
+              <e p="IEnableable.cs" t="Include" />
+              <e p="IEnchantable.cs" t="Include" />
+              <e p="IRunnable.cs" t="Include" />
+              <e p="IUseableCell.cs" t="Include" />
+              <e p="IUseableCellList.cs" t="Include" />
+              <e p="IUseableCharacter.cs" t="Include" />
+            </e>
+            <e p="Turn.cs" t="Include" />
           </e>
-          <e p="Game.cs" t="Include" />
-          <e p="GameLog.cs" t="Include" />
-          <e p="GameOptions.cs" t="Include" />
-          <e p="GameOptionsValidator.cs" t="Include" />
-          <e p="GamePlayer.cs" t="Include" />
-          <e p="GamePreparer.cs" t="Include" />
-          <e p="GamePreparerOptions.cs" t="Include" />
-          <e p="Hex" t="Include">
-            <e p="HexCell.cs" t="Include" />
-            <e p="HexCoordinates.cs" t="Include" />
-            <e p="HexDirection.cs" t="Include" />
-            <e p="HexMap.cs" t="Include" />
-            <e p="SearchFlags.cs" t="Include" />
-          </e>
-          <e p="HexCellEffects" t="Include">
-            <e p="Conflagration.cs" t="Include" />
-            <e p="HowlingBlizzard.cs" t="Include" />
-          </e>
-          <e p="HexMapSerializer.cs" t="Include" />
-          <e p="ISelectable.cs" t="Include" />
-          <e p="Instantiator.cs" t="Include" />
-          <e p="NKMID.cs" t="Include" />
-          <e p="NKMRandom.cs" t="Include" />
-          <e p="Phase.cs" t="Include" />
-          <e p="PickType.cs" t="Include" />
-          <e p="SelectableProperties.cs" t="Include" />
-          <e p="Stat.cs" t="Include" />
-          <e p="Templates" t="Include">
-            <e p="Ability.cs" t="Include" />
-            <e p="Character.cs" t="Include" />
-            <e p="Effect.cs" t="Include" />
-            <e p="EnableableAbility.cs" t="Include" />
-            <e p="FightType.cs" t="Include" />
-            <e p="HexCellEffect.cs" t="Include" />
-            <e p="IClickable.cs" t="Include" />
-            <e p="IEnableable.cs" t="Include" />
-            <e p="IEnchantable.cs" t="Include" />
-            <e p="IRunnable.cs" t="Include" />
-            <e p="IUseableCell.cs" t="Include" />
-            <e p="IUseableCellList.cs" t="Include" />
-            <e p="IUseableCharacter.cs" t="Include" />
-          </e>
-          <e p="Turn.cs" t="Include" />
-        </e>
-        <e p="Unity" t="Include">
-          <e p="AnimationPlayer.cs" t="Include" />
-          <e p="Animations" t="Include">
-            <e p="AsterYo.cs" t="Include" />
-            <e p="CamaelMegiddo.cs" t="Include" />
-            <e p="Destroy.cs" t="Include" />
-            <e p="GrammaticaFinish.cs" t="Include" />
-            <e p="GrammaticaStart.cs" t="Include" />
-            <e p="ItadakiNoKura.cs" t="Include" />
-            <e p="MoveTo.cs" t="Include" />
-            <e p="NkmAnimation.cs" t="Include" />
-            <e p="NkmAnimationPart.cs" t="Include" />
-            <e p="Parts" t="Include">
-              <e p="AsterYoFinish.cs" t="Include" />
-              <e p="AsterYoStart.cs" t="Include" />
-              <e p="CamaelMegiddoStart.cs" t="Include" />
+          <e p="Unity" t="Include">
+            <e p="AnimationPlayer.cs" t="Include" />
+            <e p="Animations" t="Include">
+              <e p="AsterYo.cs" t="Include" />
+              <e p="CamaelMegiddo.cs" t="Include" />
               <e p="Destroy.cs" t="Include" />
-              <e p="DestroyParticles.cs" t="Include" />
-              <e p="FloatingInfoFinish.cs" t="Include" />
-              <e p="FloatingInfoStart.cs" t="Include" />
-              <e p="Hide.cs" t="Include" />
-              <e p="ItadakiNoKuraFinish.cs" t="Include" />
-              <e p="ItadakiNoKuraStart.cs" t="Include" />
-              <e p="MoveToPosition.cs" t="Include" />
-              <e p="Show.cs" t="Include" />
-              <e p="TeleportToPosition.cs" t="Include" />
-              <e p="Wait.cs" t="Include" />
+              <e p="GrammaticaFinish.cs" t="Include" />
+              <e p="GrammaticaStart.cs" t="Include" />
+              <e p="ItadakiNoKura.cs" t="Include" />
+              <e p="MoveTo.cs" t="Include" />
+              <e p="NkmAnimation.cs" t="Include" />
+              <e p="NkmAnimationPart.cs" t="Include" />
+              <e p="Parts" t="Include">
+                <e p="AsterYoFinish.cs" t="Include" />
+                <e p="AsterYoStart.cs" t="Include" />
+                <e p="CamaelMegiddoStart.cs" t="Include" />
+                <e p="Destroy.cs" t="Include" />
+                <e p="DestroyParticles.cs" t="Include" />
+                <e p="FloatingInfoFinish.cs" t="Include" />
+                <e p="FloatingInfoStart.cs" t="Include" />
+                <e p="Hide.cs" t="Include" />
+                <e p="ItadakiNoKuraFinish.cs" t="Include" />
+                <e p="ItadakiNoKuraStart.cs" t="Include" />
+                <e p="MoveToPosition.cs" t="Include" />
+                <e p="Show.cs" t="Include" />
+                <e p="TeleportToPosition.cs" t="Include" />
+                <e p="Wait.cs" t="Include" />
+              </e>
+              <e p="ShowInfo.cs" t="Include" />
+              <e p="Tilt.cs" t="Include" />
             </e>
-            <e p="ShowInfo.cs" t="Include" />
-            <e p="Tilt.cs" t="Include" />
-          </e>
-          <e p="ColorToTileType.cs" t="Include" />
-          <e p="ConsoleDrawer.cs" t="Include" />
-          <e p="CreatableBackgroundCamera.cs" t="Include" />
-          <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
-          <e p="Extensions" t="Include">
-            <e p="Hex.cs" t="Include" />
+            <e p="ColorToTileType.cs" t="Include" />
+            <e p="ConsoleDrawer.cs" t="Include" />
+            <e p="CreatableBackgroundCamera.cs" t="Include" />
+            <e p="CreatableSingletonMonoBehaviour.cs" t="Include" />
+            <e p="Extensions" t="Include">
+              <e p="Hex.cs" t="Include" />
+              <e p="Tooltip.cs" t="Include" />
+              <e p="UnityGameObject.cs" t="Include" />
+            </e>
+            <e p="Hex" t="Include">
+              <e p="DrawnHexCell.cs" t="Include" />
+              <e p="HexMapDrawer.cs" t="Include" />
+              <e p="HexMapFactory.cs" t="Include" />
+              <e p="HexMapScriptable.cs" t="Include" />
+              <e p="HexMesh.cs" t="Include" />
+              <e p="HexMetrics.cs" t="Include" />
+            </e>
+            <e p="HighlightColor.cs" t="Include" />
+            <e p="Highlights.cs" t="Include" />
+            <e p="IsRaycastValid.cs" t="Include" />
+            <e p="MainCameraController.cs" t="Include" />
+            <e p="Managers" t="Include">
+              <e p="AsyncCaller.cs" t="Include" />
+              <e p="Client.cs" t="Include" />
+              <e p="ClientManager.cs" t="Include" />
+              <e p="GameStarter.cs" t="Include" />
+              <e p="MainMenu.cs" t="Include" />
+              <e p="MusicManager.cs" t="Include" />
+              <e p="Options.cs" t="Include" />
+              <e p="PreGameOptions.cs" t="Include" />
+              <e p="ServerList.cs" t="Include" />
+              <e p="ServerLobby.cs" t="Include" />
+              <e p="ShortcutManager.cs" t="Include" />
+              <e p="SpriteSelectSelectable.cs" t="Include" />
+            </e>
+            <e p="PlayerPrefsX.cs" t="Include" />
+            <e p="Scenes.cs" t="Include" />
+            <e p="SessionSettings.cs" t="Include" />
+            <e p="SingletonMonoBehaviour.cs" t="Include" />
+            <e p="Spawner.cs" t="Include" />
+            <e p="SpriteSelect.cs" t="Include" />
+            <e p="Stuff.cs" t="Include" />
             <e p="Tooltip.cs" t="Include" />
-            <e p="UnityGameObject.cs" t="Include" />
-          </e>
-          <e p="Hex" t="Include">
-            <e p="DrawnHexCell.cs" t="Include" />
-            <e p="HexMapDrawer.cs" t="Include" />
-            <e p="HexMapFactory.cs" t="Include" />
-            <e p="HexMapScriptable.cs" t="Include" />
-            <e p="HexMesh.cs" t="Include" />
-            <e p="HexMetrics.cs" t="Include" />
-          </e>
-          <e p="HighlightColor.cs" t="Include" />
-          <e p="Highlights.cs" t="Include" />
-          <e p="IsRaycastValid.cs" t="Include" />
-          <e p="MainCameraController.cs" t="Include" />
-          <e p="Managers" t="Include">
-            <e p="AsyncCaller.cs" t="Include" />
-            <e p="Client.cs" t="Include" />
-            <e p="ClientManager.cs" t="Include" />
-            <e p="GameStarter.cs" t="Include" />
-            <e p="MainMenu.cs" t="Include" />
-            <e p="MusicManager.cs" t="Include" />
-            <e p="Options.cs" t="Include" />
-            <e p="PreGameOptions.cs" t="Include" />
-            <e p="ServerList.cs" t="Include" />
-            <e p="ServerLobby.cs" t="Include" />
-            <e p="ShortcutManager.cs" t="Include" />
-            <e p="SpriteSelectSelectable.cs" t="Include" />
-          </e>
-          <e p="PlayerPrefsX.cs" t="Include" />
-          <e p="Scenes.cs" t="Include" />
-          <e p="SessionSettings.cs" t="Include" />
-          <e p="SingletonMonoBehaviour.cs" t="Include" />
-          <e p="Spawner.cs" t="Include" />
-          <e p="SpriteSelect.cs" t="Include" />
-          <e p="Stuff.cs" t="Include" />
-          <e p="Tooltip.cs" t="Include" />
-          <e p="UI" t="Include">
-            <e p="CharacterUI" t="Include">
-              <e p="Abilities.cs" t="Include" />
-              <e p="Effects.cs" t="Include" />
-              <e p="Face.cs" t="Include" />
-              <e p="Info.cs" t="Include" />
-              <e p="MainHPBar.cs" t="Include" />
-              <e p="Stats.cs" t="Include" />
+            <e p="UI" t="Include">
+              <e p="CharacterUI" t="Include">
+                <e p="Abilities.cs" t="Include" />
+                <e p="Effects.cs" t="Include" />
+                <e p="Face.cs" t="Include" />
+                <e p="Info.cs" t="Include" />
+                <e p="MainHPBar.cs" t="Include" />
+                <e p="Stats.cs" t="Include" />
+              </e>
+              <e p="HexCellUI" t="Include">
+                <e p="Effects.cs" t="Include" />
+                <e p="HexImage.cs" t="Include" />
+              </e>
+              <e p="Replay.cs" t="Include" />
+              <e p="UIManager.cs" t="Include" />
+              <e p="Victory.cs" t="Include" />
             </e>
-            <e p="HexCellUI" t="Include">
-              <e p="Effects.cs" t="Include" />
-              <e p="HexImage.cs" t="Include" />
-            </e>
-            <e p="Replay.cs" t="Include" />
-            <e p="UIManager.cs" t="Include" />
-            <e p="Victory.cs" t="Include" />
           </e>
         </e>
+        <e p="VertexColors.shader" t="Include" />
+        <e p="testing_characters.txt" t="Include" />
       </e>
-      <e p="Assets/VertexColors.shader" t="Include" />
-      <e p="Library" t="ExcludeRecursive" />
+      <e p="NKM.Editor.csproj" t="IncludeRecursive" />
+      <e p="NKM.csproj" t="IncludeRecursive" />
       <e p="NKM.sln" t="IncludeFlat" />
-      <e p="Temp" t="ExcludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-      </e>
-      <e p="obj" t="ExcludeRecursive" />
+      <e p="Temp/UnityVS_bin/Debug" t="ExcludeRecursive" />
+      <e p="Temp/UnityVS_obj/Debug" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
     </e>
   </component>

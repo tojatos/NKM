@@ -16,6 +16,7 @@ namespace Unity.Managers
 	    private NetworkStream _msgStream;
 	    private bool _running;
         private bool _clientRequestedDisconnect;
+	    public bool IsConnected => !_isDisconnected(_client);
 
 	    public void TryConnecting(string hostname, int port)
 	    {
@@ -91,6 +92,7 @@ namespace Unity.Managers
         // Adapted from: http://stackoverflow.com/questions/722240/instantly-detect-client-disconnection-from-server-socket
         private static bool _isDisconnected(TcpClient client)
         {
+	        if (client == null) return true;
             try
             {
                 Socket s = client.Client;

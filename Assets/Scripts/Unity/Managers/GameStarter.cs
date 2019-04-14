@@ -52,7 +52,7 @@ namespace Unity.Managers
 		private void Awake()
 		{
 			_conn = new SqliteConnection("Data source=" + Application.streamingAssetsPath + "/database.db");
-			if (ClientManager.Instance.Client != null)
+			if (ClientManager.Instance.Client.IsConnected)
 			{
 				S.Options.Connection = _conn;
 				_game = new Game(S.Options);
