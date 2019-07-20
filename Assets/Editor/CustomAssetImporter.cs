@@ -13,11 +13,11 @@ namespace Editor
 			var importer = assetImporter as TextureImporter;
 			if (assetPath.Contains("Sprites"))
 			{
-			ImportSprite(importer);
+				ImportSprite(importer);
 			}
 			if (assetPath.Contains("Maps"))
 			{
-			ImportMap(importer);
+				ImportMap(importer);
 			}
 		}
 
