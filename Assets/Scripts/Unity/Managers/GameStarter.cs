@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Mono.Data.Sqlite;
 using NKMCore;
+using NKMCore.Extensions;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Hex;
@@ -16,8 +17,9 @@ using UnityEngine.SceneManagement;
 
 namespace Unity.Managers
 {
-	public class GameStarter : SingletonMonoBehaviour<GameStarter>
+    public class GameStarter : SingletonMonoBehaviour<GameStarter>
 	{
+		private string dbPath = $"{Application.streamingAssetsPath}/database.db";
 		public bool IsTesting;
 		public ISelectable Selectable = new SpriteSelectSelectable();
 		private static IDbConnection _conn;
@@ -40,18 +42,17 @@ namespace Unity.Managers
 		{
 			if (IsTesting)
 				return HexMapFactory.FromScriptable(Stuff.Maps.Single(m => m.Map.name == "TestMap"));
-			
-            int mapIndex = S.GetDropdownSetting(SettingType.SelectedMapIndex);
-            HexMapScriptable mapScriptable = Stuff.Maps[mapIndex];
-			
-            return HexMapFactory.FromScriptable(mapScriptable);
+
+			int mapIndex = S.GetDropdownSetting(SettingType.SelectedMapIndex);
+			HexMapScriptable mapScriptable = Stuff.Maps[mapIndex];
+			return HexMapFactory.FromScriptable(mapScriptable);
 		}
 
 		private static bool BansAreEnabled => S.GetDropdownSetting(SettingType.AreBansEnabled) == 1;
 
 		private void Awake()
 		{
-			_conn = new SqliteConnection("Data source=" + Application.streamingAssetsPath + "/database.db");
+			_conn = new SqliteConnection($"Data source={dbPath}");
 			if (ClientManager.Instance.Client.IsConnected)
 			{
 				S.Options.Connection = _conn;
@@ -84,7 +85,7 @@ namespace Unity.Managers
 			SceneManager.sceneLoaded += removeMessageHandler;
 		}
 
-		private void HandleMessageFromServerInMainThread(string message) 
+		private void HandleMessageFromServerInMainThread(string message)
 			=> AsyncCaller.Instance.Call(() => HandleMessageFromServer(message));
 
 		private void HandleMessageFromServer(string message)
@@ -93,6 +94,7 @@ namespace Unity.Managers
 			string header = data[0];
 			string content = string.Empty;
 			if (data.Length > 1) content = data[1];
+            Debug.Log(header);
 			switch (header)
 			{
 				case "BLINDPICK":
@@ -103,7 +105,25 @@ namespace Unity.Managers
                         OnSelectFinish = list => ClientManager.Instance.Client.SendMessage("PICKED " + string.Join(";", list.Select(c => c.ID))),
                         SelectionTitle = $"Wybór postaci",
                     });
-					
+					break;
+				case "ALLRANDOM":
+					void AllRandom()
+					{
+						List<string> allCharacterNames = _conn.GetCharacterNames();
+						_game.Players.ForEach(p =>
+						{
+							while (p.Characters.Count != 1)
+							{
+								string randomCharacterName = allCharacterNames.GetRandom();
+								allCharacterNames.Remove(randomCharacterName);
+								p.Characters.Add(CharacterFactory.Create(_game, randomCharacterName));
+							}
+						});
+					}
+
+					AllRandom();
+                    RunGame(_game);
+                    //PrepareAndStartTestingGame();
 					break;
 			}
 		}
@@ -111,11 +131,11 @@ namespace Unity.Managers
 		private void PrepareAndStartTestingGame()
 		{
             var game = new Game(GetTestingGameOptions());
-			
+
             BindTestingCharactersToPlayers(game);
-			
+
             InitUI(game);
-			
+
 			game.Start();
 		}
 		private async void PrepareAndStartGame()

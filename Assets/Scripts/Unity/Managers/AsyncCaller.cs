@@ -14,7 +14,7 @@ namespace Unity.Managers
 
 		private void Update()
 		{
-			while (_toInvoke.Count > 0)
+			if (_toInvoke.Count > 0)
 				_toInvoke.Dequeue().Invoke();
 		}
 
