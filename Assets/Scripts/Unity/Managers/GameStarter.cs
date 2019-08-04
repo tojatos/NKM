@@ -109,24 +109,8 @@ namespace Unity.Managers
                     });
 					break;
 				case "ALLRANDOM":
-					//void AllRandom()
-					//{
-					//	List<string> allCharacterNames = _conn.GetCharacterNames();
-					//	_game.Players.ForEach(p =>
-					//	{
-					//		while (p.Characters.Count != 1)
-					//		{
-					//			NKMRandom nkmRandom = new NKMRandom();
-					//			string randomCharacterName = allCharacterNames.GetNKMRandom(nkmRandom); //TODO: GetNKMRandom (inject NKMRandom into the game)
-					//			allCharacterNames.Remove(randomCharacterName);
-					//			p.Characters.Add(CharacterFactory.Create(_game, randomCharacterName));
-					//		}
-					//	});
-					//}
-
-					//AllRandom();
 					ClientManager.Instance.Client.SendMessage("GET_CHARACTERS");
-                    //PrepareAndStartTestingGame();
+					_game.Options.PlaceAllCharactersRandomlyAtStart = true;
 					break;
 				case "SET_CHARACTERS":
 					AttachCharactersFromServer(_game, content);
