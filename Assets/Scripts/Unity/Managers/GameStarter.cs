@@ -11,6 +11,7 @@ using NKMCore.Templates;
 using Unity.Hex;
 using Unity.UI;
 using Unity.UI.CharacterUI;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -28,6 +29,7 @@ namespace Unity.Managers
 		private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
 		private static int GetPlayersNumber() => S.GetDropdownSetting(SettingType.NumberOfPlayers) + 2;
 		private static int GetBansNumber() => S.GetDropdownSetting(SettingType.BansNumber) + 1;
+		private static bool IsClientConnected => ClientManager.Instance.Client.IsConnected;
 		private static PickType GetPickType()
 		{
 			switch (S.GetDropdownSetting(SettingType.PickType))
@@ -53,7 +55,7 @@ namespace Unity.Managers
 		private void Awake()
 		{
 			_conn = new SqliteConnection($"Data source={dbPath}");
-			if (ClientManager.Instance.Client.IsConnected)
+			if (IsClientConnected)
 			{
 				S.Options.Connection = _conn;
 				_game = new Game(S.Options);
@@ -90,7 +92,7 @@ namespace Unity.Managers
 
 		private void HandleMessageFromServer(string message)
 		{
-			string[] data = message.Split(' ');
+            string[] data = message.Split(new []{' '}, 2);
 			string header = data[0];
 			string content = string.Empty;
 			if (data.Length > 1) content = data[1];
@@ -107,25 +109,47 @@ namespace Unity.Managers
                     });
 					break;
 				case "ALLRANDOM":
-					void AllRandom()
-					{
-						List<string> allCharacterNames = _conn.GetCharacterNames();
-						_game.Players.ForEach(p =>
-						{
-							while (p.Characters.Count != 1)
-							{
-								string randomCharacterName = allCharacterNames.GetRandom();
-								allCharacterNames.Remove(randomCharacterName);
-								p.Characters.Add(CharacterFactory.Create(_game, randomCharacterName));
-							}
-						});
-					}
+					//void AllRandom()
+					//{
+					//	List<string> allCharacterNames = _conn.GetCharacterNames();
+					//	_game.Players.ForEach(p =>
+					//	{
+					//		while (p.Characters.Count != 1)
+					//		{
+					//			NKMRandom nkmRandom = new NKMRandom();
+					//			string randomCharacterName = allCharacterNames.GetNKMRandom(nkmRandom); //TODO: GetNKMRandom (inject NKMRandom into the game)
+					//			allCharacterNames.Remove(randomCharacterName);
+					//			p.Characters.Add(CharacterFactory.Create(_game, randomCharacterName));
+					//		}
+					//	});
+					//}
 
-					AllRandom();
-                    RunGame(_game);
+					//AllRandom();
+					ClientManager.Instance.Client.SendMessage("GET_CHARACTERS");
                     //PrepareAndStartTestingGame();
 					break;
+				case "SET_CHARACTERS":
+					AttachCharactersFromServer(_game, content);
+                    RunGame(_game);
+					break;
 			}
+		}
+
+		private void AttachCharactersFromServer(Game game, string content)
+		{
+			List<(string playerName, List<string> characterNames)> playerNamesWithCharacters = content.Split(';').Select(x =>
+			{
+				string[] data = x.Split(':');
+				string playerName = data[0];
+				List<string> characterNames = data.Skip(1).ToList();
+				return (playerName, characterNames);
+			}).ToList();
+			playerNamesWithCharacters.ForEach(c =>
+			{
+				game.Players.Find(p => p.Name == c.playerName).Characters.AddRange(c.characterNames.Select(x => CharacterFactory.Create(game, x)));
+			});
+			//instance.Game.Players.Select(p => (p.Name, p.Characters.Select(c => c.Name).ToList())).ToList();
+			//string msg = string.Join(";", playerNamesWithCharacters.Select(n => string.Join(":", n.Item1, string.Join(":", n.Item2))));
 		}
 
 		private void PrepareAndStartTestingGame()

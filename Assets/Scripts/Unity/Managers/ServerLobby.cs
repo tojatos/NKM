@@ -122,6 +122,7 @@ namespace Unity.Managers
 		private void LoadGame()
 		{
 			SessionSettings S = SessionSettings.Instance;
+			_options.Players = _players.Select(p => p.Value).ToList();
 			S.Options = _options;
             SceneManager.LoadScene(Scenes.MainGame);
 		}
