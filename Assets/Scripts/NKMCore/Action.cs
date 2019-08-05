@@ -18,6 +18,7 @@ namespace NKMCore
         }
 
         public event Delegates.String AfterAction;
+        public event Delegates.String MultiplayerAction;
         public void Make(string actionType, string[] args)//TODO
         {
             switch (actionType)
@@ -29,6 +30,10 @@ namespace NKMCore
                 case Types.TakeAction:
                     break;
                 case Types.BasicMove:
+                    Character characterToMove = _game.Characters.First(c => c.Name == args[0]);
+                    List<HexCell> cellsToMove = args.Skip(1)
+                        .Select(coords => _game.HexMap.Cells.First(c => c.Coordinates.ToString() == coords)).ToList();
+                    BasicMove(characterToMove, cellsToMove, true);
                     break;
                 case Types.BasicAttack:
                     break;
@@ -61,8 +66,13 @@ namespace NKMCore
             AfterAction?.Invoke(Types.TakeAction);
         }
 
-        public void BasicMove(Character character, List<HexCell> cellPath)
+        public void BasicMove(Character character, List<HexCell> cellPath, bool force = false)
         {
+            if (_game.Options.Type == GameType.Multiplayer && !force)
+            {
+                MultiplayerAction?.Invoke($"ACTION {Types.BasicMove};{character.Name}:{string.Join(":", cellPath.Select(c => c.Coordinates.ToString()))}");
+                return;
+            }
             character.TryToTakeTurn();
             character.BasicMove(cellPath);
             AfterAction?.Invoke(Types.BasicMove);
@@ -115,6 +125,7 @@ namespace NKMCore
             _game.Active.Deselect();
             AfterAction?.Invoke(Types.Deselect);
         }
+        
     
         public static class Types
         {
@@ -128,6 +139,7 @@ namespace NKMCore
             public const string CancelAbility = "CancelAbility";
             public const string Select = "Select";
             public const string Deselect = "Deselect";
+            public const string TouchCell = "TouchCell";
         }
     }
 }

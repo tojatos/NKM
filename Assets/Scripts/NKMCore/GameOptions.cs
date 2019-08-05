@@ -20,6 +20,7 @@ namespace NKMCore
 	{
 		Undefined,
 		Local,
-		Replay
+		Multiplayer,
+		Replay,
 	}
 }

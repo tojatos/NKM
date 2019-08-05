@@ -11,10 +11,12 @@ using NKMCore.Templates;
 using Unity.Hex;
 using Unity.UI;
 using Unity.UI.CharacterUI;
+using Unity.UI.HexCellUI;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Effects = Unity.UI.CharacterUI.Effects;
 
 namespace Unity.Managers
 {
@@ -114,7 +116,14 @@ namespace Unity.Managers
 					break;
 				case "SET_CHARACTERS":
 					AttachCharactersFromServer(_game, content);
+					_game.Options.Type = GameType.Multiplayer;
                     RunGame(_game);
+					break;
+				case "ACTION":
+					string[] actionData = content.Split(';');
+					string actionType = actionData[0];
+					string[] args = actionData[1].Split(':');
+					_game.Action.Make(actionType, args);
 					break;
 			}
 		}
@@ -132,8 +141,11 @@ namespace Unity.Managers
 			{
 				game.Players.Find(p => p.Name == c.playerName).Characters.AddRange(c.characterNames.Select(x => CharacterFactory.Create(game, x)));
 			});
-			//instance.Game.Players.Select(p => (p.Name, p.Characters.Select(c => c.Name).ToList())).ToList();
-			//string msg = string.Join(";", playerNamesWithCharacters.Select(n => string.Join(":", n.Item1, string.Join(":", n.Item2))));
+			//game.AfterCellSelect += cell =>
+			//	ClientManager.Instance.Client.SendMessage($"TOUCH_CELL {cell.Coordinates.ToString()}");
+			game.Action.MultiplayerAction += message =>
+				ClientManager.Instance.Client.SendMessage(message);
+
 		}
 
 		private void PrepareAndStartTestingGame()
@@ -195,6 +207,8 @@ namespace Unity.Managers
 			UI.CharacterUI.Abilities.Instance.Init(game);
 			Effects.Instance.Init(game);
 			Face.Instance.Init(game);
+			UI.HexCellUI.Effects.Instance.Init(game);
+			HexImage.Instance.Init(game);
 			Spawner.Instance.Init(game);
 
 			game.AfterAbilityInit += ability =>

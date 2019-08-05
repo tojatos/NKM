@@ -11,6 +11,7 @@ using NKMCore.HexCellEffects;
 using NKMCore.Templates;
 using Unity.Animations;
 using Unity.Extensions;
+using Unity.Managers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Action = NKMCore.Action;
@@ -106,6 +107,15 @@ namespace Unity.Hex
 			Active.AfterCharacterPlacePrepare += set => SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
 			Active.AfterCancelPlacingCharacter += () => RemoveHighlights();
 			Active.AfterClean += () => RemoveHighlights();
+			_game.AfterCellSelect += touchedCell =>
+			{
+				if (Active.SelectedCharacterToPlace != null) return;
+				if (Active.HexCells?.Contains(touchedCell) == true) return;
+				if (Active.AbilityToUse != null) return;
+				//possibility of highlighting with control pressed
+				if (!Input.GetKey(KeyCode.LeftControl)) RemoveHighlights();
+				if (touchedCell.IsEmpty) SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
+			};
 			_game.HexMap.AfterCellEffectCreate += effect =>
 			{
 				if (effect is Conflagration)
@@ -287,7 +297,7 @@ namespace Unity.Hex
 				if (IsPointerOverUiObject()) return; //Do not touch cells if mouse is over UI
 
 				HexCell cellPointed = CellPointed();
-				if (cellPointed != null) TouchCell(cellPointed);
+				if (cellPointed != null) _game.TouchCell(cellPointed);
 			}
 
 			if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
@@ -308,60 +318,7 @@ namespace Unity.Hex
 		public List<DrawnHexCell> SelectDrawnCells(IEnumerable<HexCell> cells) => cells.Select(SelectDrawnCell).ToList();
 		public DrawnHexCell SelectDrawnCell(HexCell cell) =>
 			Cells.FirstOrDefault(g => g.HexCell == cell);
-
 		
-		public event Delegates.Cell AfterCellSelect;
-		private void TouchCell(HexCell touchedCell)
-        {
-            Active.SelectedCell = touchedCell;
-	        AfterCellSelect?.Invoke(touchedCell);
-            if (Active.SelectedCharacterToPlace != null)
-            {
-	            if(!Active.GamePlayer.GetSpawnPoints(_game).Contains(touchedCell)) return;
-                Action.PlaceCharacter(Active.SelectedCharacterToPlace, touchedCell);
-	            if (Active.Phase.Number != 0) return;
-	            Active.Turn.Finish();
-            }
-            else if (Active.HexCells?.Contains(touchedCell) == true)
-            {
-                if (Active.AbilityToUse != null)
-                {
-	                //It is important to check in that order, in case ability uses multiple interfaces!
-	                if(Active.AbilityToUse is IUseableCharacter && !touchedCell.IsEmpty)
-		                Action.UseAbility((IUseableCharacter)Active.AbilityToUse, touchedCell.FirstCharacter);
-	                else if(Active.AbilityToUse is IUseableCell)
-		                Action.UseAbility((IUseableCell)Active.AbilityToUse, touchedCell);
-	                else if(Active.AbilityToUse is IUseableCellList)
-                        Action.UseAbility((IUseableCellList)Active.AbilityToUse, Active.AirSelection.IsEnabled ? Active.AirSelection.HexCells : Active.HexCells);
-                }
-                else if (Active.Character != null)
-                {
-                    if(!touchedCell.IsEmpty && Active.Character.CanBasicAttack(touchedCell.FirstCharacter))
-                        Action.BasicAttack(Active.Character, touchedCell.FirstCharacter);
-                    else if(touchedCell.IsFreeToStand && Active.Character.CanBasicMove(touchedCell) && Active.MoveCells.Last() == touchedCell)
-                        Action.BasicMove(Active.Character, Active.MoveCells);
-                }
-            }
-            else
-            {
-                if (Active.AbilityToUse != null)
-                {
-                    return;
-                }
-                //possibility of highlighting with control pressed
-                if (!Input.GetKey(KeyCode.LeftControl))
-                {
-                    RemoveHighlights();
-                }
-
-	            if (!touchedCell.IsEmpty) Action.Select(touchedCell.FirstCharacter);
-	            else
-	            {
-		            Action.Deselect();
-		            SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
-	            }
-            }
-        }
         public static bool IsPointerOverUiObject()
         {
             var eventDataCurrentPosition =

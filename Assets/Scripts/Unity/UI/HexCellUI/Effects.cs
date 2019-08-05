@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NKMCore;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Extensions;
-using Unity.Hex;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,11 +14,8 @@ namespace Unity.UI.HexCellUI
 		public GameObject HexEffectButtonPrefab;
 		private List<GameObject> Buttons { get; set; }
 
-		private void Awake()
-		{
-			Buttons = new List<GameObject>();
-			HexMapDrawer.Instance.AfterCellSelect += UpdateButtons;
-		}
+		private void Awake() => Buttons = new List<GameObject>();
+		public void Init(Game game) => game.AfterCellSelect += UpdateButtons;
 
 		public void UpdateButtons(HexCell selectedCell)
 		{
