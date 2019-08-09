@@ -24,7 +24,7 @@ namespace Unity.Managers
 		private Client _client;
 		private readonly Dictionary<int, GamePlayer> _players = new Dictionary<int, GamePlayer>();
 		private readonly Dictionary<int, bool> _readyStates = new Dictionary<int, bool>();
-		private int _numberOfPlayers;
+		private int _numberOfPlayers = -1;
 
 		private void Start()
 		{
@@ -35,11 +35,10 @@ namespace Unity.Managers
 
 			Map.text = "";
 			ClearPlayerList();
-			ReadyButton.onClick.AddListener(()=> _client.SendMessage("READY_CHANGE"));
+			ReadyButton.onClick.AddListener(() => _client.SendMessage("READY_CHANGE"));
 			
 			GameObject.FindGameObjectsWithTag("Back Button").ToList()
-				.ForEach(b => b.AddTrigger(EventTriggerType.PointerClick,
-				() => _client.Disconnect()));
+				.ForEach(b => b.AddTrigger(EventTriggerType.PointerClick, () => _client.Disconnect()));
 			InitializeMessageHandler();
 			ChangeSceneOnDisconnect();
 			AskServerForGameInfo();
@@ -153,6 +152,7 @@ namespace Unity.Managers
 			int index = int.Parse(s[0]);
 			string pName = s[1];
 			_players[index] = new GamePlayer {Name = pName};
+			_readyStates[index] = false;
 			RefreshList();
 		}
 
@@ -160,8 +160,9 @@ namespace Unity.Managers
 		private void ClearPlayerList() => PlayersGameObject.transform.Clear();
 		private void RefreshList()
 		{
+			if (_numberOfPlayers == -1) return;
 			ClearPlayerList();
-			for (int i = 0; i < _numberOfPlayers; i++)
+			for (var i = 0; i < _numberOfPlayers; i++)
 			{
 				if(!_players.ContainsKey(i)) CreateEmptyPlayer();
 				else CreatePlayer(i);
