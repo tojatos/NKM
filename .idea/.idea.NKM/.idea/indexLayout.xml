@@ -16,6 +16,7 @@
       <Path>Builds</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
+      <Path>Temp</Path>
       <Path>docs</Path>
       <Path>obj</Path>
     </explicitExcludes>
