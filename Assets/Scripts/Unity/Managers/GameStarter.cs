@@ -54,6 +54,7 @@ namespace Unity.Managers
 		private void Awake()
 		{
 			_conn = new SqliteConnection($"Data source={_dbPath}");
+			if(IsClientConnected) return;
 			if(IsTesting)
                 PrepareAndStartTestingGame();
 			else
