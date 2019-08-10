@@ -12,7 +12,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -165,10 +166,14 @@
     <Compile Include="Assets\Scripts\NKMCore\Action.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Active.cs" />
     <Compile Include="Assets\Scripts\NKMCore\AirSelection.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\AllRandom.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\BlindPick.cs" />
     <Compile Include="Assets\Scripts\NKMCore\CharacterFactory.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\CharacterPick.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Console.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Damage.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Delegates.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\DraftPick.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Effects\BlackBlood.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Effects\Disarm.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Effects\Empty.cs" />
@@ -193,11 +198,11 @@
     <Compile Include="Assets\Scripts\NKMCore\Extensions\SystemGeneric.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Game.cs" />
     <Compile Include="Assets\Scripts\NKMCore\GameLog.cs" />
-    <Compile Include="Assets\Scripts\NKMCore\GameOptions.cs" />
-    <Compile Include="Assets\Scripts\NKMCore\GameOptionsValidator.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\GameDependencies.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\GameDependenciesValidator.cs" />
     <Compile Include="Assets\Scripts\NKMCore\GamePlayer.cs" />
     <Compile Include="Assets\Scripts\NKMCore\GamePreparer.cs" />
-    <Compile Include="Assets\Scripts\NKMCore\GamePreparerOptions.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\GamePreparerDependencies.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexCell.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexCoordinates.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexDirection.cs" />
@@ -904,9 +909,6 @@
     </Reference>
     <Reference Include="UnityScript.Lang">
       <HintPath>/home/tojatos/Unity/Hub/Editor/2019.2.0b9/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/UnityScript.Lang.dll</HintPath>
-    </Reference>
-    <Reference Include="Boo.Lang">
-      <HintPath>/home/tojatos/Unity/Hub/Editor/2019.2.0b9/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

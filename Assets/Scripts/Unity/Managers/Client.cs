@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using NKMCore;
@@ -98,10 +99,13 @@ namespace Unity.Managers
                 Socket s = client.Client;
                 return s.Poll(10 * 1000, SelectMode.SelectRead) && (s.Available == 0);
             }
-            catch(SocketException)
+            catch(Exception ex)
             {
-                // We got a socket error, assume it's disconnected
-                return true;
+                // We got a socket or disposed error, assume it's disconnected
+	            if(ex is ObjectDisposedException || ex is SocketException)
+                    return true;
+	            
+	            throw;
             }
         }
     }

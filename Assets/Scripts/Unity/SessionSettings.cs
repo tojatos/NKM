@@ -36,7 +36,7 @@ namespace Unity
 		public string PlayerName2;
 		public string PlayerName3;
 		public string PlayerName4;
-		public GameOptions Options;
+		public GameDependencies Dependencies;
 
 		//Do not add items to this list from the other classes
 		private readonly Dictionary<string, int> _dropdownSettings = new Dictionary<string, int>();

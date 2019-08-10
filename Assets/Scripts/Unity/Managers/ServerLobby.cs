@@ -19,7 +19,7 @@ namespace Unity.Managers
 		public GameObject PlayersGameObject;
 		public Text Map;
 		
-		private GameOptions _options;
+		private GameDependencies _dependencies;
 		private AsyncCaller _asyncCaller;
 		private Client _client;
 		private readonly Dictionary<int, GamePlayer> _players = new Dictionary<int, GamePlayer>();
@@ -30,8 +30,8 @@ namespace Unity.Managers
 		{
 			_asyncCaller = AsyncCaller.Instance;
 			_client = ClientManager.Instance.Client;
-			_options = new GameOptions {Players = new List<GamePlayer>()};
-			_options.Selectable = new SpriteSelectSelectable();
+			_dependencies = new GameDependencies {Players = new List<GamePlayer>()};
+			_dependencies.Selectable = new SpriteSelectSelectable();
 
 			Map.text = "";
 			ClearPlayerList();
@@ -121,8 +121,8 @@ namespace Unity.Managers
 		private void LoadGame()
 		{
 			SessionSettings S = SessionSettings.Instance;
-			_options.Players = _players.OrderBy(p => p.Key).Select(p => p.Value).ToList();
-			S.Options = _options;
+			_dependencies.Players = _players.OrderBy(p => p.Key).Select(p => p.Value).ToList();
+			S.Dependencies = _dependencies;
             SceneManager.LoadScene(Scenes.MainGame);
 		}
 
@@ -142,7 +142,7 @@ namespace Unity.Managers
 
 		private void HandleMapname(string content)
 		{
-			_options.HexMap = HexMapFactory.FromScriptable(Stuff.Maps.First(m => m.name == content));
+			_dependencies.HexMap = HexMapFactory.FromScriptable(Stuff.Maps.First(m => m.name == content));
 			Map.text = content;
 		}
 

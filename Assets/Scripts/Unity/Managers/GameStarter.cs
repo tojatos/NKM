@@ -59,8 +59,8 @@ namespace Unity.Managers
 			_conn = new SqliteConnection($"Data source={dbPath}");
 			if (IsClientConnected)
 			{
-				S.Options.Connection = _conn;
-				_game = new Game(S.Options);
+				S.Dependencies.Connection = _conn;
+				_game = new Game(S.Dependencies);
 				return;
 			}
 			if(IsTesting)
@@ -112,11 +112,11 @@ namespace Unity.Managers
 					break;
 				case "ALLRANDOM":
 					ClientManager.Instance.Client.SendMessage("GET_CHARACTERS");
-					_game.Options.PlaceAllCharactersRandomlyAtStart = true;
+					//_game.Options.PlaceAllCharactersRandomlyAtStart = true;
 					break;
 				case "SET_CHARACTERS":
 					AttachCharactersFromServer(_game, content);
-					_game.Options.Type = GameType.Multiplayer;
+					_game.Dependencies.Type = GameType.Multiplayer;
                     RunGame(_game);
 					break;
 				case "ACTION":
@@ -154,13 +154,11 @@ namespace Unity.Managers
 
             BindTestingCharactersToPlayers(game);
 
-            InitUI(game);
-
-			game.Start();
+            RunGame(game);
 		}
 		private async void PrepareAndStartGame()
 		{
-            var preparer = new GamePreparer(new GamePreparerOptions
+            var preparer = new GamePreparer(new GamePreparerDependencies
             {
                 NumberOfPlayers = GetPlayersNumber(),
                 NumberOfCharactersPerPlayer = GetCharactersPerPlayerNumber(),
@@ -174,8 +172,7 @@ namespace Unity.Managers
                 LogFilePath = GetLogFilePath(),
             });
 
-            var game = new Game(preparer.GameOptions);
-            await preparer.BindCharactersToPlayers(game);
+            Game game = await preparer.CreateGame();
             RunGame(game);
 		}
 
@@ -234,7 +231,7 @@ namespace Unity.Managers
                     .Select(c => CharacterFactory.Create(game, c)));
             }
 		}
-		private GameOptions GetTestingGameOptions()
+		private GameDependencies GetTestingGameOptions()
 		{
             string testingCharactersFile = File.ReadAllText(Application.dataPath + Path.DirectorySeparatorChar + "testing_characters.txt").TrimEnd();
 			string[][] charactersGrouped = testingCharactersFile.Split(new[] {"\n\n"}, StringSplitOptions.None).Select(s => s.Split('\n')).ToArray();
@@ -244,7 +241,7 @@ namespace Unity.Managers
 					Name = playerNames[i % playerNames.Length],
 				})
 				.ToList();
-			var gameOptions = new GameOptions
+			var gameOptions = new GameDependencies
 			{
 				HexMap = GetMap(),
 				Players = testingGamePlayers,
