@@ -16,19 +16,19 @@ namespace Unity.Managers
 	    public void Show()
 	    {
 		    gameObject.Show();
-		    PlayerName1.text = S.PlayerName1;
-		    PlayerName2.text = S.PlayerName2;
-		    PlayerName3.text = S.PlayerName3;
-		    PlayerName4.text = S.PlayerName4;
+		    PlayerName1.text = S.PlayerNames[0];
+		    PlayerName2.text = S.PlayerNames[1];
+		    PlayerName3.text = S.PlayerNames[2];
+		    PlayerName4.text = S.PlayerNames[3];
 	    }
 	    
         [UsedImplicitly]
 		public void SaveButtonClick()
         {
-	        S.PlayerName1 = PlayerName1.text;
-	        S.PlayerName2 = PlayerName2.text;
-	        S.PlayerName3 = PlayerName3.text;
-	        S.PlayerName4 = PlayerName4.text;
+	        S.PlayerNames[0] = PlayerName1.text;
+	        S.PlayerNames[1] = PlayerName2.text;
+	        S.PlayerNames[2] = PlayerName3.text;
+	        S.PlayerNames[3] = PlayerName4.text;
 			gameObject.Hide();
 		}
     }

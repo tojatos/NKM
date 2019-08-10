@@ -5,14 +5,11 @@ using System.IO;
 using System.Linq;
 using Mono.Data.Sqlite;
 using NKMCore;
-using NKMCore.Extensions;
 using NKMCore.Hex;
-using NKMCore.Templates;
 using Unity.Hex;
 using Unity.UI;
 using Unity.UI.CharacterUI;
 using Unity.UI.HexCellUI;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -22,7 +19,7 @@ namespace Unity.Managers
 {
     public class GameStarter : SingletonMonoBehaviour<GameStarter>
 	{
-		private string dbPath = $"{Application.streamingAssetsPath}/database.db";
+		private readonly string _dbPath = $"{Application.streamingAssetsPath}/database.db";
 		public bool IsTesting;
 		public ISelectable Selectable = new SpriteSelectSelectable();
 		private static IDbConnection _conn;
@@ -56,13 +53,7 @@ namespace Unity.Managers
 
 		private void Awake()
 		{
-			_conn = new SqliteConnection($"Data source={dbPath}");
-			if (IsClientConnected)
-			{
-				S.Dependencies.Connection = _conn;
-				_game = new Game(S.Dependencies);
-				return;
-			}
+			_conn = new SqliteConnection($"Data source={_dbPath}");
 			if(IsTesting)
                 PrepareAndStartTestingGame();
 			else
@@ -92,31 +83,28 @@ namespace Unity.Managers
 		private void HandleMessageFromServerInMainThread(string message)
 			=> AsyncCaller.Instance.Call(() => HandleMessageFromServer(message));
 
-		private void HandleMessageFromServer(string message)
+		private async void HandleMessageFromServer(string message)
 		{
             string[] data = message.Split(new []{' '}, 2);
 			string header = data[0];
 			string content = string.Empty;
 			if (data.Length > 1) content = data[1];
-            Debug.Log(header);
 			switch (header)
 			{
-				case "BLINDPICK":
-					_game.Selectable.Select(new SelectableProperties<Character>
-                    {
-                        ToSelect = Game.GetMockCharacters(),
-                        ConstraintOfSelection = list => list.Count == 4,
-                        OnSelectFinish = list => ClientManager.Instance.Client.SendMessage("PICKED " + string.Join(";", list.Select(c => c.ID))),
-                        SelectionTitle = $"Wybór postaci",
-                    });
-					break;
 				case "ALLRANDOM":
 					ClientManager.Instance.Client.SendMessage("GET_CHARACTERS");
-					//_game.Options.PlaceAllCharactersRandomlyAtStart = true;
+					S.Dependencies.PickType = PickType.AllRandom;
 					break;
 				case "SET_CHARACTERS":
+					if(_game != null) return;
+                    S.Dependencies.Connection = _conn;
+                    S.Dependencies.GameType = GameType.Multiplayer;
+                    var preparer = new GamePreparer(S.Dependencies);
+                    if (!preparer.AreOptionsValid)
+                        throw new Exception("Options are invalid!");
+                    _game = await preparer.CreateGame();
+					
 					AttachCharactersFromServer(_game, content);
-					_game.Dependencies.Type = GameType.Multiplayer;
                     RunGame(_game);
 					break;
 				case "ACTION":
@@ -161,6 +149,7 @@ namespace Unity.Managers
             var preparer = new GamePreparer(new GamePreparerDependencies
             {
                 NumberOfPlayers = GetPlayersNumber(),
+                PlayerNames = GetPlayerNames(),
                 NumberOfCharactersPerPlayer = GetCharactersPerPlayerNumber(),
                 BansEnabled = BansAreEnabled,
                 NumberOfBans = GetBansNumber(),
@@ -174,6 +163,18 @@ namespace Unity.Managers
 
             Game game = await preparer.CreateGame();
             RunGame(game);
+		}
+
+		private static List<string> GetPlayerNames()
+		{
+            var names = new List<string>();
+			for (var i = 0; i < GetPlayersNumber(); ++i)
+			{
+				names.Add(S.PlayerNames.ElementAtOrDefault(i) != null
+					? S.PlayerNames[i]
+					: $"Player {i + 1}");
+			}
+			return names;
 		}
 
 		private static void RunGame(Game game)

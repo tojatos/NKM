@@ -19,18 +19,19 @@ namespace Unity.Managers
 		public GameObject PlayersGameObject;
 		public Text Map;
 		
-		private GameDependencies _dependencies;
+		private GamePreparerDependencies _dependencies;
 		private AsyncCaller _asyncCaller;
 		private Client _client;
-		private readonly Dictionary<int, GamePlayer> _players = new Dictionary<int, GamePlayer>();
+		private readonly Dictionary<int, string> _players = new Dictionary<int, string>();
 		private readonly Dictionary<int, bool> _readyStates = new Dictionary<int, bool>();
-		private int _numberOfPlayers = -1;
+//		private int _numberOfPlayers = -1;
 
 		private void Start()
 		{
 			_asyncCaller = AsyncCaller.Instance;
 			_client = ClientManager.Instance.Client;
-			_dependencies = new GameDependencies {Players = new List<GamePlayer>()};
+//			_dependencies = new GameDependencies {Players = new List<GamePlayer>()};
+            _dependencies = new GamePreparerDependencies();
 			_dependencies.Selectable = new SpriteSelectSelectable();
 
 			Map.text = "";
@@ -86,7 +87,7 @@ namespace Unity.Managers
 			switch (header)
 			{
 				case "PLAYER_NUM":
-					_numberOfPlayers = int.Parse(content);
+					_dependencies.NumberOfPlayers = int.Parse(content);
 					RefreshList();
 					break;
 				case "PLAYERS":
@@ -96,7 +97,6 @@ namespace Unity.Managers
 				case "PLAYER_JOIN":
 					HandlePlayerJoin(content);
 					break;
-				
 				case "PLAYER_LEFT":
 					int index = int.Parse(content);
 					_players.Remove(index);
@@ -121,7 +121,7 @@ namespace Unity.Managers
 		private void LoadGame()
 		{
 			SessionSettings S = SessionSettings.Instance;
-			_dependencies.Players = _players.OrderBy(p => p.Key).Select(p => p.Value).ToList();
+			_dependencies.PlayerNames = _players.OrderBy(p => p.Key).Select(p => p.Value).ToList();
 			S.Dependencies = _dependencies;
             SceneManager.LoadScene(Scenes.MainGame);
 		}
@@ -135,7 +135,7 @@ namespace Unity.Managers
 				int playerIndex = int.Parse(playerData[0]);
 				string playerName = playerData[1];
 				bool isReady = bool.Parse(playerData[2]);
-				_players[playerIndex] = new GamePlayer {Name = playerName};
+				_players[playerIndex] = playerName;
 				_readyStates[playerIndex] = isReady;
 			}
 		}
@@ -151,7 +151,7 @@ namespace Unity.Managers
 			string[] s = content.Split(';');
 			int index = int.Parse(s[0]);
 			string pName = s[1];
-			_players[index] = new GamePlayer {Name = pName};
+			_players[index] = pName;
 			_readyStates[index] = false;
 			RefreshList();
 		}
@@ -160,9 +160,9 @@ namespace Unity.Managers
 		private void ClearPlayerList() => PlayersGameObject.transform.Clear();
 		private void RefreshList()
 		{
-			if (_numberOfPlayers == -1) return;
+			if (_dependencies.NumberOfPlayers <= 0) return;
 			ClearPlayerList();
-			for (var i = 0; i < _numberOfPlayers; i++)
+			for (var i = 0; i < _dependencies.NumberOfPlayers; i++)
 			{
 				if(!_players.ContainsKey(i)) CreateEmptyPlayer();
 				else CreatePlayer(i);
@@ -176,9 +176,8 @@ namespace Unity.Managers
 		}
 		private void CreatePlayer(int i)
 		{
-			GamePlayer player = _players[i];
 			GameObject g = Instantiate(Stuff.Prefabs.Find(p => p.name == "Player Info"), PlayersGameObject.transform);
-			g.transform.Find("Name").GetComponent<Text>().text = player.Name;
+			g.transform.Find("Name").GetComponent<Text>().text = _players[i];
 			g.transform.Find("Readiness").GetComponent<Text>().text = $"Ready: {(_readyStates[i] ? "<color=green>Yes</color>" : "<color=red>No</color>")}";
 		}
 	}

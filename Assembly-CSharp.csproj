@@ -218,6 +218,7 @@
     <Compile Include="Assets\Scripts\NKMCore\Phase.cs" />
     <Compile Include="Assets\Scripts\NKMCore\PickType.cs" />
     <Compile Include="Assets\Scripts\NKMCore\SelectableProperties.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\ServerPick.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Stat.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\Ability.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\Character.cs" />
