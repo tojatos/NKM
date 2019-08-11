@@ -111,7 +111,7 @@ namespace Unity.Managers
 				case "ACTION":
 					string[] actionData = content.Split(';');
 					string actionType = actionData[0];
-					string[] args = actionData[1].Split(':');
+					string[] args = actionData.Length > 1 ? actionData[1].Split(':') : Array.Empty<string>();
 					_game.Action.Make(actionType, args);
 					break;
 			}
