@@ -24,15 +24,12 @@ namespace Unity.Managers
 		private Client _client;
 		private readonly Dictionary<int, string> _players = new Dictionary<int, string>();
 		private readonly Dictionary<int, bool> _readyStates = new Dictionary<int, bool>();
-//		private int _numberOfPlayers = -1;
 
 		private void Start()
 		{
 			_asyncCaller = AsyncCaller.Instance;
 			_client = ClientManager.Instance.Client;
-//			_dependencies = new GameDependencies {Players = new List<GamePlayer>()};
             _dependencies = new GamePreparerDependencies();
-			_dependencies.Selectable = new SpriteSelectSelectable();
 
 			Map.text = "";
 			ClearPlayerList();
@@ -123,6 +120,7 @@ namespace Unity.Managers
 			SessionSettings S = SessionSettings.Instance;
 			_dependencies.PlayerNames = _players.OrderBy(p => p.Key).Select(p => p.Value).ToList();
 			S.Dependencies = _dependencies;
+			
             SceneManager.LoadScene(Scenes.MainGame);
 		}
 

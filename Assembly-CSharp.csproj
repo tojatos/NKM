@@ -217,6 +217,8 @@
     <Compile Include="Assets\Scripts\NKMCore\NKMRandom.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Phase.cs" />
     <Compile Include="Assets\Scripts\NKMCore\PickType.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\SelectableAction.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\SelectableManager.cs" />
     <Compile Include="Assets\Scripts\NKMCore\SelectableProperties.cs" />
     <Compile Include="Assets\Scripts\NKMCore\ServerPick.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Stat.cs" />
