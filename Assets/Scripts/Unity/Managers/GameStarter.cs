@@ -118,6 +118,7 @@ namespace Unity.Managers
                     S.Dependencies.GameType = GameType.Multiplayer;
                     S.Dependencies.SelectableManager = SelectableManager;
                     S.Dependencies.Selectable = _selectable;
+                    S.Dependencies.SelectableAction = _selectableAction;
                     var preparer = new GamePreparer(S.Dependencies);
                     if (!preparer.AreOptionsValid)
                         throw new Exception("Options are invalid!");

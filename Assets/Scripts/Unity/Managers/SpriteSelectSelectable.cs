@@ -3,23 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using NKMCore;
 using NKMCore.Templates;
-using Action = NKMCore.Action;
 
 namespace Unity.Managers
 {
     public class SpriteSelectSelectable : ISelectable
     {
-//        public void Select<T>(SelectableProperties<T> props)
-//        {
-//            if(typeof(T) == typeof(Character)) SpriteSelect.Instance.Open(props.ToSelect as List<Character>, () =>
-//            {
-//                List<Character> selectedObj = SpriteSelect.Instance.SelectedObjects;
-//                if (!props.ConstraintOfSelection(selectedObj as List<T>)) return;
-//                props.OnSelectFinish(selectedObj as List<T>);
-//
-//                SpriteSelect.Instance.Close();
-//            }, props.SelectionTitle, "Zakończ wybieranie" );
-//        }
         private readonly SelectableManager _manager;
         private SelectableAction _action;
 
