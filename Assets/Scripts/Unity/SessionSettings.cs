@@ -12,9 +12,12 @@ namespace Unity
 		private void Awake()
 		{
 			IsMuted = PlayerPrefsX.GetBool("IsMuted", false);
-			for (var i = 1; i <= 4; ++i) 
+			for (int i = 1; i <= 4; ++i)
 				PlayerNames.Add(PlayerPrefs.GetString($"PlayerName{i}", $"Player {i}"));
-		
+
+            Nickname = PlayerPrefs.GetString("Nickname", "");
+            SelectedIP = PlayerPrefs.GetString("SelectedIP");
+
 			AddDropdownSetting(SettingType.AreBansEnabled);
 			AddDropdownSetting(SettingType.NumberOfCharactersPerPlayer);
 			AddDropdownSetting(SettingType.NumberOfPlayers);
@@ -26,6 +29,9 @@ namespace Unity
 			_dropdownSettings.Add(settingType, PlayerPrefs.GetInt(settingType, defaultValue));
 
 		public bool IsMuted;
+		public string Nickname;
+		public string SelectedIP;
+
         public List<string> PlayerNames = new List<string>();
 		public GamePreparerDependencies Dependencies;
 
@@ -39,12 +45,15 @@ namespace Unity
 			foreach (KeyValuePair<string, int> keyValuePair in _dropdownSettings)
 				PlayerPrefs.SetInt(keyValuePair.Key, keyValuePair.Value);
 
+            PlayerPrefs.SetString("Nickname", Nickname);
+            PlayerPrefs.SetString("SelectedIP", SelectedIP);
 
 			PlayerPrefsX.SetBool("IsMuted", IsMuted);
-			
-			for (var i = 1; i <= 4; ++i) 
+
+			for (int i = 1; i <= 4; ++i)
 				PlayerPrefs.SetString($"PlayerName{i}", PlayerNames[i-1]);
 		}
+
 	}
 
 	public static class SettingType

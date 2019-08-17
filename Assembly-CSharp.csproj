@@ -292,6 +292,7 @@
     <Compile Include="Assets\Scripts\Unity\Managers\ShortcutManager.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\SpriteSelectSelectable.cs" />
     <Compile Include="Assets\Scripts\Unity\PlayerPrefsX.cs" />
+    <Compile Include="Assets\Scripts\Unity\Popup.cs" />
     <Compile Include="Assets\Scripts\Unity\Scenes.cs" />
     <Compile Include="Assets\Scripts\Unity\SessionSettings.cs" />
     <Compile Include="Assets\Scripts\Unity\SingletonMonoBehaviour.cs" />

@@ -15,16 +15,23 @@ namespace Unity.Managers
 		public InputField Nickname;
 		public Button AddServerButton;
 		public Button JoinServerButton;
-		public string SelectedIP;
+		private static string SelectedIP
+		{
+			get => SessionSettings.Instance.SelectedIP;
+			set => SessionSettings.Instance.SelectedIP = value;
+		}
+
 		public GameObject Servers;
 		private Client _client;
 		private AsyncCaller _asyncCaller;
 
 		private void Start()
 		{
+			Nickname.text = SessionSettings.Instance.Nickname;
+
 			_client = ClientManager.Instance.Client;
 			_asyncCaller = AsyncCaller.Instance;
-			
+
 			AddServerButton.onClick.AddListener(()=> {
 				if(AddServerName.text == "" || AddServerIP.text == "") return;
 				AddServerInfoToFile(AddServerName.text, AddServerIP.text);
@@ -35,13 +42,12 @@ namespace Unity.Managers
 				if(Nickname.text == "") return;
 				TryToJoinAServer(SelectedIP);
 			});
-			
+
 			RefreshList();
-			
+
 			InitializeMessageHandler();
 		}
-		
-		
+
 		private void InitializeMessageHandler()
 		{
 			_client.OnMessage += HandleMessageFromServerInMainThread;
@@ -53,19 +59,21 @@ namespace Unity.Managers
 			};
 			SceneManager.sceneLoaded += removeMessageHandler;
 		}
-		
-		private void HandleMessageFromServerInMainThread(string message) 
+
+		private void HandleMessageFromServerInMainThread(string message)
 			=> _asyncCaller.Call(() => HandleMessageFromServer(message));
 		private void HandleMessageFromServer(string message)
 		{
-			string[] data = message.Split(' ');
+			void ShowServerMessage(string msg) => Popup.Instance.Show("Server", msg);
+
+            string[] data = message.Split(new []{' '}, 2);
 			string header = data[0];
             string content = string.Empty;
 			if(data.Length > 1) content = data[1];
 			switch (header)
 			{
 				case "TOO_MANY_PLAYERS":
-					Debug.LogError("Too many players!");
+					ShowServerMessage("Too many players!");
 					_client.Disconnect();
 					break;
 				case "GET_NICKNAME":
@@ -74,22 +82,29 @@ namespace Unity.Managers
 				case "JOIN":
 					JoinLobby();
 					break;
+				case "REJECT":
+					ShowServerMessage(content);
+					_client.Disconnect();
+					break;
 			}
 		}
 
-		private static void JoinLobby() => SceneManager.LoadScene(Scenes.ServerLobby);
+		private void JoinLobby()
+		{
+			SessionSettings.Instance.Nickname = Nickname.text;
+			SceneManager.LoadScene(Scenes.ServerLobby);
+		}
 
 		private void Update()
 		{
 			JoinServerButton.ToggleIf(SelectedIP == "");
 		}
 
-		private void TryToJoinAServer(string selectedIP)
+		private static void TryToJoinAServer(string selectedIP)
 		{
 			string[] ipInfo = selectedIP.Split(':');
 			ClientManager.Instance.Client.TryConnecting(ipInfo[0], int.Parse(ipInfo[1]));
 		}
-
 
 		private void RefreshList()
 		{
@@ -124,7 +139,7 @@ namespace Unity.Managers
 			string serverListFilePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "Settings" +
 			                            Path.DirectorySeparatorChar + "server_list.txt";
 			// ReSharper disable once AssignNullToNotNullAttribute
-			Directory.CreateDirectory(Path.GetDirectoryName(serverListFilePath));	
+			Directory.CreateDirectory(Path.GetDirectoryName(serverListFilePath));
 			File.AppendAllLines(serverListFilePath, new []{serverName, ip, ""});
 		}
 	}

@@ -18,7 +18,7 @@ namespace Unity.Managers
 		public Button ReadyButton;
 		public GameObject PlayersGameObject;
 		public Text Map;
-		
+
 		private GamePreparerDependencies _dependencies;
 		private AsyncCaller _asyncCaller;
 		private Client _client;
@@ -34,7 +34,7 @@ namespace Unity.Managers
 			Map.text = "";
 			ClearPlayerList();
 			ReadyButton.onClick.AddListener(() => _client.SendMessage("READY_CHANGE"));
-			
+
 			GameObject.FindGameObjectsWithTag("Back Button").ToList()
 				.ForEach(b => b.AddTrigger(EventTriggerType.PointerClick, () => _client.Disconnect()));
 			InitializeMessageHandler();
@@ -42,10 +42,7 @@ namespace Unity.Managers
 			AskServerForGameInfo();
 		}
 
-		private void AskServerForGameInfo()
-		{
-			_client.SendMessage("GAME_INFO");
-		}
+		private void AskServerForGameInfo() => _client.SendMessage("GAME_INFO");
 
 		private void InitializeMessageHandler()
 		{
@@ -58,7 +55,7 @@ namespace Unity.Managers
 			};
 			SceneManager.sceneLoaded += removeMessageHandler;
 		}
-		
+
 		private void ChangeSceneOnDisconnect()
 		{
 			Delegates.Void onDisconnect = () => AsyncCaller.Instance.Call(ShortcutManager.Instance.LoadLastScene);
@@ -72,12 +69,12 @@ namespace Unity.Managers
 			SceneManager.sceneLoaded += removeTrigger;
 		}
 
-		private void HandleMessageFromServerInMainThread(string message) 
+		private void HandleMessageFromServerInMainThread(string message)
 			=> _asyncCaller.Call(() => HandleMessageFromServer(message));
 
 		private void HandleMessageFromServer(string message)
 		{
-			string[] data = message.Split(' ');
+            string[] data = message.Split(new []{' '}, 2);
 			string header = data[0];
             string content = string.Empty;
 			if(data.Length > 1) content = data[1];
@@ -120,7 +117,7 @@ namespace Unity.Managers
 			SessionSettings S = SessionSettings.Instance;
 			_dependencies.PlayerNames = _players.OrderBy(p => p.Key).Select(p => p.Value).ToList();
 			S.Dependencies = _dependencies;
-			
+
             SceneManager.LoadScene(Scenes.MainGame);
 		}
 
@@ -170,7 +167,7 @@ namespace Unity.Managers
 		private void CreateEmptyPlayer()
 		{
 			Instantiate(Stuff.Prefabs.Find(p => p.name == "Empty Player"), PlayersGameObject.transform);
-			
+
 		}
 		private void CreatePlayer(int i)
 		{
