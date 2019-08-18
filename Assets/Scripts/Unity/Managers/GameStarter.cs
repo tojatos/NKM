@@ -109,10 +109,12 @@ namespace Unity.Managers
             switch (header)
             {
                 case "ALLRANDOM":
+                {
                     ClientManager.Instance.Client.SendMessage("GET_CHARACTERS");
                     S.Dependencies.PickType = PickType.AllRandom;
-                    break;
+                } break;
                 case "SET_CHARACTERS":
+                {
                     if(_game != null) return;
                     S.Dependencies.Connection = _conn;
                     S.Dependencies.GameType = GameType.Multiplayer;
@@ -126,8 +128,9 @@ namespace Unity.Managers
 
                     AttachCharactersFromServer(_game, content);
                     RunGame(_game);
-                    break;
+                } break;
                 case "ACTION":
+                {
                     string[] actionData = content.Split(';');
                     string actionType = actionData[0];
                     string[] args = actionData.Length > 1 ? actionData[1].Split(':') : Array.Empty<string>();
@@ -135,7 +138,12 @@ namespace Unity.Managers
                         _selectableAction.Make(actionType, args);
                     else
                         _game.Action.Make(actionType, args);
-                    break;
+                } break;
+                case "NKMRANDOM":
+                {
+                    string[] d = content.Split(';');
+                    _game.Random.Set(d[0], int.Parse(d[1]));
+                } break;
             }
         }
 
