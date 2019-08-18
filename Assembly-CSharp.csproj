@@ -213,6 +213,7 @@
     <Compile Include="Assets\Scripts\NKMCore\SelectableAction.cs" />
     <Compile Include="Assets\Scripts\NKMCore\SelectableManager.cs" />
     <Compile Include="Assets\Scripts\NKMCore\SelectableProperties.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\SelectionConstraint.cs" />
     <Compile Include="Assets\Scripts\NKMCore\ServerPick.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Stat.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\Ability.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Assets\Scripts\Unity\SingletonMonoBehaviour.cs" />
     <Compile Include="Assets\Scripts\Unity\Spawner.cs" />
     <Compile Include="Assets\Scripts\Unity\SpriteSelect.cs" />
+    <Compile Include="Assets\Scripts\Unity\SpriteSelectProperties.cs" />
     <Compile Include="Assets\Scripts\Unity\Stuff.cs" />
     <Compile Include="Assets\Scripts\Unity\Tooltip.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\CharacterUI\Abilities.cs" />

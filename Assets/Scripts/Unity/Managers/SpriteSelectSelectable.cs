@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using NKMCore;
-using NKMCore.Templates;
 
 namespace Unity.Managers
 {
@@ -24,21 +21,15 @@ namespace Unity.Managers
         public void OpenSelectable(int selectableId)
         {
             SelectableProperties props = _manager.Get(selectableId);
-            switch (props.WhatIsSelected)
+            SpriteSelect.Instance.Open(new SpriteSelectProperties
             {
-                case SelectableProperties.Type.Character:
-                    List<Character> toPickFrom = Game.GetMockCharacters();
-                    if(GameStarter._game != null) toPickFrom.AddRange(GameStarter._game.Characters);
-                    SpriteSelect.Instance.Open(toPickFrom.FindAll(c => props.IdsToSelect.Contains(c.ID)),
-                        () =>
-                        {
-                            List<int> selectedIds = SpriteSelect.Instance.SelectedObjects.Select(c => c.ID).ToList();
-                            _action.CloseSelectable(selectableId, selectedIds);
-                        }, props.SelectionTitle, "Zakończ wybieranie");
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                WhatIsSelected = props.WhatIsSelected,
+                IdsToSelect = props.IdsToSelect,
+                SelectionTitle = props.SelectionTitle,
+                FinishSelectingButtonText = "Zakończ wybieranie",
+                OnSelectFinish = selectedIds => _action.CloseSelectable(selectableId, selectedIds),
+                Instant = props.Instant,
+            });
         }
 
         public void CloseSelectable(int selectableId, List<int> selectedIds)

@@ -1,50 +1,71 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NKMCore;
 using NKMCore.Templates;
 using Unity.Extensions;
+using Unity.Managers;
 using UnityEngine;
 using UnityEngine.UI;
-
-//using NKMObject = NKMObjects.Templates.NKMObject;
 
 namespace Unity
 {
 	public class SpriteSelect : SingletonMonoBehaviour<SpriteSelect>
 	{
-		private List<Character> _objectsToFill = new List<Character>();
-		public List<Character> SelectedObjects { get; } = new List<Character>();
 		public Button FinishSelectingButton;
 		public Text Title;
 		public GameObject SpriteObjectPrefab;
 		public GameObject Sprites;
 
-		public bool IsOpened => gameObject.transform.parent.gameObject.activeSelf;
+		private List<int> SelectedIds { get; } = new List<int>();
 
-		public void Open(IEnumerable<Character> objectsToFill, System.Action finishSelectingButtonClick, string title, string finishButtonText)
+		public void Open(SpriteSelectProperties props)
 		{
-			gameObject.transform.parent.gameObject.Show();
-			SelectedObjects.Clear();
-			Sprites.transform.Clear(); //Careful! Removes probably on the next frame
-			_objectsToFill = new List<Character>(objectsToFill);
-			_objectsToFill.ForEach(SpawnSpriteObject);
-			FinishSelectingButton.onClick.RemoveAllListeners();
-			FinishSelectingButton.onClick.AddListener(()=>finishSelectingButtonClick());
+			Clean();
 
-			Title.text = title;
-			FinishSelectingButton.GetComponentInChildren<Text>().text = finishButtonText;
+			GenerateSprites(props);
 
-			//select item if is the only one
-			Transform spritesTransform = Sprites.transform;
-			if (_objectsToFill.Count == 1) spritesTransform.GetComponentsInChildren<Button>()[spritesTransform.childCount-1].onClick.Invoke(); //get last button, because the others are not removed yet for some reason
+			Title.text = props.SelectionTitle;
+			FinishSelectingButton.onClick.AddListener(() => props.OnSelectFinish(SelectedIds));
+			FinishSelectingButton.GetComponentInChildren<Text>().text = props.FinishSelectingButtonText;
+			FinishSelectingButton.gameObject.SetActive(!props.Instant);
+
+			Show();
 		}
-		private void SpawnSpriteObject(Character o)
+
+        public void Close() => Hide();
+
+        private void Hide() => gameObject.transform.parent.gameObject.Hide();
+        private void Show() => gameObject.transform.parent.gameObject.Show();
+
+		private void GenerateSprites(SpriteSelectProperties props)
+		{
+			if (props.WhatIsSelected == SelectableProperties.Type.Character)
+			{
+				List<Character> toPickFrom = Game.GetMockCharacters();
+				if (GameStarter._game != null) toPickFrom.AddRange(GameStarter._game.Characters);
+
+				toPickFrom.FindAll(c => props.IdsToSelect.Contains(c.ID)).ForEach(c => SpawnSpriteObject(c, props.Instant));
+			}
+		}
+
+		private void Clean()
+		{
+			SelectedIds.Clear();
+			Sprites.transform.Clear(); //Careful! Removes probably on the next frame
+			FinishSelectingButton.onClick.RemoveAllListeners();
+		}
+
+		private void SpawnSpriteObject(Character o, bool instant)
 		{
 			GameObject spriteObject = Instantiate(SpriteObjectPrefab, Sprites.transform);
 			var button = spriteObject.GetComponent<Button>();
-			button.onClick.AddListener(delegate
+			button.onClick.AddListener(() =>
 			{
-				var isSelected = ToggleSelected(o);
-				button.image.color = isSelected ? Color.white : Color.grey;
+                bool isSelected = ToggleSelected(o.ID);
+                button.image.color = isSelected ? Color.white : Color.grey;
+
+				if (instant)
+					FinishSelectingButton.onClick.Invoke();
 			});
 			button.image.color = Color.grey;
 			button.image.sprite = Stuff.Sprites.CharacterHexagons.SingleOrDefault(c => c.name == o.Name);
@@ -55,18 +76,17 @@ namespace Unity
 		/// </summary>
 		/// <param name="o">Object to toggle</param>
 		/// <returns>Is selected</returns>
-		private bool ToggleSelected(Character o)
+		private bool ToggleSelected(int o)
 		{
-			if (SelectedObjects.Contains(o))
+			if (SelectedIds.Contains(o))
 			{
-				SelectedObjects.Remove(o);
+				SelectedIds.Remove(o);
 				return false;
 			}
 
-			SelectedObjects.Add(o);
+			SelectedIds.Add(o);
 			return true;
 		}
 
-		public void Close() => gameObject.transform.parent.gameObject.Hide();
 	}
 }
