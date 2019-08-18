@@ -11,10 +11,8 @@ using NKMCore.HexCellEffects;
 using NKMCore.Templates;
 using Unity.Animations;
 using Unity.Extensions;
-using Unity.Managers;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Action = NKMCore.Action;
 
 namespace Unity.Hex
 {
@@ -22,20 +20,18 @@ namespace Unity.Hex
 	{
 		private Game _game;
 		private Active Active => _game.Active;
-		private Action Action => _game.Action;
 		public DrawnHexCell CellPrefab;
 		public List<DrawnHexCell> Cells;
 		private readonly Dictionary<Character, GameObject> _characterObjects = new Dictionary<Character, GameObject>();
 
 		public GameObject GetCharacterObject(Character character)
 		{
-			GameObject value;
-			_characterObjects.TryGetValue(character, out value);
+			_characterObjects.TryGetValue(character, out GameObject value);
 			return value;
 		}
 
 		public void SetCharacterObject(Character character, GameObject cObject) => _characterObjects[character] = cObject;
-	    
+
 		public HexMesh HexMesh { get; private set; }
 		public void Init(Game game)
 		{
@@ -52,7 +48,7 @@ namespace Unity.Hex
                 AnimationPlayer.Add(new Destroy(SelectDrawnCell(cell).gameObject.GetComponent<LineRenderer>())); //Remove the line
                 AnimationPlayer.Add(new MoveTo(GetCharacterObject(character).transform,
                     GetCharacterObject(character).transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
-                
+
             };
             _game.HexMap.AfterCharacterPlace += (character, cell) => Spawner.Instance.Spawn(SelectDrawnCell(cell), character);
             Active.BeforeMoveCellsRemoved += cells => SelectDrawnCells(cells).ForEach(c => Destroy(c.gameObject.GetComponent<LineRenderer>()));
@@ -181,7 +177,7 @@ namespace Unity.Hex
 			HexMesh = GetComponentInChildren<HexMesh>();
 			HexMesh.Init();
 			hexMap.Cells.ForEach(CreateCell);
-			
+
 			TriangulateCells();
 		}
 
@@ -196,11 +192,10 @@ namespace Unity.Hex
 			position.x = (hexCell.Coordinates.X + hexCell.Coordinates.Z * 0.5f) * (HexMetrics.InnerRadius * 2f);
 			position.y = 0f;
 			position.z = hexCell.Coordinates.Z * (HexMetrics.OuterRadius * 1.5f);
-			
-			DrawnHexCell cell = Instantiate(CellPrefab);
+
+			DrawnHexCell cell = Instantiate(CellPrefab, transform, false);
 			Cells.Add(cell);
 			cell.HexCell = hexCell;
-			cell.transform.SetParent(transform, false);
 			cell.transform.localPosition = position;
 
 			switch (hexCell.Type)
@@ -318,7 +313,7 @@ namespace Unity.Hex
 		public List<DrawnHexCell> SelectDrawnCells(IEnumerable<HexCell> cells) => cells.Select(SelectDrawnCell).ToList();
 		public DrawnHexCell SelectDrawnCell(HexCell cell) =>
 			Cells.FirstOrDefault(g => g.HexCell == cell);
-		
+
         public static bool IsPointerOverUiObject()
         {
             var eventDataCurrentPosition =

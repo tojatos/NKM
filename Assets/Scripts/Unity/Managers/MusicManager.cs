@@ -49,48 +49,63 @@ namespace Unity.Managers
 		private void ToggleMute()
 		{
 			if (SessionSettings.Instance.IsMuted)
-			{
-				_muteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "unmute");
-				Music.Play();
-			}
+				Unmute();
 			else
-			{
-				_muteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "mute");
-				Music.Stop();
-			}
+				Mute();
+
 			SessionSettings.Instance.IsMuted = !SessionSettings.Instance.IsMuted;
+		}
+
+		private void Mute()
+		{
+			_muteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "mute");
+			Music.Stop();
+		}
+
+		private void Unmute()
+		{
+			_muteButton.GetComponent<Image>().sprite = Stuff.Sprites.Icons.FirstOrDefault(i => i.name == "unmute");
+			Music.Play();
 		}
 
 		private static void PlayAudio(string path, float volume = 0.8f)
         {
             try
             {
-                var ac = Resources.Load("Audio/"+path) as AudioClip;
-                AudioSource.PlayClipAtPoint(ac, Camera.main.transform.position, volume);
+	            var ac = Resources.Load("Audio/"+path) as AudioClip;
+	            if (Camera.main != null) AudioSource.PlayClipAtPoint(ac, Camera.main.transform.position, volume);
             }
             catch (Exception e)
             {
                 Debug.LogWarning(e.Message);
             }
-            
+
         }
 
 		public static void AddTriggers(Ability ability)
 		{
-			if (ability is GomuGomuNoMi)
+			switch (ability)
 			{
-				var ab = (GomuGomuNoMi) ability;
-				ab.OnClick += () => PlayAudio("gomu gomu no");
-				ab.BeforePistol += () => PlayAudio("pistol");
-				ab.BeforeRocket += () => PlayAudio("gomu gomu no rocket effect");
-			}
-			if (ability is HyakuHachiPoundHou) ((HyakuHachiPoundHou) ability).BeforeUse += () => PlayAudio(ability.Name);
-			if (ability is LackOfOrientation) ((LackOfOrientation) ability).AfterGettingLost += () => PlayAudio("op wtf " + Random.Range(1, 4));
-			if (ability is OniGiri)
-			{
-				var ab = (OniGiri) ability;
-				ab.AfterOniGiriPrepare += list => PlayAudio("oni");
-				ab.AfterOniGiri += () => PlayAudio("giri");
+				case GomuGomuNoMi gomuGomuNoMi:
+				{
+					gomuGomuNoMi.OnClick += () => PlayAudio("gomu gomu no");
+					gomuGomuNoMi.BeforePistol += () => PlayAudio("pistol");
+					gomuGomuNoMi.BeforeRocket += () => PlayAudio("gomu gomu no rocket effect");
+				} break;
+
+				case HyakuHachiPoundHou hyakuHachiPoundHou:
+				{
+					hyakuHachiPoundHou.BeforeUse += () => PlayAudio(ability.Name);
+				} break;
+				case LackOfOrientation lackOfOrientation:
+				{
+					lackOfOrientation.AfterGettingLost += () => PlayAudio("op wtf " + Random.Range(1, 4));
+				} break;
+				case OniGiri oniGiri:
+				{
+					oniGiri.AfterOniGiriPrepare += list => PlayAudio("oni");
+					oniGiri.AfterOniGiri += () => PlayAudio("giri");
+				} break;
 			}
 		}
 

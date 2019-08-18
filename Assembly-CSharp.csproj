@@ -61,13 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\EffectExamples\Shared\Scripts\DecalDestroyer.cs" />
-    <Compile Include="Assets\EffectExamples\Shared\Scripts\ExtinguishableFire.cs" />
-    <Compile Include="Assets\EffectExamples\Shared\Scripts\GunAim.cs" />
-    <Compile Include="Assets\EffectExamples\Shared\Scripts\GunShoot.cs" />
-    <Compile Include="Assets\EffectExamples\Shared\Scripts\ParticleCollision.cs" />
-    <Compile Include="Assets\EffectExamples\Shared\Scripts\ParticleExamples.cs" />
-    <Compile Include="Assets\EffectExamples\Shared\Scripts\ParticleMenu.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Aqua\NaturesBeauty.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Aqua\Purification.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Aqua\Resurrection.cs" />
@@ -311,7 +304,6 @@
     <Compile Include="Assets\Scripts\Unity\UI\Replay.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\Victory.cs" />
-    <None Include="Assets\EffectExamples\Shared\Shaders\SurfaceShader_VC.shader" />
     <None Include="Assets\testing_characters.txt" />
     <None Include="Assets\VertexColors.shader" />
     <Reference Include="Unity.Timeline.Editor">
