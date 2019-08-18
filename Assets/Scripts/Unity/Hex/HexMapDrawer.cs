@@ -297,7 +297,7 @@ namespace Unity.Hex
 
 			if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
 			{
-				_game.Active.Cancel();
+				_game.Action.Cancel();
 			}
 		}
 		private static HexCell CellPointed()

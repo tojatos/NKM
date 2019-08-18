@@ -12,16 +12,15 @@ namespace Unity.Managers
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 		private static void DDOL() => DontDestroyOnLoad(Instance);
 
-		private void Update()
-		{
-//			if (new[] {Scenes.MainMenu, Scenes.PreGameOptions}.Contains(SceneManager.GetActiveScene().name))
-			if (SceneManager.GetActiveScene().name != Scenes.MainGame)
-			{
-				if (Input.GetKeyDown(KeyCode.LeftArrow)) LoadLastScene();
-				if (Input.GetKeyDown(KeyCode.RightArrow)) ClickActiveButton();
-			}
-		}
-		
+//		private void Update()
+//		{
+//			if (SceneManager.GetActiveScene().name != Scenes.MainGame)
+//			{
+//				if (Input.GetKeyDown(KeyCode.LeftArrow)) LoadLastScene();
+//				if (Input.GetKeyDown(KeyCode.RightArrow)) ClickActiveButton();
+//			}
+//		}
+
 		private readonly Stack<string> _lastScenes = new Stack<string>();
 		private void Awake() => SceneManager.sceneLoaded += (scene, mode) =>
 		{
