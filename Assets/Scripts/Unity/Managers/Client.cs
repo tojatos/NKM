@@ -42,7 +42,7 @@ namespace Unity.Managers
 		    }
 
 		}
-	    
+
         private void CleanupNetworkResources()
         {
             _msgStream?.Close();
@@ -68,10 +68,10 @@ namespace Unity.Managers
 						if (_client.Available > 0)
 						{
 							string message;
-							if((message = sr.ReadLine()) != null)
-	                            OnMessage?.Invoke(message);
+							if ((message = sr.ReadLine()) != null)
+								OnMessage?.Invoke(message);
 						}
-						
+
                         if (_isDisconnected(_client) && !_clientRequestedDisconnect)
                         {
                             _running = false;
@@ -79,7 +79,7 @@ namespace Unity.Managers
 					}
 					CleanupNetworkResources();
 				}
-			}	
+			}
 	    }
 
 	    public void SendMessage(string message)
@@ -88,7 +88,7 @@ namespace Unity.Managers
 		    var sw = new StreamWriter(_msgStream) {AutoFlush = true};
             sw.WriteLine(message);
 	    }
-	    
+
         // Checks if a client has disconnected ungracefully
         // Adapted from: http://stackoverflow.com/questions/722240/instantly-detect-client-disconnection-from-server-socket
         private static bool _isDisconnected(TcpClient client)
@@ -104,7 +104,7 @@ namespace Unity.Managers
                 // We got a socket or disposed error, assume it's disconnected
 	            if(ex is ObjectDisposedException || ex is SocketException)
                     return true;
-	            
+
 	            throw;
             }
         }

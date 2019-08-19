@@ -5,11 +5,11 @@
 	/// </summary>
 	public static class Scenes
 	{
-		public static string MainGame => "Main Game";
-		public static string MainMenu => "Main Menu";
-		public static string PreGameOptions => "Pre Game Options";
-		public static string GameStatistics => "Game Statistics";
-		public static string ServerList => "Server List";
-		public static string ServerLobby => "Server Lobby";
+		public const string MainGame = "Main Game";
+		public const string MainMenu = "Main Menu";
+		public const string PreGameOptions = "Pre Game Options";
+		public const string GameStatistics = "Game Statistics";
+		public const string ServerList = "Server List";
+		public const string ServerLobby = "Server Lobby";
 	}
 }

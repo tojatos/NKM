@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Unity.Extensions;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,14 +22,12 @@ namespace Unity.Managers
 
 		public GameObject Servers;
 		private Client _client;
-		private AsyncCaller _asyncCaller;
 
 		private void Start()
 		{
 			Nickname.text = SessionSettings.Instance.Nickname;
 
 			_client = ClientManager.Instance.Client;
-			_asyncCaller = AsyncCaller.Instance;
 
 			AddServerButton.onClick.AddListener(()=> {
 				if(AddServerName.text == "" || AddServerIP.text == "") return;
@@ -44,28 +41,17 @@ namespace Unity.Managers
 			});
 
 			RefreshList();
-
-			InitializeMessageHandler();
 		}
 
-		private void InitializeMessageHandler()
-		{
-			_client.OnMessage += HandleMessageFromServerInMainThread;
-			UnityAction<Scene, LoadSceneMode> removeMessageHandler = null;
-			removeMessageHandler = (scene, mode) =>
-			{
-				_client.OnMessage -= HandleMessageFromServerInMainThread;
-				SceneManager.sceneLoaded -= removeMessageHandler;
-			};
-			SceneManager.sceneLoaded += removeMessageHandler;
-		}
+		private static void ShowServerMessage(string msg) => Popup.Instance.Show("Server", msg);
+		private static void ShowError(string msg)
+        {
+	        Popup.Instance.Show("Error", msg);
+	        Debug.LogError(msg);
+        }
 
-		private void HandleMessageFromServerInMainThread(string message)
-			=> _asyncCaller.Call(() => HandleMessageFromServer(message));
-		private void HandleMessageFromServer(string message)
+		public void HandleMessageFromServer(string message)
 		{
-			void ShowServerMessage(string msg) => Popup.Instance.Show("Server", msg);
-
             string[] data = message.Split(new []{' '}, 2);
 			string header = data[0];
             string content = string.Empty;
@@ -95,14 +81,16 @@ namespace Unity.Managers
 			SceneManager.LoadScene(Scenes.ServerLobby);
 		}
 
-		private void Update()
-		{
-			JoinServerButton.ToggleIf(SelectedIP == "");
-		}
+		private void Update() => JoinServerButton.ToggleIf(SelectedIP == "");
 
 		private static void TryToJoinAServer(string selectedIP)
 		{
 			string[] ipInfo = selectedIP.Split(':');
+			if (ipInfo.Length < 2)
+			{
+				ShowError("Invalid IP address!");
+				return;
+			}
 			ClientManager.Instance.Client.TryConnecting(ipInfo[0], int.Parse(ipInfo[1]));
 		}
 

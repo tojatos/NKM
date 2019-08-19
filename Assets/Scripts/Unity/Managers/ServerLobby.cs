@@ -4,7 +4,6 @@ using NKMCore;
 using Unity.Extensions;
 using Unity.Hex;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,17 +16,20 @@ namespace Unity.Managers
 		public GameObject PlayersGameObject;
 		public Text Map;
 
-		private GamePreparerDependencies _dependencies;
-		private AsyncCaller _asyncCaller;
+		private static GamePreparerDependencies Dependencies
+		{
+			get => SessionSettings.Instance.Dependencies;
+			set => SessionSettings.Instance.Dependencies = value;
+		}
+
 		private Client _client;
 		private readonly Dictionary<int, string> _players = new Dictionary<int, string>();
 		private readonly Dictionary<int, bool> _readyStates = new Dictionary<int, bool>();
 
 		private void Start()
 		{
-			_asyncCaller = AsyncCaller.Instance;
 			_client = ClientManager.Instance.Client;
-            _dependencies = new GamePreparerDependencies();
+            Dependencies = new GamePreparerDependencies();
 
 			Map.text = "";
 			ClearPlayerList();
@@ -35,42 +37,27 @@ namespace Unity.Managers
 
 			GameObject.FindGameObjectsWithTag("Back Button").ToList()
 				.ForEach(b => b.AddTrigger(EventTriggerType.PointerClick, () => _client.Disconnect()));
-			InitializeMessageHandler();
 			ChangeSceneOnDisconnect();
 			AskServerForGameInfo();
 		}
 
 		private void AskServerForGameInfo() => _client.SendMessage("GAME_INFO");
 
-		private void InitializeMessageHandler()
-		{
-			_client.OnMessage += HandleMessageFromServerInMainThread;
-			UnityAction<Scene, LoadSceneMode> removeMessageHandler = null;
-			removeMessageHandler = (scene, mode) =>
-			{
-				_client.OnMessage -= HandleMessageFromServerInMainThread;
-				SceneManager.sceneLoaded -= removeMessageHandler;
-			};
-			SceneManager.sceneLoaded += removeMessageHandler;
-		}
-
 		private void ChangeSceneOnDisconnect()
 		{
-			Delegates.Void onDisconnect = () => AsyncCaller.Instance.Call(ShortcutManager.Instance.LoadLastScene);
-			_client.OnDisconnect += onDisconnect;
-			UnityAction<Scene, LoadSceneMode> removeTrigger = null;
-			removeTrigger = (scene, mode) =>
+			void OnDisconnect() => AsyncCaller.Instance.Call(ShortcutManager.Instance.LoadLastScene);
+			_client.OnDisconnect += OnDisconnect;
+
+			void RemoveTrigger(Scene scene, LoadSceneMode mode)
 			{
-				_client.OnDisconnect -= onDisconnect;
-				SceneManager.sceneLoaded -= removeTrigger;
-			};
-			SceneManager.sceneLoaded += removeTrigger;
+				_client.OnDisconnect -= OnDisconnect;
+				SceneManager.sceneLoaded -= RemoveTrigger;
+			}
+
+			SceneManager.sceneLoaded += RemoveTrigger;
 		}
 
-		private void HandleMessageFromServerInMainThread(string message)
-			=> _asyncCaller.Call(() => HandleMessageFromServer(message));
-
-		private void HandleMessageFromServer(string message)
+		public void HandleMessageFromServer(string message)
 		{
             string[] data = message.Split(new []{' '}, 2);
 			string header = data[0];
@@ -79,7 +66,7 @@ namespace Unity.Managers
 			switch (header)
 			{
 				case "PLAYER_NUM":
-					_dependencies.NumberOfPlayers = int.Parse(content);
+					Dependencies.NumberOfPlayers = int.Parse(content);
 					RefreshList();
 					break;
 				case "PLAYERS":
@@ -88,6 +75,7 @@ namespace Unity.Managers
 					break;
 				case "PLAYER_JOIN":
 					HandlePlayerJoin(content);
+					RefreshList();
 					break;
 				case "PLAYER_LEFT":
 					int index = int.Parse(content);
@@ -96,6 +84,7 @@ namespace Unity.Managers
 					break;
 				case "MAPNAME":
 					HandleMapname(content);
+					RefreshList();
 					break;
 				case "READY":
 					string[] x = content.Split(';');
@@ -112,10 +101,7 @@ namespace Unity.Managers
 
 		private void LoadGame()
 		{
-			SessionSettings S = SessionSettings.Instance;
-			_dependencies.PlayerNames = _players.OrderBy(p => p.Key).Select(p => p.Value).ToList();
-			S.Dependencies = _dependencies;
-
+			Dependencies.PlayerNames = _players.OrderBy(p => p.Key).Select(p => p.Value).ToList();
             SceneManager.LoadScene(Scenes.MainGame);
 		}
 
@@ -135,7 +121,7 @@ namespace Unity.Managers
 
 		private void HandleMapname(string content)
 		{
-			_dependencies.HexMap = HexMapFactory.FromScriptable(Stuff.Maps.First(m => m.name == content));
+			Dependencies.HexMap = HexMapFactory.FromScriptable(Stuff.Maps.First(m => m.name == content));
 			Map.text = content;
 		}
 
@@ -146,16 +132,15 @@ namespace Unity.Managers
 			string pName = s[1];
 			_players[index] = pName;
 			_readyStates[index] = false;
-			RefreshList();
 		}
 
 
 		private void ClearPlayerList() => PlayersGameObject.transform.Clear();
 		private void RefreshList()
 		{
-			if (_dependencies.NumberOfPlayers <= 0) return;
+			if (Dependencies.NumberOfPlayers <= 0) return;
 			ClearPlayerList();
-			for (var i = 0; i < _dependencies.NumberOfPlayers; i++)
+			for (int i = 0; i < Dependencies.NumberOfPlayers; i++)
 			{
 				if(!_players.ContainsKey(i)) CreateEmptyPlayer();
 				else CreatePlayer(i);

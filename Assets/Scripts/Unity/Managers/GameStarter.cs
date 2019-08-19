@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Mono.Data.Sqlite;
 using NKMCore;
 using NKMCore.Hex;
@@ -11,8 +12,6 @@ using Unity.UI;
 using Unity.UI.CharacterUI;
 using Unity.UI.HexCellUI;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using Action = NKMCore.Action;
 using Effects = Unity.UI.CharacterUI.Effects;
 
@@ -26,7 +25,7 @@ namespace Unity.Managers
         private static ISelectable  _selectable = new SpriteSelectSelectable(SelectableManager);
         private static IDbConnection _conn;
         private static SelectableAction _selectableAction;
-        public static Game _game;
+        public static Game Game;
         private static SessionSettings S => SessionSettings.Instance;
         private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
         private static int GetPlayersNumber() => S.GetDropdownSetting(SettingType.NumberOfPlayers) + 2;
@@ -77,30 +76,7 @@ namespace Unity.Managers
                 PrepareAndStartGame();
         }
 
-        private void Start()
-        {
-            if (ClientManager.Instance.Client != null)
-            {
-                InitializeMessageHandler();
-            }
-        }
-        private void InitializeMessageHandler()
-        {
-            Client client = ClientManager.Instance.Client;
-            client.OnMessage += HandleMessageFromServerInMainThread;
-            UnityAction<Scene, LoadSceneMode> removeMessageHandler = null;
-            removeMessageHandler = (scene, mode) =>
-            {
-                client.OnMessage -= HandleMessageFromServerInMainThread;
-                SceneManager.sceneLoaded -= removeMessageHandler;
-            };
-            SceneManager.sceneLoaded += removeMessageHandler;
-        }
-
-        private void HandleMessageFromServerInMainThread(string message)
-            => AsyncCaller.Instance.Call(() => HandleMessageFromServer(message));
-
-        private async void HandleMessageFromServer(string message)
+        public async void HandleMessageFromServer(string message)
         {
             string[] data = message.Split(new []{' '}, 2);
             string header = data[0];
@@ -115,7 +91,7 @@ namespace Unity.Managers
                 } break;
                 case "SET_CHARACTERS":
                 {
-                    if(_game != null) return;
+                    if(Game != null) return;
                     S.Dependencies.Connection = _conn;
                     S.Dependencies.GameType = GameType.Multiplayer;
                     S.Dependencies.SelectableManager = SelectableManager;
@@ -124,10 +100,10 @@ namespace Unity.Managers
                     var preparer = new GamePreparer(S.Dependencies);
                     if (!preparer.AreOptionsValid)
                         throw new Exception("Options are invalid!");
-                    _game = await preparer.CreateGame();
+                    Game = await preparer.CreateGame();
 
-                    AttachCharactersFromServer(_game, content);
-                    RunGame(_game);
+                    AttachCharactersFromServer(Game, content);
+                    await Task.Delay(1000).ContinueWith(t => AsyncCaller.Instance.Call(() => RunGame(Game)));
                 } break;
                 case "ACTION":
                 {
@@ -137,12 +113,12 @@ namespace Unity.Managers
                     if (new[] {Action.Types.OpenSelectable, Action.Types.CloseSelectable}.Contains(actionType))
                         _selectableAction.Make(actionType, args);
                     else
-                        _game.Action.Make(actionType, args);
+                        Game.Action.Make(actionType, args);
                 } break;
                 case "NKMRANDOM":
                 {
                     string[] d = content.Split(';');
-                    _game.Random.Set(d[0], int.Parse(d[1]));
+                    Game.Random.Set(d[0], int.Parse(d[1]));
                 } break;
             }
         }
@@ -169,11 +145,11 @@ namespace Unity.Managers
 
         private void PrepareAndStartTestingGame()
         {
-            _game = new Game(GetTestingGameOptions());
+            Game = new Game(GetTestingGameOptions());
 
-            BindTestingCharactersToPlayers(_game);
+            BindTestingCharactersToPlayers(Game);
 
-            RunGame(_game);
+            RunGame(Game);
         }
         private async void PrepareAndStartGame()
         {
@@ -194,8 +170,8 @@ namespace Unity.Managers
                 LogFilePath = GetLogFilePath(),
             });
 
-            _game = await preparer.CreateGame();
-            RunGame(_game);
+            Game = await preparer.CreateGame();
+            RunGame(Game);
         }
 
         private static List<string> GetPlayerNames()

@@ -42,7 +42,7 @@ namespace Unity
 			if (props.WhatIsSelected == SelectableProperties.Type.Character)
 			{
 				List<Character> toPickFrom = Game.GetMockCharacters();
-				if (GameStarter._game != null) toPickFrom.AddRange(GameStarter._game.Characters);
+				if (GameStarter.Game != null) toPickFrom.AddRange(GameStarter.Game.Characters);
 
 				toPickFrom.FindAll(c => props.IdsToSelect.Contains(c.ID)).ForEach(c => SpawnSpriteObject(c, props.Instant));
 			}
