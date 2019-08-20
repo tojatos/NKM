@@ -1,4 +1,5 @@
 using Unity.Extensions;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Unity
@@ -14,11 +15,13 @@ namespace Unity
 
 		private void Start() => AcceptMessageButton.onClick.AddListener(ClosePopup);
 
-		public void Show(string header, string message)
+		public void Show(string header, string message, UnityAction onButtonClick = null)
 		{
 			Header.text = header;
 			Message.text = message;
 			ShowPopup();
+			if(onButtonClick != null)
+				AcceptMessageButton.onClick.AddListener(onButtonClick);
 		}
     }
 }

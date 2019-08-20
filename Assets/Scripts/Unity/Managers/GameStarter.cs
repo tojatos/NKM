@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using Mono.Data.Sqlite;
 using NKMCore;
 using NKMCore.Hex;
+using Unity.Animations;
 using Unity.Hex;
 using Unity.UI;
 using Unity.UI.CharacterUI;
 using Unity.UI.HexCellUI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Action = NKMCore.Action;
 using Effects = Unity.UI.CharacterUI.Effects;
 
@@ -217,7 +219,12 @@ namespace Unity.Managers
             UI.HexCellUI.Effects.Instance.Init(game);
             HexImage.Instance.Init(game);
             Spawner.Instance.Init(game);
-
+            game.OnFinish += () => ShowFinishGamePopup(game);
+            game.Active.Turn.TurnStarted += player =>
+            {
+                Debug.Log("start");
+                AsyncCaller.Instance.Call(() => AnimationPlayer.Add(new ShowVanishablePopup($"{player.Name}", 2)));
+            };
             game.AfterAbilityInit += ability =>
             {
                 AnimationPlayer.AddTriggers(ability);
@@ -229,6 +236,18 @@ namespace Unity.Managers
                 AnimationPlayer.AddTriggers(character);
                 UIManager.Instance.AddUITriggers(character);
             };
+        }
+
+        private static void ShowFinishGamePopup(Game game)
+        {
+            GamePlayer victor = game.Players.SingleOrDefault(p => !p.IsEliminated);
+            Popup.Instance.Show("Gra zakończona", victor == null ? "Nikt nie wygrał" : $"{victor.Name} wygrał!", () =>
+            {
+                SceneManager.LoadScene(Scenes.MainMenu);
+                if(IsClientConnected)
+                    ClientManager.Instance.Client.Disconnect();
+            });
+
         }
         private static void BindTestingCharactersToPlayers(Game game)
         {
