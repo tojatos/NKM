@@ -23,6 +23,7 @@ namespace Unity.Managers
 
 		private void Awake()
 		{
+			Dropdowns.transform.Clear();
 			var pickTypeSettings = new DropdownSettings
 			{
 				Type = SettingType.PickType,
