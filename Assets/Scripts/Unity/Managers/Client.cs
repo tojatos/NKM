@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using NKMCore;
@@ -21,27 +22,46 @@ namespace Unity.Managers
 
 	    public void TryConnecting(string hostname, int port)
 	    {
-			if (_running)
-			{
-				OnError?.Invoke("Already connected!");
-				return;
-			}
-
-		    try
+		    new Thread(() =>
 		    {
-			    _client = new TcpClient(hostname, port);
-			    if (!_client.Connected) return;
-			    OnConnection?.Invoke();
-			    _running = true;
-			    _msgStream = _client.GetStream();
-			    new Thread(ListenForMessages).Start();
-		    }
-		    catch (SocketException se)
-		    {
-			    OnError?.Invoke(se.Message);
-		    }
+                if (_running)
+                {
+                    OnError?.Invoke("Already connected!");
+                    return;
+                }
 
+                try
+                {
+	                _client = new TcpClient();
+	                if (!_client.ConnectAsync(hostname, port).Wait(1000))
+	                {
+		                OnError?.Invoke("Connection timed out.");
+		                return;
+	                }
+
+	                if (!_client.Connected) return;
+	                OnConnection?.Invoke();
+	                _running = true;
+	                _msgStream = _client.GetStream();
+	                new Thread(ListenForMessages).Start();
+                }
+                catch (AggregateException ae)
+                {
+	                ae.InnerExceptions.ToList().ForEach(HandleConnectionException);
+                }
+                catch (Exception e)
+                {
+	                HandleConnectionException(e);
+                }
+		    }).Start();
 		}
+
+	    private void HandleConnectionException(Exception e)
+	    {
+            OnError?.Invoke(e.Message);
+            if (e is SocketException) return;
+            throw e;
+	    }
 
         private void CleanupNetworkResources()
         {

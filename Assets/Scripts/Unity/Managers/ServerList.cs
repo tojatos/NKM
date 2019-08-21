@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Unity.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -83,15 +85,12 @@ namespace Unity.Managers
 
 		private void Update() => JoinServerButton.ToggleIf(SelectedIP == "");
 
-		private static void TryToJoinAServer(string selectedIP)
+		private static async void TryToJoinAServer(string selectedIP)
 		{
 			string[] ipInfo = selectedIP.Split(':');
-			if (ipInfo.Length < 2)
-			{
-				ShowError("Invalid IP address!");
-				return;
-			}
-			ClientManager.Instance.Client.TryConnecting(ipInfo[0], int.Parse(ipInfo[1]));
+			string hostname = ipInfo[0];
+			int port = ipInfo.Length < 2 ? 30000 : int.Parse(ipInfo[1]);
+			ClientManager.Instance.Client.TryConnecting(hostname, port);
 		}
 
 		private void RefreshList()
