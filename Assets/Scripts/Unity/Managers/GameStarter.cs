@@ -122,6 +122,14 @@ namespace Unity.Managers
                     string[] d = content.Split(';');
                     Game.Random.Set(d[0], int.Parse(d[1]));
                 } break;
+                case "STOP":
+                {
+                    Popup.Instance.Show("STOP", content, () =>
+                    {
+                        ClientManager.Instance.Client.Disconnect();
+                        SceneManager.LoadScene(Scenes.MainMenu);
+                    });
+                } break;
             }
         }
 

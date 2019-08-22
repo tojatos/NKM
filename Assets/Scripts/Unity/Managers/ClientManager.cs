@@ -29,9 +29,9 @@ namespace Unity.Managers
                 string header = message.Split(new []{' '}, 2)[0];
                 if (_availableGameStarterMessages.Contains(header))
 	                _gameStarterMessages.Add(message);
-                else if (_availableServerLobbyMessages.Contains(header))
+                if (_availableServerLobbyMessages.Contains(header))
 	                _serverLobbyMessages.Add(message);
-                else if (_availableServerListMessages.Contains(header))
+                if (_availableServerListMessages.Contains(header))
 	                _serverListMessages.Add(message);
 			};
 		}
@@ -91,6 +91,7 @@ namespace Unity.Managers
 			Messages.SetCharacters,
 			Messages.Action,
 			Messages.NkmRandom,
+			Messages.Stop,
 		};
 		private readonly List<string> _availableServerLobbyMessages = new List<string>
 		{
@@ -128,6 +129,7 @@ namespace Unity.Managers
 			public static string GetNickname => "GET_NICKNAME";
 			public static string Join => "JOIN";
             public static string Reject => "REJECT";
+            public static string Stop => "STOP";
 		}
 
 	}

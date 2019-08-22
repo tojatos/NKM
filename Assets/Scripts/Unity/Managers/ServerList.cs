@@ -85,7 +85,7 @@ namespace Unity.Managers
 
 		private void Update() => JoinServerButton.ToggleIf(SelectedIP == "");
 
-		private static async void TryToJoinAServer(string selectedIP)
+		private static void TryToJoinAServer(string selectedIP)
 		{
 			string[] ipInfo = selectedIP.Split(':');
 			string hostname = ipInfo[0];
