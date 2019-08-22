@@ -10,7 +10,7 @@ namespace Unity
 		public Text Message;
 		public Button AcceptMessageButton;
 
-		private void ClosePopup() => gameObject.Hide();
+		public void ClosePopup() => gameObject.Hide();
 		private void ShowPopup() => gameObject.Show();
 
 		private void Start() => AcceptMessageButton.onClick.AddListener(ClosePopup);

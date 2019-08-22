@@ -28,7 +28,7 @@ namespace Unity.UI.CharacterUI
 
 		private void Update()
 		{
-			if(Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape)) gameObject.Hide();
+			if(Input.GetMouseButtonDown(1)) gameObject.Hide();
 		}
 
 //		private void UpdateInfo(Character character)

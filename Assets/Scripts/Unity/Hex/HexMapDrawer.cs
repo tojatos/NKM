@@ -295,7 +295,7 @@ namespace Unity.Hex
 				if (cellPointed != null) _game.TouchCell(cellPointed);
 			}
 
-			if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
+			if (Input.GetMouseButtonDown(1))
 			{
 				_game.Action.Cancel();
 			}

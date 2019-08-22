@@ -12,14 +12,24 @@ namespace Unity.Managers
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 		private static void DDOL() => DontDestroyOnLoad(Instance);
 
-//		private void Update()
-//		{
+		private void Update()
+		{
 //			if (SceneManager.GetActiveScene().name != Scenes.MainGame)
 //			{
 //				if (Input.GetKeyDown(KeyCode.LeftArrow)) LoadLastScene();
 //				if (Input.GetKeyDown(KeyCode.RightArrow)) ClickActiveButton();
 //			}
-//		}
+			if (Input.GetKeyDown(KeyCode.Escape))
+			{
+				if (SceneManager.GetActiveScene().name == Scenes.MainGame)
+				{
+					if(!Popup.Instance.gameObject.activeSelf)
+                        Popup.Instance.Show("Wyjście", "Czy na pewno chcesz wyjść?", GameStarter.Quit);
+					else
+						Popup.Instance.ClosePopup();
+				}
+			}
+		}
 
 		private readonly Stack<string> _lastScenes = new Stack<string>();
 		private void Awake() => SceneManager.sceneLoaded += (scene, mode) =>

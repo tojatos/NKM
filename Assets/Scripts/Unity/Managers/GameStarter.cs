@@ -124,13 +124,16 @@ namespace Unity.Managers
                 } break;
                 case "STOP":
                 {
-                    Popup.Instance.Show("STOP", content, () =>
-                    {
-                        ClientManager.Instance.Client.Disconnect();
-                        SceneManager.LoadScene(Scenes.MainMenu);
-                    });
+                    Popup.Instance.Show("STOP", content, Quit);
                 } break;
             }
+        }
+
+        public static void Quit()
+        {
+            if(IsClientConnected)
+                ClientManager.Instance.Client.Disconnect();
+            SceneManager.LoadScene(Scenes.MainMenu);
         }
 
         private void AttachCharactersFromServer(Game game, string content)
