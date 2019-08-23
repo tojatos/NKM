@@ -31,7 +31,7 @@ namespace Unity
 		{
 			if (ability is NKMCore.Abilities.Hecate.AsterYo)
 			{
-				((NKMCore.Abilities.Hecate.AsterYo) ability).BeforeAsterBlaster += (character, characters) => 
+				((NKMCore.Abilities.Hecate.AsterYo) ability).BeforeAsterBlaster += (character, characters) =>
                     Add(new AsterYo(
                         HexMapDrawer.Instance.GetCharacterObject(character).transform,
                         characters.Select(c => HexMapDrawer.Instance.GetCharacterObject(c).transform).ToList()
@@ -40,7 +40,7 @@ namespace Unity
 
 			if (ability is NKMCore.Abilities.Itsuka_Kotori.CamaelMegiddo)
 			{
-				((NKMCore.Abilities.Itsuka_Kotori.CamaelMegiddo) ability).BeforeFlamewave += (lineCells, conflargationCells) => 
+				((NKMCore.Abilities.Itsuka_Kotori.CamaelMegiddo) ability).BeforeFlamewave += (lineCells, conflargationCells) =>
                     Add(new CamaelMegiddo(
                         lineCells.Select(c => HexMapDrawer.Instance.SelectDrawnCell(c).transform).ToList(),
                         conflargationCells.Select(c => HexMapDrawer.Instance.SelectDrawnCell(c).transform).ToList()
@@ -48,24 +48,24 @@ namespace Unity
 			}
 			if (ability is SwordVieldingTechnique)
 			{
-				((SwordVieldingTechnique) ability).OnSwing += (character, cell) => 
+				((SwordVieldingTechnique) ability).OnSwing += (character, cell) =>
                     Add(new MoveTo(
 	                    HexMapDrawer.Instance.GetCharacterObject(character).transform,
 	                    HexMapDrawer.Instance.SelectDrawnCell(cell).transform.position,
 	                    0.13f
                     ));
 			}
-			
+
 			if (ability is VerticalManeuveringEquipment)
 			{
-				((VerticalManeuveringEquipment) ability).OnSwing += (character, cell) => 
+				((VerticalManeuveringEquipment) ability).OnSwing += (character, cell) =>
                     Add(new MoveTo(
 	                    HexMapDrawer.Instance.GetCharacterObject(character).transform,
 	                    HexMapDrawer.Instance.SelectDrawnCell(cell).transform.position,
 	                    0.13f
                     ));
 			}
-			
+
 			if (ability is Grammatica)
 			{
 				var ab = (Grammatica) ability;
@@ -77,8 +77,8 @@ namespace Unity
                         HexMapDrawer.Instance.SelectDrawnCell(targetCell).transform.TransformPoint(0,10,0)
                     ));
 			}
-			
-				
+
+
 		}
 		public static void AddTriggers(Character character)
 		{
@@ -89,6 +89,7 @@ namespace Unity
 			character.AfterHeal += (targetCharacter, valueHealed) =>
 				Add(new ShowInfo(HexMapDrawer.Instance.GetCharacterObject(targetCharacter).transform, valueHealed.ToString(), Color.blue));
 			character.OnDeath += () => Add(new Destroy(HexMapDrawer.Instance.GetCharacterObject(character)));
+			character.AfterRefresh += () => Add(new Undim(character));
 		}
 		private async void Update()
 		{

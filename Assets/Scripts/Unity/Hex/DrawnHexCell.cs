@@ -12,7 +12,7 @@ namespace Unity.Hex
 		private static Spawner Spawner => Spawner.Instance;
 
 		public HexCell HexCell;
-		
+
 		public List<GameObject> Highlights;
 		public List<GameObject> EffectHighlights;
 		public Color Color;
@@ -25,7 +25,7 @@ namespace Unity.Hex
 //			AnimationPlayer.Add(new Destroy(highlight));
 			Destroy(highlight);
             EffectHighlights.Remove(highlight);
-			
+
 		}
 	}
 }

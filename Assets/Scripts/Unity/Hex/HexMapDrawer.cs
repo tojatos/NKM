@@ -23,6 +23,7 @@ namespace Unity.Hex
 		public DrawnHexCell CellPrefab;
 		public List<DrawnHexCell> Cells;
 		private readonly Dictionary<Character, GameObject> _characterObjects = new Dictionary<Character, GameObject>();
+        public static readonly Dictionary<Character, GameObject> Dims = new Dictionary<Character, GameObject>();
 
 		public GameObject GetCharacterObject(Character character)
 		{

@@ -233,9 +233,9 @@ namespace Unity.Managers
             game.OnFinish += () => ShowFinishGamePopup(game);
             game.Active.Turn.TurnStarted += player =>
             {
-                Debug.Log("start");
-                AsyncCaller.Instance.Call(() => AnimationPlayer.Add(new ShowVanishablePopup($"{player.Name}", 2)));
+                AnimationPlayer.Add(new ShowVanishablePopup($"{player.Name}", 2));
             };
+            game.Active.Turn.TurnFinished += character => { AnimationPlayer.Add(new Dim(character)); };
             game.AfterAbilityInit += ability =>
             {
                 AnimationPlayer.AddTriggers(ability);

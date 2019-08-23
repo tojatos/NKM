@@ -12,5 +12,6 @@
 		public static string GreenTransparent => "Green Transparent";
 		public static string BlackTransparent => "Black Transparent";
 		public static string RedTransparent => "Red Transparent";
+		public static string Dim => "Dim";
 	}
 }
