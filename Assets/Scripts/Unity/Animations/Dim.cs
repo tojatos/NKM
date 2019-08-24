@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NKMCore.Templates;
+﻿using NKMCore.Templates;
 using Unity.Animations.Parts;
-using Unity.Extensions;
-using Unity.Hex;
-using UnityEngine;
 
 namespace Unity.Animations
 {
@@ -14,7 +9,6 @@ namespace Unity.Animations
         {
             var d = new DimCreate(character);
             AnimationParts.Enqueue(d);
-
             AnimationParts.Enqueue(new Show(d.HighlightObject));
         }
 

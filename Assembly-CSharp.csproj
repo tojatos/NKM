@@ -291,6 +291,7 @@
     <Compile Include="Assets\Scripts\Unity\Managers\ServerLobby.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\ShortcutManager.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\SpriteSelectSelectable.cs" />
+    <Compile Include="Assets\Scripts\Unity\MultipleDropdowns.cs" />
     <Compile Include="Assets\Scripts\Unity\PlayerPrefsX.cs" />
     <Compile Include="Assets\Scripts\Unity\Popup.cs" />
     <Compile Include="Assets\Scripts\Unity\Scenes.cs" />

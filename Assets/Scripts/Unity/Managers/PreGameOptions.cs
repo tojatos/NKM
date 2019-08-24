@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using JetBrains.Annotations;
 using Unity.Extensions;
 using Unity.Hex;
@@ -11,19 +10,15 @@ namespace Unity.Managers
 {
 	public class PreGameOptions : MonoBehaviour
 	{
-		public GameObject Dropdowns;
+		private GameObject _multipleDropdownsObject;
+		public Transform WindowHandle;
 		private static SessionSettings S => SessionSettings.Instance;
-		private readonly List<Dropdown> _dropdowns = new List<Dropdown>();
-		private Dropdown AddSessionSettingsDropdown(DropdownSettings settings)
-		{
-			Dropdown dropdown = Dropdowns.AddDropdownGroup(settings);
-			_dropdowns.Add(dropdown);
-			return dropdown;
-		}
 
 		private void Awake()
 		{
-			Dropdowns.transform.Clear();
+			_multipleDropdownsObject = Instantiate(Stuff.Prefabs.First(s => s.name == "Multiple Dropdowns"), WindowHandle);
+			var md = _multipleDropdownsObject.GetComponent<MultipleDropdowns>();
+			md.FinishSelectingButton.onClick.AddListener(() => SceneManager.LoadScene(Scenes.MainGame));
 			var pickTypeSettings = new DropdownSettings
 			{
 				Type = SettingType.PickType,
@@ -61,42 +56,24 @@ namespace Unity.Managers
 				Description = "Liczba banów na gracza",
 				Options = GetNumberOfBansStrings()
 			};
-			AddSessionSettingsDropdown(pickTypeSettings);
-			AddSessionSettingsDropdown(areBansEnabledSettings);
-			AddSessionSettingsDropdown(bansNumberSettings);
-			Dropdown mapSelectDropdown = AddSessionSettingsDropdown(mapSelectSettings);
-			Dropdown numberOfPlayersDropdown = AddSessionSettingsDropdown(numberOfPlayersSettings);
-			Dropdown numberOfCharacterPerPlayerDropdown = AddSessionSettingsDropdown(numberOfCharacterPerPlayerSettings);
-			
+			md.AddSessionSettingsDropdown(pickTypeSettings);
+			md.AddSessionSettingsDropdown(areBansEnabledSettings);
+			md.AddSessionSettingsDropdown(bansNumberSettings);
+			Dropdown mapSelectDropdown = md.AddSessionSettingsDropdown(mapSelectSettings);
+			Dropdown numberOfPlayersDropdown = md.AddSessionSettingsDropdown(numberOfPlayersSettings);
+			Dropdown numberOfCharacterPerPlayerDropdown = md.AddSessionSettingsDropdown(numberOfCharacterPerPlayerSettings);
+
 			mapSelectDropdown.onValueChanged.AddListener(i => ReloadPlayerCountDropdown(i, numberOfPlayersDropdown));
 			mapSelectDropdown.onValueChanged.AddListener(i => ReloadCppDropdown(i, numberOfCharacterPerPlayerDropdown));
-			
-			_dropdowns.ForEach(d => d.onValueChanged.AddListener(i => S.SetDropdownSetting(d.name, i)));
+
 		}
 
-		
-		[UsedImplicitly]
-		public void PlayButtonClick()
-		{
-//			_dropdowns.ForEach(d => S.DropdownSettings.Add(d.name, GetValueFromDropdown(d.name)));
-//			SessionSettings.Instance.PickType = _pickTypeDropdown.value;
-//			SessionSettings.Instance.SelectedMapIndex = _mapSelectDropdown.value;
-//			SessionSettings.Instance.NumberOfPlayers = _playerCountDropdown.value + 1;
-//			SessionSettings.Instance.NumberOfCharactersPerPlayer = _cppDropdown.value + 1;
-
-			SceneManager.LoadScene(Scenes.MainGame);
-		}
 		[UsedImplicitly]
 		public void BackButtonClick() => SceneManager.LoadScene(Scenes.MainMenu);
 
 		private static void ReloadPlayerCountDropdown(int value, Dropdown playerCountDropdown)
 		{
 			int maxPlayers = Stuff.Maps[value].MaxPlayers;
-//			playerCountDropdown.options = new List<Dropdown.OptionData>();
-//			for (int i = 1; i <= maxPlayers; i++)
-//			{
-//				playerCountDropdown.options.Add(new Dropdown.OptionData(i.ToString()));
-//			}
 			playerCountDropdown.options = GetNumberOfPlayerStrings(maxPlayers).Select(x => new Dropdown.OptionData(x)).ToList();
 
 			playerCountDropdown.value = 0;
@@ -104,13 +81,13 @@ namespace Unity.Managers
 		}
 
 		private static string[] GetNumberOfPlayerStrings(int maxPlayers) =>
-			Enumerable.Range(2, maxPlayers - 1).Select(x => x.ToString()).ToArray();//.Select(x => new Dropdown.OptionData(x.ToString())).ToList();
-		
+			Enumerable.Range(2, maxPlayers - 1).Select(x => x.ToString()).ToArray();
+
 		private static string[] GetNumberOfCppStrings(int maxCharacters) =>
-			Enumerable.Range(1, maxCharacters).Select(x => x.ToString()).ToArray();//.Select(x => new Dropdown.OptionData(x.ToString())).ToList();
-		
+			Enumerable.Range(1, maxCharacters).Select(x => x.ToString()).ToArray();
+
 		private static string[] GetNumberOfBansStrings() =>
-			Enumerable.Range(1, 5).Select(x => x.ToString()).ToArray();//.Select(x => new Dropdown.OptionData(x.ToString())).ToList();
+			Enumerable.Range(1, 5).Select(x => x.ToString()).ToArray();
 		private static void ReloadCppDropdown(int value, Dropdown cppDropdown)
 		{
 			int maxCharacters = Stuff.Maps[value].MaxCharacters;
@@ -119,7 +96,5 @@ namespace Unity.Managers
 			cppDropdown.value = 0;
 			cppDropdown.RefreshShownValue();
 		}
-
-
 	}
 }

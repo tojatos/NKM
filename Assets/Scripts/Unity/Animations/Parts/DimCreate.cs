@@ -16,6 +16,7 @@ namespace Unity.Animations.Parts
         public DimCreate(Character character)
         {
             GameObject characterObject = HexMapDrawer.Instance.GetCharacterObject(character);
+            if(characterObject == null) return;
 			HighlightObject = Object.Instantiate(Stuff.Prefabs.Find(s => s.name == "Highlight"), characterObject.transform);
 			HighlightObject.transform.localPosition = new Vector3(0, 0, -5);
             HighlightObject.transform.rotation = new Quaternion(0, 0, 0, 0);

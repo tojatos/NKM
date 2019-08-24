@@ -235,7 +235,11 @@ namespace Unity.Managers
             {
                 AnimationPlayer.Add(new ShowVanishablePopup($"{player.Name}", 2));
             };
-            game.Active.Turn.TurnFinished += character => { AnimationPlayer.Add(new Dim(character)); };
+            game.Active.Turn.TurnFinished += character =>
+            {
+                if(character == null) return;
+                AnimationPlayer.Add(new Dim(character));
+            };
             game.AfterAbilityInit += ability =>
             {
                 AnimationPlayer.AddTriggers(ability);
