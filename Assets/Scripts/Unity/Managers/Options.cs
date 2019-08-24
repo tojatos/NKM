@@ -1,5 +1,8 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using System.Linq;
+using JetBrains.Annotations;
 using Unity.Extensions;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Unity.Managers
@@ -13,16 +16,28 @@ namespace Unity.Managers
 
 	    private static SessionSettings S => SessionSettings.Instance;
 
-	    public void Show()
+	    private void Awake()
 	    {
-		    gameObject.Show();
+		    GameObject mdObject = Instantiate(Stuff.Prefabs.First(p => p.name == "Multiple Dropdowns"), GameObject.Find("Handle").transform);
+		    var md = mdObject.GetComponent<MultipleDropdowns>();
+		    md.Title.gameObject.Hide();
+		    md.FinishSelectingButton.gameObject.Hide();
+		    var x = md.AddSessionSettingsDropdown(new DropdownSettings
+		    {
+			    Description = "Efekty w tle",
+			    Options = new[] {"Wyłączone", "Włączone"},
+			    Type = SettingType.BackgroundEffectsEnabled,
+		    });
+		    x.onValueChanged.AddListener(i => S.UpdateEffects());
 		    PlayerName1.text = S.PlayerNames[0];
 		    PlayerName2.text = S.PlayerNames[1];
 		    PlayerName3.text = S.PlayerNames[2];
 		    PlayerName4.text = S.PlayerNames[3];
 	    }
-	    
-        [UsedImplicitly]
+
+	    public void Show() => gameObject.Show();
+
+	    [UsedImplicitly]
 		public void SaveButtonClick()
         {
 	        S.PlayerNames[0] = PlayerName1.text;

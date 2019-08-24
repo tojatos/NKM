@@ -25,11 +25,7 @@ namespace Unity.Hex
 		private readonly Dictionary<Character, GameObject> _characterObjects = new Dictionary<Character, GameObject>();
         public static readonly Dictionary<Character, GameObject> Dims = new Dictionary<Character, GameObject>();
 
-		public GameObject GetCharacterObject(Character character)
-		{
-			_characterObjects.TryGetValue(character, out GameObject value);
-			return value;
-		}
+        public GameObject GetCharacterObject(Character character) => _characterObjects.GetValueOrDefault(character);
 
 		public void SetCharacterObject(Character character, GameObject cObject) => _characterObjects[character] = cObject;
 

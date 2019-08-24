@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NKMCore;
+using NKMCore.Extensions;
 using UnityEngine;
 
 namespace Unity
@@ -18,14 +20,20 @@ namespace Unity
             Nickname = PlayerPrefs.GetString("Nickname", "");
             SelectedIP = PlayerPrefs.GetString("SelectedIP");
 
-			AddDropdownSetting(SettingType.AreBansEnabled);
-			AddDropdownSetting(SettingType.NumberOfCharactersPerPlayer);
-			AddDropdownSetting(SettingType.NumberOfPlayers);
-			AddDropdownSetting(SettingType.PickType);
-			AddDropdownSetting(SettingType.SelectedMapIndex);
-			AddDropdownSetting(SettingType.BansNumber);
+            _enabledSettings.ForEach(AddDropdownSetting);
+            UpdateEffects();
 		}
-		private void AddDropdownSetting(string settingType, int defaultValue = 0) =>
+		public void UpdateEffects()
+		{
+			if (GetDropdownSetting(SettingType.BackgroundEffectsEnabled) == 0)
+				CreatableBackgroundCamera.DisableEffects();
+			else
+				CreatableBackgroundCamera.EnableEffects();
+		}
+
+		private void AddDropdownSetting(string settingType) =>
+			AddDropdownSetting(settingType, 0);
+		private void AddDropdownSetting(string settingType, int defaultValue) =>
 			_dropdownSettings.Add(settingType, PlayerPrefs.GetInt(settingType, defaultValue));
 
 		public bool IsMuted;
@@ -54,6 +62,16 @@ namespace Unity
 				PlayerPrefs.SetString($"PlayerName{i}", PlayerNames[i-1]);
 		}
 
+        private readonly List<string> _enabledSettings = new List<string>
+        {
+			SettingType.AreBansEnabled,
+			SettingType.NumberOfCharactersPerPlayer,
+			SettingType.NumberOfPlayers,
+			SettingType.PickType,
+			SettingType.SelectedMapIndex,
+			SettingType.BansNumber,
+			SettingType.BackgroundEffectsEnabled,
+        };
 	}
 
 	public static class SettingType
@@ -64,6 +82,7 @@ namespace Unity
 		public static string NumberOfCharactersPerPlayer => "NumberOfCharactersPerPlayer";
 		public static string AreBansEnabled => "AreBansEnabled";
 		public static string BansNumber => "BansNumber";
+		public static string BackgroundEffectsEnabled => "BackgroundEffectsEnabled";
 		public static string GameType => "GameType";
 	}
 }

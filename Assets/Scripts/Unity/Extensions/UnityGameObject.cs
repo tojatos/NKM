@@ -65,13 +65,14 @@ namespace Unity.Extensions
 			dropdown.name = dropdownSettings.Type;
 			if(dropdownSettings.Options != null) dropdown.options = dropdownSettings.Options.Select(o => new Dropdown.OptionData(o)).ToList();
 			dropdown.value = SessionSettings.Instance.GetDropdownSetting(dropdownSettings.Type);
-			
+			dropdown.onValueChanged.AddListener(i => SessionSettings.Instance.SetDropdownSetting(dropdown.name, i));
+
 			return dropdown;
 		}
 
 		public static Vector3 GetCharacterTransformPoint(this Transform transform) =>
 			transform.TransformPoint(0, 10, 0);
-		
+
 		public static void Clear(this Transform transform)
 		{
 			foreach (Transform child in transform)
