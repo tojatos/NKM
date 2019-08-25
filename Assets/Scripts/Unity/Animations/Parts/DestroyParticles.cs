@@ -6,7 +6,7 @@ namespace Unity.Animations.Parts
 {
     public class DestroyParticles : NkmAnimationPart
     {
-        private readonly  List<GameObject> _particles;
+        private readonly List<GameObject> _particles;
         private readonly float _animationTime;
         private readonly float _delay;
         private readonly bool _simultanously;

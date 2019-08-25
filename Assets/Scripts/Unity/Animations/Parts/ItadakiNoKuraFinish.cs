@@ -5,7 +5,7 @@ namespace Unity.Animations.Parts
 {
     public class ItadakiNoKuraFinish : NkmAnimationPart
     {
-	    private readonly GameObject _particle;
+        private readonly GameObject _particle;
 
         public ItadakiNoKuraFinish(GameObject particle)
         {

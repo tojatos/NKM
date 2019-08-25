@@ -8,7 +8,7 @@ namespace Unity.Animations.Parts
 {
     public class AsterYoStart : NkmAnimationPart
     {
-	    private const float ParticleSecondSize = 10f;
+        private const float ParticleSecondSize = 10f;
         public readonly Dictionary<GameObject, Transform> ParticlesWithTargets = new Dictionary<GameObject, Transform>();
         private readonly Transform _parentTransform;
 //        private readonly List<Transform> _targetTransforms;

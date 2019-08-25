@@ -9,8 +9,8 @@ namespace Unity.UI.HexCellUI
     {
         private Image _image;
 
-		private void Awake() => _image = GetComponent<Image>();
-		public void Init(Game game) => game.AfterCellSelect += UpdateImage;
-	    private void UpdateImage(HexCell hexCell) => _image.color = HexMapDrawer.Instance.SelectDrawnCell(hexCell).Color;
+        private void Awake() => _image = GetComponent<Image>();
+        public void Init(Game game) => game.AfterCellSelect += UpdateImage;
+        private void UpdateImage(HexCell hexCell) => _image.color = HexMapDrawer.Instance.SelectDrawnCell(hexCell).Color;
     }
 }

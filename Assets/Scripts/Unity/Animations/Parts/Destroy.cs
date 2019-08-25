@@ -5,7 +5,7 @@ namespace Unity.Animations.Parts
 {
     public class Destroy : NkmAnimationPart
     {
-	    private readonly Object _objectToDestroy;
+        private readonly Object _objectToDestroy;
 
         public Destroy(Object objectToDestroy)
         {

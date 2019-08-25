@@ -12,9 +12,9 @@ namespace Unity
         public void Awake() => DropdownsObject.transform.Clear();
 
         public Dropdown AddSessionSettingsDropdown(DropdownSettings settings)
-		{
-			Dropdown dropdown = DropdownsObject.AddDropdownGroup(settings);
-			return dropdown;
-		}
+        {
+            Dropdown dropdown = DropdownsObject.AddDropdownGroup(settings);
+            return dropdown;
+        }
     }
 }

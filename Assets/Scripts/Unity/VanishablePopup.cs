@@ -5,6 +5,6 @@ namespace Unity
 {
     public class VanishablePopup : MonoBehaviour
     {
-		public Text Message;
+        public Text Message;
     }
 }

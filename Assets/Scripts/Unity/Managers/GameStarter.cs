@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Mono.Data.Sqlite;
 using NKMCore;
 using NKMCore.Hex;
@@ -24,7 +25,7 @@ namespace Unity.Managers
         private readonly string _dbPath = $"{Application.streamingAssetsPath}/database.db";
         public bool IsTesting;
         private static readonly SelectableManager SelectableManager = new SelectableManager();
-        private static ISelectable  _selectable = new SpriteSelectSelectable(SelectableManager);
+        [CanBeNull] private static readonly ISelectable Selectable = new SpriteSelectSelectable(SelectableManager);
         private static IDbConnection _conn;
         private static SelectableAction _selectableAction;
         public static Game Game;
@@ -58,19 +59,19 @@ namespace Unity.Managers
         private void Awake()
         {
             _conn = new SqliteConnection($"Data source={_dbPath}");
-            var sel = _selectable as SpriteSelectSelectable;
+            var sel = Selectable as SpriteSelectSelectable;
 
             if (IsClientConnected)
             {
-                _selectableAction = new SelectableAction(GameType.Multiplayer, _selectable);
+                _selectableAction = new SelectableAction(GameType.Multiplayer, Selectable);
                 _selectableAction.MultiplayerAction += message =>
                     ClientManager.Instance.Client.SendMessage(message);
-                sel.Init(_selectableAction);
+                sel?.Init(_selectableAction);
                 return;
             }
 
-            _selectableAction = new SelectableAction(GameType.Local, _selectable);
-            sel.Init(_selectableAction);
+            _selectableAction = new SelectableAction(GameType.Local, Selectable);
+            sel?.Init(_selectableAction);
 
             if(IsTesting)
                 PrepareAndStartTestingGame();
@@ -97,7 +98,7 @@ namespace Unity.Managers
                     S.Dependencies.Connection = _conn;
                     S.Dependencies.GameType = GameType.Multiplayer;
                     S.Dependencies.SelectableManager = SelectableManager;
-                    S.Dependencies.Selectable = _selectable;
+                    S.Dependencies.Selectable = Selectable;
                     S.Dependencies.SelectableAction = _selectableAction;
                     var preparer = new GamePreparer(S.Dependencies);
                     if (!preparer.AreOptionsValid)
@@ -150,7 +151,7 @@ namespace Unity.Managers
                 game.Players.Find(p => p.Name == c.playerName).Characters.AddRange(c.characterNames.Select(x => CharacterFactory.Create(game, x)));
             });
             //game.AfterCellSelect += cell =>
-            //	ClientManager.Instance.Client.SendMessage($"TOUCH_CELL {cell.Coordinates.ToString()}");
+            //  ClientManager.Instance.Client.SendMessage($"TOUCH_CELL {cell.Coordinates.ToString()}");
             game.Action.MultiplayerAction += message =>
                 ClientManager.Instance.Client.SendMessage(message);
 
@@ -176,7 +177,7 @@ namespace Unity.Managers
                 HexMap = GetMap(),
                 PickType = GetPickType(),
                 GameType = GameType.Local,
-                Selectable = _selectable,
+                Selectable = Selectable,
                 SelectableManager = SelectableManager,
                 SelectableAction = _selectableAction,
                 Connection = _conn,
@@ -291,7 +292,7 @@ namespace Unity.Managers
                 Players = testingGamePlayers,
                 LogFilePath = GetLogFilePath(),
                 Type = GameType.Local,
-                Selectable = _selectable,
+                Selectable = Selectable,
                 Connection = _conn,
                 SelectableManager = SelectableManager,
                 SelectableAction = _selectableAction,

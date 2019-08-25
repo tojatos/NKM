@@ -11,85 +11,85 @@ using Effects = Unity.UI.CharacterUI.Effects;
 
 namespace Unity.UI
 {
-	public class UIManager : SingletonMonoBehaviour<UIManager>
-	{
-		private Game _game;
-		private Active Active => _game.Active;
-		private static ConsoleDrawer ConsoleDrawer => ConsoleDrawer.Instance;
+    public class UIManager : SingletonMonoBehaviour<UIManager>
+    {
+        private Game _game;
+        private Active Active => _game.Active;
+        private static ConsoleDrawer ConsoleDrawer => ConsoleDrawer.Instance;
 
-		public GameObject CancelButton;
-		public GameObject AbilityButtons;
-		public GameObject CharacterUI;
-		public GameObject HexCellUI;
+        public GameObject CancelButton;
+        public GameObject AbilityButtons;
+        public GameObject CharacterUI;
+        public GameObject HexCellUI;
 
-		public GameObject EndTurnImage;
-		public GameObject HourglassImage;
-		
+        public GameObject EndTurnImage;
+        public GameObject HourglassImage;
 
-		public Text ActivePlayerText;
-		public Text ActivePhaseText;
-		public Text ActiveCharacterText;
-		public Text ActiveHexCellText;
 
-		private bool CanClickEndTurnButton =>
-			!(_game == null || _game.Active.Phase.Number == 0 || _game.Active.Turn.CharacterThatTookActionInTurn == null &&
-			  _game.Active.GamePlayer.Characters.Any(c => (Active.CanWait(c) || Active.CanTakeAction(c)) && c.IsOnMap) || Active.AbilityToUse != null);
+        public Text ActivePlayerText;
+        public Text ActivePhaseText;
+        public Text ActiveCharacterText;
+        public Text ActiveHexCellText;
 
-		public void Init(Game game) //TODO
-		{
-			_game = game;
-			Stats.Instance.Init(game);
-			Tooltip.Instance.Init();
-			EndTurnImage.AddTrigger(EventTriggerType.PointerClick, e => EndTurnImageClick());
-			CancelButton.AddTrigger(EventTriggerType.PointerClick, e => _game.Action.Cancel());
-			HourglassImage.AddTrigger(EventTriggerType.PointerClick, e => HourglassImageClick());
-			ActivePlayerText.gameObject.AddSetTooltipEvent("Nazwa aktywnego gracza");
-			ActivePlayerText.gameObject.AddRemoveTooltipEvent();
-			ActivePhaseText.gameObject.AddSetTooltipEvent("Numer fazy");
-			ActivePhaseText.gameObject.AddRemoveTooltipEvent();
-			
-			game.Active.Phase.PhaseChanged += UpdateActivePhaseText;
-			game.Active.Turn.TurnStarted += UpdateActivePlayerUI;
-		}
-		public void UpdateActivePlayerUI(GamePlayer player) => ActivePlayerText.SetText(player.Name);
-		public void UpdateActivePhaseText() => ActivePhaseText.SetText(_game.Active.Phase.Number.ToString());
+        private bool CanClickEndTurnButton =>
+            !(_game == null || _game.Active.Phase.Number == 0 || _game.Active.Turn.CharacterThatTookActionInTurn == null &&
+              _game.Active.GamePlayer.Characters.Any(c => (Active.CanWait(c) || Active.CanTakeAction(c)) && c.IsOnMap) || Active.AbilityToUse != null);
 
-		private void Update()
-		{
-			if (Input.GetKeyDown(KeyCode.F2))
-				ConsoleDrawer.Toggle();
+        public void Init(Game game) //TODO
+        {
+            _game = game;
+            Stats.Instance.Init(game);
+            Tooltip.Instance.Init();
+            EndTurnImage.AddTrigger(EventTriggerType.PointerClick, e => EndTurnImageClick());
+            CancelButton.AddTrigger(EventTriggerType.PointerClick, e => _game.Action.Cancel());
+            HourglassImage.AddTrigger(EventTriggerType.PointerClick, e => HourglassImageClick());
+            ActivePlayerText.gameObject.AddSetTooltipEvent("Nazwa aktywnego gracza");
+            ActivePlayerText.gameObject.AddRemoveTooltipEvent();
+            ActivePhaseText.gameObject.AddSetTooltipEvent("Numer fazy");
+            ActivePhaseText.gameObject.AddRemoveTooltipEvent();
 
-			EndTurnImage.ToggleIf(!CanClickEndTurnButton);
-			Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
-			CharacterUI.ToggleIf(_game?.Active.Character == null);
-			HexCellUI.ToggleIf(_game?.Active.SelectedCell == null);
-			
-			if (_game==null) return;
-			
-			if (Active.Character != null) ActiveCharacterText.text = Active.Character.Name;
-			if (Active.SelectedCell != null) ActiveHexCellText.text = Active.SelectedCell.Type.ToString();
-			bool isActiveUse = _game.Active.IsActiveUse;
-			AbilityButtons.ToggleIf(isActiveUse);
-			CancelButton.ToggleIf(!isActiveUse);
-			HourglassImage.ToggleIf(isActiveUse || Active.Character!=null && !Active.CanWait(Active.Character));
-			
-		}
+            game.Active.Phase.PhaseChanged += UpdateActivePhaseText;
+            game.Active.Turn.TurnStarted += UpdateActivePlayerUI;
+        }
+        public void UpdateActivePlayerUI(GamePlayer player) => ActivePlayerText.SetText(player.Name);
+        public void UpdateActivePhaseText() => ActivePhaseText.SetText(_game.Active.Phase.Number.ToString());
 
-		private void EndTurnImageClick()
-		{
-			if (_game.Active.Phase.Number == 0) return;
-			if (CanClickEndTurnButton) _game.Action.FinishTurn();//Game.Active.Turn.Finish();
-		}
-		
-		private void HourglassImageClick()
-		{
-            if(Active.Character.Owner != Active.GamePlayer) return;
-			_game.Action.TakeTurn(Active.Character);
-			_game.Action.FinishTurn();
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F2))
+                ConsoleDrawer.Toggle();
+
+            EndTurnImage.ToggleIf(!CanClickEndTurnButton);
+            Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
+            CharacterUI.ToggleIf(_game?.Active.Character == null);
+            HexCellUI.ToggleIf(_game?.Active.SelectedCell == null);
+
+            if (_game==null) return;
+
+            if (Active.Character != null) ActiveCharacterText.text = Active.Character.Name;
+            if (Active.SelectedCell != null) ActiveHexCellText.text = Active.SelectedCell.Type.ToString();
+            bool isActiveUse = _game.Active.IsActiveUse;
+            AbilityButtons.ToggleIf(isActiveUse);
+            CancelButton.ToggleIf(!isActiveUse);
+            HourglassImage.ToggleIf(isActiveUse || Active.Character!=null && !Active.CanWait(Active.Character));
+
         }
 
-		public void AddUITriggers(Character character)
-		{
+        private void EndTurnImageClick()
+        {
+            if (_game.Active.Phase.Number == 0) return;
+            if (CanClickEndTurnButton) _game.Action.FinishTurn(); //Game.Active.Turn.Finish();
+        }
+
+        private void HourglassImageClick()
+        {
+            if(Active.Character.Owner != Active.GamePlayer) return;
+            _game.Action.TakeTurn(Active.Character);
+            _game.Action.FinishTurn();
+        }
+
+        public void AddUITriggers(Character character)
+        {
             character.HealthPoints.StatChanged += () =>
             {
                 if (Active.Character == character) MainHPBar.Instance.UpdateHPAmount(character);
@@ -106,8 +106,8 @@ namespace Unity.UI
                 HexMapDrawer.Instance.RemoveHighlights();
                 Stats.Instance.UpdateCharacterStats(null);
             };
-			
-		}
 
-	}
+        }
+
+    }
 }
