@@ -163,6 +163,7 @@
     <Compile Include="Assets\Scripts\NKMCore\BlindPick.cs" />
     <Compile Include="Assets\Scripts\NKMCore\CharacterFactory.cs" />
     <Compile Include="Assets\Scripts\NKMCore\CharacterPick.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\CommandExecutor.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Console.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Damage.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Delegates.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Assets\Scripts\NKMCore\HexMapSerializer.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Instantiator.cs" />
     <Compile Include="Assets\Scripts\NKMCore\ISelectable.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Logger.cs" />
     <Compile Include="Assets\Scripts\NKMCore\NKMID.cs" />
     <Compile Include="Assets\Scripts\NKMCore\NKMRandom.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Phase.cs" />

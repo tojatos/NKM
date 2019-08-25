@@ -2,6 +2,7 @@
 using System.Linq;
 using NKMCore;
 using Unity.Extensions;
+using Unity.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -56,8 +57,8 @@ namespace Unity
         {
             if(_console==null) return;
             if (!InputField.isFocused || InputField.text == "" || !Input.GetKey(KeyCode.Return)) return;
-        
-            _console.ExecuteCommand(InputField.text);
+
+            GameStarter.Game.Action.ExecuteCommand(InputField.text);
 
             UpdateLogText();
             InputField.text = "";
