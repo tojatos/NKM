@@ -229,7 +229,7 @@ namespace Unity.Managers
             Effects.Instance.Init(game);
             Face.Instance.Init(game);
             UI.HexCellUI.Effects.Instance.Init(game);
-            HexImage.Instance.Init(game);
+            HexImage.Instance.Init();
             Spawner.Instance.Init(game);
             game.OnFinish += () => ShowFinishGamePopup(game);
             game.Active.Turn.TurnStarted += player =>

@@ -4,6 +4,7 @@ using NKMCore;
 using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Extensions;
+using Unity.Hex;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,11 +16,15 @@ namespace Unity.UI.HexCellUI
         private List<GameObject> Buttons { get; set; }
 
         private void Awake() => Buttons = new List<GameObject>();
-        public void Init(Game game) => game.AfterCellSelect += UpdateButtons;
+        public void Init(Game game) => HexMapDrawer.Instance.AfterCellSelect += UpdateButtons;
 
-        public void UpdateButtons(HexCell selectedCell)
+        private HexCell _lastSelectedCell;
+
+        public void Refresh() => UpdateButtons(_lastSelectedCell);
+        private void UpdateButtons(HexCell selectedCell)
         {
             if (selectedCell == null) return;
+            _lastSelectedCell = selectedCell;
             RemoveButtons();
             selectedCell.Effects.ForEach(effect => CreateEffectButton(selectedCell, effect));
         }

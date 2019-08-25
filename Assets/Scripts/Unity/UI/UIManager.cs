@@ -15,6 +15,7 @@ namespace Unity.UI
     {
         private Game _game;
         private Active Active => _game.Active;
+        public UnityActive UnityActive;
         private static ConsoleDrawer ConsoleDrawer => ConsoleDrawer.Instance;
 
         public GameObject CancelButton;
@@ -35,9 +36,11 @@ namespace Unity.UI
             !(_game == null || _game.Active.Phase.Number == 0 || _game.Active.Turn.CharacterThatTookActionInTurn == null &&
               _game.Active.GamePlayer.Characters.Any(c => (Active.CanWait(c) || Active.CanTakeAction(c)) && c.IsOnMap) || Active.AbilityToUse != null);
 
+
         public void Init(Game game) //TODO
         {
             _game = game;
+            UnityActive = new UnityActive();
             Stats.Instance.Init(game);
             Tooltip.Instance.Init();
             EndTurnImage.AddTrigger(EventTriggerType.PointerClick, e => EndTurnImageClick());
@@ -47,6 +50,11 @@ namespace Unity.UI
             ActivePlayerText.gameObject.AddRemoveTooltipEvent();
             ActivePhaseText.gameObject.AddSetTooltipEvent("Numer fazy");
             ActivePhaseText.gameObject.AddRemoveTooltipEvent();
+
+            game.Active.AfterDeselect += () => UnityActive.SelectedCell = null;
+            game.Active.Turn.TurnFinished += character => UnityActive.SelectedCell = null;
+            HexMapDrawer.Instance.AfterCellSelect += cell => UnityActive.SelectedCell = cell;
+
 
             game.Active.Phase.PhaseChanged += UpdateActivePhaseText;
             game.Active.Turn.TurnStarted += UpdateActivePlayerUI;
@@ -62,12 +70,12 @@ namespace Unity.UI
             EndTurnImage.ToggleIf(!CanClickEndTurnButton);
             Tooltip.Instance.gameObject.ToggleIf(!Tooltip.Instance.IsActive);
             CharacterUI.ToggleIf(_game?.Active.Character == null);
-            HexCellUI.ToggleIf(_game?.Active.SelectedCell == null);
+            HexCellUI.ToggleIf(UnityActive?.SelectedCell == null);
 
             if (_game==null) return;
 
             if (Active.Character != null) ActiveCharacterText.text = Active.Character.Name;
-            if (Active.SelectedCell != null) ActiveHexCellText.text = Active.SelectedCell.Type.ToString();
+            if (UnityActive.SelectedCell != null) ActiveHexCellText.text = UnityActive.SelectedCell.Type.ToString();
             bool isActiveUse = _game.Active.IsActiveUse;
             AbilityButtons.ToggleIf(isActiveUse);
             CancelButton.ToggleIf(!isActiveUse);

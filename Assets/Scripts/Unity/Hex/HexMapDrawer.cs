@@ -13,6 +13,7 @@ using Unity.Animations;
 using Unity.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Action = NKMCore.Action;
 using Debug = System.Diagnostics.Debug;
 
 namespace Unity.Hex
@@ -21,6 +22,7 @@ namespace Unity.Hex
     {
         private Game _game;
         private Active Active => _game.Active;
+        private Action Action => _game.Action;
         public DrawnHexCell CellPrefab;
         public List<DrawnHexCell> Cells;
         private readonly Dictionary<Character, GameObject> _characterObjects = new Dictionary<Character, GameObject>();
@@ -101,7 +103,7 @@ namespace Unity.Hex
             Active.AfterCharacterPlacePrepare += set => SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
             Active.AfterCancelPlacingCharacter += () => RemoveHighlights();
             Active.AfterClean += () => RemoveHighlights();
-            _game.AfterCellSelect += touchedCell =>
+            AfterCellSelect += touchedCell =>
             {
                 if (Active.SelectedCharacterToPlace != null) return;
                 if (Active.HexCells?.Contains(touchedCell) == true) return;
@@ -114,16 +116,56 @@ namespace Unity.Hex
             {
                 if (effect is Conflagration)
                     SelectDrawnCell(effect.ParentCell).AddEffectHighlight(effect.Name);
-                Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(Active.SelectedCell);
+                Unity.UI.HexCellUI.Effects.Instance.Refresh();
             };
             _game.HexMap.AfterCellEffectRemove += effect =>
             {
                 if (effect is Conflagration)
                     SelectDrawnCell(effect.ParentCell).RemoveEffectHighlight(effect.Name);
-                Unity.UI.HexCellUI.Effects.Instance.UpdateButtons(Active.SelectedCell);
+                Unity.UI.HexCellUI.Effects.Instance.Refresh();
             };
+        }
 
+        public event Delegates.Cell AfterCellSelect;
+        public void TouchCell(HexCell touchedCell)
+        {
+            AfterCellSelect?.Invoke(touchedCell);
+            if (Active.SelectedCharacterToPlace != null)
+            {
+                if(!Active.CanPlace(Active.SelectedCharacterToPlace, touchedCell)) return;
+                Action.PlaceCharacter(Active.SelectedCharacterToPlace, touchedCell);
+                if (Active.Phase.Number != 0) return;
+                Action.FinishTurn();
+            }
+            else if (Active.HexCells?.Contains(touchedCell) == true)
+            {
+                if (Active.AbilityToUse != null)
+                {
+                    //It is important to check in that order, in case ability uses multiple interfaces!
+                    if(Active.AbilityToUse is IUseableCharacter && !touchedCell.IsEmpty)
+                        Action.UseAbility((IUseableCharacter) Active.AbilityToUse, touchedCell.FirstCharacter);
+                    else if(Active.AbilityToUse is IUseableCell)
+                        Action.UseAbility((IUseableCell) Active.AbilityToUse, touchedCell);
+                    else if(Active.AbilityToUse is IUseableCellList)
+                        Action.UseAbility((IUseableCellList) Active.AbilityToUse, Active.AirSelection.IsEnabled ? Active.AirSelection.HexCells : Active.HexCells);
+                }
+                else if (Active.Character != null)
+                {
+                    if(!touchedCell.IsEmpty && Active.Character.CanBasicAttack(touchedCell.FirstCharacter))
+                        Action.BasicAttack(Active.Character, touchedCell.FirstCharacter);
+                    else if(touchedCell.IsFreeToStand && Active.Character.CanBasicMove(touchedCell) && Active.MoveCells.Last() == touchedCell)
+                        Action.BasicMove(Active.Character, Active.MoveCells);
+                }
+            }
+            else
+            {
+                if (Active.AbilityToUse != null) return;
 
+                if (!touchedCell.IsEmpty)
+                    Action.Select(touchedCell.FirstCharacter);
+                else
+                    Action.Deselect();
+            }
         }
 
         public void AddTriggers(Ability ability)
@@ -290,7 +332,7 @@ namespace Unity.Hex
                 if (IsPointerOverUiObject()) return; //Do not touch cells if mouse is over UI
 
                 HexCell cellPointed = CellPointed();
-                if (cellPointed != null) _game.TouchCell(cellPointed);
+                if (cellPointed != null) TouchCell(cellPointed);
             }
 
             if (Input.GetMouseButtonDown(1))

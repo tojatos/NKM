@@ -229,6 +229,7 @@
     <Compile Include="Assets\Scripts\NKMCore\Templates\IUseableCell.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\IUseableCellList.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\IUseableCharacter.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Templates\NKMEntity.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Turn.cs" />
     <Compile Include="Assets\Scripts\Unity\AnimationPlayer.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\AsterYo.cs" />
@@ -313,6 +314,7 @@
     <Compile Include="Assets\Scripts\Unity\UI\Replay.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\Victory.cs" />
+    <Compile Include="Assets\Scripts\Unity\UnityActive.cs" />
     <Compile Include="Assets\Scripts\Unity\VanishablePopup.cs" />
     <None Include="Assets\testing_characters.txt" />
     <None Include="Assets\VertexColors.shader" />
