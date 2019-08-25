@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using Unity.Extensions;
-using UnityEngine;
 
 namespace Unity.Animations.Parts
 {

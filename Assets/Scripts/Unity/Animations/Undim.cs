@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NKMCore.Templates;
+﻿using NKMCore.Templates;
 using Unity.Animations.Parts;
-using Unity.Extensions;
 using Unity.Hex;
 using UnityEngine;
 

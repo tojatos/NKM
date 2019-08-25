@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Unity.Extensions;
 using UnityEngine;
 
 namespace Unity
@@ -17,7 +16,7 @@ namespace Unity
 			Instantiate(Stuff.Prefabs.Find(p => p.name == "Background Camera"));
 
         public static void DisableEffects() =>
-            Instance. GetComponentsInChildren<ParticleSystem>().ToList().ForEach(p =>
+            Instance.GetComponentsInChildren<ParticleSystem>().ToList().ForEach(p =>
             {
 	            p.Stop();
 	            p.Clear();

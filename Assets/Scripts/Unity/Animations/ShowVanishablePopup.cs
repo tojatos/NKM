@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Unity.Animations.Parts;
+﻿using Unity.Animations.Parts;
 using UnityEngine;
 
 namespace Unity.Animations
