@@ -5,10 +5,9 @@ namespace Unity.Animations
 {
     public class ShowInfo : NkmAnimation
     {
-        
         public ShowInfo(Transform targetTransform, string value, Color color)
         {
-//            AllowPlayingOtherAnimations = true;
+            AllowPlayingOtherAnimations = true;
             var f = new FloatingInfoStart(targetTransform, value, color);
             GameObject textObject = f.TextObject;
             AnimationParts.Enqueue(f);
@@ -17,6 +16,6 @@ namespace Unity.Animations
             AnimationParts.Enqueue(new MoveToPosition(textObject.transform, Vector3.forward * 15, 0.4f, true));
             AnimationParts.Enqueue(new FloatingInfoFinish(textObject));
         }
-        
+
     }
 }

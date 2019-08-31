@@ -98,7 +98,7 @@ namespace Unity.UI
 
         public void AddUITriggers(Character character)
         {
-            character.HealthPoints.StatChanged += () =>
+            character.HealthPoints.StatChanged += (o, n) =>
             {
                 if (Active.Character == character) MainHPBar.Instance.UpdateHPAmount(character);
             };
