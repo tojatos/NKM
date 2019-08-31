@@ -237,6 +237,7 @@
     <Compile Include="Assets\Scripts\Unity\Animations\AsterYo.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\CamaelMegiddo.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\Destroy.cs" />
+    <Compile Include="Assets\Scripts\Unity\Animations\Check.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\Dim.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\GrammaticaFinish.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\GrammaticaStart.cs" />
@@ -248,6 +249,7 @@
     <Compile Include="Assets\Scripts\Unity\Animations\Parts\AsterYoFinish.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\Parts\AsterYoStart.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\Parts\CamaelMegiddoStart.cs" />
+    <Compile Include="Assets\Scripts\Unity\Animations\Parts\CheckCreate.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\Parts\Destroy.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\Parts\DestroyParticles.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\Parts\DimCreate.cs" />

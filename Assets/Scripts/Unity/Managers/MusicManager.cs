@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NKMCore.Abilities.Bezimienni;
 using NKMCore.Abilities.Monkey_D._Luffy;
 using NKMCore.Abilities.Roronoa_Zoro;
 using NKMCore.Templates;
@@ -86,13 +87,16 @@ namespace Unity.Managers
         {
             switch (ability)
             {
+                case Check check:
+                {
+                    check.AfterCheck += character => PlayAudio("Check");
+                } break;
                 case GomuGomuNoMi gomuGomuNoMi:
                 {
                     gomuGomuNoMi.OnClick += () => PlayAudio("gomu gomu no");
                     gomuGomuNoMi.BeforePistol += () => PlayAudio("pistol");
                     gomuGomuNoMi.BeforeRocket += () => PlayAudio("gomu gomu no rocket effect");
                 } break;
-
                 case HyakuHachiPoundHou hyakuHachiPoundHou:
                 {
                     hyakuHachiPoundHou.BeforeUse += () => PlayAudio(ability.Name);

@@ -10,6 +10,7 @@ using Unity.Animations;
 using Unity.Hex;
 using UnityEngine;
 using AsterYo = NKMCore.Abilities.Hecate.AsterYo;
+using Check = NKMCore.Abilities.Bezimienni.Check;
 using ItadakiNoKura = NKMCore.Abilities.Hecate.ItadakiNoKura;
 
 namespace Unity
@@ -36,6 +37,9 @@ namespace Unity
             DrawnHexCell Gdc(HexCell cell) => HexMapDrawer.Instance.SelectDrawnCell(cell);
             switch (ability)
             {
+                case Check check:
+                    check.AfterCheck += character => Add(new Animations.Check(character));
+                    break;
                 case AsterYo yo:
                     yo.BeforeAsterBlaster += (character, characters) =>
                         Add(new Animations.AsterYo(
