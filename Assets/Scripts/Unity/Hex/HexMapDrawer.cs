@@ -47,7 +47,7 @@ namespace Unity.Hex
                 GetCharacterObject(character).transform.parent = SelectDrawnCell(cell).transform;
                 AnimationPlayer.Add(new Destroy(SelectDrawnCell(cell).gameObject.GetComponent<LineRenderer>())); //Remove the line
                 AnimationPlayer.Add(new MoveTo(GetCharacterObject(character).transform,
-                    GetCharacterObject(character).transform.parent.transform.TransformPoint(0, 10, 0), 0.13f));
+                    GetCharacterObject(character).transform.parent.transform.TransformPoint(0, 10, 0), 0.60f / character.Speed.Value));
 
             };
             _game.HexMap.AfterCharacterPlace += (character, cell) => Spawner.Instance.Spawn(SelectDrawnCell(cell), character);
