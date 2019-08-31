@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using NKMCore.Abilities.Levi;
 using NKMCore.Abilities.Sakai_Yuuji;
+using NKMCore.Hex;
 using NKMCore.Templates;
 using Unity.Animations;
 using Unity.Hex;
 using UnityEngine;
+using AsterYo = NKMCore.Abilities.Hecate.AsterYo;
+using ItadakiNoKura = NKMCore.Abilities.Hecate.ItadakiNoKura;
 
 namespace Unity
 {
@@ -29,56 +32,56 @@ namespace Unity
 
         public static void AddTriggers(Ability ability)
         {
-            if (ability is NKMCore.Abilities.Hecate.AsterYo)
+            GameObject Gco(Character z) => HexMapDrawer.Instance.GetCharacterObject(z);
+            DrawnHexCell Gdc(HexCell cell) => HexMapDrawer.Instance.SelectDrawnCell(cell);
+            switch (ability)
             {
-                ((NKMCore.Abilities.Hecate.AsterYo) ability).BeforeAsterBlaster += (character, characters) =>
-                    Add(new AsterYo(
-                        HexMapDrawer.Instance.GetCharacterObject(character).transform,
-                        characters.Select(c => HexMapDrawer.Instance.GetCharacterObject(c).transform).ToList()
-                    ));
+                case AsterYo yo:
+                    yo.BeforeAsterBlaster += (character, characters) =>
+                        Add(new Animations.AsterYo(
+                                Gco(character).transform,
+                                characters.Select(c => HexMapDrawer.Instance.GetCharacterObject(c).transform).ToList()
+                            ));
+                    break;
+                case ItadakiNoKura kura:
+                    kura.AfterCollectingEnergy += (parent, target) =>
+                        Add(new Animations.ItadakiNoKura(Gco(parent).transform, Gco(target).transform));
+                    break;
+                case NKMCore.Abilities.Itsuka_Kotori.CamaelMegiddo megiddo:
+                    megiddo.BeforeFlamewave += (lineCells, conflagrationCells) =>
+                        Add(new CamaelMegiddo(
+                                lineCells.Select(c => Gdc(c).transform).ToList(),
+                                conflagrationCells.Select(c => Gdc(c).transform).ToList()
+                            ));
+                    break;
+                case SwordVieldingTechnique technique:
+                    technique.OnSwing += (character, cell) =>
+                        Add(new MoveTo(
+                                Gco(character).transform,
+                                Gdc(cell).transform.position,
+                                0.13f
+                            ));
+                    break;
+                case VerticalManeuveringEquipment equipment:
+                    equipment.OnSwing += (character, cell) =>
+                        Add(new MoveTo(
+                                Gco(character).transform,
+                                Gdc(cell).transform.position,
+                                0.13f
+                            ));
+                    break;
+                case Grammatica grammatica:
+                {
+                    grammatica.BeforeGrammatica += (parentCharacter, targetCharacter) => Add(new GrammaticaStart(parentCharacter, targetCharacter));
+                    grammatica.AfterGrammatica += (parentCharacter, targetCharacter, targetCell) =>
+                        Add(new GrammaticaFinish(
+                                Gco(parentCharacter).transform,
+                                Gco(targetCharacter).transform,
+                                Gdc(targetCell).transform.TransformPoint(0,10,0)
+                            ));
+                    break;
+                }
             }
-
-            if (ability is NKMCore.Abilities.Itsuka_Kotori.CamaelMegiddo)
-            {
-                ((NKMCore.Abilities.Itsuka_Kotori.CamaelMegiddo) ability).BeforeFlamewave += (lineCells, conflargationCells) =>
-                    Add(new CamaelMegiddo(
-                        lineCells.Select(c => HexMapDrawer.Instance.SelectDrawnCell(c).transform).ToList(),
-                        conflargationCells.Select(c => HexMapDrawer.Instance.SelectDrawnCell(c).transform).ToList()
-                    ));
-            }
-            if (ability is SwordVieldingTechnique)
-            {
-                ((SwordVieldingTechnique) ability).OnSwing += (character, cell) =>
-                    Add(new MoveTo(
-                        HexMapDrawer.Instance.GetCharacterObject(character).transform,
-                        HexMapDrawer.Instance.SelectDrawnCell(cell).transform.position,
-                        0.13f
-                    ));
-            }
-
-            if (ability is VerticalManeuveringEquipment)
-            {
-                ((VerticalManeuveringEquipment) ability).OnSwing += (character, cell) =>
-                    Add(new MoveTo(
-                        HexMapDrawer.Instance.GetCharacterObject(character).transform,
-                        HexMapDrawer.Instance.SelectDrawnCell(cell).transform.position,
-                        0.13f
-                    ));
-            }
-
-            if (ability is Grammatica)
-            {
-                var ab = (Grammatica) ability;
-                ab.BeforeGrammatica += (parentCharacter, targetCharacter) => Add(new GrammaticaStart(parentCharacter, targetCharacter));
-                ab.AfterGrammatica += (parentCharacter, targetCharacter, targetCell) =>
-                    Add(new GrammaticaFinish(
-                        HexMapDrawer.Instance.GetCharacterObject(parentCharacter).transform,
-                        HexMapDrawer.Instance.GetCharacterObject(targetCharacter).transform,
-                        HexMapDrawer.Instance.SelectDrawnCell(targetCell).transform.TransformPoint(0,10,0)
-                    ));
-            }
-
-
         }
         public static void AddTriggers(Character character)
         {
