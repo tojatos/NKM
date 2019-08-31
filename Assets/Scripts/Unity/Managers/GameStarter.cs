@@ -79,6 +79,18 @@ namespace Unity.Managers
                 PrepareAndStartGame();
         }
 
+        private static async Task InitOnlineGame()
+        {
+            S.Dependencies.Connection = _conn;
+            S.Dependencies.GameType = GameType.Multiplayer;
+            S.Dependencies.SelectableManager = SelectableManager;
+            S.Dependencies.Selectable = Selectable;
+            S.Dependencies.SelectableAction = _selectableAction;
+            var preparer = new GamePreparer(S.Dependencies);
+            if (!preparer.AreOptionsValid)
+                throw new Exception("Options are invalid!");
+            Game = await preparer.CreateGame();
+        }
         public async void HandleMessageFromServer(string message)
         {
             string[] data = message.Split(new []{' '}, 2);
@@ -87,24 +99,25 @@ namespace Unity.Managers
             if (data.Length > 1) content = data[1];
             switch (header)
             {
-                case "ALLRANDOM":
+                case ClientManager.Messages.AllRandom:
                 {
                     ClientManager.Instance.Client.SendMessage("GET_CHARACTERS");
                     S.Dependencies.PickType = PickType.AllRandom;
                 } break;
+                case ClientManager.Messages.Draft:
+                case ClientManager.Messages.Blind:
+                {
+                    if(Game != null) return;
+                    S.Dependencies.PickType = header == ClientManager.Messages.Draft ? PickType.Draft : PickType.Blind;
+                    await InitOnlineGame();
+
+                    await Task.Delay(1000).ContinueWith(t => AsyncCaller.Instance.Call(() => RunGame(Game)));
+
+                } break;
                 case "SET_CHARACTERS":
                 {
                     if(Game != null) return;
-                    S.Dependencies.Connection = _conn;
-                    S.Dependencies.GameType = GameType.Multiplayer;
-                    S.Dependencies.SelectableManager = SelectableManager;
-                    S.Dependencies.Selectable = Selectable;
-                    S.Dependencies.SelectableAction = _selectableAction;
-                    var preparer = new GamePreparer(S.Dependencies);
-                    if (!preparer.AreOptionsValid)
-                        throw new Exception("Options are invalid!");
-                    Game = await preparer.CreateGame();
-
+                    await InitOnlineGame();
                     AttachCharactersFromServer(Game, content);
                     await Task.Delay(1000).ContinueWith(t => AsyncCaller.Instance.Call(() => RunGame(Game)));
                 } break;

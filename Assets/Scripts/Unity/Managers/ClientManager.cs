@@ -42,24 +42,20 @@ namespace Unity.Managers
                 case Scenes.MainGame:
                 {
                     string Header(string msg) => msg.Split(new []{' '}, 2)[0];
-                    if (_gameStarterMessages.Any(m => m == Messages.AllRandom))
-                    {
-                        _gameStarterMessages.Remove(Messages.AllRandom);
-                        GameStarter.Instance.HandleMessageFromServer(Messages.AllRandom);
-                        return;
-                    }
-                    if (_gameStarterMessages.Any(m => Header(m) == Messages.SetCharacters))
-                    {
-                        string message = _gameStarterMessages.First(m => Header(m) == Messages.SetCharacters);
-                        _gameStarterMessages.RemoveAll(m => Header(m) == Messages.SetCharacters);
-                        GameStarter.Instance.HandleMessageFromServer(message);
-                        return;
-                    }
-                    if (GameStarter.Game == null) return;
                     if(_gameStarterMessages.Any())
                     {
                         string message = _gameStarterMessages[0];
-                        _gameStarterMessages.RemoveAt(0);
+                        if (GameStarter.Game == null && Header(message) == Messages.NkmRandom)
+                        {
+                            // get first non nkmrandom msg
+                            message = _gameStarterMessages.FirstOrDefault(m => Header(m) != Messages.NkmRandom);
+                            if(message==null) return;
+                            _gameStarterMessages.Remove(message);
+                        }
+                        else
+                        {
+                            _gameStarterMessages.RemoveAt(0);
+                        }
                         GameStarter.Instance.HandleMessageFromServer(message);
                     }
                 } break;
@@ -87,6 +83,8 @@ namespace Unity.Managers
         private readonly List<string> _availableGameStarterMessages = new List<string>
         {
             Messages.AllRandom,
+            Messages.Blind,
+            Messages.Draft,
             Messages.SetCharacters,
             Messages.Action,
             Messages.NkmRandom,
@@ -113,22 +111,24 @@ namespace Unity.Managers
 
         public static class Messages
         {
-            public static string AllRandom => "ALLRANDOM";
-            public static string SetCharacters => "SET_CHARACTERS";
-            public static string Action => "ACTION";
-            public static string NkmRandom => "NKMRANDOM";
-            public static string PlayerNum => "PLAYER_NUM";
-            public static string Players => "PLAYERS";
-            public static string PlayerJoin => "PLAYER_JOIN";
-            public static string PlayerLeft => "PLAYER_LEFT";
-            public static string MapName => "MAPNAME";
-            public static string Ready => "READY";
-            public static string GameInit => "GAMEINIT";
-            public static string TooManyPlayers => "TOO_MANY_PLAYERS";
-            public static string GetNickname => "GET_NICKNAME";
-            public static string Join => "JOIN";
-            public static string Reject => "REJECT";
-            public static string Stop => "STOP";
+            public const string AllRandom = "ALLRANDOM";
+            public const string Blind = "BLIND";
+            public const string Draft = "DRAFT";
+            public const string SetCharacters = "SET_CHARACTERS";
+            public const string Action = "ACTION";
+            public const string NkmRandom = "NKMRANDOM";
+            public const string PlayerNum = "PLAYER_NUM";
+            public const string Players = "PLAYERS";
+            public const string PlayerJoin = "PLAYER_JOIN";
+            public const string PlayerLeft = "PLAYER_LEFT";
+            public const string MapName = "MAPNAME";
+            public const string Ready = "READY";
+            public const string GameInit = "GAMEINIT";
+            public const string TooManyPlayers = "TOO_MANY_PLAYERS";
+            public const string GetNickname = "GET_NICKNAME";
+            public const string Join = "JOIN";
+            public const string Reject = "REJECT";
+            public const string Stop = "STOP";
         }
 
     }
