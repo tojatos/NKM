@@ -38,7 +38,6 @@ Every character has:
 ### Death
 When a character has no Health Points left, they are removed from the map.
 
-
 ## Actions
 
 There are four possible actions:
@@ -75,3 +74,11 @@ Every effect has a cooldown. When that cooldown reaches 0, the effect is removed
 
 An effect applies just before the first action, that character takes.
 If that effect kills the character, it cancels the action that would be done.
+
+## Player elimination
+When all of Players characters are dead, that Player is eliminated.
+The game is continued without that Player.
+
+## Game finish
+When there is only Player that is not eliminated, game finishes and this Player is victorious.
+In a case where all Players are eliminated, game finishes without winner.
