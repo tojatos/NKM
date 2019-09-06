@@ -1,8 +1,10 @@
 # NKM
 
-A local multiplayer turn-based strategy game on a hex board.
+A multiplayer turn-based strategy game on a hex board.
 
 Made with C# (Unity as frontend)
+
+![Picture of the game](https://raw.githubusercontent.com/tojatos/NKM/rewrite/docs/images/nkm.png)
 
 Currently the only supported language in game is Polish.
 
@@ -15,8 +17,7 @@ Hopefully I'm good enough now to stop rewriting the game and start developing!
 
 ## How the game works
 
-You can read about it in the [Game Rules](https://github.com/tojatos/NKM/blob/master/docs/GameRules.md) section.
-It will be improved later.
+You can read about it in the [Game Rules](https://github.com/tojatos/NKM/blob/rewrite/docs/GameRules.md) section.
 
 ## Where is the code?
 
@@ -32,14 +33,13 @@ It will be improved later.
 
 ## Running / building the game
 
-To run the game simply clone the project and open it in Unity (2019.1.0f1, it may or may not work in other versions).
-You can build using Unity's usual way (ctrl+B), using `Developement` on the toolbar, or using script in root folder (BuildLinux.sh or BuildWindows.cmd).
+To run the game simply clone the project and open it in Unity (I am working on newest versions, so be careful: it may or may not work in other versions).
+You can build using Unity's usual way (ctrl+B), or using `Developement` on the toolbar in Unity (recommended).
 
 Make sure that in the Main Game scene IsTesting is not selected in Game Starter object (it automatically loads characters from Assets/testing_characters.txt).
 
 Warning: git-lfs must be installed to pull everything correctly!
 
-## Future
+## Contributing
 
-Right now I am focused on online mode and writing tests.
-In the future I'd like to support for mobile devices, better documentation for contributing, a website and much more!
+Pull requests are welcome, but please raise an issue before making any changes to let me know that you are working on something. Better documentation coming soon!
