@@ -17,7 +17,8 @@ Hopefully I'm good enough now to stop rewriting the game and start developing!
 
 ## How the game works
 
-You can read about it in the [Game Rules](https://github.com/tojatos/NKM/blob/rewrite/docs/GameRules.md) section.
+You can read about the rules in the [Game Rules](https://github.com/tojatos/NKM/blob/rewrite/docs/GameRules.md) section.\
+If you are a developer, you may be interested in [Introduction](https://github.com/tojatos/NKM/blob/rewrite/docs/Introduction.md).
 
 ## Where is the code?
 
