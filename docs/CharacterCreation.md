@@ -2,9 +2,14 @@
 
 - [Prerequisites](#prerequisites)
 - [Adding to database](#adding-to-database)
+  - [Character](#character)
+  - [Abilities](#abilities)
 - [Ability creation](#ability-creation)
-- [Adding character sprite](#adding-character-sprite)
-- [Testing](#e-character-sprite)
+- [Adding images](#adding-images)
+  - [Character](#character-1)
+  - [Abilities](#abilities-1)
+  - [Effects](#effects)
+- [Testing](#testing)
   - [Init](#Init)
   - [Console](#console)
 
@@ -16,16 +21,34 @@ You should prepare:
 * Base stats values (HP, speed, basic attack range, basic attack value, magic resist, armor).
 * Character attack type (ranged | melee)
 * Ability descriptions (generally every character has 3 abilities: passive, active and ultimate. It is possible to have more, but not recommended)
-* Ability images
-* Character image
+* Images:
+  * Character
+  * Abilities
+  * Effects (Optional)
+
+If you want to contribute your character to this repository, you should present your designed character with the NKM team. As there is no flow created for this yet, simply mail me or raise an issue.
+After your design is officially accepted, you are ready to go!
 
 ## Adding to database
 
 ### Character
 
+TODO
+
 ### Abilities
 
+TODO
+
 ## Ability creation
+
+Look at existing abilities at `Assets/Scripts/NKMCore/Abilities`, read their descriptions and analyze the code.\
+Play the game and see how they actually work. (Or you can [test](#testing) it.)
+
+There is no better way of learning this right now. Trust me.
+
+Create a folder inside `Abilities` folder with your character name, and create `<ability_name>.cs` for every ability. Remember to be accurate with the naming, otherwise you will be running into issues.
+You shouldn't care about how to modify other code than your ability files, just use the existing system. If it is not possible to make your ability using current system, raise an issue.
+
 ## Adding images
 
 All images should be in png format.
@@ -44,7 +67,9 @@ Put them in `Assets/Resources/Sprites/Abilities` with name matching the ability 
 
 ### Effects
 
-TBD
+Effect images should be diamonds. You should use existing effect image as a template, just like in character case.
+
+Put them in `Assets/Resources/Sprites/Effects` with name matching the ability name.
 
 ## Testing
 
