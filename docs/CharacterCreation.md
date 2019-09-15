@@ -2,15 +2,17 @@
 
 - [Prerequisites](#prerequisites)
 - [Adding to database](#adding-to-database)
-  - [Character](#character)
+  - [Author](#author)
   - [Abilities](#abilities)
+  - [Character](#character)
+  - [Mapping abilities to character](#mapping-abilities-to-character)
 - [Ability creation](#ability-creation)
 - [Adding images](#adding-images)
   - [Character](#character-1)
   - [Abilities](#abilities-1)
   - [Effects](#effects)
 - [Testing](#testing)
-  - [Init](#Init)
+  - [Introduction](#introduction)
   - [Console](#console)
 
 ## Prerequisites
@@ -31,13 +33,26 @@ After your design is officially accepted, you are ready to go!
 
 ## Adding to database
 
-### Character
+This sqlite3 database is located at `Assets/StreamingAssets/database.db`.
 
-TODO
+### Author
+
+If you are a new contributor, you should add your name to the `Author` table.
 
 ### Abilities
 
-TODO
+For every ability you create, you should append your ability **class** name to the `Ability` table.
+
+### Character
+
+Add your character data to the `character` table.\
+Name should match the character name, stats are integers, and *FightType* is one of `Melee` or `Ranged`.\
+You should also add *AuthorID* which maps to your name in the `Author` table.\
+Description and Quote are unused right now, so you can safely ignore them.
+
+### Mapping abilities to character
+
+For every ability, you should append to `Character_Ability` table with your *CharacterID* from the `character` table and *AbilityID* from the `Ability` table.
 
 ## Ability creation
 
@@ -73,7 +88,7 @@ Put them in `Assets/Resources/Sprites/Effects` with name matching the ability na
 
 ## Testing
 
-### Init
+### Introduction
 
 To test a character, go to `Game` scene, select `GameStarter` in hierarchy and select `IsTesting` checkbox in the inspector. (Remember to uncheck it before commiting!). After you click `Start` in Unity, a testing map will appear with all characters specified in `testing_characters.txt` spawned. You can modify this file and put your character there with all other characters you wish to appear.
 
