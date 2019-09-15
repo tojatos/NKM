@@ -208,6 +208,7 @@
     <Compile Include="Assets\Scripts\NKMCore\Instantiator.cs" />
     <Compile Include="Assets\Scripts\NKMCore\ISelectable.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Logger.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\NKMData.cs" />
     <Compile Include="Assets\Scripts\NKMCore\NKMID.cs" />
     <Compile Include="Assets\Scripts\NKMCore\NKMRandom.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Phase.cs" />

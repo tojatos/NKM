@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +25,6 @@ namespace Unity.Managers
         public bool IsTesting;
         private static readonly SelectableManager SelectableManager = new SelectableManager();
         [CanBeNull] private static readonly ISelectable Selectable = new SpriteSelectSelectable(SelectableManager);
-        private static IDbConnection _conn;
         private static SelectableAction _selectableAction;
         public static Game Game;
         private static SessionSettings S => SessionSettings.Instance;
@@ -58,7 +56,7 @@ namespace Unity.Managers
 
         private void Awake()
         {
-            _conn = new SqliteConnection($"Data source={_dbPath}");
+            NKMData.Connection = new SqliteConnection($"Data source={_dbPath}");
             var sel = Selectable as SpriteSelectSelectable;
 
             if (IsClientConnected)
@@ -81,7 +79,6 @@ namespace Unity.Managers
 
         private static async Task InitOnlineGame()
         {
-            S.Dependencies.Connection = _conn;
             S.Dependencies.GameType = GameType.Multiplayer;
             S.Dependencies.SelectableManager = SelectableManager;
             S.Dependencies.Selectable = Selectable;
@@ -193,7 +190,6 @@ namespace Unity.Managers
                 Selectable = Selectable,
                 SelectableManager = SelectableManager,
                 SelectableAction = _selectableAction,
-                Connection = _conn,
                 LogFilePath = GetLogFilePath(),
             });
 
@@ -306,7 +302,6 @@ namespace Unity.Managers
                 LogFilePath = GetLogFilePath(),
                 Type = GameType.Local,
                 Selectable = Selectable,
-                Connection = _conn,
                 SelectableManager = SelectableManager,
                 SelectableAction = _selectableAction,
                 PlaceAllCharactersRandomlyAtStart = true,
