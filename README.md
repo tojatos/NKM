@@ -43,4 +43,4 @@ Warning: git-lfs must be installed to pull everything correctly!
 
 ## Contributing
 
-Pull requests are welcome, but please raise an issue before making any changes to let me know that you are working on something. Better documentation coming soon!
+Pull requests are welcome, but please raise an issue before making any changes to let me know that you are working on something.

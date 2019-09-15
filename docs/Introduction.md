@@ -7,6 +7,7 @@ NKM is a turn-based multiplayer game on a hexagonal board.
 - [Server](#server)
   - [Access control](#access-control)
   - [Randomness](#randomness)
+- [Core details](#core-details)
 
 ## Project overview
 
@@ -68,3 +69,10 @@ ExecuteCommand (should be restricted for server only)
 To sync randomness on every client, after a random event occurs on the server it sends ID of that event with result to feed the NKMRandom systems on every client.
 
 Why didn't I just seed the random generators with the same unique ID? Well, I was a little bit worried that it would give the players an option to cheat, since they could predict the result of any random action. And remember, even without source code, C# is fairly easy to reverse engineer.
+
+## Core details
+
+This part of documentation is under work.
+
+Existing pages:
+* [Game dependencies](https://github.com/tojatos/NKM/blob/rewrite/docs/GameDependencies.md)
