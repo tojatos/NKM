@@ -54,6 +54,7 @@ crashlytics-build.properties
 **/.idea/**/uiDesigner.xml
 **/.idea/**/dbnavigator.xml
 /Assets/Plugins/Editor/JetBrains/
+/Assets/Plugins/Editor/JetBrains.meta
 
 # Doxygen
 /docs/html/
