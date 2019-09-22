@@ -326,12 +326,6 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="com.unity.multiplayer-hlapi.Editor">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VSCode.Editor">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
@@ -341,47 +335,14 @@
     <Reference Include="Unity.Timeline">
       <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.multiplayer-weaver.Editor">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.XR.LegacyInputHelpers">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
       <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.SpatialTracking">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.SpatialTracking">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.XR.LegacyInputHelpers">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>/home/tojatos/Unity/Hub/Editor/2019.2.0b9/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -562,15 +523,6 @@
     </Reference>
     <Reference Include="Mono.Data.Sqlite">
       <HintPath>/home/tojatos/Scripts/NKM/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.StandardEvents.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.Editor">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>/home/tojatos/Scripts/NKM/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>/home/tojatos/Unity/Hub/Editor/2019.2.0b9/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
