@@ -11,6 +11,9 @@ namespace NKMCore.Tests
         {
             var properties = new Character.Properties
             {
+                Game = null,
+                Id = 5,
+                Name = "Foo",
                 HealthPoints      =  new  Stat(StatType.HealthPoints,      60),
                 AttackPoints      =  new  Stat(StatType.AttackPoints,      20),
                 BasicAttackRange  =  new  Stat(StatType.BasicAttackRange,  5),
@@ -19,14 +22,24 @@ namespace NKMCore.Tests
                 MagicalDefense    =  new  Stat(StatType.MagicalDefense,    15),
                 Shield            =  new  Stat(StatType.Shield,            0),
                 Type              =  FightType.Melee,
+                Abilities = new List<Ability>(),
             };
-            List<Ability> abilities = new List<Ability>();
-//            Game game = new Game();
-//            Character character = new Character(game, "My character", 1, properties, abilities);
-//            Assert.Equal(true, character.IsAlive);
+            var character = new Character(properties);
+            Assert.Null(character.Game);
+            Assert.Equal(5, character.ID);
+            Assert.Equal("Foo", character.Name);
+            Assert.Equal(FightType.Melee, character.Type);
+
+            Assert.Equal(60, character.HealthPoints.BaseValue);
+            Assert.Equal(60, character.HealthPoints.Value);
+            Assert.Equal(20, character.AttackPoints.Value);
+            Assert.Equal(5, character.BasicAttackRange.Value);
+            Assert.Equal(7, character.Speed.BaseValue);
+            Assert.Equal(20, character.PhysicalDefense.BaseValue);
+            Assert.Equal(15, character.MagicalDefense.BaseValue);
+            Assert.Equal(0, character.Shield.Value);
+
+            Assert.True(character.IsAlive);
         }
-
-
-
     }
 }
