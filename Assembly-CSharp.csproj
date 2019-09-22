@@ -188,6 +188,7 @@
     <Compile Include="Assets\Scripts\NKMCore\Extensions\GameLog.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\NKMObject.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\Predicates.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Extensions\Serializers.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\Sqlite.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\SystemGeneric.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Game.cs" />
