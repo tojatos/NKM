@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NKMCore.Extensions;
 using NKMCore.Templates;
 using Xunit;
@@ -17,17 +16,13 @@ namespace NKMCore.Tests
             Assert.Equal(type, type.Serialize().DeserializeGameType());
         }
 
-        [Fact]
-        public void CharacterSerializeAndDeserialize()
+        [Theory]
+        [InlineData(PickType.Blind)]
+        [InlineData(PickType.Draft)]
+        [InlineData(PickType.AllRandom)]
+        public void PickTypeSerializeAndDeserialize(PickType type)
         {
-            const string name = "Steve";
-            var character = new Character(new Character.Properties{Name = name});
-
-            string serializedCharacter = character.Serialize();
-            Character deserializedCharacter = serializedCharacter.DeserializeCharacter();
-
-            Assert.Equal(name, serializedCharacter);
-            Assert.Equal(character.Name, deserializedCharacter.Name);
+            Assert.Equal(type, type.Serialize().DeserializePickType());
         }
     }
 }
