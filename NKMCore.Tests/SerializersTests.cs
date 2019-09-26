@@ -38,6 +38,7 @@ namespace NKMCore.Tests
               NumberOfCharactersPerPlayer = 4,
               BansEnabled = true,
               NumberOfBans = 2,
+              HexMap = HexMapSerializer.Deserialize("1:1;Wall\n\nSpawnPoint1"),
               PickType = PickType.Draft,
               GameType = GameType.Local,
           };
@@ -47,7 +48,7 @@ namespace NKMCore.Tests
           Assert.Equal(deps.NumberOfCharactersPerPlayer, newDeps.NumberOfCharactersPerPlayer);
           Assert.Equal(deps.BansEnabled, newDeps.BansEnabled);
           Assert.Equal(deps.NumberOfBans, newDeps.NumberOfBans);
-          Assert.Equal(deps.HexMap, newDeps.HexMap);
+          Assert.Equal(HexMapSerializer.Serialize(deps.HexMap), HexMapSerializer.Serialize(newDeps.HexMap));
           Assert.Equal(deps.PickType, newDeps.PickType);
           Assert.Equal(deps.GameType, newDeps.GameType);
         }
