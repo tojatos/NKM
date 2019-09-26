@@ -217,16 +217,19 @@ namespace Unity.Managers
             game.Start();
         }
 
-        private Logger GetLogger()
+        private string GetLogPath()
         {
-            string path = Application.persistentDataPath +
-                   Path.DirectorySeparatorChar +
-                   (IsTesting ? "Testing Game Logs" : "Game Logs") +
-                   Path.DirectorySeparatorChar +
-                   DateTime.Now.ToString("yyyy-MM-dd hh.mm.ss") +
-                   ".txt";
-            return new Logger(path);
+            string[] pathSegments =
+            {
+                Application.persistentDataPath,
+               IsTesting ? "testing_game_logs" : "game_logs",
+               DateTime.Now.ToString("yyyy-MM"),
+               DateTime.Now.ToString("dd"),
+               DateTime.Now.ToString("HH.mm.ss") + ".txt",
+            };
+            return string.Join(Path.DirectorySeparatorChar.ToString(), pathSegments);
         }
+        private Logger GetLogger() => new Logger(GetLogPath());
 
         private static void InitUI(Game game)
         {
