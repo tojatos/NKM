@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using NKMCore.Extensions;
-using NKMCore.Templates;
 using Xunit;
 
 namespace NKMCore.Tests
@@ -51,6 +51,26 @@ namespace NKMCore.Tests
           Assert.Equal(HexMapSerializer.Serialize(deps.HexMap), HexMapSerializer.Serialize(newDeps.HexMap));
           Assert.Equal(deps.PickType, newDeps.PickType);
           Assert.Equal(deps.GameType, newDeps.GameType);
+        }
+
+        [Fact]
+        public void GamePreparerDependencies_SerializeWithComma_Throws()
+        {
+          var deps = new GamePreparerDependencies
+          {
+              NumberOfPlayers = 2,
+              PlayerNames = new List<string> {
+                "Ryszard;",
+                "Maciej",
+              },
+              NumberOfCharactersPerPlayer = 4,
+              BansEnabled = true,
+              NumberOfBans = 2,
+              HexMap = HexMapSerializer.Deserialize("1:1;Wall\n\nSpawnPoint1"),
+              PickType = PickType.Draft,
+              GameType = GameType.Local,
+          };
+          Assert.Throws<FormatException>(() => deps.Serialize());
         }
     }
 }
