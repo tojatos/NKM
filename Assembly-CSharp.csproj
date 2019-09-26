@@ -192,7 +192,6 @@
     <Compile Include="Assets\Scripts\NKMCore\Extensions\Sqlite.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\SystemGeneric.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Game.cs" />
-    <Compile Include="Assets\Scripts\NKMCore\GameLog.cs" />
     <Compile Include="Assets\Scripts\NKMCore\GameDependencies.cs" />
     <Compile Include="Assets\Scripts\NKMCore\GameDependenciesValidator.cs" />
     <Compile Include="Assets\Scripts\NKMCore\GamePlayer.cs" />

@@ -16,6 +16,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Action = NKMCore.Action;
 using Effects = Unity.UI.CharacterUI.Effects;
+using Logger = NKMCore.Logger;
 
 namespace Unity.Managers
 {
@@ -190,7 +191,7 @@ namespace Unity.Managers
                 Selectable = Selectable,
                 SelectableManager = SelectableManager,
                 SelectableAction = _selectableAction,
-                LogFilePath = GetLogFilePath(),
+                Logger = GetLogger(),
             });
 
             Game = await preparer.CreateGame();
@@ -216,14 +217,15 @@ namespace Unity.Managers
             game.Start();
         }
 
-        private string GetLogFilePath()
+        private Logger GetLogger()
         {
-            return Application.persistentDataPath +
+            string path = Application.persistentDataPath +
                    Path.DirectorySeparatorChar +
                    (IsTesting ? "Testing Game Logs" : "Game Logs") +
                    Path.DirectorySeparatorChar +
                    DateTime.Now.ToString("yyyy-MM-dd hh.mm.ss") +
                    ".txt";
+            return new Logger(path);
         }
 
         private static void InitUI(Game game)
@@ -299,11 +301,11 @@ namespace Unity.Managers
             {
                 HexMap = GetMap(),
                 Players = testingGamePlayers,
-                LogFilePath = GetLogFilePath(),
                 Type = GameType.Local,
                 Selectable = Selectable,
                 SelectableManager = SelectableManager,
                 SelectableAction = _selectableAction,
+                Logger = GetLogger(),
                 PlaceAllCharactersRandomlyAtStart = true,
             };
             return gameOptions;
