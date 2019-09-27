@@ -26,7 +26,7 @@ namespace NKMCore.Tests
             Assert.Equal(type, type.Serialize().DeserializePickType());
         }
         [Fact]
-        public void GamePreparerDependenciesSerializeAndDeserialize()
+        public void GamePreparerDependencies_SerializeAndDeserialize()
         {
           var deps = new GamePreparerDependencies
           {
