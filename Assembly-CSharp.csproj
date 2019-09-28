@@ -14,7 +14,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -293,7 +294,9 @@
     <Compile Include="Assets\Scripts\Unity\Managers\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\MusicManager.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\Options.cs" />
+    <Compile Include="Assets\Scripts\Unity\Managers\PathManager.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\PreGameOptions.cs" />
+    <Compile Include="Assets\Scripts\Unity\Managers\ReplaySelect.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\ServerList.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\ServerLobby.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\ShortcutManager.cs" />

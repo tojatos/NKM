@@ -12,7 +12,6 @@ using Unity.Hex;
 using Unity.UI;
 using Unity.UI.CharacterUI;
 using Unity.UI.HexCellUI;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Action = NKMCore.Action;
 using Effects = Unity.UI.CharacterUI.Effects;
@@ -22,7 +21,6 @@ namespace Unity.Managers
 {
     public class GameStarter : SingletonMonoBehaviour<GameStarter>
     {
-        private readonly string _dbPath = $"{Application.streamingAssetsPath}/database.db";
         public bool IsTesting;
         private static readonly SelectableManager SelectableManager = new SelectableManager();
         [CanBeNull] private static readonly ISelectable Selectable = new SpriteSelectSelectable(SelectableManager);
@@ -57,7 +55,7 @@ namespace Unity.Managers
 
         private void Awake()
         {
-            NKMData.Connection = new SqliteConnection($"Data source={_dbPath}");
+            NKMData.Connection = new SqliteConnection($"Data source={PathManager.DbPath}");
             var sel = Selectable as SpriteSelectSelectable;
 
             if (IsClientConnected)
@@ -217,19 +215,7 @@ namespace Unity.Managers
             game.Start();
         }
 
-        private string GetLogPath()
-        {
-            string[] pathSegments =
-            {
-                Application.persistentDataPath,
-               IsTesting ? "testing_game_logs" : "game_logs",
-               DateTime.Now.ToString("yyyy-MM"),
-               DateTime.Now.ToString("dd"),
-               DateTime.Now.ToString("HH.mm.ss") + ".txt",
-            };
-            return string.Join(Path.DirectorySeparatorChar.ToString(), pathSegments);
-        }
-        private Logger GetLogger() => new Logger(GetLogPath());
+        private Logger GetLogger() => new Logger(PathManager.GetLogFilePath());
 
         private static void InitUI(Game game)
         {
@@ -281,7 +267,7 @@ namespace Unity.Managers
         }
         private static void BindTestingCharactersToPlayers(Game game)
         {
-            string testingCharactersFile = File.ReadAllText(Application.dataPath + Path.DirectorySeparatorChar + "testing_characters.txt").TrimEnd();
+            string testingCharactersFile = File.ReadAllText(PathManager.TestingCharactersFilePath).TrimEnd();
             string[][] characterNamesGrouped = testingCharactersFile.Split(new[] {"\n\n"}, StringSplitOptions.None).Select(s => s.Split('\n')).ToArray();
             for (int i = 0; i < characterNamesGrouped.Length; ++i)
             {
@@ -292,7 +278,7 @@ namespace Unity.Managers
         }
         private GameDependencies GetTestingGameOptions()
         {
-            string testingCharactersFile = File.ReadAllText(Application.dataPath + Path.DirectorySeparatorChar + "testing_characters.txt").TrimEnd();
+            string testingCharactersFile = File.ReadAllText(PathManager.TestingCharactersFilePath).TrimEnd();
             string[][] charactersGrouped = testingCharactersFile.Split(new[] {"\n\n"}, StringSplitOptions.None).Select(s => s.Split('\n')).ToArray();
             string[] playerNames = {"Ryszard", "Maciej", "Zygfryd", "Bożydar"};
             List<GamePlayer> testingGamePlayers = charactersGrouped.Select((t, i) => new GamePlayer

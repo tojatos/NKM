@@ -11,5 +11,6 @@
         public const string GameStatistics = "Game Statistics";
         public const string ServerList = "Server List";
         public const string ServerLobby = "Server Lobby";
+        public const string ReplaySelect = "Replay Select";
     }
 }

@@ -10,8 +10,6 @@ namespace Unity.Managers
     public class ServerList : SingletonMonoBehaviour<ServerList>
     {
 
-        private static string _settingsDir;
-        private static string _serverListFilePath;
         public InputField AddServerName;
         public InputField AddServerIP;
         public InputField Nickname;
@@ -28,8 +26,6 @@ namespace Unity.Managers
 
         private void Start()
         {
-            _settingsDir = $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}Settings";
-            _serverListFilePath = $"{_settingsDir}{Path.DirectorySeparatorChar}server_list.txt";
             Nickname.text = SessionSettings.Instance.Nickname;
 
             _client = ClientManager.Instance.Client;
@@ -94,8 +90,8 @@ namespace Unity.Managers
         private void RefreshList()
         {
             Servers.transform.Clear();
-            if(!File.Exists(_serverListFilePath)) return;
-            string[] serverListLines = File.ReadAllLines(_serverListFilePath);
+            if(!File.Exists(PathManager.ServerListFilePath)) return;
+            string[] serverListLines = File.ReadAllLines(PathManager.ServerListFilePath);
             string n = "";
             foreach (string line in serverListLines)
             {
@@ -119,8 +115,8 @@ namespace Unity.Managers
 
         private static void AddServerInfoToFile(string serverName, string ip)
         {
-            Directory.CreateDirectory(_settingsDir);
-            File.AppendAllLines(_serverListFilePath, new []{serverName, ip, ""});
+            Directory.CreateDirectory(PathManager.SettingsDirPath);
+            File.AppendAllLines(PathManager.ServerListFilePath, new []{serverName, ip, ""});
         }
     }
 }

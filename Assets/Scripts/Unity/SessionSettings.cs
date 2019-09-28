@@ -37,6 +37,7 @@ namespace Unity
         public bool IsMuted;
         public string Nickname;
         public string SelectedIP;
+        public string SelectedReplayFilePath;
 
         public List<string> PlayerNames = new List<string>();
         public GamePreparerDependencies Dependencies;

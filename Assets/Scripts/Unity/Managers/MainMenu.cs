@@ -9,22 +9,16 @@ namespace Unity.Managers
         public Button LocalButton;
         public Button OnlineButton;
         public Button OptionsButton;
+        public Button ReplayButton;
         public Button ExitButton;
         private void Awake()
         {
-            LocalButton.onClick.AddListener(()=>
-            {
-//              SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 0);
-                SceneManager.LoadScene(Scenes.PreGameOptions);
-            });
-            OnlineButton.onClick.AddListener(()=>
-            {
-//              SessionSettings.Instance.SetDropdownSetting(SettingType.GameType, 1);
-                SceneManager.LoadScene(Scenes.ServerList);
-            });
+            LocalButton.onClick.AddListener(() => SceneManager.LoadScene(Scenes.PreGameOptions));
+            OnlineButton.onClick.AddListener(() => SceneManager.LoadScene(Scenes.ServerList));
+            ReplayButton.onClick.AddListener(() => SceneManager.LoadScene(Scenes.ReplaySelect));
             OptionsButton.onClick.AddListener(Options.Instance.Show);
             ExitButton.onClick.AddListener(Application.Quit);
-            
+
             LocalButton.Select();
         }
     }
