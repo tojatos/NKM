@@ -337,6 +337,7 @@ namespace Unity.Hex
 
             if (Input.GetMouseButtonDown(1))
             {
+
                 _game.Action.Cancel();
             }
         }

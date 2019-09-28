@@ -4,8 +4,12 @@
     <attachedFolders />
     <explicitIncludes>
       <Path>Library/PackageCache/com.unity.ext.nunit@1.0.0</Path>
+      <Path>Library/PackageCache/com.unity.render-pipelines.core@6.9.1</Path>
+      <Path>Library/PackageCache/com.unity.render-pipelines.high-definition@6.9.1-preview</Path>
+      <Path>Library/PackageCache/com.unity.shadergraph@6.9.1</Path>
       <Path>Library/PackageCache/com.unity.test-framework@1.0.13</Path>
       <Path>Library/PackageCache/com.unity.textmeshpro@2.0.1</Path>
+      <Path>Library/PackageCache/com.unity.visualeffectgraph@6.9.1-preview</Path>
       <Path>Packages</Path>
       <Path>ProjectSettings</Path>
     </explicitIncludes>
@@ -15,9 +19,11 @@
       <Path>Builds</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
+      <Path>NKMCore.Tests</Path>
       <Path>Temp</Path>
       <Path>docs</Path>
       <Path>obj</Path>
+      <Path>scripts</Path>
     </explicitExcludes>
   </component>
 </project>
