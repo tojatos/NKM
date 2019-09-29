@@ -199,6 +199,7 @@
     <Compile Include="Assets\Scripts\NKMCore\GamePlayer.cs" />
     <Compile Include="Assets\Scripts\NKMCore\GamePreparer.cs" />
     <Compile Include="Assets\Scripts\NKMCore\GamePreparerDependencies.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\GamePreparerDependenciesValidator.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexCell.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexCoordinates.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexDirection.cs" />

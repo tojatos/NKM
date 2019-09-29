@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
+using NKMCore;
 using Unity.Extensions;
 using Unity.Hex;
 using UnityEngine;
@@ -11,6 +13,7 @@ namespace Unity.Managers
     public class PreGameOptions : MonoBehaviour
     {
         private GameObject _multipleDropdownsObject;
+        private readonly List<Dropdown> _dropdowns = new List<Dropdown>();
         public Transform WindowHandle;
         private static SessionSettings S => SessionSettings.Instance;
 
@@ -18,7 +21,6 @@ namespace Unity.Managers
         {
             _multipleDropdownsObject = Instantiate(Stuff.Prefabs.First(s => s.name == "Multiple Dropdowns"), WindowHandle);
             var md = _multipleDropdownsObject.GetComponent<MultipleDropdowns>();
-            md.FinishSelectingButton.onClick.AddListener(() => SceneManager.LoadScene(Scenes.MainGame));
             var pickTypeSettings = new DropdownSettings
             {
                 Type = SettingType.PickType,
@@ -56,16 +58,33 @@ namespace Unity.Managers
                 Description = "Liczba banów na gracza",
                 Options = GetNumberOfBansStrings()
             };
-            md.AddSessionSettingsDropdown(pickTypeSettings);
-            md.AddSessionSettingsDropdown(areBansEnabledSettings);
-            md.AddSessionSettingsDropdown(bansNumberSettings);
+            _dropdowns.Add(md.AddSessionSettingsDropdown(pickTypeSettings));
+            _dropdowns.Add(md.AddSessionSettingsDropdown(areBansEnabledSettings));
+            _dropdowns.Add(md.AddSessionSettingsDropdown(bansNumberSettings));
             Dropdown mapSelectDropdown = md.AddSessionSettingsDropdown(mapSelectSettings);
             Dropdown numberOfPlayersDropdown = md.AddSessionSettingsDropdown(numberOfPlayersSettings);
             Dropdown numberOfCharacterPerPlayerDropdown = md.AddSessionSettingsDropdown(numberOfCharacterPerPlayerSettings);
+            _dropdowns.Add(mapSelectDropdown);
+            _dropdowns.Add(numberOfPlayersDropdown);
+            _dropdowns.Add(numberOfCharacterPerPlayerDropdown);
 
             mapSelectDropdown.onValueChanged.AddListener(i => ReloadPlayerCountDropdown(i, numberOfPlayersDropdown));
             mapSelectDropdown.onValueChanged.AddListener(i => ReloadCppDropdown(i, numberOfCharacterPerPlayerDropdown));
+            var validator = new GamePreparerDependenciesValidator(S.Dependencies);
 
+            md.FinishSelectingButton.onClick.AddListener(() =>
+            {
+                // force writing dropdown values into SessionSettings
+                _dropdowns.ForEach(d => d.onValueChanged.Invoke(d.value));
+
+                if (!validator.AreOptionsValid)
+                {
+//                    Popup.Instance.Show("Error", "Niepoprawne opcje"); //TODO: after making popup global and createable
+                    return;
+                }
+
+                SceneManager.LoadScene(Scenes.MainGame);
+            });
         }
 
         [UsedImplicitly]
@@ -75,6 +94,8 @@ namespace Unity.Managers
         {
             int maxPlayers = Stuff.Maps[value].MaxPlayers;
             playerCountDropdown.options = GetNumberOfPlayerStrings(maxPlayers).Select(x => new Dropdown.OptionData(x)).ToList();
+
+            if(playerCountDropdown.value < maxPlayers - 1) return;
 
             playerCountDropdown.value = 0;
             playerCountDropdown.RefreshShownValue();
@@ -92,6 +113,8 @@ namespace Unity.Managers
         {
             int maxCharacters = Stuff.Maps[value].MaxCharacters;
             cppDropdown.options = GetNumberOfCppStrings(maxCharacters).Select(x => new Dropdown.OptionData(x)).ToList();
+
+            if(cppDropdown.value < maxCharacters) return;
 
             cppDropdown.value = 0;
             cppDropdown.RefreshShownValue();

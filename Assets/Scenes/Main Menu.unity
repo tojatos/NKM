@@ -2196,7 +2196,7 @@ MonoBehaviour:
   LocalButton: {fileID: 1113797401}
   OnlineButton: {fileID: 512671753}
   OptionsButton: {fileID: 623620948}
-  ReplayButton: {fileID: 0}
+  ReplayButton: {fileID: 703120049}
   ExitButton: {fileID: 1677648365}
 --- !u!4 &1340893106
 Transform:

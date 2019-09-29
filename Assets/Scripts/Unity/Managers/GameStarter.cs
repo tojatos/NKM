@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Mono.Data.Sqlite;
 using NKMCore;
-using NKMCore.Hex;
 using Unity.Animations;
 using Unity.Hex;
 using Unity.UI;
@@ -26,36 +25,14 @@ namespace Unity.Managers
         [CanBeNull] private static readonly ISelectable Selectable = new SpriteSelectSelectable(SelectableManager);
         private static SelectableAction _selectableAction;
         public static Game Game;
-        private static SessionSettings S => SessionSettings.Instance;
-        private static int GetCharactersPerPlayerNumber() => S.GetDropdownSetting(SettingType.NumberOfCharactersPerPlayer) + 1;
-        private static int GetPlayersNumber() => S.GetDropdownSetting(SettingType.NumberOfPlayers) + 2;
-        private static int GetBansNumber() => S.GetDropdownSetting(SettingType.BansNumber) + 1;
+
+        private static GamePreparerDependencies _gamePreparerDependencies;
         private static bool IsClientConnected => ClientManager.Instance.Client.IsConnected;
-        private static PickType GetPickType()
-        {
-            switch (S.GetDropdownSetting(SettingType.PickType))
-            {
-                case 0: return PickType.Blind;
-                case 1: return PickType.Draft;
-                case 2: return PickType.AllRandom;
-                default: throw new ArgumentOutOfRangeException();
-            }
-        }
-        private HexMap GetMap()
-        {
-            if (IsTesting)
-                return HexMapFactory.FromScriptable(Stuff.Maps.Single(m => m.Map.name == "TestMap"));
-
-            int mapIndex = S.GetDropdownSetting(SettingType.SelectedMapIndex);
-            HexMapScriptable mapScriptable = Stuff.Maps[mapIndex];
-            return HexMapFactory.FromScriptable(mapScriptable);
-        }
-
-        private static bool BansAreEnabled => S.GetDropdownSetting(SettingType.AreBansEnabled) == 1;
 
         private void Awake()
         {
             NKMData.Connection = new SqliteConnection($"Data source={PathManager.DbPath}");
+            _gamePreparerDependencies = SessionSettings.Instance.Dependencies;
             var sel = Selectable as SpriteSelectSelectable;
 
             if (IsClientConnected)
@@ -64,25 +41,30 @@ namespace Unity.Managers
                 _selectableAction.MultiplayerAction += message =>
                     ClientManager.Instance.Client.SendMessage(message);
                 sel?.Init(_selectableAction);
-                return;
             }
-
-            _selectableAction = new SelectableAction(GameType.Local, Selectable);
-            sel?.Init(_selectableAction);
-
-            if(IsTesting)
-                PrepareAndStartTestingGame();
             else
-                PrepareAndStartGame();
+            {
+                _selectableAction = new SelectableAction(GameType.Local, Selectable);
+                sel?.Init(_selectableAction);
+            }
+            _gamePreparerDependencies.SelectableManager = SelectableManager;
+            _gamePreparerDependencies.Selectable = Selectable;
+            _gamePreparerDependencies.SelectableAction = _selectableAction;
+            _gamePreparerDependencies.Logger = new Logger(PathManager.GetLogFilePath());
+
+            if (!IsClientConnected)
+            {
+                if(IsTesting)
+                    PrepareAndStartTestingGame();
+                else
+                    PrepareAndStartGame();
+            }
         }
 
         private static async Task InitOnlineGame()
         {
-            S.Dependencies.GameType = GameType.Multiplayer;
-            S.Dependencies.SelectableManager = SelectableManager;
-            S.Dependencies.Selectable = Selectable;
-            S.Dependencies.SelectableAction = _selectableAction;
-            var preparer = new GamePreparer(S.Dependencies);
+            _gamePreparerDependencies.GameType = GameType.Multiplayer;
+            var preparer = new GamePreparer(_gamePreparerDependencies);
             if (!preparer.AreOptionsValid)
                 throw new Exception("Options are invalid!");
             Game = await preparer.CreateGame();
@@ -98,13 +80,13 @@ namespace Unity.Managers
                 case ClientManager.Messages.AllRandom:
                 {
                     ClientManager.Instance.Client.SendMessage("GET_CHARACTERS");
-                    S.Dependencies.PickType = PickType.AllRandom;
+                    _gamePreparerDependencies.PickType = PickType.AllRandom;
                 } break;
                 case ClientManager.Messages.Draft:
                 case ClientManager.Messages.Blind:
                 {
                     if(Game != null) return;
-                    S.Dependencies.PickType = header == ClientManager.Messages.Draft ? PickType.Draft : PickType.Blind;
+                    _gamePreparerDependencies.PickType = header == ClientManager.Messages.Draft ? PickType.Draft : PickType.Blind;
                     await InitOnlineGame();
 
                     await Task.Delay(1000).ContinueWith(t => AsyncCaller.Instance.Call(() => RunGame(Game)));
@@ -146,7 +128,7 @@ namespace Unity.Managers
             SceneManager.LoadScene(Scenes.MainMenu);
         }
 
-        private void AttachCharactersFromServer(Game game, string content)
+        private static void AttachCharactersFromServer(Game game, string content)
         {
             List<(string playerName, List<string> characterNames)> playerNamesWithCharacters = content.Split(';').Select(x =>
             {
@@ -159,8 +141,6 @@ namespace Unity.Managers
             {
                 game.Players.Find(p => p.Name == c.playerName).Characters.AddRange(c.characterNames.Select(x => CharacterFactory.Create(game, x)));
             });
-            //game.AfterCellSelect += cell =>
-            //  ClientManager.Instance.Client.SendMessage($"TOUCH_CELL {cell.Coordinates.ToString()}");
             game.Action.MultiplayerAction += message =>
                 ClientManager.Instance.Client.SendMessage(message);
 
@@ -174,23 +154,11 @@ namespace Unity.Managers
 
             RunGame(Game);
         }
-        private async void PrepareAndStartGame()
+        private static async void PrepareAndStartGame()
         {
-            var preparer = new GamePreparer(new GamePreparerDependencies
-            {
-                NumberOfPlayers = GetPlayersNumber(),
-                PlayerNames = GetPlayerNames(),
-                NumberOfCharactersPerPlayer = GetCharactersPerPlayerNumber(),
-                BansEnabled = BansAreEnabled,
-                NumberOfBans = GetBansNumber(),
-                HexMap = GetMap(),
-                PickType = GetPickType(),
-                GameType = GameType.Local,
-                Selectable = Selectable,
-                SelectableManager = SelectableManager,
-                SelectableAction = _selectableAction,
-                Logger = GetLogger(),
-            });
+            _gamePreparerDependencies.PlayerNames = GetPlayerNames();
+            _gamePreparerDependencies.GameType = GameType.Local;
+            var preparer = new GamePreparer(_gamePreparerDependencies);
 
             Game = await preparer.CreateGame();
             RunGame(Game);
@@ -199,10 +167,10 @@ namespace Unity.Managers
         private static List<string> GetPlayerNames()
         {
             var names = new List<string>();
-            for (var i = 0; i < GetPlayersNumber(); ++i)
+            for (int i = 0; i < _gamePreparerDependencies.NumberOfPlayers; ++i)
             {
-                names.Add(S.PlayerNames.ElementAtOrDefault(i) != null
-                    ? S.PlayerNames[i]
+                names.Add(SessionSettings.Instance.PlayerNames.ElementAtOrDefault(i) != null
+                    ? SessionSettings.Instance.PlayerNames[i]
                     : $"Player {i + 1}");
             }
             return names;
@@ -214,8 +182,6 @@ namespace Unity.Managers
 
             game.Start();
         }
-
-        private Logger GetLogger() => new Logger(PathManager.GetLogFilePath());
 
         private static void InitUI(Game game)
         {
@@ -288,13 +254,13 @@ namespace Unity.Managers
                 .ToList();
             var gameOptions = new GameDependencies
             {
-                HexMap = GetMap(),
+                HexMap = HexMapFactory.FromScriptable(Stuff.Maps.Single(m => m.Map.name == "TestMap")),
                 Players = testingGamePlayers,
                 Type = GameType.Local,
-                Selectable = Selectable,
-                SelectableManager = SelectableManager,
-                SelectableAction = _selectableAction,
-                Logger = GetLogger(),
+                Selectable = _gamePreparerDependencies.Selectable,
+                SelectableManager = _gamePreparerDependencies.SelectableManager,
+                SelectableAction = _gamePreparerDependencies.SelectableAction,
+                Logger = _gamePreparerDependencies.Logger,
                 PlaceAllCharactersRandomlyAtStart = true,
             };
             return gameOptions;
