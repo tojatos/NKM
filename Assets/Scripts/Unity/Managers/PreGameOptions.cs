@@ -79,7 +79,7 @@ namespace Unity.Managers
 
                 if (!validator.AreOptionsValid)
                 {
-//                    Popup.Instance.Show("Error", "Niepoprawne opcje"); //TODO: after making popup global and createable
+                    Popup.Create(GameObject.Find("Canvas").transform).Show("Error", "Niepoprawne opcje");
                     return;
                 }
 
