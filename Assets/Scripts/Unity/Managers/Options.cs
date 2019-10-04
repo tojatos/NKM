@@ -21,7 +21,7 @@ namespace Unity.Managers
             var md = mdObject.GetComponent<MultipleDropdowns>();
             md.Title.gameObject.Hide();
             md.FinishSelectingButton.gameObject.Hide();
-            var x = md.AddSessionSettingsDropdown(new DropdownSettings
+            Dropdown x = md.AddSessionSettingsDropdown(new DropdownSettings
             {
                 Description = "Efekty w tle",
                 Options = new[] {"Wyłączone", "Włączone"},

@@ -56,7 +56,7 @@ namespace Unity
             // Math.Abs(_cam.orthographicSize - MaxZoom) > 0.01 - drag only on zoom
             if (Input.GetMouseButton(2) && !HexMapDrawer.IsPointerOverUiObject()) //drag only over a Game
             {
-                _diference = (_cam.ScreenToWorldPoint(Input.mousePosition)) - _cam.transform.position;
+                _diference = _cam.ScreenToWorldPoint(Input.mousePosition) - _cam.transform.position;
                 if (_drag == false)
                 {
                     _drag = true;
@@ -69,7 +69,7 @@ namespace Unity
             }
             if (_drag)
             {
-                _cam.transform.position = (_origin - _diference);
+                _cam.transform.position = _origin - _diference;
             }
         }
 
@@ -84,11 +84,11 @@ namespace Unity
             Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
 
             // Find the magnitude of the vector (the distance) between the touches in each frame.
-            var prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-            var touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+            float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+            float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
 
             // Find the difference in the distances between each frame.
-            var deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+            float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
             //MessageLogger.Instance.Log(deltaMagnitudeDiff.ToString());
             if (deltaMagnitudeDiff < -20)
             {
@@ -107,7 +107,7 @@ namespace Unity
         {
             // Calculate how much we will have to move towards the zoomTowards position
             //float multiplier = (1.0f / _cam.orthographicSize * PositionChange);
-            var multiplier = (PositionChange / _cam.orthographicSize);
+            float multiplier = PositionChange / _cam.orthographicSize;
             Vector3 amountToMove;
             if (zoomFoward)
             {
@@ -116,7 +116,7 @@ namespace Unity
             }
             else
             {
-                amountToMove = (MaxZoom -_cam.orthographicSize<20) ? (_mainPosition - transform.position) : Vector3.zero; // * (PositionChange/_cam.orthographicSize);
+                amountToMove = MaxZoom -_cam.orthographicSize < 20 ? _mainPosition - transform.position : Vector3.zero; // * (PositionChange/_cam.orthographicSize);
             }
 
             // Move camera

@@ -19,7 +19,7 @@ namespace Unity.Hex
                 {
                     Color pixelColor = hexMapScriptable.Map.GetPixel(x, z);
                     if (Math.Abs(pixelColor.a) < 0.001) continue; //transparent pixel
-                    
+
                     HexCell.TileType type = hexMapScriptable.ColorMappings.ToList()
                         .First(c => c.Color.Equals(pixelColor)).TileType;
                     GetScriptableCell(ref map, width, type, x, z, i++);
@@ -31,7 +31,7 @@ namespace Unity.Hex
 
         private static void GetScriptableCell(ref HexMap map, int width, HexCell.TileType type, int x, int z, int i)
         {
-            HexCell cell = new HexCell(map, HexCoordinates.FromOffsetCoordinates(x, z), type);
+            var cell = new HexCell(map, HexCoordinates.FromOffsetCoordinates(x, z), type);
             map.Cells.Add(cell);
             if (x > 0)
             {

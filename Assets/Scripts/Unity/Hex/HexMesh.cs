@@ -44,7 +44,7 @@ namespace Unity.Hex
         private void Triangulate(DrawnHexCell cell)
         {
             Vector3 center = cell.transform.localPosition;
-            for (var i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++)
             {
                 AddTriangle(
                     center,
@@ -57,7 +57,7 @@ namespace Unity.Hex
 
         private void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
         {
-            var vertexIndex = _vertices.Count;
+            int vertexIndex = _vertices.Count;
             _vertices.Add(v1);
             _vertices.Add(v2);
             _vertices.Add(v3);

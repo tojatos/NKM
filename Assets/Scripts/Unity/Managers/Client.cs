@@ -117,7 +117,7 @@ namespace Unity.Managers
             try
             {
                 Socket s = client.Client;
-                return s.Poll(10 * 1000, SelectMode.SelectRead) && (s.Available == 0);
+                return s.Poll(10 * 1000, SelectMode.SelectRead) && s.Available == 0;
             }
             catch(Exception ex)
             {
