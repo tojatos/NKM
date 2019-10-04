@@ -3143,6 +3143,7 @@ MonoBehaviour:
   Nickname: {fileID: 831338550}
   AddServerButton: {fileID: 1995897342}
   JoinServerButton: {fileID: 1099619711}
+  MainWindowHandle: {fileID: 601223614}
   Servers: {fileID: 1893129696}
 --- !u!1 &1347698486
 GameObject:

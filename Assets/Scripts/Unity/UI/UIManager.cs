@@ -59,6 +59,7 @@ namespace Unity.UI
             game.Active.Phase.PhaseChanged += UpdateActivePhaseText;
             game.Active.Turn.TurnStarted += UpdateActivePlayerUI;
         }
+
         public void UpdateActivePlayerUI(GamePlayer player) => ActivePlayerText.SetText(player.Name);
         public void UpdateActivePhaseText() => ActivePhaseText.SetText(_game.Active.Phase.Number.ToString());
 

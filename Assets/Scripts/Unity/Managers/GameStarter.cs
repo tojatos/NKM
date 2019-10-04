@@ -116,7 +116,7 @@ namespace Unity.Managers
                 } break;
                 case "STOP":
                 {
-                    Popup.Instance.Show("STOP", content, Quit);
+                    Popup.Create(UIManager.Instance.transform).Show("STOP", content, Quit);
                 } break;
             }
         }
@@ -223,7 +223,7 @@ namespace Unity.Managers
         private static void ShowFinishGamePopup(Game game)
         {
             GamePlayer victor = game.Players.SingleOrDefault(p => !p.IsEliminated);
-            Popup.Instance.Show("Gra zakończona", victor == null ? "Nikt nie wygrał" : $"{victor.Name} wygrał!", () =>
+            Popup.Create(UIManager.Instance.transform).Show("Gra zakończona", victor == null ? "Nikt nie wygrał" : $"{victor.Name} wygrał!", () =>
             {
                 SceneManager.LoadScene(Scenes.MainMenu);
                 if(IsClientConnected)

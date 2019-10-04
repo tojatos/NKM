@@ -21,7 +21,7 @@ namespace Unity.Managers
             Client.OnConnection += () => Debug.Log("Connected!");
             Client.OnDisconnect += () => Debug.Log("Disconnected!");
             Client.OnError += message => AsyncCaller.Instance.Call(() => Debug.LogError(message));
-            Client.OnError += message => AsyncCaller.Instance.Call(() => Popup.Instance.Show("Connection error", message));
+            Client.OnError += message => AsyncCaller.Instance.Call(() => Popup.Create(GameObject.Find("Canvas").transform).Show("Connection error", message));
             Client.OnMessage += message => Debug.Log($"Server: {message}");
             Client.OnMessage += message =>
             {

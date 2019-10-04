@@ -9,12 +9,12 @@ namespace Unity.Managers
 {
     public class ServerList : SingletonMonoBehaviour<ServerList>
     {
-
         public InputField AddServerName;
         public InputField AddServerIP;
         public InputField Nickname;
         public Button AddServerButton;
         public Button JoinServerButton;
+        public Transform MainWindowHandle;
         private static string SelectedIP
         {
             get => SessionSettings.Instance.SelectedIP;
@@ -44,7 +44,7 @@ namespace Unity.Managers
             RefreshList();
         }
 
-        private static void ShowServerMessage(string msg) => Popup.Instance.Show("Server", msg);
+        private void ShowServerMessage(string msg) => Popup.Create(MainWindowHandle).Show("Server", msg);
 
         public void HandleMessageFromServer(string message)
         {

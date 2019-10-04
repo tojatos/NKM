@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ namespace Unity.Managers
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void DDOL() => DontDestroyOnLoad(Instance);
 
+        private static Popup _quitPopup;
         private void Update()
         {
 //          if (SceneManager.GetActiveScene().name != Scenes.MainGame)
@@ -22,10 +24,15 @@ namespace Unity.Managers
             {
                 if (SceneManager.GetActiveScene().name == Scenes.MainGame)
                 {
-                    if(!Popup.Instance.gameObject.activeSelf)
-                        Popup.Instance.Show("Wyjście", "Czy na pewno chcesz wyjść?", GameStarter.Quit);
+                    if (_quitPopup != null && _quitPopup.gameObject.activeSelf)
+                    {
+                        _quitPopup.ClosePopup();
+                    }
                     else
-                        Popup.Instance.ClosePopup();
+                    {
+                        _quitPopup = Popup.Create(UIManager.Instance.transform);
+                        _quitPopup.Show("Wyjście", "Czy na pewno chcesz wyjść?", GameStarter.Quit);
+                    }
                 }
             }
         }
