@@ -84,7 +84,6 @@
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Derieri\ComboBuilder.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Derieri\ComboStar.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Derieri\GapCloser.cs" />
-    <Compile Include="Assets\Scripts\NKMCore\Abilities\Ditto\Transform.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Empty.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Gilgamesh\Enkidu.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Gilgamesh\GateOfBabylon.cs" />
@@ -187,7 +186,6 @@
     <Compile Include="Assets\Scripts\NKMCore\Effects\TakenDamageModifier.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\Async.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\CharacterExtension.cs" />
-    <Compile Include="Assets\Scripts\NKMCore\Extensions\GameLog.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\NKMObject.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\Predicates.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\Serializers.cs" />
@@ -324,7 +322,6 @@
     <Compile Include="Assets\Scripts\Unity\UI\HexCellUI\HexImage.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\Replay.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\UIManager.cs" />
-    <Compile Include="Assets\Scripts\Unity\UI\Victory.cs" />
     <Compile Include="Assets\Scripts\Unity\UnityActive.cs" />
     <Compile Include="Assets\Scripts\Unity\VanishablePopup.cs" />
     <None Include="Assets\VertexColors.shader" />
