@@ -10,7 +10,7 @@ namespace Unity.Managers
     {
         private readonly GamePreparerDependencies _gamePreparerDependencies;
         private readonly string _serializedCharacters;
-        private readonly List<string> _actions;
+        private readonly Queue<string> _actions;
         public ReplayPreparer(string[] configToParse)
         {
             string serializedPreparerDependencies = string.Join("\n", configToParse
@@ -23,7 +23,7 @@ namespace Unity.Managers
             if (_serializedCharacters.Length == 0)
                 throw new ReplayException("There are no characters in that replay! Aborting");
 
-            _actions = configToParse.SkipWhile(l => l != "# FINISH: Logging characters").Skip(1).ToList();
+            _actions = new Queue<string>(configToParse.SkipWhile(l => l != "# FINISH: Logging characters").Skip(1).Select(line => line.Split(new[] {' '}, 2)[1]));
 
             if (_actions.Count == 0)
                 throw new ReplayException("There are no actions in that replay! Aborting");
@@ -58,6 +58,6 @@ namespace Unity.Managers
     public class ReplayResults
     {
         public Game Game;
-        public List<string> Actions;
+        public Queue<string> Actions;
     }
 }

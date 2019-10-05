@@ -22,7 +22,6 @@ namespace Unity.Managers
     {
         public bool IsTesting;
         public bool IsReplay => SessionSettings.Instance.SelectedReplayFilePath != null;
-        private List<string> ReplayActions;
         private static readonly SelectableManager SelectableManager = new SelectableManager();
         [CanBeNull] private static readonly ISelectable Selectable = new SpriteSelectSelectable(SelectableManager);
         private static SelectableAction _selectableAction;
@@ -106,13 +105,7 @@ namespace Unity.Managers
                 } break;
                 case "ACTION":
                 {
-                    string[] actionData = content.Split(';');
-                    string actionType = actionData[0];
-                    string[] args = actionData.Length > 1 ? actionData[1].Split(':') : Array.Empty<string>();
-                    if (new[] {Action.Types.OpenSelectable, Action.Types.CloseSelectable}.Contains(actionType))
-                        _selectableAction.Make(actionType, args);
-                    else
-                        Game.Action.Make(actionType, args);
+                    Act(Game, content);
                 } break;
                 case "NKMRANDOM":
                 {
@@ -124,6 +117,17 @@ namespace Unity.Managers
                     Popup.Create(UIManager.Instance.transform).Show("STOP", content, Quit);
                 } break;
             }
+        }
+
+        public static void Act(Game game, string content)
+        {
+            string[] actionData = content.Split(';');
+            string actionType = actionData[0];
+            string[] args = actionData.Length > 1 ? actionData[1].Split(':') : Array.Empty<string>();
+            if (new[] {Action.Types.OpenSelectable, Action.Types.CloseSelectable}.Contains(actionType))
+                _selectableAction.Make(actionType, args);
+            else
+                game.Action.Make(actionType, args);
         }
 
         public static void Quit()
@@ -176,7 +180,9 @@ namespace Unity.Managers
             }
             ReplayResults replayResults = preparer.CreateGame(_gamePreparerDependencies);
             Game = replayResults.Game;
-            ReplayActions = replayResults.Actions;
+
+            Replay.Instance.Actions = replayResults.Actions;
+            Replay.Instance.Show();
 
             RunGame(Game);
         }
