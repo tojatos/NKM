@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NKMCore;
@@ -19,7 +20,14 @@ namespace Unity.Managers
                                                     .SkipWhile(l => l != "# START: Logging characters").Skip(1)
                                                     .TakeWhile(l => l != "# FINISH: Logging characters"));
 
+            if (_serializedCharacters.Length == 0)
+                throw new ReplayException("There are no characters in that replay! Aborting");
+
             _actions = configToParse.SkipWhile(l => l != "# FINISH: Logging characters").Skip(1).ToList();
+
+            if (_actions.Count == 0)
+                throw new ReplayException("There are no actions in that replay! Aborting");
+
             _gamePreparerDependencies = serializedPreparerDependencies.DeserializeGamePreparerDependencies();
         }
 
@@ -40,6 +48,11 @@ namespace Unity.Managers
 
             return replayResults;
         }
+    }
+
+    public class ReplayException : Exception
+    {
+        public ReplayException(string msg) : base(msg) { }
     }
 
     public class ReplayResults

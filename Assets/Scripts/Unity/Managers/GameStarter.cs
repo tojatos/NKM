@@ -164,7 +164,16 @@ namespace Unity.Managers
         {
             string[] logFileData = File.ReadAllLines(SessionSettings.Instance.SelectedReplayFilePath);
             SessionSettings.Instance.SelectedReplayFilePath = null; // Do not start new game as a replay
-            var preparer = new ReplayPreparer(logFileData);
+            ReplayPreparer preparer;
+            try
+            {
+                preparer = new ReplayPreparer(logFileData);
+            }
+            catch (ReplayException e)
+            {
+                Popup.Create(UIManager.Instance.transform).Show("Error", e.Message, () => SceneManager.LoadScene(Scenes.ReplaySelect));
+                throw;
+            }
             ReplayResults replayResults = preparer.CreateGame(_gamePreparerDependencies);
             Game = replayResults.Game;
             ReplayActions = replayResults.Actions;
