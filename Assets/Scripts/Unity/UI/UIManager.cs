@@ -76,7 +76,7 @@ namespace Unity.UI
             if (_game==null) return;
 
             if (Active.Character != null) ActiveCharacterText.text = Active.Character.Name;
-            if (UnityActive.SelectedCell != null) ActiveHexCellText.text = UnityActive.SelectedCell.Type.ToString();
+            if (UnityActive?.SelectedCell != null) ActiveHexCellText.text = UnityActive.SelectedCell.Type.ToString();
             bool isActiveUse = _game.Active.IsActiveUse;
             AbilityButtons.ToggleIf(isActiveUse);
             CancelButton.ToggleIf(!isActiveUse);

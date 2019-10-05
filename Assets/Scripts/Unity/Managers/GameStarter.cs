@@ -21,6 +21,8 @@ namespace Unity.Managers
     public class GameStarter : SingletonMonoBehaviour<GameStarter>
     {
         public bool IsTesting;
+        public bool IsReplay => SessionSettings.Instance.SelectedReplayFilePath != null;
+        private List<string> ReplayActions;
         private static readonly SelectableManager SelectableManager = new SelectableManager();
         [CanBeNull] private static readonly ISelectable Selectable = new SpriteSelectSelectable(SelectableManager);
         private static SelectableAction _selectableAction;
@@ -56,6 +58,8 @@ namespace Unity.Managers
             {
                 if(IsTesting)
                     PrepareAndStartTestingGame();
+                else if (IsReplay)
+                    PrepareAndStartReplay();
                 else
                     PrepareAndStartGame();
             }
@@ -67,7 +71,8 @@ namespace Unity.Managers
             var preparer = new GamePreparer(_gamePreparerDependencies);
             if (!preparer.AreOptionsValid)
                 throw new Exception("Options are invalid!");
-            Game = await preparer.CreateGame();
+            Game = preparer.CreateGame();
+            await preparer.BindCharactersToPlayers();
         }
         public async void HandleMessageFromServer(string message)
         {
@@ -154,13 +159,27 @@ namespace Unity.Managers
 
             RunGame(Game);
         }
+
+        private void PrepareAndStartReplay()
+        {
+            string[] logFileData = File.ReadAllLines(SessionSettings.Instance.SelectedReplayFilePath);
+            SessionSettings.Instance.SelectedReplayFilePath = null; // Do not start new game as a replay
+            var preparer = new ReplayPreparer(logFileData);
+            ReplayResults replayResults = preparer.CreateGame(_gamePreparerDependencies);
+            Game = replayResults.Game;
+            ReplayActions = replayResults.Actions;
+
+            RunGame(Game);
+        }
+
         private static async void PrepareAndStartGame()
         {
             _gamePreparerDependencies.PlayerNames = GetPlayerNames();
             _gamePreparerDependencies.GameType = GameType.Local;
             var preparer = new GamePreparer(_gamePreparerDependencies);
 
-            Game = await preparer.CreateGame();
+            Game = preparer.CreateGame();
+            await preparer.BindCharactersToPlayers();
             RunGame(Game);
         }
 
