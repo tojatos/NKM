@@ -35,9 +35,14 @@ namespace Unity.Managers
         {
             var replayResults = new ReplayResults();
 
-            _gamePreparerDependencies.Selectable = preparerDependencies.Selectable;
-            _gamePreparerDependencies.SelectableAction = preparerDependencies.SelectableAction;
-            _gamePreparerDependencies.SelectableManager = preparerDependencies.SelectableManager;
+            _gamePreparerDependencies.SelectableManager = new SelectableManager();
+
+            var sel = new DefaultSelectable();
+
+            _gamePreparerDependencies.SelectableAction = new SelectableAction(GameType.Local, sel);
+            sel.Init(_gamePreparerDependencies.SelectableAction);
+
+            _gamePreparerDependencies.Selectable = sel;
             _gamePreparerDependencies.Logger = new Logger(null);
 
             var preparer = new GamePreparer(_gamePreparerDependencies);

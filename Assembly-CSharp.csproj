@@ -167,6 +167,7 @@
     <Compile Include="Assets\Scripts\NKMCore\CommandExecutor.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Console.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Damage.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\DefaultSelectable.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Delegates.cs" />
     <Compile Include="Assets\Scripts\NKMCore\DraftPick.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Effects\BlackBlood.cs" />

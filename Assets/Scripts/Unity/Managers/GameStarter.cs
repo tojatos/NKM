@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Mono.Data.Sqlite;
 using NKMCore;
 using Unity.Animations;
@@ -22,8 +21,9 @@ namespace Unity.Managers
     {
         public bool IsTesting;
         public bool IsReplay => SessionSettings.Instance.SelectedReplayFilePath != null;
-        private static readonly SelectableManager SelectableManager = new SelectableManager();
-        [CanBeNull] private static readonly ISelectable Selectable = new SpriteSelectSelectable(SelectableManager);
+
+        private static readonly SelectableManager SpriteSelectSelectableManager = new SelectableManager();
+        private static readonly ISelectable Selectable = new SpriteSelectSelectable(SpriteSelectSelectableManager);
         private static SelectableAction _selectableAction;
         public static Game Game;
 
@@ -48,7 +48,7 @@ namespace Unity.Managers
                 _selectableAction = new SelectableAction(GameType.Local, Selectable);
                 sel?.Init(_selectableAction);
             }
-            _gamePreparerDependencies.SelectableManager = SelectableManager;
+            _gamePreparerDependencies.SelectableManager = SpriteSelectSelectableManager;
             _gamePreparerDependencies.Selectable = Selectable;
             _gamePreparerDependencies.SelectableAction = _selectableAction;
             _gamePreparerDependencies.Logger = new Logger(PathManager.GetLogFilePath());
