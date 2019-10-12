@@ -28,7 +28,7 @@ namespace Editor
 
 		[MenuItem("Developement/Builds/Android Build")]
 		private static void BuildAndroidPlayer()
-			=> BuildPlayer(BuildTarget.Android, BuildOptions.None, "Builds/Linux/Automatic/NKM");
+			=> BuildPlayer(BuildTarget.Android, BuildOptions.None, "Builds/NKM.apk");
 
 		private static void BuildWindowsPlayer(BuildOptions buildOptions)
 			=> BuildPlayer(BuildTarget.StandaloneWindows64, buildOptions, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/NKM/NKM.exe");
