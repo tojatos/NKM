@@ -62,6 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\NKMCore\Abilities\Akame\Eliminate.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Abilities\Akame\LittleWarHorn.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Abilities\Akame\Murasame.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Aqua\NaturesBeauty.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Aqua\Purification.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Abilities\Aqua\Resurrection.cs" />
