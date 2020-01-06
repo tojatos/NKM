@@ -18,8 +18,7 @@
       <Path>Builds</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
-      <Path>NKMCore.Tests</Path>
-      <Path>Temp</Path>
+      <Path>NKMData</Path>
       <Path>UserSettings</Path>
       <Path>docs</Path>
       <Path>obj</Path>

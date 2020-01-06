@@ -16,4 +16,10 @@
       <ProjectReference Include="..\Assembly-CSharp.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Mono.Data.Sqlite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+        <HintPath>..\Assets\Plugins\Mono.Data.Sqlite.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
