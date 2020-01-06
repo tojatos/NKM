@@ -34,7 +34,7 @@ If you are a developer, you may be interested in [Introduction](https://github.c
 
 ## Running / building the game
 
-To run the game simply clone the project and open it in Unity (I am working on newest versions, so be careful: it may or may not work in other versions).
+To run the game clone the project (there are submodules, run `git submodule sync --recursive && git submodule update --init --recursive` after cloning) and open it in Unity (I am working on newest versions, so be careful: it may or may not work in other versions).
 You can build using Unity's usual way (ctrl+B), or using `Developement` on the toolbar in Unity (recommended).
 
 Make sure that in the Main Game scene IsTesting is not selected in Game Starter object (it automatically loads characters from Assets/testing_characters.txt).

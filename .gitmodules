@@ -2,3 +2,7 @@
 	path = Assets/Scripts/NKMCore
 	url = git@github.com:tojatos/NKMCore.git
 	branch = rewrite
+[submodule "NKMData"]
+	path = NKMData
+	url = git@github.com:tojatos/NKMData.git
+	branch = rewrite
