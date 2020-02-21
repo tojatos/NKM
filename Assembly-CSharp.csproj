@@ -14,7 +14,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{E37D7EE6-FE3B-6404-B840-2B5A51D305C6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -232,6 +233,7 @@
     <Compile Include="Assets\Scripts\NKMCore\Templates\IClickable.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\IEnableable.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\IEnchantable.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Templates\IGame.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\IRunnable.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\IUseableCell.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Templates\IUseableCellList.cs" />
