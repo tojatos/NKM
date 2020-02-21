@@ -210,6 +210,7 @@
     <Compile Include="Assets\Scripts\NKMCore\HexCellEffects\Conflagration.cs" />
     <Compile Include="Assets\Scripts\NKMCore\HexCellEffects\HowlingBlizzard.cs" />
     <Compile Include="Assets\Scripts\NKMCore\HexMapSerializer.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\ILogger.cs" />
     <Compile Include="Assets\Scripts\NKMCore\ISelectable.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Instantiator.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Logger.cs" />
