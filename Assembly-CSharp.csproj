@@ -329,6 +329,7 @@
     <Compile Include="Assets\Scripts\Unity\UI\Replay.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\Unity\UnityActive.cs" />
+    <Compile Include="Assets\Scripts\Unity\Utilities.cs" />
     <Compile Include="Assets\Scripts\Unity\VanishablePopup.cs" />
     <None Include="Assets\VertexColors.shader" />
     <None Include="Assets\testing_characters.txt" />

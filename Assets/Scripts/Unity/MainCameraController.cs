@@ -54,7 +54,7 @@ namespace Unity
             }
             //Drag camera
             // Math.Abs(_cam.orthographicSize - MaxZoom) > 0.01 - drag only on zoom
-            if (Input.GetMouseButton(2) && !HexMapDrawer.IsPointerOverUiObject()) //drag only over a Game
+            if (Input.GetMouseButton(2) && !Utilities.IsPointerOverUiObject()) //drag only over a Game
             {
                 _diference = _cam.ScreenToWorldPoint(Input.mousePosition) - _cam.transform.position;
                 if (_drag == false)

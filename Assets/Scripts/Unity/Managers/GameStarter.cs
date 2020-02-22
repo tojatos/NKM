@@ -5,11 +5,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mono.Data.Sqlite;
 using NKMCore;
+using NKMCore.Extensions;
+using NKMCore.Hex;
+using NKMCore.HexCellEffects;
+using NKMCore.Templates;
 using Unity.Animations;
 using Unity.Hex;
 using Unity.UI;
 using Unity.UI.CharacterUI;
 using Unity.UI.HexCellUI;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Action = NKMCore.Action;
 using Effects = Unity.UI.CharacterUI.Effects;
@@ -217,11 +222,187 @@ namespace Unity.Managers
             game.Start();
         }
 
+        private static void AddTriggersToEvents(IGame game, HexMapDrawer d)
+        {
+            game.HexMap.AfterMove += (character, cell) =>
+            {
+                if (d.GetCharacterObject(character) == null) return;
+                d.GetCharacterObject(character).transform.parent = d.SelectDrawnCell(cell).transform;
+                AnimationPlayer.Add(new Destroy(d.SelectDrawnCell(cell).gameObject.GetComponent<LineRenderer>())); //Remove the line
+                AnimationPlayer.Add(new MoveTo(d.GetCharacterObject(character).transform,
+                    d.GetCharacterObject(character).transform.parent.transform.TransformPoint(0, 10, 0), 0.60f / character.Speed.Value));
+
+            };
+            game.HexMap.AfterCharacterPlace += (character, cell) => Spawner.Instance.Spawn(d.SelectDrawnCell(cell), character);
+            game.Active.BeforeMoveCellsRemoved += cells => d.SelectDrawnCells(cells).ForEach(c => Destroy(c.gameObject.GetComponent<LineRenderer>()));
+            game.Active.AfterMoveCellAdded += hexcell =>
+            {
+                //Draw a line between two hexcell centres
+
+                //Check for component in case of Zoro's Lack of Orientation
+                DrawnHexCell cell = d.SelectDrawnCell(hexcell);
+                LineRenderer lRend = cell.gameObject.GetComponent<LineRenderer>() != null
+                    ? cell.gameObject.GetComponent<LineRenderer>()
+                    : cell.gameObject.AddComponent<LineRenderer>();
+                lRend.SetPositions(new[]
+                {
+                    d.SelectDrawnCell(game.Active.MoveCells.SecondLast()).transform.position + Vector3.up * 20,
+                    cell.transform.position + Vector3.up * 20
+                });
+                lRend.material = new Material(Shader.Find("Standard")) {color = Color.black};
+                lRend.startColor = Color.black;
+                lRend.endColor = Color.black;
+                lRend.widthMultiplier = 2;
+            };
+            game.Active.AirSelection.AfterEnable += set => d.SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.BlueTransparent));
+            game.Active.AirSelection.AfterCellsSet += set =>
+            {
+                d.RemoveHighlights();
+                if (game.Active.HexCells != null && set != null)
+                {
+                    game.Active.HexCells.ToList().ForEach(c =>
+                    {
+                        if (set.All(ac => ac != c))
+                        {
+                            d.SelectDrawnCell(c).AddHighlight(Highlights.BlueTransparent);
+                        }
+                    });
+                }
+
+                set?.ToList().ForEach(c => d.SelectDrawnCell(c).AddHighlight(Highlights.RedTransparent));
+            };
+            game.Active.AfterAbilityPrepare += (ability, list) =>
+            {
+                d.RemoveHighlights();
+                d.SelectDrawnCells(list).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+            };
+            game.Active.AfterCharacterSelectPrepare += (character, list) =>
+            {
+                d.SelectDrawnCells(list.Distinct()).ForEach(c =>
+                    c.AddHighlight(!c.HexCell.IsEmpty && character.CanBasicAttack(c.HexCell.FirstCharacter)
+                        ? Highlights.RedTransparent
+                        : Highlights.GreenTransparent));
+            };
+            game.Active.AfterCharacterPlacePrepare += set => d.SelectDrawnCells(set).ForEach(c => c.AddHighlight(Highlights.RedTransparent));
+            game.Active.AfterCancelPlacingCharacter += () => d.RemoveHighlights();
+            game.Active.AfterClean += () => d.RemoveHighlights();
+
+            d.AfterCellSelect += touchedCell =>
+            {
+                // AfterCellSelect?.Invoke(touchedCell);
+                if (game.Active.SelectedCharacterToPlace != null)
+                {
+                    if(!game.Active.CanPlace(game.Active.SelectedCharacterToPlace, touchedCell)) return;
+                    game.Action.PlaceCharacter(game.Active.SelectedCharacterToPlace, touchedCell);
+                    if (game.Active.Phase.Number != 0) return;
+                    game.Action.FinishTurn();
+                }
+                else if (game.Active.HexCells?.Contains(touchedCell) == true)
+                {
+                    if (game.Active.AbilityToUse != null)
+                    {
+                        //It is important to check in that order, in case ability uses multiple interfaces!
+                        if(game.Active.AbilityToUse is IUseableCharacter && !touchedCell.IsEmpty)
+                            game.Action.UseAbility((IUseableCharacter) game.Active.AbilityToUse, touchedCell.FirstCharacter);
+                        else if(game.Active.AbilityToUse is IUseableCell)
+                            game.Action.UseAbility((IUseableCell) game.Active.AbilityToUse, touchedCell);
+                        else if(game.Active.AbilityToUse is IUseableCellList)
+                            game.Action.UseAbility((IUseableCellList) game.Active.AbilityToUse, game.Active.AirSelection.IsEnabled ? game.Active.AirSelection.HexCells : game.Active.HexCells);
+                    }
+                    else if (game.Active.Character != null)
+                    {
+                        if(!touchedCell.IsEmpty && game.Active.Character.CanBasicAttack(touchedCell.FirstCharacter))
+                            game.Action.BasicAttack(game.Active.Character, touchedCell.FirstCharacter);
+                        else if(touchedCell.IsFreeToStand && game.Active.Character.CanBasicMove(touchedCell) && game.Active.MoveCells.Last() == touchedCell)
+                            game.Action.BasicMove(game.Active.Character, game.Active.MoveCells);
+                    }
+                }
+                else
+                {
+                    if (!touchedCell.IsEmpty)
+                        game.Action.Select(touchedCell.FirstCharacter);
+                    else if (game.Active.Character != null)
+                        game.Action.Deselect();
+                    else
+                    {
+                        //possibility of highlighting with control pressed
+                        if (!Input.GetKey(KeyCode.LeftControl)) d.RemoveHighlights();
+                        if (touchedCell.IsEmpty) d.SelectDrawnCell(touchedCell).AddHighlight(Highlights.BlackTransparent);
+                    }
+                }
+            };
+            game.HexMap.AfterCellEffectCreate += effect =>
+            {
+                if (effect is Conflagration)
+                    d.SelectDrawnCell(effect.ParentCell).AddEffectHighlight(effect.Name);
+                Unity.UI.HexCellUI.Effects.Instance.Refresh();
+            };
+            game.HexMap.AfterCellEffectRemove += effect =>
+            {
+                if (effect is Conflagration)
+                    d.SelectDrawnCell(effect.ParentCell).RemoveEffectHighlight(effect.Name);
+                Unity.UI.HexCellUI.Effects.Instance.Refresh();
+            };
+        }
+
+        public void Update()
+        {
+            if(Game == null) return;
+
+            if (Game.Active.AirSelection.IsEnabled)
+            {
+                HexCell cellPointed = HexMapDrawer.CellPointed();
+                if (cellPointed != null && Game.Active.HexCells.Contains(cellPointed))
+                {
+                    Game.Active.AirSelection.HexCells = new HashSet<HexCell> { cellPointed };
+                }
+            }
+
+            if(Game.Active.Character!=null && Game.Active.Character.CanUseBasicMove && Game.Active.HexCells != null)
+            {
+                HexCell cellPointed = HexMapDrawer.CellPointed();
+                if (cellPointed != null && (Game.Active.HexCells.Contains(cellPointed)||cellPointed==Game.Active.Character.ParentCell))
+                {
+                    HexCell lastMoveCell = Game.Active.MoveCells.LastOrDefault();
+                    if(lastMoveCell==null) throw new Exception("Move cell is null!");
+                    if (cellPointed != lastMoveCell)
+                    {
+                        if (Game.Active.MoveCells.Contains(cellPointed))
+                        {
+                            //remove all cells to pointed
+                            for (int i = Game.Active.MoveCells.Count - 1; i >= 0; i--)
+                            {
+                                if (Game.Active.MoveCells[i] == cellPointed) break;
+
+                                //Remove the line
+                                Destroy(HexMapDrawer.Instance.SelectDrawnCell(Game.Active.MoveCells[i]).gameObject
+                                    .GetComponent<LineRenderer>());
+
+                                Game.Active.MoveCells.RemoveAt(i);
+                            }
+                        }
+                        else if (Game.Active.Character.Speed.Value >= Game.Active.MoveCells.Count &&
+                                 lastMoveCell.GetNeighbors(Game.Active.GamePlayer, 1).Contains(cellPointed) && (cellPointed.CharactersOnCell.Count == 0||!cellPointed.CharactersOnCell.Any(c => c.IsEnemyFor(Game.Active.Character.Owner))))
+                        {
+                            Game.Active.AddMoveCell(cellPointed);
+
+                        }
+                    }
+                }
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                Game.Action.Cancel();
+            }
+        }
+
         private static void InitUI(Game game)
         {
             UIManager.Instance.Init(game);
             UIManager.Instance.UpdateActivePhaseText();
-            HexMapDrawer.Instance.Init(game);
+            AddTriggersToEvents(game, HexMapDrawer.Instance);
+            // HexMapDrawer.Instance.Init(game);
             HexMapDrawer.Instance.CreateMap(game.HexMap);
             MainCameraController.Instance.Init(game);
             ConsoleDrawer.Instance.Init(game.Console);
