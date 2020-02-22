@@ -206,10 +206,10 @@
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexCoordinates.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexDirection.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\HexMap.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Hex\HexMapSerializer.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Hex\SearchFlags.cs" />
     <Compile Include="Assets\Scripts\NKMCore\HexCellEffects\Conflagration.cs" />
     <Compile Include="Assets\Scripts\NKMCore\HexCellEffects\HowlingBlizzard.cs" />
-    <Compile Include="Assets\Scripts\NKMCore\HexMapSerializer.cs" />
     <Compile Include="Assets\Scripts\NKMCore\ILogger.cs" />
     <Compile Include="Assets\Scripts\NKMCore\ISelectable.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Instantiator.cs" />

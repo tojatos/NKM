@@ -9,20 +9,23 @@ namespace NKMCore.Tests
         [Fact]
         public void SingleTileDeserialize()
         {
-            const string mapString = "0:0;Normal\n\nSpawnPoint1";
+            const string mapString = "TestName\n\n0:0;Normal\n\nSpawnPoint1";
 
             HexMap map = HexMapSerializer.Deserialize(mapString);
             Assert.Single(map.Cells);
+            Assert.Equal("TestName", map.Name);
             Assert.Equal(HexCell.TileType.Normal, map.Cells.First().Type);
             Assert.Equal(new HexCoordinates(0, 0), map.Cells.First().Coordinates);
         }
 
         [Theory]
-        [InlineData("0:0;Normal\n\nSpawnPoint1")]
-        [InlineData("1:1;Wall\n\nSpawnPoint1")]
-        [InlineData("0:0;Normal\n\nSpawnPoint1;SpawnPoint2")]
+        [InlineData("TestName\n\n0:0;Normal\n\nSpawnPoint1")]
+        [InlineData("TestName\n\n1:1;Wall\n\nSpawnPoint1")]
+        [InlineData("TestName\n\n0:0;Normal\n\nSpawnPoint1;SpawnPoint2")]
         [InlineData(
-@"0:0;Wall
+@"TestName
+
+0:0;Wall
 1:0;Wall
 2:0;Wall
 3:0;Wall

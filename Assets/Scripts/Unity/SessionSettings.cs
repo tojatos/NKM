@@ -4,6 +4,7 @@ using NKMCore;
 using NKMCore.Extensions;
 using Unity.Hex;
 using UnityEngine;
+using Console = System.Console;
 
 namespace Unity
 {
@@ -81,7 +82,14 @@ namespace Unity
             UpdateEffects();
 
             string depsString = PlayerPrefs.GetString("Deps", string.Empty);
-            Dependencies = depsString != string.Empty ? depsString.DeserializeGamePreparerDependencies() : new GamePreparerDependencies();
+            try
+            {
+                Dependencies = depsString != string.Empty ? depsString.DeserializeGamePreparerDependencies() : new GamePreparerDependencies();
+            }
+            catch
+            {
+                Dependencies = new GamePreparerDependencies();
+            }
 
         }
         public void UpdateEffects()

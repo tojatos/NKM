@@ -38,7 +38,7 @@ namespace NKMCore.Tests
               NumberOfCharactersPerPlayer = 4,
               BansEnabled = true,
               NumberOfBans = 2,
-              HexMap = HexMapSerializer.Deserialize("1:1;Wall\n\nSpawnPoint1"),
+              HexMap = HexMapSerializer.Deserialize("TestName\n\n1:1;Wall\n\nSpawnPoint1"),
               PickType = PickType.Draft,
               GameType = GameType.Local,
           };
@@ -66,7 +66,7 @@ namespace NKMCore.Tests
               NumberOfCharactersPerPlayer = 4,
               BansEnabled = true,
               NumberOfBans = 2,
-              HexMap = HexMapSerializer.Deserialize("1:1;Wall\n\nSpawnPoint1"),
+              HexMap = HexMapSerializer.Deserialize("TestName\n\n1:1;Wall\n\nSpawnPoint1"),
               PickType = PickType.Draft,
               GameType = GameType.Local,
           };

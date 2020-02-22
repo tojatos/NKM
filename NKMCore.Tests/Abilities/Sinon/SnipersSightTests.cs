@@ -11,7 +11,7 @@ namespace NKMCore.Tests.Abilities.Sinon
     }
     public class SnipersSightTests
     {
-        private const string TestHexMap = "0:0;Normal\n\nSpawnPoint1";
+        private const string TestHexMap = "TestName\n\n0:0;Normal\n\nSpawnPoint1";
         private const GameType _gameType = GameType.Local;
         private readonly DefaultSelectable _sel = new DefaultSelectable();
 

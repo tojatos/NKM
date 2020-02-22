@@ -12,7 +12,7 @@ namespace Unity.Hex
         {
             int width = hexMapScriptable.Map.width;
             int height = hexMapScriptable.Map.height;
-            var map = new HexMap(new List<HexCell>(), hexMapScriptable.SpawnPoints);
+            var map = new HexMap(hexMapScriptable.Name, new List<HexCell>(), hexMapScriptable.SpawnPoints);
             for (int z = 0, i = 0; z < height; z++)
             {
                 for (int x = 0; x < width; x++)
