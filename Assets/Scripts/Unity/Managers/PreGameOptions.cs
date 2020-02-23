@@ -2,6 +2,7 @@
 using System.Linq;
 using JetBrains.Annotations;
 using NKMCore;
+using NKMCore.Hex;
 using Unity.Extensions;
 using Unity.Hex;
 using UnityEngine;
@@ -39,18 +40,18 @@ namespace Unity.Managers
                 Description = "Wybierz mapę:",
                 Options = Stuff.Maps.Select(map => map.Name).ToArray()
             };
-            HexMapScriptable selectedMapScriptable = Stuff.Maps[S.GetDropdownSetting(SettingType.SelectedMapIndex)];
+            HexMap selectedMap = Stuff.Maps[S.GetDropdownSetting(SettingType.SelectedMapIndex)];
             var numberOfPlayersSettings = new DropdownSettings
             {
                 Type = SettingType.NumberOfPlayers,
                 Description = "Liczba graczy:",
-                Options = GetNumberOfPlayerStrings(selectedMapScriptable.MaxPlayers)
+                Options = GetNumberOfPlayerStrings(selectedMap.MaxPlayers)
             };
             var numberOfCharacterPerPlayerSettings = new DropdownSettings
             {
                 Type = SettingType.NumberOfCharactersPerPlayer,
                 Description = "Liczba postaci na gracza:",
-                Options = GetNumberOfCppStrings(selectedMapScriptable.MaxCharacters)
+                Options = GetNumberOfCppStrings(selectedMap.MaxCharactersPerPlayer)
             };
             var bansNumberSettings = new DropdownSettings
             {
@@ -111,7 +112,7 @@ namespace Unity.Managers
             Enumerable.Range(1, 5).Select(x => x.ToString()).ToArray();
         private static void ReloadCppDropdown(int value, Dropdown cppDropdown)
         {
-            int maxCharacters = Stuff.Maps[value].MaxCharacters;
+            int maxCharacters = Stuff.Maps[value].MaxCharactersPerPlayer;
             cppDropdown.options = GetNumberOfCppStrings(maxCharacters).Select(x => new Dropdown.OptionData(x)).ToList();
 
             if(cppDropdown.value < maxCharacters) return;

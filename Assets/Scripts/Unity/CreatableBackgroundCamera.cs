@@ -5,7 +5,6 @@ namespace Unity
 {
     public class CreatableBackgroundCamera : MonoBehaviour
     {
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void DDOL() => DontDestroyOnLoad(Instance);
 

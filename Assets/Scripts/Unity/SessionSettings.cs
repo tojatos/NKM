@@ -39,7 +39,7 @@ namespace Unity
                 } break;
                 case SettingType.SelectedMapIndex:
                 {
-                    Dependencies.HexMap = HexMapFactory.FromScriptable(Stuff.Maps[value]);
+                    Dependencies.HexMap = Stuff.Maps[value].Clone();
                 } break;
                 case SettingType.NumberOfPlayers:
                 {

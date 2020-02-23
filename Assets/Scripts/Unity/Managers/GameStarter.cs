@@ -469,7 +469,7 @@ namespace Unity.Managers
                 .ToList();
             var gameOptions = new GameDependencies
             {
-                HexMap = HexMapFactory.FromScriptable(Stuff.Maps.Single(m => m.Map.name == "TestMap")),
+                HexMap = Stuff.Maps.Single(m => m.Name == "TestMap").Clone(),
                 Players = testingGamePlayers,
                 Type = GameType.Local,
                 Selectable = _gamePreparerDependencies.Selectable,

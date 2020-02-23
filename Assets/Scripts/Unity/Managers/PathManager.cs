@@ -11,6 +11,7 @@ namespace Unity.Managers
 
         public static string DbPath;
         public static string SettingsDirPath;
+        public static string HexMapsDirPath;
         public static string TestingCharactersFilePath;
         public static string ServerListFilePath;
         public static string LogDirPath;
@@ -34,6 +35,7 @@ namespace Unity.Managers
         {
             DbPath = MakePath(Application.streamingAssetsPath, "database.db");
             SettingsDirPath = MakePath(Application.persistentDataPath, "Settings");
+            HexMapsDirPath = MakePath(Application.dataPath, "Resources/HexMaps");
             TestingCharactersFilePath = MakePath(Application.dataPath, "testing_characters.txt");
             ServerListFilePath = MakePath(SettingsDirPath, "server_list.txt");
             LogDirPath = MakePath(Application.persistentDataPath, "game_logs");

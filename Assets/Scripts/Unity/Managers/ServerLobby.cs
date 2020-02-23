@@ -121,7 +121,7 @@ namespace Unity.Managers
 
         private void HandleMapname(string content)
         {
-            Dependencies.HexMap = HexMapFactory.FromScriptable(Stuff.Maps.First(m => m.name == content));
+            Dependencies.HexMap = Stuff.Maps.First(m => m.Name == content).Clone();
             Map.text = content;
         }
 

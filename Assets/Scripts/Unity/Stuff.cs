@@ -1,19 +1,30 @@
 ﻿using System.Collections.Generic;
-using Unity.Hex;
+using System.IO;
+using System.Linq;
+using NKMCore;
+using NKMCore.Hex;
+using Unity.Managers;
 using UnityEngine;
 
 namespace Unity
 {
     public static class Stuff
     {
-        public static readonly List<HexMapScriptable> Maps;
+        private static List<HexMap> _maps;
+        public static List<HexMap> Maps
+        {
+            get
+            {
+                //lazy loading because HexMapsDirPath is null before Unity's awake
+                return _maps ?? (_maps = new DirectoryInfo(PathManager.HexMapsDirPath).GetFiles("*.hexmap").Select(f => HexMapSerializer.Deserialize(File.ReadAllText(f.FullName))).ToList());
+            }
+        }
         public static readonly List<GameObject> Particles;
         public static readonly AllSprites Sprites;
         public static readonly List<GameObject> Prefabs;
 
         static Stuff()
         {
-            Maps = new List<HexMapScriptable>(Resources.LoadAll<HexMapScriptable>("Maps"));
             Particles = new List<GameObject>(Resources.LoadAll<GameObject>("Particles"));
             Prefabs = new List<GameObject>(Resources.LoadAll<GameObject>("Blender"));
             Prefabs.AddRange(Resources.LoadAll<GameObject>("Prefabs"));

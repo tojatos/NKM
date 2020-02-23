@@ -284,8 +284,6 @@
     <Compile Include="Assets\Scripts\Unity\Extensions\UnityGameObject.cs" />
     <Compile Include="Assets\Scripts\Unity\Hex\DrawnHexCell.cs" />
     <Compile Include="Assets\Scripts\Unity\Hex\HexMapDrawer.cs" />
-    <Compile Include="Assets\Scripts\Unity\Hex\HexMapFactory.cs" />
-    <Compile Include="Assets\Scripts\Unity\Hex\HexMapScriptable.cs" />
     <Compile Include="Assets\Scripts\Unity\Hex\HexMesh.cs" />
     <Compile Include="Assets\Scripts\Unity\Hex\HexMetrics.cs" />
     <Compile Include="Assets\Scripts\Unity\HighlightColor.cs" />
