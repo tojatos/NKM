@@ -13,10 +13,16 @@ namespace Unity
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void DDOL() => DontDestroyOnLoad(Instance);
 
+        //persistent
         public bool IsMuted;
         public string Nickname;
         public string SelectedIP;
         public string SelectedReplayFilePath;
+
+        //volatile
+        public string SelectedMapCreationType;
+        public int NewMapDimX;
+        public int NewMapDimY;
 
         public List<string> PlayerNames = new List<string>();
         public GamePreparerDependencies Dependencies;
@@ -145,5 +151,11 @@ namespace Unity
         public const string BackgroundEffectsEnabled = "BackgroundEffectsEnabled";
         public const string GameType = "GameType";
         public const string SelectedMapToEditIndex = "SelectedMapToEditIndex";
+    }
+
+    public static class MapCreationTypes
+    {
+        public const string New = "New";
+        public const string FromOld = "FromOld";
     }
 }

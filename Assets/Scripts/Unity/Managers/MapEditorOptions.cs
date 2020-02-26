@@ -18,6 +18,7 @@ namespace Unity.Managers
         public Button CreateNew;
         public Button CreateFromOther;
         public Transform MainWindowHandle;
+        private static SessionSettings S => SessionSettings.Instance;
 
         private void Start()
         {
@@ -37,16 +38,21 @@ namespace Unity.Managers
                         Popup.Create(MainWindowHandle).Show("Błąd", "Wymiary powinny być większe od 0");
                         return;
                     }
-                    SceneManager.LoadScene(Scenes.MapEditor);
                 }
                 catch
                 {
                     Popup.Create(MainWindowHandle).Show("Błąd", "Wymiary powinny być liczbą całkowitą większą od 0");
+                    return;
                 }
+
+                S.NewMapDimX = x;
+                S.NewMapDimY = x;
+                S.SelectedMapCreationType = MapCreationTypes.New;
+                SceneManager.LoadScene(Scenes.MapEditor);
             });
             CreateFromOther.onClick.AddListener(() =>
             {
-                //TODO
+                S.SelectedMapCreationType = MapCreationTypes.FromOld;
                 SceneManager.LoadScene(Scenes.MapEditor);
             });
 

@@ -18,6 +18,7 @@ namespace Unity.Hex
     {
         public DrawnHexCell CellPrefab;
         public List<DrawnHexCell> Cells;
+        public bool Created = false;
         private readonly Dictionary<Character, GameObject> _characterObjects = new Dictionary<Character, GameObject>();
         public static readonly Dictionary<Character, GameObject> Dims = new Dictionary<Character, GameObject>();
 
@@ -108,6 +109,7 @@ namespace Unity.Hex
             hexMap.Cells.ForEach(CreateCell);
 
             TriangulateCells();
+            Created = true;
         }
 
         private void TriangulateCells()

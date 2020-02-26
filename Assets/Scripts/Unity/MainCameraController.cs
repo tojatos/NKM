@@ -12,16 +12,14 @@ namespace Unity
         public float PositionChange = 15f;
 
         private Camera _cam;
-        private Game _game;
         private Vector3 _mainPosition;
 
         private Vector3 _origin;
         private Vector3 _diference;
         private bool _drag;
 
-        public void Init(Game game)
+        public void Init()
         {
-            _game = game;
             _cam = GetComponent<Camera>();
             Bounds meshBounds = HexMapDrawer.Instance.HexMesh.Mesh.bounds;
             Vector3 boundsCenter = meshBounds.center;
@@ -34,8 +32,7 @@ namespace Unity
         }
         private void Update()
         {
-            if(_game==null) return;
-//      if (Game.UIManager.VisibleUI != UIManager.Instance.GameUI) return;
+            if(!HexMapDrawer.Instance.Created) return;
 
             if (Input.touchCount == 2)
             {

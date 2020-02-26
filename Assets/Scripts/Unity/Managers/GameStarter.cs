@@ -404,7 +404,7 @@ namespace Unity.Managers
             AddTriggersToEvents(game, HexMapDrawer.Instance);
             // HexMapDrawer.Instance.Init(game);
             HexMapDrawer.Instance.CreateMap(game.HexMap);
-            MainCameraController.Instance.Init(game);
+            MainCameraController.Instance.Init();
             ConsoleDrawer.Instance.Init(game.Console);
             UI.CharacterUI.Abilities.Instance.Init(game);
             Effects.Instance.Init(game);
