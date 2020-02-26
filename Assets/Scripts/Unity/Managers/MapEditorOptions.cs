@@ -23,18 +23,25 @@ namespace Unity.Managers
         {
             CreateNew.onClick.AddListener(() =>
             {
-                if (NewMapDimensionX.text == "" || NewMapDimensionY.text == "") return; // TODO: show popup
+                if (NewMapDimensionX.text == "" || NewMapDimensionY.text == "") {
+                    Popup.Create(MainWindowHandle).Show("Błąd", "Podaj wymiary mapy");
+                    return;
+                }
                 int x, y;
                 try
                 {
                     x = int.Parse(NewMapDimensionX.text);
                     y = int.Parse(NewMapDimensionY.text);
-                    //TODO
+                    if (x < 1 || y < 1)
+                    {
+                        Popup.Create(MainWindowHandle).Show("Błąd", "Wymiary powinny być większe od 0");
+                        return;
+                    }
                     SceneManager.LoadScene(Scenes.MapEditor);
                 }
                 catch
                 {
-                    // TODO: show popup
+                    Popup.Create(MainWindowHandle).Show("Błąd", "Wymiary powinny być liczbą całkowitą większą od 0");
                 }
             });
             CreateFromOther.onClick.AddListener(() =>
