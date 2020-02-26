@@ -8,6 +8,7 @@ namespace Unity.Managers
     {
         public Button LocalButton;
         public Button OnlineButton;
+        public Button MapEditorButton;
         public Button OptionsButton;
         public Button ReplayButton;
         public Button ExitButton;
@@ -15,6 +16,7 @@ namespace Unity.Managers
         {
             LocalButton.onClick.AddListener(() => SceneManager.LoadScene(Scenes.PreGameOptions));
             OnlineButton.onClick.AddListener(() => SceneManager.LoadScene(Scenes.ServerList));
+            MapEditorButton.onClick.AddListener(() => SceneManager.LoadScene(Scenes.MapEditorOptions));
             ReplayButton.onClick.AddListener(() => SceneManager.LoadScene(Scenes.ReplaySelect));
             OptionsButton.onClick.AddListener(Options.Instance.Show);
             ExitButton.onClick.AddListener(Application.Quit);

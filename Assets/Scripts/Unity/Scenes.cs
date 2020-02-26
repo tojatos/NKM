@@ -8,6 +8,8 @@
         public const string MainGame = "Main Game";
         public const string MainMenu = "Main Menu";
         public const string PreGameOptions = "Pre Game Options";
+        public const string MapEditorOptions = "Map Editor Options";
+        public const string MapEditor = "Map Editor";
         public const string GameStatistics = "Game Statistics";
         public const string ServerList = "Server List";
         public const string ServerLobby = "Server Lobby";

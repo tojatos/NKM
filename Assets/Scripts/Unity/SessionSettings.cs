@@ -130,6 +130,7 @@ namespace Unity
             SettingType.SelectedMapIndex,
             SettingType.BansNumber,
             SettingType.BackgroundEffectsEnabled,
+            SettingType.SelectedMapToEditIndex,
         };
     }
 
@@ -143,5 +144,6 @@ namespace Unity
         public const string BansNumber = "BansNumber";
         public const string BackgroundEffectsEnabled = "BackgroundEffectsEnabled";
         public const string GameType = "GameType";
+        public const string SelectedMapToEditIndex = "SelectedMapToEditIndex";
     }
 }

@@ -70,6 +70,17 @@ namespace Unity.Extensions
             return dropdown;
         }
 
+        public static Dropdown AddSingleDropdown(this GameObject gameObject, SingleDropdownSettings dropdownSettings)
+        {
+            var dropdown = Object.Instantiate(Stuff.Prefabs.Find(p => p.name == "SingleDropdown"), gameObject.transform).GetComponent<Dropdown>();
+            dropdown.name = dropdownSettings.Type;
+            if(dropdownSettings.Options != null) dropdown.options = dropdownSettings.Options.Select(o => new Dropdown.OptionData(o)).ToList();
+            dropdown.value = SessionSettings.Instance.GetDropdownSetting(dropdownSettings.Type);
+            dropdown.onValueChanged.AddListener(i => SessionSettings.Instance.SetDropdownSetting(dropdown.name, i));
+
+            return dropdown;
+        }
+
         public static Vector3 GetCharacterTransformPoint(this Transform transform) =>
             transform.TransformPoint(0, 10, 0);
 
@@ -94,6 +105,12 @@ namespace Unity.Extensions
     {
         public string Type;
         public string Description;
+        public string[] Options;
+    }
+
+    public class SingleDropdownSettings
+    {
+        public string Type;
         public string[] Options;
     }
 }

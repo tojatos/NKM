@@ -295,6 +295,7 @@
     <Compile Include="Assets\Scripts\Unity\Managers\ClientManager.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\GameStarter.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Unity\Managers\MapEditorOptions.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\MusicManager.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\Options.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\PathManager.cs" />
