@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NKMCore;
 using NKMCore.Hex;
 using Unity.Managers;
 using UnityEngine;

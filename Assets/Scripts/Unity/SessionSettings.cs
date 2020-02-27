@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using NKMCore;
 using NKMCore.Extensions;
-using Unity.Hex;
 using UnityEngine;
-using Console = System.Console;
 
 namespace Unity
 {

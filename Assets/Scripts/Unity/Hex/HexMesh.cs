@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NKMCore.Hex;
 using UnityEngine;
 
 namespace Unity.Hex
@@ -51,7 +52,8 @@ namespace Unity.Hex
                     center + HexMetrics.Corners[i],
                     center + HexMetrics.Corners[i + 1]
                 );
-                AddTriangleColor(cell.Color);
+                if(cell.HexCell.Type == HexCell.TileType.Transparent) AddTransparentColor();
+                else AddTriangleColor(cell.Color);
             }
         }
 
@@ -71,6 +73,13 @@ namespace Unity.Hex
             _colors.Add(color);
             _colors.Add(color);
             _colors.Add(color);
+        }
+
+        private void AddTransparentColor()
+        {
+            _colors.Add(Color.white);
+            _colors.Add(Color.black);
+            _colors.Add(Color.red);
         }
     }
 }

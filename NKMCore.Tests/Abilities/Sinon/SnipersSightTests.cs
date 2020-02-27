@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NKMCore.Abilities.Sinon;
+using NKMCore.Hex;
 using NKMCore.Templates;
 using Xunit;
 

@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using NKMCore;
 using NKMCore.Hex;
 using Unity.Extensions;
-using Unity.Hex;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

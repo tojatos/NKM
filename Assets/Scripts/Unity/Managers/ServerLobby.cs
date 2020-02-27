@@ -2,7 +2,6 @@
 using System.Linq;
 using NKMCore;
 using Unity.Extensions;
-using Unity.Hex;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;

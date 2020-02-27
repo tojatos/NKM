@@ -18,7 +18,7 @@ namespace Unity.Hex
     {
         public DrawnHexCell CellPrefab;
         public List<DrawnHexCell> Cells;
-        public bool Created = false;
+        public bool Created;
         private readonly Dictionary<Character, GameObject> _characterObjects = new Dictionary<Character, GameObject>();
         public static readonly Dictionary<Character, GameObject> Dims = new Dictionary<Character, GameObject>();
 
@@ -28,15 +28,20 @@ namespace Unity.Hex
         public HexMesh HexMesh { get; private set; }
 
         public event Delegates.Cell AfterCellSelect;
+        public event Delegates.Cell AfterCellDrag;
 
         public void Update()
         {
+            if (Utilities.IsPointerOverUiObject()) return; //Do not touch cells if mouse is over UI
             if (Input.GetMouseButtonDown(0))
             {
-                if (Utilities.IsPointerOverUiObject()) return; //Do not touch cells if mouse is over UI
-
                 HexCell cellPointed = CellPointed();
                 if (cellPointed != null) AfterCellSelect?.Invoke(cellPointed);
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                HexCell cellPointed = CellPointed();
+                if (cellPointed != null) AfterCellDrag?.Invoke(cellPointed);
             }
         }
 
@@ -112,7 +117,7 @@ namespace Unity.Hex
             Created = true;
         }
 
-        private void TriangulateCells()
+        public void TriangulateCells()
         {
             HexMesh.Triangulate(Cells);
         }
@@ -129,23 +134,30 @@ namespace Unity.Hex
             cell.HexCell = hexCell;
             cell.transform.localPosition = position;
 
-            switch (hexCell.Type)
+            RepaintCell(cell);
+        }
+
+        public void RepaintCell(DrawnHexCell cell) => cell.Color = FromHexType(cell.HexCell.Type);
+
+        public static Color FromHexType(HexCell.TileType type)
+        {
+            switch (type)
             {
                 case HexCell.TileType.Normal:
-                    cell.Color = Color.white;
-                    break;
+                    return Color.white;
                 case HexCell.TileType.Wall:
-                    cell.Color = Color.black;
-                    break;
+                    return Color.black;
                 case HexCell.TileType.SpawnPoint1:
                 case HexCell.TileType.SpawnPoint2:
                 case HexCell.TileType.SpawnPoint3:
                 case HexCell.TileType.SpawnPoint4:
-                    cell.Color = Color.green;
-                    break;
+                    return Color.green;
+                case HexCell.TileType.Transparent:
+                    return new Color(200, 70, 70, 0.4f);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
         }
 
         public void RemoveHighlights(Predicate<GameObject> predicate = null)

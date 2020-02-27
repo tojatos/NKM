@@ -275,7 +275,6 @@
     <Compile Include="Assets\Scripts\Unity\Animations\ShowVanishablePopup.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\Tilt.cs" />
     <Compile Include="Assets\Scripts\Unity\Animations\Undim.cs" />
-    <Compile Include="Assets\Scripts\Unity\ColorToTileType.cs" />
     <Compile Include="Assets\Scripts\Unity\ConsoleDrawer.cs" />
     <Compile Include="Assets\Scripts\Unity\CreatableBackgroundCamera.cs" />
     <Compile Include="Assets\Scripts\Unity\CreatableSingletonMonoBehaviour.cs" />

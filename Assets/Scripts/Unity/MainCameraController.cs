@@ -1,5 +1,4 @@
-﻿using NKMCore;
-using Unity.Hex;
+﻿using Unity.Hex;
 using UnityEngine;
 
 namespace Unity

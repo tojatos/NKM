@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NKMCore.Extensions;
+using NKMCore.Hex;
 using Xunit;
 
 namespace NKMCore.Tests
