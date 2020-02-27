@@ -18,8 +18,6 @@ namespace Unity
         public string Nickname;
         public string SelectedIP;
         public string SelectedReplayFilePath;
-
-        //volatile
         public string SelectedMapCreationType;
         public int NewMapDimX;
         public int NewMapDimY;
@@ -84,6 +82,10 @@ namespace Unity
             Nickname = PlayerPrefs.GetString("Nickname", "");
             SelectedIP = PlayerPrefs.GetString("SelectedIP");
 
+            SelectedMapCreationType = PlayerPrefs.GetString("SelectedMapCreationType");
+            NewMapDimX = PlayerPrefs.GetInt("NewMapDimX");
+            NewMapDimY = PlayerPrefs.GetInt("NewMapDimY");
+
             _enabledSettings.ForEach(AddDropdownSetting);
             UpdateEffects();
 
@@ -118,6 +120,9 @@ namespace Unity
 
             PlayerPrefs.SetString("Nickname", Nickname);
             PlayerPrefs.SetString("SelectedIP", SelectedIP);
+            PlayerPrefs.SetString("SelectedMapCreationType", SelectedMapCreationType);
+            PlayerPrefs.SetInt("NewMapDimX", NewMapDimX);
+            PlayerPrefs.SetInt("NewMapDimY", NewMapDimY);
 
             PlayerPrefsX.SetBool("IsMuted", IsMuted);
 
