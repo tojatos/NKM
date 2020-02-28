@@ -367,6 +367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BrushSelectionPanel: {fileID: 757788740}
   SaveButton: {fileID: 2024119508}
+  MainWindowHandle: {fileID: 243346503}
 --- !u!1 &757788740
 GameObject:
   m_ObjectHideFlags: 0

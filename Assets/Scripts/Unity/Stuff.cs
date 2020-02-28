@@ -14,10 +14,21 @@ namespace Unity
         {
             get
             {
-                //lazy loading because HexMapsDirPath is null before Unity's awake
-                return _maps ?? (_maps = new DirectoryInfo(PathManager.HexMapsDirPath).GetFiles("*.hexmap").Select(f => HexMapSerializer.Deserialize(File.ReadAllText(f.FullName))).ToList());
+                //lazy loading because paths are null before Unity's awake
+                if(_maps == null) ReloadMaps();
+
+                return _maps;
             }
         }
+
+        private static void ReloadMaps()
+        {
+            var hexMapDirs = new[] { PathManager.HexMapsDirPath, PathManager.UserHexMapsDirPath };
+            var hexMapFiles = hexMapDirs.SelectMany(dir => new DirectoryInfo(dir).GetFiles("*.hexmap"));
+            var hexMapFileContents = hexMapFiles.Select(file => File.ReadAllText(file.FullName));
+            _maps = hexMapFileContents.Select(HexMapSerializer.Deserialize).ToList();
+        }
+
         public static readonly List<GameObject> Particles;
         public static readonly AllSprites Sprites;
         public static readonly List<GameObject> Prefabs;

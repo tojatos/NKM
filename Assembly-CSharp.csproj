@@ -194,6 +194,7 @@
     <Compile Include="Assets\Scripts\NKMCore\Extensions\Predicates.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\Serializers.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\Sqlite.cs" />
+    <Compile Include="Assets\Scripts\NKMCore\Extensions\String.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Extensions\SystemGeneric.cs" />
     <Compile Include="Assets\Scripts\NKMCore\Game.cs" />
     <Compile Include="Assets\Scripts\NKMCore\GameDependencies.cs" />
@@ -287,6 +288,7 @@
     <Compile Include="Assets\Scripts\Unity\Hex\HexMetrics.cs" />
     <Compile Include="Assets\Scripts\Unity\HighlightColor.cs" />
     <Compile Include="Assets\Scripts\Unity\Highlights.cs" />
+    <Compile Include="Assets\Scripts\Unity\InputPopup.cs" />
     <Compile Include="Assets\Scripts\Unity\IsRaycastValid.cs" />
     <Compile Include="Assets\Scripts\Unity\MainCameraController.cs" />
     <Compile Include="Assets\Scripts\Unity\Managers\AsyncCaller.cs" />

@@ -12,6 +12,7 @@ namespace Unity.Managers
         public static string DbPath;
         public static string SettingsDirPath;
         public static string HexMapsDirPath;
+        public static string UserHexMapsDirPath;
         public static string TestingCharactersFilePath;
         public static string ServerListFilePath;
         public static string LogDirPath;
@@ -35,10 +36,13 @@ namespace Unity.Managers
         {
             DbPath = MakePath(Application.streamingAssetsPath, "database.db");
             SettingsDirPath = MakePath(Application.persistentDataPath, "Settings");
-            HexMapsDirPath = MakePath(Application.dataPath, "Resources/HexMaps");
+            HexMapsDirPath = MakePath(Application.dataPath, "Resources", "HexMaps");
+            UserHexMapsDirPath = MakePath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tosware", "NKM", "HexMaps");
             TestingCharactersFilePath = MakePath(Application.dataPath, "testing_characters.txt");
             ServerListFilePath = MakePath(SettingsDirPath, "server_list.txt");
             LogDirPath = MakePath(Application.persistentDataPath, "game_logs");
+
+            Directory.CreateDirectory(UserHexMapsDirPath);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NKMCore.Extensions;
 using NKMCore.Hex;
@@ -15,10 +16,13 @@ namespace Unity.Managers
     {
         public GameObject BrushSelectionPanel;
         public GameObject SaveButton;
+        public Transform MainWindowHandle;
 
         private static SessionSettings S => SessionSettings.Instance;
         private HexCell.TileType _currentBrushType = HexCell.TileType.Transparent;
         private HexMap _map;
+
+        private void ShowErrorPopup(string message) => Popup.Create(MainWindowHandle).Show("Błąd", message);
 
         private void Awake()
         {
@@ -26,6 +30,33 @@ namespace Unity.Managers
             InitBrushSelectionPanel();
             SaveButton.AddTrigger(EventTriggerType.PointerClick, () =>
             {
+                var popup = InputPopup.Create(MainWindowHandle);
+                popup.Show("Podaj nazwę swojej mapy", () =>
+                {
+                    string mapName = popup.Input.text.Trim();
+                    if (mapName == "")
+                    {
+                        ShowErrorPopup("Nazwa nie może być pusta!");
+                        return;
+                    }
+
+                    if (!mapName.IsValidFilename())
+                    {
+                        ShowErrorPopup("Nazwa zawiera nieprawidłowe znaki");
+                        return;
+                    }
+
+                    if (Stuff.Maps.Select(m => m.Name).Contains(mapName))
+                    {
+                        ShowErrorPopup("Taka mapa już istnieje!");
+                        return;
+                    }
+                    var mapToSave = new HexMap(mapName, _map.Cells, new List<HexCell.TileType>{HexCell.TileType.SpawnPoint1, HexCell.TileType.SpawnPoint2}); //TODO: spawnpoints
+                    string savePath = Path.Combine(PathManager.UserHexMapsDirPath, $"{mapName}.hexmap");
+                    File.WriteAllText(savePath, HexMapSerializer.Serialize(mapToSave));
+                    popup.ClosePopup();
+                    Popup.Create(MainWindowHandle).Show("Sukces", "Pomyślnie zapisano mapę");
+                });
 
             });
         }
