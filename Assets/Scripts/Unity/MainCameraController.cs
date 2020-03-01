@@ -1,5 +1,7 @@
-﻿using Unity.Hex;
+﻿using System.Linq;
+using Unity.Hex;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Unity
 {
@@ -31,6 +33,7 @@ namespace Unity
         }
         private void Update()
         {
+            if(!new []{Scenes.MainGame, Scenes.MapEditor}.Contains(SceneManager.GetActiveScene().name)) return;
             if(!HexMapDrawer.Instance.Created) return;
 
             if (Input.touchCount == 2)
