@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -37,12 +38,12 @@ namespace Unity.Managers
             DbPath = MakePath(Application.streamingAssetsPath, "database.db");
             SettingsDirPath = MakePath(Application.persistentDataPath, "Settings");
             HexMapsDirPath = MakePath(Application.dataPath, "Resources", "HexMaps");
-            UserHexMapsDirPath = MakePath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tosware", "NKM", "HexMaps");
+            UserHexMapsDirPath = MakePath(Application.persistentDataPath, "HexMaps");
             TestingCharactersFilePath = MakePath(Application.dataPath, "testing_characters.txt");
             ServerListFilePath = MakePath(SettingsDirPath, "server_list.txt");
             LogDirPath = MakePath(Application.persistentDataPath, "game_logs");
 
-            Directory.CreateDirectory(UserHexMapsDirPath);
+            new List<string> {SettingsDirPath, UserHexMapsDirPath}.ForEach(s => Directory.CreateDirectory(s));
         }
     }
 }
