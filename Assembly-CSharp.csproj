@@ -52,6 +52,9 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>/home/tojatos/.UnityInstallations/2020.1.0a13/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

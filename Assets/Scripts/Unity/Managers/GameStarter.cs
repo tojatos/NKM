@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Mono.Data.Sqlite;
 using NKMCore;
@@ -15,6 +16,7 @@ using Unity.UI;
 using Unity.UI.CharacterUI;
 using Unity.UI.HexCellUI;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using Action = NKMCore.Action;
 using Effects = Unity.UI.CharacterUI.Effects;
@@ -35,9 +37,34 @@ namespace Unity.Managers
         private static GamePreparerDependencies _gamePreparerDependencies;
         private static bool IsClientConnected => ClientManager.Instance.Client.IsConnected;
 
+        private static void SetDbConnection()
+        {
+            string dbPath = PathManager.DbPath;
+            if (!File.Exists(PathManager.DbPath)) //Android
+            {
+                dbPath = PathManager.AndroidDbPath;
+                if (!File.Exists(dbPath)) DownloadDbFromJar(dbPath);
+            }
+
+            NKMData.Connection = new SqliteConnection($"Data source={dbPath}");
+        }
+
+        private static void DownloadDbFromJar(string targetPath)
+        {
+            string url = $"jar:file://{Application.dataPath}!/assets/database.db";
+            UnityWebRequest dbDownloadRequest = UnityWebRequest.Get(url);
+            dbDownloadRequest.SendWebRequest();
+            while (dbDownloadRequest.isDone)
+            {
+                if (dbDownloadRequest.isHttpError || dbDownloadRequest.isNetworkError) throw new Exception($"Error while downloading database from jar");
+                Thread.Sleep(100);
+            }
+            File.WriteAllBytes(targetPath, dbDownloadRequest.downloadHandler.data);
+        }
+
         private void Awake()
         {
-            NKMData.Connection = new SqliteConnection($"Data source={PathManager.DbPath}");
+            SetDbConnection();
             _gamePreparerDependencies = SessionSettings.Instance.Dependencies;
             var sel = Selectable as SpriteSelectSelectable;
 

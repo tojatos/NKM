@@ -39,7 +39,8 @@ namespace Unity.Managers
                 Description = "Wybierz mapę:",
                 Options = Stuff.Maps.Select(map => map.Name).ToArray()
             };
-            HexMap selectedMap = Stuff.Maps[S.GetDropdownSetting(SettingType.SelectedMapIndex)];
+            HexMap selectedMap = Stuff.Maps.ElementAtOrDefault(S.GetDropdownSetting(SettingType.SelectedMapIndex)) ??
+                                 Stuff.Maps[0];
             var numberOfPlayersSettings = new DropdownSettings
             {
                 Type = SettingType.NumberOfPlayers,

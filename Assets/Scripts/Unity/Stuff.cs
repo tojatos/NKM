@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using NKMCore.Hex;
 using Unity.Managers;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Unity
 {
@@ -21,12 +24,41 @@ namespace Unity
             }
         }
 
+        private static void DownloadHexMapsFromJar(string targetPath)
+        {
+            //TODO: something overrides
+            // //TODO: do not hardcode
+            // var mapNames = new[] {"1v1v1", "Arena", "Linia", "Map1", "Shuriken", "TestMap"};
+            // foreach (string mapName in mapNames)
+            // {
+            //     //TODO: async wait for all requests
+            //     string url = $"jar:file://{Application.dataPath}!/assets/HexMaps/{mapName}.hexmap";
+            //     UnityWebRequest dbDownloadRequest = UnityWebRequest.Get(url);
+            //     dbDownloadRequest.SendWebRequest();
+            //     while (dbDownloadRequest.isDone)
+            //     {
+            //         if (dbDownloadRequest.isHttpError || dbDownloadRequest.isNetworkError) throw new Exception($"Error while downloading {mapName} from jar");
+            //         Thread.Sleep(100);
+            //     }
+            //     File.WriteAllBytes(Path.Combine(targetPath, $"{mapName}.hexmap"), dbDownloadRequest.downloadHandler.data);
+            // }
+        }
+
         private static void ReloadMaps()
         {
-            var hexMapDirs = new[] { PathManager.HexMapsDirPath, PathManager.UserHexMapsDirPath };
+            var hexMapDirs = GetHexMapDirs();
             var hexMapFiles = hexMapDirs.SelectMany(dir => new DirectoryInfo(dir).GetFiles("*.hexmap"));
             var hexMapFileContents = hexMapFiles.Select(file => File.ReadAllText(file.FullName));
             _maps = hexMapFileContents.Select(HexMapSerializer.Deserialize).ToList();
+        }
+
+        private static IEnumerable<string> GetHexMapDirs()
+        {
+            if (Directory.Exists(PathManager.HexMapsDirPath))
+                return new[] {PathManager.HexMapsDirPath, PathManager.UserHexMapsDirPath};
+
+            DownloadHexMapsFromJar(PathManager.AndroidHexMapsDirPath);
+            return new[] {PathManager.AndroidHexMapsDirPath, PathManager.UserHexMapsDirPath};
         }
 
         public static readonly List<GameObject> Particles;

@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d323de04306be9b50b83c97e875c572a
+  m_SerializeEntries:
+  - m_GUID: 567b868994ce4444a80b4d79370cc087
+    m_Address: Assets/StreamingAssets/HexMaps/Arena.hexmap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    <BundleFileId>k__BackingField: 
+    <IsInResources>k__BackingField: 0
+    <IsInSceneList>k__BackingField: 0
+    <IsSubAsset>k__BackingField: 0
+    m_CheckedIsScene: 1
+    m_IsScene: 0
+    m_cachedAssetPath: Assets/StreamingAssets/HexMaps/Arena.hexmap
+  - m_GUID: 5b5bf23780b5f40aba052ff4bca70cf9
+    m_Address: Assets/StreamingAssets/HexMaps/Map1.hexmap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    <BundleFileId>k__BackingField: 
+    <IsInResources>k__BackingField: 0
+    <IsInSceneList>k__BackingField: 0
+    <IsSubAsset>k__BackingField: 0
+    m_CheckedIsScene: 1
+    m_IsScene: 0
+    m_cachedAssetPath: Assets/StreamingAssets/HexMaps/Map1.hexmap
+  - m_GUID: 5c6286d53d0444988b6ff4ed4d90c3ef
+    m_Address: Assets/StreamingAssets/HexMaps/Linia.hexmap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    <BundleFileId>k__BackingField: 
+    <IsInResources>k__BackingField: 0
+    <IsInSceneList>k__BackingField: 0
+    <IsSubAsset>k__BackingField: 0
+    m_CheckedIsScene: 1
+    m_IsScene: 0
+    m_cachedAssetPath: Assets/StreamingAssets/HexMaps/Linia.hexmap
+  - m_GUID: aa514392277174f2e8bab2255dca7bd9
+    m_Address: Assets/StreamingAssets/HexMaps/TestMap.hexmap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    <BundleFileId>k__BackingField: 
+    <IsInResources>k__BackingField: 0
+    <IsInSceneList>k__BackingField: 0
+    <IsSubAsset>k__BackingField: 0
+    m_CheckedIsScene: 1
+    m_IsScene: 0
+    m_cachedAssetPath: Assets/StreamingAssets/HexMaps/TestMap.hexmap
+  - m_GUID: e045eb65d2d3441219210df2c9adf690
+    m_Address: HexMaps
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    <BundleFileId>k__BackingField: 
+    <IsInResources>k__BackingField: 0
+    <IsInSceneList>k__BackingField: 0
+    <IsSubAsset>k__BackingField: 0
+    m_CheckedIsScene: 0
+    m_IsScene: 0
+    m_cachedAssetPath: Assets/StreamingAssets/HexMaps
+  - m_GUID: f198f54ff39094d9fba7eb4627e94cc6
+    m_Address: Assets/StreamingAssets/HexMaps/Shuriken.hexmap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    <BundleFileId>k__BackingField: 
+    <IsInResources>k__BackingField: 0
+    <IsInSceneList>k__BackingField: 0
+    <IsSubAsset>k__BackingField: 0
+    m_CheckedIsScene: 1
+    m_IsScene: 0
+    m_cachedAssetPath: Assets/StreamingAssets/HexMaps/Shuriken.hexmap
+  - m_GUID: f6173a8b85f1f4610a17e2bb9c654960
+    m_Address: Assets/StreamingAssets/HexMaps/1v1v1.hexmap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    <BundleFileId>k__BackingField: 
+    <IsInResources>k__BackingField: 0
+    <IsInSceneList>k__BackingField: 0
+    <IsSubAsset>k__BackingField: 0
+    m_CheckedIsScene: 1
+    m_IsScene: 0
+    m_cachedAssetPath: Assets/StreamingAssets/HexMaps/1v1v1.hexmap
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a7bd0bdaa0b711865ba5ed566e96909c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 10a9a8b60bf7f4a65bcd7b28a423a77e, type: 2}
+    - {fileID: 11400000, guid: 81e0d9e387f6fca9386a490ded292862, type: 2}

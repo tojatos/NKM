@@ -11,8 +11,10 @@ namespace Unity.Managers
         private static void DDOL() => DontDestroyOnLoad(Instance);
 
         public static string DbPath;
+        public static string AndroidDbPath;
         public static string SettingsDirPath;
         public static string HexMapsDirPath;
+        public static string AndroidHexMapsDirPath;
         public static string UserHexMapsDirPath;
         public static string TestingCharactersFilePath;
         public static string ServerListFilePath;
@@ -36,8 +38,10 @@ namespace Unity.Managers
         private void Awake()
         {
             DbPath = MakePath(Application.streamingAssetsPath, "database.db");
+            AndroidDbPath = MakePath(Application.persistentDataPath, "database.db");
             SettingsDirPath = MakePath(Application.persistentDataPath, "Settings");
-            HexMapsDirPath = MakePath(Application.dataPath, "Resources", "HexMaps");
+            HexMapsDirPath = MakePath(Application.streamingAssetsPath, "HexMaps");
+            AndroidHexMapsDirPath = MakePath(Application.persistentDataPath, "HexMaps");
             UserHexMapsDirPath = MakePath(Application.persistentDataPath, "HexMaps");
             TestingCharactersFilePath = MakePath(Application.dataPath, "testing_characters.txt");
             ServerListFilePath = MakePath(SettingsDirPath, "server_list.txt");
