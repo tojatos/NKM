@@ -147,10 +147,7 @@ namespace Unity.Hex
                     return Color.white;
                 case HexCell.TileType.Wall:
                     return Color.black;
-                case HexCell.TileType.SpawnPoint1:
-                case HexCell.TileType.SpawnPoint2:
-                case HexCell.TileType.SpawnPoint3:
-                case HexCell.TileType.SpawnPoint4:
+                case HexCell.TileType.SpawnPoint:
                     return Color.green;
                 case HexCell.TileType.Transparent:
                     return new Color(200, 70, 70, 0.4f);

@@ -20,6 +20,7 @@ namespace Unity.Managers
 
         private static SessionSettings S => SessionSettings.Instance;
         private HexCell.TileType _currentBrushType = HexCell.TileType.Transparent;
+        private int? _currentSpawnNumber = null;
         private HexMap _map;
 
         private void ShowErrorPopup(string message) => Popup.Create(MainWindowHandle).Show("Błąd", message);
@@ -51,7 +52,7 @@ namespace Unity.Managers
                         ShowErrorPopup("Taka mapa już istnieje!");
                         return;
                     }
-                    var mapToSave = new HexMap(mapName, _map.Cells, new List<HexCell.TileType>{HexCell.TileType.SpawnPoint1, HexCell.TileType.SpawnPoint2}); //TODO: spawnpoints
+                    var mapToSave = new HexMap(mapName, _map.Cells);
                     string savePath = Path.Combine(PathManager.UserHexMapsDirPath, $"{mapName}.hexmap");
                     File.WriteAllText(savePath, HexMapSerializer.Serialize(mapToSave));
                     popup.ClosePopup();
@@ -65,21 +66,33 @@ namespace Unity.Managers
         {
             foreach (HexCell.TileType t in SystemGeneric.EnumValues<HexCell.TileType>())
             {
-                GameObject go = Instantiate( Stuff.Prefabs.Single( g => g.name == "Brush Select"), BrushSelectionPanel.transform);
-                go.GetComponent<RawImage>().color = HexMapDrawer.FromHexType(t);
-                go.AddTrigger(EventTriggerType.PointerClick, () => _currentBrushType = t);
+                if (t == HexCell.TileType.SpawnPoint)
+                    for (int i = 0; i < 4; ++i) //TODO: a better way to create spawn brushes
+                        CreateBrush(t, i);
+                else CreateBrush(t);
             }
+        }
+
+        private void CreateBrush(HexCell.TileType t, int? spawnNumber = null)
+        {
+            GameObject go = Instantiate( Stuff.Prefabs.Single( g => g.name == "Brush Select"), BrushSelectionPanel.transform);
+            go.GetComponent<RawImage>().color = HexMapDrawer.FromHexType(t);
+            go.AddTrigger(EventTriggerType.PointerClick, () =>
+            {
+                _currentBrushType = t;
+                _currentSpawnNumber = spawnNumber;
+            });
         }
 
         private HexMap MapFromDimensions(int x, int y)
         {
-            HexMap map = new HexMap("temp", new List<HexCell>(), new List<HexCell.TileType>());
+            var map = new HexMap("temp", new List<HexCell>());
 
             for (int i = 0; i < y; ++i)
             {
                 for (int j = 0; j < x; ++j)
                 {
-                    map.Cells.Add(new HexCell(_map, new HexCoordinates(j, -x-i), HexCell.TileType.Transparent));
+                    map.Cells.Add(new HexCell(_map, new HexCoordinates(j, -x-i), HexCell.TileType.Transparent, null));
                 }
             }
 
@@ -127,6 +140,7 @@ namespace Unity.Managers
             HexMapDrawer.Instance.AfterCellDrag += cell =>
             {
                 cell.Type = _currentBrushType;
+                cell.SpawnNumber = _currentSpawnNumber;
                 HexMapDrawer.Instance.RepaintCell(HexMapDrawer.Instance.SelectDrawnCell(cell));
                 HexMapDrawer.Instance.TriangulateCells();
             };

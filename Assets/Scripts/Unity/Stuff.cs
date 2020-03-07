@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using NKMCore.Hex;
 using Unity.Managers;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Unity
 {

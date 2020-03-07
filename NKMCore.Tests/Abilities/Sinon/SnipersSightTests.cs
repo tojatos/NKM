@@ -12,8 +12,8 @@ namespace NKMCore.Tests.Abilities.Sinon
     }
     public class SnipersSightTests
     {
-        private const string TestHexMap = "TestName\n\n0:0;Normal\n\nSpawnPoint1";
-        private const GameType _gameType = GameType.Local;
+        private const string TestHexMap = "TestName\n\n0:0;Normal";
+        private const GameType GameType = NKMCore.GameType.Local;
         private readonly DefaultSelectable _sel = new DefaultSelectable();
 
         [Fact]
@@ -27,11 +27,11 @@ namespace NKMCore.Tests.Abilities.Sinon
                     new GamePlayer{Name = "Player2"},
                 },
                 HexMap = HexMapSerializer.Deserialize(TestHexMap),
-                Type = _gameType,
+                Type = GameType,
                 PlaceAllCharactersRandomlyAtStart = false,
                 Selectable = _sel,
                 SelectableManager = new SelectableManager(),
-                SelectableAction = new SelectableAction(_gameType, _sel),
+                SelectableAction = new SelectableAction(GameType, _sel),
                 Logger = new MockLogger()
             };
             var testGame = new Game(testGameDeps);
