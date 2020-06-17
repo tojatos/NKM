@@ -37,11 +37,11 @@ namespace Unity.Managers
 
         private void Awake()
         {
-            DbPath = MakePath(Application.streamingAssetsPath, "database.db");
-            AndroidDbPath = MakePath(Application.persistentDataPath, "database.db");
+            DbPath = MakePath(Application.streamingAssetsPath, "NKMData/database.db");
+            AndroidDbPath = MakePath(Application.persistentDataPath, "NKMData/database.db");
             SettingsDirPath = MakePath(Application.persistentDataPath, "Settings");
-            HexMapsDirPath = MakePath(Application.streamingAssetsPath, "HexMaps");
-            AndroidHexMapsDirPath = MakePath(Application.persistentDataPath, "HexMaps");
+            HexMapsDirPath = MakePath(Application.streamingAssetsPath, "NKMData/HexMaps");
+            AndroidHexMapsDirPath = MakePath(Application.persistentDataPath, "NKMData/HexMaps");
             UserHexMapsDirPath = MakePath(Application.persistentDataPath, "HexMaps");
             TestingCharactersFilePath = MakePath(Application.dataPath, "testing_characters.txt");
             ServerListFilePath = MakePath(SettingsDirPath, "server_list.txt");
