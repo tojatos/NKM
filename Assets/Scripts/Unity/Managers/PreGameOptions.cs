@@ -40,7 +40,15 @@ namespace Unity.Managers
                 Options = Stuff.Maps.Select(map => map.Name).ToArray()
             };
             HexMap selectedMap = Stuff.Maps.ElementAtOrDefault(S.GetDropdownSetting(SettingType.SelectedMapIndex)) ??
-                                 Stuff.Maps[0];
+                                 Stuff.Maps.ElementAtOrDefault(0);
+
+            if (selectedMap is null)
+            {
+                Debug.LogError("There are no HexMaps?");
+                return;
+            }
+            
+            
             var numberOfPlayersSettings = new DropdownSettings
             {
                 Type = SettingType.NumberOfPlayers,
