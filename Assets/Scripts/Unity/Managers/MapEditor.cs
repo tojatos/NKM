@@ -20,7 +20,7 @@ namespace Unity.Managers
 
         private static SessionSettings S => SessionSettings.Instance;
         private HexCell.TileType _currentBrushType = HexCell.TileType.Transparent;
-        private int? _currentSpawnNumber = null;
+        private int? _currentSpawnNumber;
         private HexMap _map;
 
         private void ShowErrorPopup(string message) => Popup.Create(MainWindowHandle).Show("Błąd", message);

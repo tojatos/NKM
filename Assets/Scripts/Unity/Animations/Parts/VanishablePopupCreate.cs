@@ -8,8 +8,6 @@ namespace Unity.Animations.Parts
 {
     public class VanishablePopupCreate : NkmAnimationPart
     {
-        private readonly string _textToShow;
-        private readonly Color _textColor;
         public readonly GameObject PopupObject;
 
         public VanishablePopupCreate(string message)
