@@ -61,3 +61,6 @@ crashlytics-build.properties
 
 # Windows
 Thumbs.db
+
+.fake
+.ionide
