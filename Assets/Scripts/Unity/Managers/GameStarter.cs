@@ -473,9 +473,13 @@ namespace Unity.Managers
             });
 
         }
+
+        private static string GetTestingCharactersFile() =>
+            File.ReadAllText(PathManager.TestingCharactersFilePath).TrimEnd().Replace("\r\n", "\n");
+
         private static void BindTestingCharactersToPlayers(Game game)
         {
-            string testingCharactersFile = File.ReadAllText(PathManager.TestingCharactersFilePath).TrimEnd();
+            string testingCharactersFile = GetTestingCharactersFile();
             string[][] characterNamesGrouped = testingCharactersFile.Split(new[] {"\n\n"}, StringSplitOptions.None).Select(s => s.Split('\n')).ToArray();
             for (int i = 0; i < characterNamesGrouped.Length; ++i)
             {
@@ -486,7 +490,7 @@ namespace Unity.Managers
         }
         private GameDependencies GetTestingGameOptions()
         {
-            string testingCharactersFile = File.ReadAllText(PathManager.TestingCharactersFilePath).TrimEnd();
+            string testingCharactersFile = GetTestingCharactersFile();
             string[][] charactersGrouped = testingCharactersFile.Split(new[] {"\n\n"}, StringSplitOptions.None).Select(s => s.Split('\n')).ToArray();
             string[] playerNames = {"Ryszard", "Maciej", "Zygfryd", "Bożydar"};
             List<GamePlayer> testingGamePlayers = charactersGrouped.Select((t, i) => new GamePlayer

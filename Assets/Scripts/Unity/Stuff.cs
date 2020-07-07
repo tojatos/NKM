@@ -46,6 +46,7 @@ namespace Unity
             var hexMapDirs = GetHexMapDirs();
             var hexMapFiles = hexMapDirs.SelectMany(dir => new DirectoryInfo(dir).GetFiles("*.hexmap"));
             var hexMapFileContents = hexMapFiles.Select(file => File.ReadAllText(file.FullName));
+            hexMapFileContents = hexMapFileContents.Select(c => c.Replace("\r\n", "\n"));
             _maps = hexMapFileContents.Select(HexMapSerializer.Deserialize).ToList();
         }
 
